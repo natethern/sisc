@@ -40,40 +40,53 @@ import sisc.nativefun.*;
  *   (set-so-timeout! <tcp socket> <timeout>) => <void>
  */
 
-public class SNetwork extends ModuleAdapter {
+public class SNetwork extends IndexedProcedure {
 
-    static final Symbol SNETB=Symbol.intern("sisc.modules.io.Messages");
+    static final Symbol SNETB = Symbol.intern("sisc.modules.io.Messages");
 
-    protected static final int
-        GET_LOCAL_HOST=0, GET_HOST_NAME_BY_IP=1, GET_HOST_IP_BY_NAME=2,
-        SET_MULTICAST_TTL=3, LEAVE_MULTICAST_GROUP=4,
-        JOIN_MULTICAST_GROUP=5, OPEN_MULTICAST_SOCKET=6,
-        OPEN_UDP_SOCKET=9, ACCEPT_TCP_SOCKET=7,
-        OPEN_SOCKET_OUTPUT_PORT=10, OPEN_SOCKET_INPUT_PORT=11,
-        OPEN_TCP_SOCKET=12,
-        OPEN_TCP_LISTENER=13, CLOSE_SOCKET=14,
-        SET_SO_TIMEOUT=15, OPEN_UDP_LISTEN_SOCKET=16, SOCKETQ=17,
-        SERVERSOCKETQ=18;
-   
+    protected static final int GET_LOCAL_HOST = 0,
+        GET_HOST_NAME_BY_IP = 1,
+        GET_HOST_IP_BY_NAME = 2,
+        SET_MULTICAST_TTL = 3,
+        LEAVE_MULTICAST_GROUP = 4,
+        JOIN_MULTICAST_GROUP = 5,
+        OPEN_MULTICAST_SOCKET = 6,
+        OPEN_UDP_SOCKET = 9,
+        ACCEPT_TCP_SOCKET = 7,
+        OPEN_SOCKET_OUTPUT_PORT = 10,
+        OPEN_SOCKET_INPUT_PORT = 11,
+        OPEN_TCP_SOCKET = 12,
+        OPEN_TCP_LISTENER = 13,
+        CLOSE_SOCKET = 14,
+        SET_SO_TIMEOUT = 15,
+        OPEN_UDP_LISTEN_SOCKET = 16,
+        SOCKETQ = 17,
+        SERVERSOCKETQ = 18;
+
     interface Closable {
         void close() throws IOException;
     }
 
     abstract class SchemeSocket extends Value implements Closable {
         public abstract void close() throws IOException;
-        abstract SchemeInputPort getInputPort(Interpreter r) throws IOException, ContinuationException;
-        abstract SchemeOutputPort getOutputPort(Interpreter r, boolean autoflush) throws IOException, ContinuationException;
+        abstract SchemeInputPort getInputPort(Interpreter r)
+            throws IOException, ContinuationException;
+        abstract SchemeOutputPort getOutputPort(
+            Interpreter r,
+            boolean autoflush)
+            throws IOException, ContinuationException;
     }
 
     class SchemeServerSocket extends Value implements Closable {
         protected ServerSocket s;
 
         public SchemeServerSocket(ServerSocket s) {
-            this.s=s;
+            this.s = s;
         }
 
         public void display(ValueWriter w) throws IOException {
-            w.append("#<").append(liMessage(SNETB, "tcplistensocket")).append('>');
+            w.append("#<").append(liMessage(SNETB, "tcplistensocket")).append(
+                '>');
         }
 
         public void close() throws IOException {
@@ -81,12 +94,11 @@ public class SNetwork extends ModuleAdapter {
         }
     }
 
-
     class SchemeTCPSocket extends SchemeSocket {
         protected Socket s;
 
         public SchemeTCPSocket(Socket s) {
-            this.s=s;
+            this.s = s;
         }
 
         public void display(ValueWriter w) throws IOException {
@@ -101,14 +113,15 @@ public class SNetwork extends ModuleAdapter {
             s.setSoTimeout(ms);
         }
 
-        public SchemeInputPort getInputPort(Interpreter r) throws IOException, ContinuationException {
-            return new StreamInputPort(new BufferedInputStream(s.getInputStream()));
+        public SchemeInputPort getInputPort(Interpreter r)
+            throws IOException, ContinuationException {
+            return new StreamInputPort(
+                new BufferedInputStream(s.getInputStream()));
         }
 
-        public SchemeOutputPort getOutputPort(Interpreter r, 
-                                        boolean autoflush) throws IOException, ContinuationException {
-            return new StreamOutputPort(s.getOutputStream(),
-                                        autoflush);
+        public SchemeOutputPort getOutputPort(Interpreter r, boolean autoflush)
+            throws IOException, ContinuationException {
+            return new StreamOutputPort(s.getOutputStream(), autoflush);
         }
     }
 
@@ -119,26 +132,26 @@ public class SNetwork extends ModuleAdapter {
         protected int bp, blen;
 
         public UDPInputStream(DatagramSocket ds, int packet_size) {
-            this.ds=ds;
-            buffer=new byte[packet_size];
-            p=new DatagramPacket(buffer, packet_size);
+            this.ds = ds;
+            buffer = new byte[packet_size];
+            p = new DatagramPacket(buffer, packet_size);
         }
 
         protected void receive() throws IOException {
             ds.receive(p);
-            blen=p.getLength();
-            byte[] buf=p.getData();
+            blen = p.getLength();
+            byte[] buf = p.getData();
             System.arraycopy(buf, 0, buffer, 0, blen);
-            bp=0;
-            p=new DatagramPacket(buffer, buffer.length);
+            bp = 0;
+            p = new DatagramPacket(buffer, buffer.length);
         }
 
         public int available() {
-            return blen-bp;
+            return blen - bp;
         }
 
         public int read() throws IOException {
-            if (bp<blen)
+            if (bp < blen)
                 return buffer[bp++];
             else {
                 receive();
@@ -147,10 +160,10 @@ public class SNetwork extends ModuleAdapter {
         }
 
         public int read(byte[] b, int off, int len) throws IOException {
-            if (bp<blen) {
-                int btc=Math.min(len, blen-bp);
+            if (bp < blen) {
+                int btc = Math.min(len, blen - bp);
                 System.arraycopy(buffer, bp, b, off, btc);
-                bp+=btc;
+                bp += btc;
                 return btc;
             } else {
                 receive();
@@ -159,24 +172,23 @@ public class SNetwork extends ModuleAdapter {
         }
     }
 
-    
     class UDPOutputStream extends OutputStream {
         protected DatagramPacket p;
         protected DatagramSocket ds;
         protected InetAddress host;
         protected int port;
-        byte[] buffer=new byte[4096];
+        byte[] buffer = new byte[4096];
 
         public UDPOutputStream(DatagramSocket ds, InetAddress host, int port) {
-            this.ds=ds;
-            this.host=host;
-            this.port=port;
-            p=new DatagramPacket(buffer, buffer.length, host, port);
+            this.ds = ds;
+            this.host = host;
+            this.port = port;
+            p = new DatagramPacket(buffer, buffer.length, host, port);
         }
 
         public void write(int b) throws IOException {
-            buffer[0]=(byte)b;
-            p.setData(buffer, 0, 1);            
+            buffer[0] = (byte)b;
+            p.setData(buffer, 0, 1);
             ds.send(p);
         }
 
@@ -186,7 +198,7 @@ public class SNetwork extends ModuleAdapter {
         }
     }
 
-    static final int LISTEN=1, SEND=2;
+    static final int LISTEN = 1, SEND = 2;
 
     class SchemeUDPSocket extends SchemeSocket {
         protected int mode;
@@ -196,39 +208,42 @@ public class SNetwork extends ModuleAdapter {
         protected int dport;
 
         protected void setMode(int m) {
-            mode=m;
+            mode = m;
         }
 
         public SchemeUDPSocket(DatagramSocket s) {
             this(s, 1500);
         }
 
-        public SchemeUDPSocket(DatagramSocket s, String dhost) throws IOException {
+        public SchemeUDPSocket(DatagramSocket s, String dhost)
+            throws IOException {
             this(s, 1500);
-            remoteHost=InetAddress.getByName(dhost);
+            remoteHost = InetAddress.getByName(dhost);
         }
 
         public SchemeUDPSocket(DatagramSocket s, int ps) {
-            this.s=s;
-            packet_size=ps;
+            this.s = s;
+            packet_size = ps;
         }
 
         public SchemeUDPSocket(DatagramSocket s, int port, int ds) {
-            this.packet_size=ds;
-            this.dport=port;
-            this.s=s;
+            this.packet_size = ds;
+            this.dport = port;
+            this.s = s;
         }
 
-        public SchemeUDPSocket(DatagramSocket s, String dhost, int ds) throws IOException {
+        public SchemeUDPSocket(DatagramSocket s, String dhost, int ds)
+            throws IOException {
             this(s, 1500);
-            this.packet_size=ds;
-            remoteHost=InetAddress.getByName(dhost);
+            this.packet_size = ds;
+            remoteHost = InetAddress.getByName(dhost);
         }
 
-        public SchemeUDPSocket(DatagramSocket s, int port, String dhost) throws IOException {
+        public SchemeUDPSocket(DatagramSocket s, int port, String dhost)
+            throws IOException {
             this(s, 1500);
-            this.dport=port;
-            remoteHost=InetAddress.getByName(dhost);
+            this.dport = port;
+            remoteHost = InetAddress.getByName(dhost);
         }
 
         public void display(ValueWriter w) throws IOException {
@@ -239,38 +254,45 @@ public class SNetwork extends ModuleAdapter {
             s.close();
         }
 
-        public SchemeInputPort getInputPort(Interpreter r) throws IOException, ContinuationException {
-            if ((mode & LISTEN)==0)
+        public SchemeInputPort getInputPort(Interpreter r)
+            throws IOException, ContinuationException {
+            if ((mode & LISTEN) == 0)
                 error(r, liMessage(SNETB, "inputonoutputudp"));
-            return new StreamInputPort(new BufferedInputStream(new UDPInputStream(s, packet_size)));
+            return new StreamInputPort(
+                new BufferedInputStream(new UDPInputStream(s, packet_size)));
         }
 
-        public SchemeOutputPort getOutputPort(Interpreter r, boolean autoflush) throws IOException, ContinuationException {
-            if ((mode & SEND)==0)
+        public SchemeOutputPort getOutputPort(Interpreter r, boolean autoflush)
+            throws IOException, ContinuationException {
+            if ((mode & SEND) == 0)
                 error(r, liMessage(SNETB, "outputoninputudp"));
-            return new StreamOutputPort(new UDPOutputStream(s, remoteHost, dport),
-                                        autoflush);
+            return new StreamOutputPort(
+                new UDPOutputStream(s, remoteHost, dport),
+                autoflush);
         }
     }
 
     class SchemeMulticastUDPSocket extends SchemeUDPSocket {
-        
+
         public SchemeMulticastUDPSocket(MulticastSocket s) {
             super(s);
         }
 
         public SchemeMulticastUDPSocket(MulticastSocket s, int ps) {
-            super(s,ps);
+            super(s, ps);
         }
 
-        public SchemeMulticastUDPSocket(MulticastSocket s, String host, 
-                                        int ps) throws IOException {
+        public SchemeMulticastUDPSocket(MulticastSocket s, String host, int ps)
+            throws IOException {
             super(s, host, ps);
         }
 
-        public SchemeMulticastUDPSocket(MulticastSocket s, int port, 
-                                        String host) throws IOException {
-                                        
+        public SchemeMulticastUDPSocket(
+            MulticastSocket s,
+            int port,
+            String host)
+            throws IOException {
+
             super(s, port, host);
         }
 
@@ -280,7 +302,9 @@ public class SNetwork extends ModuleAdapter {
         }
 
         public void display(ValueWriter w) throws IOException {
-            w.append("#<").append(liMessage(SNETB, "multicastudpsocket")).append('>');
+            w.append("#<").append(
+                liMessage(SNETB, "multicastudpsocket")).append(
+                '>');
         }
 
         public void joinGroup(InetAddress group) throws IOException {
@@ -296,27 +320,40 @@ public class SNetwork extends ModuleAdapter {
         }
     }
 
-    public SNetwork() {
-        define("open-tcp-listener", OPEN_TCP_LISTENER);
-        define("accept-tcp-socket", ACCEPT_TCP_SOCKET);
-        define("open-tcp-socket", OPEN_TCP_SOCKET);
-        define("open-socket-input-port", OPEN_SOCKET_INPUT_PORT);
-        define("open-socket-output-port", OPEN_SOCKET_OUTPUT_PORT);
-        define("close-socket", CLOSE_SOCKET);
-        define("get-host-ip-by-name", GET_HOST_IP_BY_NAME);
-        define("get-host-name-by-ip", GET_HOST_NAME_BY_IP);
-        define("get-local-host", GET_LOCAL_HOST);
-        define("open-udp-listen-socket", OPEN_UDP_LISTEN_SOCKET);
-        define("open-udp-socket", OPEN_UDP_SOCKET);
-        define("open-multicast-socket", OPEN_MULTICAST_SOCKET);
-        define("join-multicast-group", JOIN_MULTICAST_GROUP);
-        define("leave-multicast-group", LEAVE_MULTICAST_GROUP);
-        define("set-multicast-ttl!", SET_MULTICAST_TTL);
-        define("set-so-timeout!", SET_SO_TIMEOUT);
-        define("socket?", SOCKETQ);
-        define("server-socket?", SERVERSOCKETQ);
-    }
+    public static class Index extends IndexedLibraryAdapter {
 
+        public Value construct(int id) {
+            return new SNetwork(id);
+        }
+
+        public Index() {
+            define("open-tcp-listener", OPEN_TCP_LISTENER);
+            define("accept-tcp-socket", ACCEPT_TCP_SOCKET);
+            define("open-tcp-socket", OPEN_TCP_SOCKET);
+            define("open-socket-input-port", OPEN_SOCKET_INPUT_PORT);
+            define("open-socket-output-port", OPEN_SOCKET_OUTPUT_PORT);
+            define("close-socket", CLOSE_SOCKET);
+            define("get-host-ip-by-name", GET_HOST_IP_BY_NAME);
+            define("get-host-name-by-ip", GET_HOST_NAME_BY_IP);
+            define("get-local-host", GET_LOCAL_HOST);
+            define("open-udp-listen-socket", OPEN_UDP_LISTEN_SOCKET);
+            define("open-udp-socket", OPEN_UDP_SOCKET);
+            define("open-multicast-socket", OPEN_MULTICAST_SOCKET);
+            define("join-multicast-group", JOIN_MULTICAST_GROUP);
+            define("leave-multicast-group", LEAVE_MULTICAST_GROUP);
+            define("set-multicast-ttl!", SET_MULTICAST_TTL);
+            define("set-so-timeout!", SET_SO_TIMEOUT);
+            define("socket?", SOCKETQ);
+            define("server-socket?", SERVERSOCKETQ);
+        }
+    }
+    
+    public SNetwork(int id) {
+        super(id);
+    }
+    
+    public SNetwork() {}
+    
     public static SchemeSocket sock(Value o) {
         try {
             return (SchemeSocket)o;
@@ -338,18 +375,18 @@ public class SNetwork extends ModuleAdapter {
         return null;
     }
 
-    public Value eval(int primid, Interpreter f) throws ContinuationException {
+    public Value doApply(Interpreter f) throws ContinuationException {
         try {
             switch(f.vlr.length) {
             case 0:
-                switch (primid) {
+                switch (id) {
                 case GET_LOCAL_HOST:
                     return new SchemeString(InetAddress.getLocalHost().getHostAddress());
                 default:
                     throwArgSizeException();
                 }
             case 1:
-                switch (primid) {
+                switch (id) {
                 case SOCKETQ:
                     return truth(f.vlr[0] instanceof SchemeSocket);
                 case SERVERSOCKETQ:
@@ -392,7 +429,7 @@ public class SNetwork extends ModuleAdapter {
                     throwArgSizeException();
                 }
             case 2:
-                switch (primid) {
+                switch (id) {
                 case OPEN_TCP_SOCKET:
                     String host=string( f.vlr[0]);
                     int port=num(f.vlr[1]).indexValue();
@@ -457,7 +494,7 @@ public class SNetwork extends ModuleAdapter {
                     throw new RuntimeException(liMessage(SISCB,"incorrectargcount"));
                 }
             case 3:
-                switch(primid) {
+                switch(id) {
                 case OPEN_UDP_LISTEN_SOCKET:
                     int dport=num(f.vlr[0]).indexValue();
                     String host=string(f.vlr[0]);
@@ -478,7 +515,7 @@ int dgramsize=num(f.vlr[2]).indexValue();
                     throwArgSizeException();
                 }
             case 4:
-                switch(primid) {
+                switch(id) {
                 case OPEN_MULTICAST_SOCKET:
                     String host=string(f.vlr[0]);
                     String iface=string(f.vlr[2]);

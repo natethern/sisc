@@ -5,7 +5,6 @@ import java.io.*;
 import sisc.data.Expression;
 import sisc.data.Singleton;
 import sisc.data.Symbol;
-import sisc.nativefun.Module;
 import sisc.env.SymbolicEnvironment;
 
 public class StreamSerializer extends SerializerImpl {
@@ -158,10 +157,6 @@ public class StreamSerializer extends SerializerImpl {
             writeExpression(e.asValue());
         } else 
             writeExpression(e.getName());
-    }
-
-    public void writeModule(Module e) throws IOException {
-        writeClass(e.getClass());
     }
 
     public void writeClass(Class c) throws IOException {

@@ -12,34 +12,48 @@ import java.io.IOException;
 
 import sisc.util.ExpressionVisitor;
 
-public class SDebug extends ModuleAdapter {
+public class SDebug extends IndexedProcedure {
 
-    protected static final int 
-        EXPRESSV=0, COMPILE=1,
-        CONT_VLR=2, CONT_NXP=3, CONT_ENV=4, CONT_FK=5,
-        CONT_LOCKQ=6, CONT_PARENT=7, 
-        ERROR_CONT_K=8,
-        FILLRIBQ=9, FILLRIBEXP=10, FREEXPQ=11, FRESYM=12,
-        QTYPE=13;
+    protected static final int EXPRESSV = 0,
+        COMPILE = 1,
+        CONT_VLR = 2,
+        CONT_NXP = 3,
+        CONT_ENV = 4,
+        CONT_FK = 5,
+        CONT_LOCKQ = 6,
+        CONT_PARENT = 7,
+        ERROR_CONT_K = 8,
+        FILLRIBQ = 9,
+        FILLRIBEXP = 10,
+        FREEXPQ = 11,
+        FRESYM = 12,
+        QTYPE = 13;
 
-    public SDebug() {
-        define("express", EXPRESSV);
-        define("compile", COMPILE);
-        define("error-continuation-k", ERROR_CONT_K);
-        define("continuation-vlr", CONT_VLR);
-        define("continuation-nxp", CONT_NXP);
-        define("continuation-env", CONT_ENV);
-        define("continuation-fk", CONT_FK);
-        define("continuation-stk", CONT_PARENT);
-        define("continuation-captured?", CONT_LOCKQ);
-        define("_fill-rib?", FILLRIBQ);
-        define("_fill-rib-exp", FILLRIBEXP);
-        define("_free-reference-exp?", FREEXPQ);
-        define("_free-reference-symbol", FRESYM);
-        define("quantity-type", QTYPE);
+    public static class Index extends IndexedLibraryAdapter {
+
+        public Value construct(int id) {
+            return new SDebug(id);
+        }
+        
+        public Index() {
+            define("express", EXPRESSV);
+            define("compile", COMPILE);
+            define("error-continuation-k", ERROR_CONT_K);
+            define("continuation-vlr", CONT_VLR);
+            define("continuation-nxp", CONT_NXP);
+            define("continuation-env", CONT_ENV);
+            define("continuation-fk", CONT_FK);
+            define("continuation-stk", CONT_PARENT);
+            define("continuation-captured?", CONT_LOCKQ);
+            define("_fill-rib?", FILLRIBQ);
+            define("_fill-rib-exp", FILLRIBEXP);
+            define("_free-reference-exp?", FREEXPQ);
+            define("_free-reference-symbol", FRESYM);
+            define("quantity-type", QTYPE);
+        }
     }
-
-    public class SISCExpression extends Value {
+    
+    public static class SISCExpression extends Value {
         public Expression e;
         
         SISCExpression(Expression e) {
@@ -76,10 +90,16 @@ public class SDebug extends ModuleAdapter {
 
     }
 
-    public Value eval(int primid, Interpreter f) throws ContinuationException {
+    public SDebug(int id) {
+        super(id);
+    }
+    
+    public SDebug() {}
+    
+    public Value doApply(Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
         case 1:
-            switch(primid) {
+            switch(id) {
             case QTYPE:
                 return Quantity.valueOf(num(f.vlr[0]).type);
             case FREEXPQ:

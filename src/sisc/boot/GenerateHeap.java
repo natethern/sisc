@@ -162,9 +162,9 @@ public class GenerateHeap {
         Context.register("main", ctx);
         
         Interpreter r = Context.enter("main");
-        new sisc.modules.Primitives().bindAll(r, r.ctx.toplevel_env);
-        new sisc.modules.Annotations().bindAll(r, r.ctx.toplevel_env);
-        new sisc.modules.io.IO().bindAll(r, r.ctx.toplevel_env);
+        new sisc.modules.Primitives.Index().bindAll(r, r.ctx.toplevel_env);
+        new sisc.modules.Annotations.Index().bindAll(r, r.ctx.toplevel_env);
+        new sisc.modules.io.IO.Index().bindAll(r, r.ctx.toplevel_env);
         ctx.setEvaluator("eval");
         
         

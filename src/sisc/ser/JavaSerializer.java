@@ -2,7 +2,6 @@ package sisc.ser;
 
 import java.io.*;
 import java.math.*;
-import sisc.nativefun.Module;
 import sisc.env.SymbolicEnvironment;
 import sisc.data.Expression;
 
@@ -41,10 +40,6 @@ public class JavaSerializer implements Serializer {
 
     public void writeClass(Class c) throws IOException {
         os.writeObject(c);
-    }
-
-    public void writeModule(Module m) throws IOException {
-        os.writeObject(m);
     }
 
     public boolean seen(Expression e) {

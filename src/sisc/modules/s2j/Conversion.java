@@ -4,58 +4,68 @@ import java.lang.reflect.*;
 
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.nativefun.IndexedLibraryAdapter;
 
 public class Conversion extends Util {
 
-    protected static final int 
-        CONV_JBOOLEAN       =1,
-        CONV_JCHAR          =2,
-        CONV_JBYTE          =3,
-        CONV_JSHORT         =4,
-        CONV_JINT           =5,
-        CONV_JLONG          =6,
-        CONV_JFLOAT         =7,
-        CONV_JDOUBLE        =8,
-        CONV_JSTRING        =9,
-        CONV_JARRAY         =10,
+    protected static final int CONV_JBOOLEAN = 1,
+        CONV_JCHAR = 2,
+        CONV_JBYTE = 3,
+        CONV_JSHORT = 4,
+        CONV_JINT = 5,
+        CONV_JLONG = 6,
+        CONV_JFLOAT = 7,
+        CONV_JDOUBLE = 8,
+        CONV_JSTRING = 9,
+        CONV_JARRAY = 10,
+        CONV_BOOLEAN = 20,
+        CONV_CHARACTER = 21,
+        CONV_NUMBER = 22,
+        CONV_STRING = 23,
+        CONV_SYMBOL = 24,
+        CONV_VECTOR = 25,
+        CONV_LIST = 26;
 
-        CONV_BOOLEAN        =20,
-        CONV_CHARACTER      =21,
-        CONV_NUMBER         =22,
-        CONV_STRING         =23,
-        CONV_SYMBOL         =24,
-        CONV_VECTOR         =25,
-        CONV_LIST           =26;    
+    public static class Index extends IndexedLibraryAdapter {
 
-    public Conversion() {
+        public Value construct(int id) {
+            return new Conversion(id);
+        }
 
-        define("->jboolean"         ,CONV_JBOOLEAN);
-        define("->jchar"            ,CONV_JCHAR);
-        define("->jbyte"            ,CONV_JBYTE);
-        define("->jshort"           ,CONV_JSHORT);
-        define("->jint"             ,CONV_JINT);
-        define("->jlong"            ,CONV_JLONG);
-        define("->jfloat"           ,CONV_JFLOAT);
-        define("->jdouble"          ,CONV_JDOUBLE);
-        define("->jstring"          ,CONV_JSTRING);
-        define("->jarray"           ,CONV_JARRAY);
+        public Index() {
+            define("->jboolean", CONV_JBOOLEAN);
+            define("->jchar", CONV_JCHAR);
+            define("->jbyte", CONV_JBYTE);
+            define("->jshort", CONV_JSHORT);
+            define("->jint", CONV_JINT);
+            define("->jlong", CONV_JLONG);
+            define("->jfloat", CONV_JFLOAT);
+            define("->jdouble", CONV_JDOUBLE);
+            define("->jstring", CONV_JSTRING);
+            define("->jarray", CONV_JARRAY);
 
-        define("->boolean"          ,CONV_BOOLEAN);
-        define("->character"        ,CONV_CHARACTER);
-        define("->number"           ,CONV_NUMBER);
-        define("->string"           ,CONV_STRING);
-        define("->symbol"           ,CONV_SYMBOL);
-        define("->vector"           ,CONV_VECTOR);
-        define("->list"             ,CONV_LIST);
-
+            define("->boolean", CONV_BOOLEAN);
+            define("->character", CONV_CHARACTER);
+            define("->number", CONV_NUMBER);
+            define("->string", CONV_STRING);
+            define("->symbol", CONV_SYMBOL);
+            define("->vector", CONV_VECTOR);
+            define("->list", CONV_LIST);
+        }
     }
-
-    public Value eval(int primid, Interpreter f) throws ContinuationException {
+ 
+    public Conversion(int id) {
+        super(id);
+    }
+    
+    public Conversion() {} 
+   
+    public Value doApply(Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
         case 0:
             throwArgSizeException();
         case 1:
-            switch(primid) {
+            switch(id) {
             case CONV_JBOOLEAN:
                 return makeJObj((truth(f.vlr[0]) ? Boolean.TRUE : Boolean.FALSE), Boolean.TYPE);
             case CONV_JCHAR:
@@ -140,7 +150,7 @@ public class Conversion extends Util {
                 throwArgSizeException();
             }
         case 2:
-            switch(primid) {
+            switch(id) {
             case CONV_JARRAY:
                 Value o = f.vlr[0];
                 Value[] vals = null;

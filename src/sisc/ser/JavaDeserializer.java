@@ -3,7 +3,6 @@ package sisc.ser;
 import java.io.*;
 import java.math.*;
 
-import sisc.nativefun.Module;
 import sisc.data.Expression;
 import sisc.data.Symbol;
 import sisc.env.SymbolicEnvironment;
@@ -62,10 +61,6 @@ public class JavaDeserializer implements Deserializer {
 
     public Class readClass() throws IOException {
         return (Class)readObjectIOExceptionOnly();
-    }
-
-    public Module readModule() throws IOException {
-        return (Module)readObjectIOExceptionOnly();
     }
 
     public Library getLibrary() {

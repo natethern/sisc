@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import sisc.nativefun.Module;
 import sisc.data.Expression;
 import sisc.env.SymbolicEnvironment;
 
@@ -18,7 +17,6 @@ public interface Deserializer extends ObjectInput {
     Expression readExpression() throws IOException;
     SymbolicEnvironment readSymbolicEnvironment() throws IOException;
     Class readClass() throws IOException;
-    Module readModule() throws IOException;
     Library getLibrary();
 }
 

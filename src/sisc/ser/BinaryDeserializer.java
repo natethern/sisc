@@ -4,12 +4,10 @@ import sisc.util.Util;
 import java.util.*;
 import java.io.*;
 import sisc.data.*;
-import sisc.nativefun.Module;
 import sisc.env.SymbolicEnvironment;
 
 public class BinaryDeserializer extends DeserializerImpl {
 
-    Map modules;
     Class[] classPool;
     Expression[] alreadyReadObjects;
     int[] offsets, sizes;
@@ -27,7 +25,6 @@ public class BinaryDeserializer extends DeserializerImpl {
         offsets=o;
         sizes=l;
         alreadyReadObjects=new Expression[offsets.length];
-        modules=new HashMap();
         deserQueue=new LinkedList();
     }
 
@@ -136,23 +133,6 @@ public class BinaryDeserializer extends DeserializerImpl {
             e=baseLib.getExpression((Symbol)e);
         return (SymbolicEnvironment)e;
 
-    }
-
-    public Module readModule() throws IOException {
-        Class c=readClass();
-        Module m=(Module)modules.get(c);
-        if (m!=null)
-            return m;
-        else {
-            try {
-                m=(Module)c.newInstance();
-            } catch (Exception ie) {
-                ie.printStackTrace();
-                throw new IOException(ie.getMessage());
-            }
-            modules.put(c, m);
-            return m;
-        }
     }
 
     public Class readClass() throws IOException {

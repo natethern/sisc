@@ -5,44 +5,55 @@ import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.modules.SThread.Mutex;
 
-public class Primitives extends ModuleAdapter {
+public class Primitives extends IndexedProcedure {
 
     public static final Symbol SHASHB =
         Symbol.intern("sisc.modules.hashtable.Messages");
 
-    protected static final int 
-        HT_MAKE_EQ              =1,
-        HT_MAKE_EQV             =2,
-        HT_MAKE_EQUAL           =3,
-        HTQ                     =4,
-        HT_PUT                  =5,
-        HT_GET                  =6,
-        HT_REMOVE               =7,
-        HT_CLEAR                =8,
-        HT_SIZE                 =9,
-        HT_TO_ALIST             =10,
-        ALIST_TO_HT_EQ          =11,
-        ALIST_TO_HT_EQV         =12,
-        ALIST_TO_HT_EQUAL       =13,
-        HT_KEYS                 =14;
-        
-    public Primitives() {
+    protected static final int HT_MAKE_EQ = 1,
+        HT_MAKE_EQV = 2,
+        HT_MAKE_EQUAL = 3,
+        HTQ = 4,
+        HT_PUT = 5,
+        HT_GET = 6,
+        HT_REMOVE = 7,
+        HT_CLEAR = 8,
+        HT_SIZE = 9,
+        HT_TO_ALIST = 10,
+        ALIST_TO_HT_EQ = 11,
+        ALIST_TO_HT_EQV = 12,
+        ALIST_TO_HT_EQUAL = 13,
+        HT_KEYS = 14;
 
-        define("make-eq-hashtable"      ,HT_MAKE_EQ);
-        define("make-eqv-hashtable"     ,HT_MAKE_EQV);
-        define("make-equal-hashtable"   ,HT_MAKE_EQUAL);
-        define("hashtable?"             ,HTQ);
-        define("hashtable/put!"         ,HT_PUT);
-        define("hashtable/get"          ,HT_GET);
-        define("hashtable/remove!"      ,HT_REMOVE);
-        define("hashtable/clear!"       ,HT_CLEAR);
-        define("hashtable/size"         ,HT_SIZE);
-        define("hashtable->alist"       ,HT_TO_ALIST);
-        define("alist->eq-hashtable"    ,ALIST_TO_HT_EQ);
-        define("alist->eqv-hashtable"   ,ALIST_TO_HT_EQV);
-        define("alist->equal-hashtable" ,ALIST_TO_HT_EQUAL);
-        define("hashtable/keys"         ,HT_KEYS);
+    public static class Index extends IndexedLibraryAdapter {
+
+        public Value construct(int id) {
+            return new Primitives(id);
+        }
+
+        public Index() {
+            define("make-eq-hashtable", HT_MAKE_EQ);
+            define("make-eqv-hashtable", HT_MAKE_EQV);
+            define("make-equal-hashtable", HT_MAKE_EQUAL);
+            define("hashtable?", HTQ);
+            define("hashtable/put!", HT_PUT);
+            define("hashtable/get", HT_GET);
+            define("hashtable/remove!", HT_REMOVE);
+            define("hashtable/clear!", HT_CLEAR);
+            define("hashtable/size", HT_SIZE);
+            define("hashtable->alist", HT_TO_ALIST);
+            define("alist->eq-hashtable", ALIST_TO_HT_EQ);
+            define("alist->eqv-hashtable", ALIST_TO_HT_EQV);
+            define("alist->equal-hashtable", ALIST_TO_HT_EQUAL);
+            define("hashtable/keys", HT_KEYS);
+        }
     }
+    
+    public Primitives(int id) {
+        super(id);
+    }
+    
+    public Primitives() {}
 
     public static final Hashtable shash(Value o) {
         try {
@@ -51,10 +62,10 @@ public class Primitives extends ModuleAdapter {
         return null;
     }
 
-    public Value eval(int primid, Interpreter f) throws ContinuationException {
+    public Value doApply(Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
         case 0:
-            switch (primid) {
+            switch (id) {
             case HT_MAKE_EQ:
                 return new EqHashtable();
             case HT_MAKE_EQV:
@@ -65,7 +76,7 @@ public class Primitives extends ModuleAdapter {
                 throwArgSizeException();
             }
         case 1:
-            switch(primid) {
+            switch(id) {
             case HTQ:
                 return truth(f.vlr[0] instanceof Hashtable);
             case HT_SIZE:
@@ -90,7 +101,7 @@ public class Primitives extends ModuleAdapter {
                 Mutex m = Mutex.of(h);
                 m.acquire();
                 try {
-                    switch(primid) {
+                    switch(id) {
                     case HT_CLEAR:
                         h.clear();
                         return VOID;
@@ -113,7 +124,7 @@ public class Primitives extends ModuleAdapter {
             Mutex m = Mutex.of(h);
             m.acquire();
             try {
-                switch(primid) {
+                switch(id) {
                 case HT_PUT:
                     switch (f.vlr.length) {
                     case 3: break;

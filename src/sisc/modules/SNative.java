@@ -4,48 +4,75 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 
-public class SNative extends ModuleAdapter {
+public class SNative extends IndexedProcedure {
 
-    protected static final int
-        ASSQ=0, MEMQ=1, ASSOC=6, MEMBER=7,
-        CADR=2, CDAR=3, CAAR=4, CDDR=5, NOT=8,
-        APPEND=9, MEMV=11, ASSV=12,
-        VECTOR=13, LISTREF=14, VALUES=15,
-        
-        SUBSTRING=17, STRINGORDER=18, STRINGORDERCI=19,
-        STRINGUPCASE=20, STRINGDOWNCASE=21,
-        MAPCDR=22, MAPCAR=23, REVERSE=24;
-    
-    static long symid=0;
+    protected static final int ASSQ = 0,
+        MEMQ = 1,
+        ASSOC = 6,
+        MEMBER = 7,
+        CADR = 2,
+        CDAR = 3,
+        CAAR = 4,
+        CDDR = 5,
+        NOT = 8,
+        APPEND = 9,
+        MEMV = 11,
+        ASSV = 12,
+        VECTOR = 13,
+        LISTREF = 14,
+        VALUES = 15,
+        SUBSTRING = 17,
+        STRINGORDER = 18,
+        STRINGORDERCI = 19,
+        STRINGUPCASE = 20,
+        STRINGDOWNCASE = 21,
+        MAPCDR = 22,
+        MAPCAR = 23,
+        REVERSE = 24;
 
-    public SNative() {
-        define("append", APPEND);
-        define("assq", ASSQ);
-        define("assoc", ASSOC);
-        define("assv", ASSV);
-        define("caar", CAAR);
-        define("cadr", CADR);
-        define("cdar", CDAR);
-        define("cddr", CDDR);
-        define("memq", MEMQ);
-        define("member", MEMBER);
-        define("list-ref", LISTREF);
-        define("memv", MEMV);
-        define("not", NOT);
-        define("reverse", REVERSE);
-        define("string-order", STRINGORDER);
-        define("string-downcase", STRINGDOWNCASE);
-        define("string-order-ci", STRINGORDERCI);
-        define("string-upcase", STRINGUPCASE);
-        define("substring", SUBSTRING);
-        define("values", VALUES);
-        define("vector", VECTOR);
-        define("map-cdr", MAPCDR);
-        define("map-car", MAPCAR);
+    static long symid = 0;
+
+    public static class Index extends IndexedLibraryAdapter {
+
+        public Value construct(int id) {
+            return new SNative(id);
+        }
+
+        public Index() {
+            define("append", APPEND);
+            define("assq", ASSQ);
+            define("assoc", ASSOC);
+            define("assv", ASSV);
+            define("caar", CAAR);
+            define("cadr", CADR);
+            define("cdar", CDAR);
+            define("cddr", CDDR);
+            define("memq", MEMQ);
+            define("member", MEMBER);
+            define("list-ref", LISTREF);
+            define("memv", MEMV);
+            define("not", NOT);
+            define("reverse", REVERSE);
+            define("string-order", STRINGORDER);
+            define("string-downcase", STRINGDOWNCASE);
+            define("string-order-ci", STRINGORDERCI);
+            define("string-upcase", STRINGUPCASE);
+            define("substring", SUBSTRING);
+            define("values", VALUES);
+            define("vector", VECTOR);
+            define("map-cdr", MAPCDR);
+            define("map-car", MAPCAR);
+        }
     }
-
+    
+    public SNative(int id) {
+        super(id);
+    }
+    
+    public SNative() {}
+    
     public static final Value cadr(Value p) {
-        return ((Pair)((Pair)p).cdr).car;
+        return ((Pair) ((Pair)p).cdr).car;
     }
 
 
@@ -67,8 +94,8 @@ public class SNative extends ModuleAdapter {
         return n;
     }
 
-    public Value eval(int primid, Interpreter f) throws ContinuationException {
-        switch(primid) {
+    public Value doApply(Interpreter f) throws ContinuationException {
+        switch(id) {
         case VECTOR:
             Value res = new SchemeVector(f.vlr);
             f.vlr = null;
@@ -111,7 +138,7 @@ public class SNative extends ModuleAdapter {
         default:
             switch(f.vlr.length) {
             case 1:
-                switch(primid) {
+                switch(id) {
                 case NOT: return truth(f.vlr[0]) ? FALSE : TRUE;
                 case CADR:
                     return ((Pair)pair(f.vlr[0]).cdr).car;
@@ -149,7 +176,7 @@ public class SNative extends ModuleAdapter {
                     throwArgSizeException();
                 }
             case 2:
-                switch(primid) {
+                switch(id) {
                 case LISTREF:
                     Pair p1=pair(f.vlr[0]);
                     for (int l=num(f.vlr[1]).intValue(); l>0; l--) {
@@ -225,7 +252,7 @@ public class SNative extends ModuleAdapter {
                     throwArgSizeException();
                 }
             case 3:
-                switch (primid) {
+                switch (id) {
                 case SUBSTRING:
                     SchemeString str=str(f.vlr[0]);
                     int lidx=num(f.vlr[1]).indexValue();

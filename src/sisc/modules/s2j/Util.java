@@ -8,17 +8,16 @@ import sisc.data.*;
 
 import java.util.HashMap;
 
-public class Util extends ModuleAdapter {
+public abstract class Util extends IndexedProcedure {
 
     protected static final Symbol S2JB =
         Symbol.intern("sisc.modules.s2j.Messages");
 
     public Util() {}
-
-    public Value eval(int primid, Interpreter f) throws ContinuationException {
-        return VOID;
+    public Util(int id) {
+        super(id);
     }
-
+    
     public static Throwable javaException(SchemeException e) {
         Throwable ex = e;
         Value message = null;

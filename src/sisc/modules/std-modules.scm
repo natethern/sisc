@@ -78,15 +78,15 @@
                      (define def (native-library-binding
                                   *module* (quote def))) ...))))))))
 
-(native-module logicops   "sisc.modules.SLogicOps")
-(native-module networking "sisc.modules.io.SNetwork")
-(native-module debugging-native  "sisc.modules.SDebug")
-(native-module threading-native  "sisc.modules.SThread")
-(native-module s2j-reflection    "sisc.modules.s2j.Reflection")
-(native-module s2j-conversion    "sisc.modules.s2j.Conversion")
-(native-module hashtable-native  "sisc.modules.hashtable.Primitives")
-(native-module block-io-native   "sisc.modules.io.BlockIO")
-(native-module file-manipulation-native "sisc.modules.io.FileManipulation")
+(native-module logicops   "sisc.modules.SLogicOps$Index")
+(native-module networking "sisc.modules.io.SNetwork$Index")
+(native-module debugging-native  "sisc.modules.SDebug$Index")
+(native-module threading-native  "sisc.modules.SThread$Index")
+(native-module s2j-reflection    "sisc.modules.s2j.Reflection$Index")
+(native-module s2j-conversion    "sisc.modules.s2j.Conversion$Index")
+(native-module hashtable-native  "sisc.modules.hashtable.Primitives$Index")
+(native-module block-io-native   "sisc.modules.io.BlockIO$Index")
+(native-module file-manipulation-native "sisc.modules.io.FileManipulation$Index")
 
 (module misc
     (wrap-symbol

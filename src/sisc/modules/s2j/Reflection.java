@@ -4,130 +4,135 @@ import java.lang.reflect.*;
 
 import sisc.data.*;
 import sisc.interpreter.*;
+import sisc.nativefun.IndexedLibraryAdapter;
 
 public class Reflection extends Util {
 
-    protected static final int 
-        JAVA_WRAP           =1,
-        JAVA_UNWRAP         =2,
-        JAVA_CLASS          =3,
-        JAVA_SYNC           =4,
+    protected static final int JAVA_WRAP = 1,
+        JAVA_UNWRAP = 2,
+        JAVA_CLASS = 3,
+        JAVA_SYNC = 4,
+        JAVA_CONSTRUCTOR = 10,
+        JAVA_METHOD = 11,
+        JAVA_FIELD = 12,
+        JAVA_CONSTRUCTORS = 13,
+        JAVA_METHODS = 14,
+        JAVA_FIELDS = 15,
+        JAVA_DECL_CONSTRUCTOR = 20,
+        JAVA_DECL_METHOD = 21,
+        JAVA_DECL_FIELD = 22,
+        JAVA_DECL_CONSTRUCTORS = 23,
+        JAVA_DECL_METHODS = 24,
+        JAVA_DECL_FIELDS = 25,
+        JAVA_CLASSES = 30,
+        JAVA_DECL_CLASSES = 31,
+        JAVA_INTERFACES = 32,
+        JAVA_SUPERCLASS = 33,
+        JAVA_COMPONENT_TYPE = 34,
+        JAVA_INSTANCEQ = 35,
+        JAVA_ASSIGNABLEQ = 36,
+        JAVA_NAME = 40,
+        JAVA_MODIFIERS = 41,
+        JAVA_DECLARING_CLASS = 42,
+        JAVA_EXCEPTION_TYPES = 43,
+        JAVA_PARAMETER_TYPES = 44,
+        JAVA_RETURN_TYPE = 45,
+        JAVA_FIELD_TYPE = 46,
+        JAVA_OBJECTQ = 50,
+        JAVA_CLASSQ = 51,
+        JAVA_FIELDQ = 52,
+        JAVA_METHODQ = 53,
+        JAVA_CONSTRUCTORQ = 54,
+        JAVA_INTERFACEQ = 55,
+        JAVA_ARRAYQ = 56,
+        JAVA_ARRAY_CLASSQ = 57,
+        JAVA_NULLQ = 58,
+        JAVA_CLASS_OF = 60,
+        JAVA_ARRAY_CLASS = 61,
+        JAVA_ARRAY_NEW = 62,
+        JAVA_INV_HANDLER = 63,
+        JAVA_PROXY_CLASS = 64,
+        JAVA_NULL = 66,
+        JAVA_MANGLE_FIELD_NAME = 68,
+        JAVA_MANGLE_METHOD_NAME = 69;
 
-        JAVA_CONSTRUCTOR    =10,
-        JAVA_METHOD         =11,
-        JAVA_FIELD          =12,
-        JAVA_CONSTRUCTORS   =13,
-        JAVA_METHODS        =14,
-        JAVA_FIELDS         =15,
+    public static class Index extends IndexedLibraryAdapter {
 
-        JAVA_DECL_CONSTRUCTOR   =20,
-        JAVA_DECL_METHOD    =21,
-        JAVA_DECL_FIELD     =22,
-        JAVA_DECL_CONSTRUCTORS  =23,
-        JAVA_DECL_METHODS   =24,
-        JAVA_DECL_FIELDS    =25,
+        public Value construct(int id) {
+            return new Reflection(id);
+        }
 
-        JAVA_CLASSES        =30,
-        JAVA_DECL_CLASSES   =31,
-        JAVA_INTERFACES     =32,
-        JAVA_SUPERCLASS     =33,
-        JAVA_COMPONENT_TYPE =34,
-        JAVA_INSTANCEQ      =35,
-        JAVA_ASSIGNABLEQ    =36,
+        public Index() {
+            define("java/wrap", JAVA_WRAP);
+            define("java/unwrap", JAVA_UNWRAP);
+            define("java/class", JAVA_CLASS);
+            define("java/synchronized", JAVA_SYNC);
 
-        JAVA_NAME           =40,
-        JAVA_MODIFIERS      =41,
-        JAVA_DECLARING_CLASS=42,
-        JAVA_EXCEPTION_TYPES=43,
-        JAVA_PARAMETER_TYPES=44,
-        JAVA_RETURN_TYPE    =45,
-        JAVA_FIELD_TYPE     =46,
-        
-        JAVA_OBJECTQ        =50,
-        JAVA_CLASSQ         =51,
-        JAVA_FIELDQ         =52,
-        JAVA_METHODQ        =53,
-        JAVA_CONSTRUCTORQ   =54,
-        JAVA_INTERFACEQ     =55,
-        JAVA_ARRAYQ         =56,
-        JAVA_ARRAY_CLASSQ   =57,
-        JAVA_NULLQ          =58,
+            define("java/constructor", JAVA_CONSTRUCTOR);
+            define("java/method", JAVA_METHOD);
+            define("java/field", JAVA_FIELD);
+            define("java/constructors", JAVA_CONSTRUCTORS);
+            define("java/methods", JAVA_METHODS);
+            define("java/fields", JAVA_FIELDS);
+            define("java/decl-constructor", JAVA_DECL_CONSTRUCTOR);
+            define("java/decl-method", JAVA_DECL_METHOD);
+            define("java/decl-field", JAVA_DECL_FIELD);
+            define("java/decl-constructors", JAVA_DECL_CONSTRUCTORS);
+            define("java/decl-methods", JAVA_DECL_METHODS);
+            define("java/decl-fields", JAVA_DECL_FIELDS);
 
-        JAVA_CLASS_OF       =60,
-        JAVA_ARRAY_CLASS    =61,
-        JAVA_ARRAY_NEW      =62,
-        JAVA_INV_HANDLER    =63,
-        JAVA_PROXY_CLASS    =64,
-        JAVA_NULL           =66,
-        JAVA_MANGLE_FIELD_NAME  =68,
-        JAVA_MANGLE_METHOD_NAME =69;
+            define("java/classes", JAVA_CLASSES);
+            define("java/decl-classes", JAVA_DECL_CLASSES);
+            define("java/interfaces", JAVA_INTERFACES);
+            define("java/superclass", JAVA_SUPERCLASS);
+            define("java/component-type", JAVA_COMPONENT_TYPE);
+            define("java/instance?", JAVA_INSTANCEQ);
+            define("java/assignable?", JAVA_ASSIGNABLEQ);
 
-    public Reflection() {
+            define("java/name", JAVA_NAME);
+            define("java/modifiers", JAVA_MODIFIERS);
+            define("java/declaring-class", JAVA_DECLARING_CLASS);
+            define("java/exception-types", JAVA_EXCEPTION_TYPES);
+            define("java/parameter-types", JAVA_PARAMETER_TYPES);
+            define("java/return-type", JAVA_RETURN_TYPE);
+            define("java/field-type", JAVA_FIELD_TYPE);
 
-        define("java/wrap"          ,JAVA_WRAP);
-        define("java/unwrap"        ,JAVA_UNWRAP);
-        define("java/class"         ,JAVA_CLASS);
-        define("java/synchronized"  ,JAVA_SYNC);
+            define("java/object?", JAVA_OBJECTQ);
+            define("java/class?", JAVA_CLASSQ);
+            define("java/field?", JAVA_FIELDQ);
+            define("java/method?", JAVA_METHODQ);
+            define("java/constructor?", JAVA_CONSTRUCTORQ);
+            define("java/interface?", JAVA_INTERFACEQ);
+            define("java/array?", JAVA_ARRAYQ);
+            define("java/array-class?", JAVA_ARRAY_CLASSQ);
+            define("java/null?", JAVA_NULLQ);
 
-        define("java/constructor"   ,JAVA_CONSTRUCTOR);
-        define("java/method"        ,JAVA_METHOD);
-        define("java/field"         ,JAVA_FIELD);
-        define("java/constructors"  ,JAVA_CONSTRUCTORS);
-        define("java/methods"       ,JAVA_METHODS);
-        define("java/fields"        ,JAVA_FIELDS);
-        define("java/decl-constructor",JAVA_DECL_CONSTRUCTOR);
-        define("java/decl-method"   ,JAVA_DECL_METHOD);
-        define("java/decl-field"    ,JAVA_DECL_FIELD);
-        define("java/decl-constructors",JAVA_DECL_CONSTRUCTORS);
-        define("java/decl-methods"  ,JAVA_DECL_METHODS);
-        define("java/decl-fields"   ,JAVA_DECL_FIELDS);
-
-        define("java/classes"       ,JAVA_CLASSES);
-        define("java/decl-classes"  ,JAVA_DECL_CLASSES);
-        define("java/interfaces"    ,JAVA_INTERFACES);
-        define("java/superclass"    ,JAVA_SUPERCLASS);
-        define("java/component-type",JAVA_COMPONENT_TYPE);
-        define("java/instance?"     ,JAVA_INSTANCEQ);
-        define("java/assignable?"   ,JAVA_ASSIGNABLEQ);
-
-        define("java/name"          ,JAVA_NAME);
-        define("java/modifiers"     ,JAVA_MODIFIERS);
-        define("java/declaring-class",JAVA_DECLARING_CLASS);
-        define("java/exception-types",JAVA_EXCEPTION_TYPES);
-        define("java/parameter-types",JAVA_PARAMETER_TYPES);
-        define("java/return-type"   ,JAVA_RETURN_TYPE);
-        define("java/field-type"    ,JAVA_FIELD_TYPE);
-
-        define("java/object?"       ,JAVA_OBJECTQ);
-        define("java/class?"        ,JAVA_CLASSQ);
-        define("java/field?"        ,JAVA_FIELDQ);
-        define("java/method?"       ,JAVA_METHODQ);
-        define("java/constructor?"  ,JAVA_CONSTRUCTORQ);
-        define("java/interface?"    ,JAVA_INTERFACEQ);
-        define("java/array?"        ,JAVA_ARRAYQ);
-        define("java/array-class?"  ,JAVA_ARRAY_CLASSQ);
-        define("java/null?"         ,JAVA_NULLQ);
-
-        define("java/class-of"      ,JAVA_CLASS_OF);
-        define("java/array-class"   ,JAVA_ARRAY_CLASS);
-        define("java/array-new"     ,JAVA_ARRAY_NEW);
-        define("java/invocation-handler",JAVA_INV_HANDLER);
-        define("java/proxy-class"   ,JAVA_PROXY_CLASS);
-        define("java/null"          ,JAVA_NULL);
-        define("java/mangle-field-name"        ,JAVA_MANGLE_FIELD_NAME);
-        define("java/mangle-method-name",JAVA_MANGLE_METHOD_NAME);
-
+            define("java/class-of", JAVA_CLASS_OF);
+            define("java/array-class", JAVA_ARRAY_CLASS);
+            define("java/array-new", JAVA_ARRAY_NEW);
+            define("java/invocation-handler", JAVA_INV_HANDLER);
+            define("java/proxy-class", JAVA_PROXY_CLASS);
+            define("java/null", JAVA_NULL);
+            define("java/mangle-field-name", JAVA_MANGLE_FIELD_NAME);
+            define("java/mangle-method-name", JAVA_MANGLE_METHOD_NAME);
+        }
     }
-
-    public Value eval(int primid, Interpreter f) throws ContinuationException {
+    
+    public Reflection(int id) {
+        super(id);
+    }
+    
+    public Reflection() {}
+    
+    public Value doApply(Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
         case 0:
-            switch(primid) {
+            switch(id) {
             case JAVA_NULL:
                 return makeJObj(null, Object.class);
             }
         case 1:
-            switch(primid) {
+            switch(id) {
             case JAVA_WRAP:
                 return makeJObj(f.vlr[0], Value.class);
             case JAVA_UNWRAP:
@@ -252,7 +257,7 @@ public class Reflection extends Util {
                 return Symbol.intern(mangleMethodName(symval(f.vlr[0])));
             }
         case 2:
-            switch(primid) {
+            switch(id) {
             case JAVA_SYNC:
                 synchronized(jobj(f.vlr[0])) {
                     Interpreter i=Context.enter(f);
@@ -308,7 +313,7 @@ public class Reflection extends Util {
                                 makeArrayClass(componentType, intDims.length));
             }
         default:
-            switch(primid) {
+            switch(id) {
             case JAVA_CONSTRUCTOR:
                 try {
                     Class[] paramTypes = new Class[f.vlr.length-1];

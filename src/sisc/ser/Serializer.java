@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import sisc.nativefun.Module;
 import sisc.data.Expression;
 import sisc.env.SymbolicEnvironment;
 
@@ -18,7 +17,6 @@ public interface Serializer extends ObjectOutput {
     void writeExpression(Expression e) throws IOException;
     void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException;
     void writeClass(Class c) throws IOException;
-    void writeModule(Module m) throws IOException;
 
     boolean seen(Expression e);
     void forceSeen(Expression e);

@@ -480,7 +480,7 @@ public class Primitives extends IndexedProcedure {
             case LOADNL:
                 try {
                     Class clazz=Class.forName(string(f.vlr[0]), true, f.dynenv.getClassLoader());
-                    return (Module)clazz.newInstance();
+                    return (NativeLibrary)clazz.newInstance();
                 } catch (Exception e) {
                     throwPrimException(e.getMessage());
                 }

@@ -9,69 +9,101 @@ import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.util.ExpressionVisitor;
 
-public class SThread extends ModuleAdapter {
+public class SThread extends IndexedProcedure {
 
     protected static final Symbol THREADB =
         Symbol.intern("sisc.modules.Messages");
 
-    protected static final Symbol MUTEX=Symbol.get("mutex");
+    protected static final Symbol MUTEX = Symbol.get("mutex");
 
-    protected static final int 
-        THREADNEW=0, THREADSTART=1, THREADYIELD=2, THREADSLEEP=3,
-        THREADINTERRUPT=4, THREADJOIN=5, THREADCURRENT=6,
-        THREADQ=7, THREADNOTIFY=8, THREADNOTIFYALL=9,
-        THREADWAIT=10, THREADNAME=11, THREADPRIORITY=12, 
-        THREADDAEMONQ=13, SETTHREADNAME=14, SETTHREADPRIORITY=15,
-        SETTHREADDAEMON=16, THREADSTATE=17, THREADINTERRUPTEDQ=18,
-        THREADHOLDSLOCKQ=19, THREADSRUNNING=20, THREADRESULT=21,
-        MUTEXNEW=22, MUTEXLOCK=23, MUTEXUNLOCK=24, 
-        CONDVARNOTIFY=25, CONDVARNOTIFYALL=26, 
-        MUTEXOF=28, MUTEXQ=29, CONDVARQ=30, CONDVARNEW=31,
-        THREADSETRESULT=32;
+    protected static final int THREADNEW = 0,
+        THREADSTART = 1,
+        THREADYIELD = 2,
+        THREADSLEEP = 3,
+        THREADINTERRUPT = 4,
+        THREADJOIN = 5,
+        THREADCURRENT = 6,
+        THREADQ = 7,
+        THREADNOTIFY = 8,
+        THREADNOTIFYALL = 9,
+        THREADWAIT = 10,
+        THREADNAME = 11,
+        THREADPRIORITY = 12,
+        THREADDAEMONQ = 13,
+        SETTHREADNAME = 14,
+        SETTHREADPRIORITY = 15,
+        SETTHREADDAEMON = 16,
+        THREADSTATE = 17,
+        THREADINTERRUPTEDQ = 18,
+        THREADHOLDSLOCKQ = 19,
+        THREADSRUNNING = 20,
+        THREADRESULT = 21,
+        MUTEXNEW = 22,
+        MUTEXLOCK = 23,
+        MUTEXUNLOCK = 24,
+        CONDVARNOTIFY = 25,
+        CONDVARNOTIFYALL = 26,
+        MUTEXOF = 28,
+        MUTEXQ = 29,
+        CONDVARQ = 30,
+        CONDVARNEW = 31,
+        THREADSETRESULT = 32;
 
+    protected static Symbol S_READY = Symbol.get("ready"),
+        S_RUNNING = Symbol.get("running"),
+        S_FINISHED = Symbol.get("finished"),
+        S_FINISHED_ABNORMALLY = Symbol.get("finished-with-error");
 
-    protected static Symbol 
-            S_READY=Symbol.get("ready"), S_RUNNING=Symbol.get("running"),
-            S_FINISHED=Symbol.get("finished"), 
-            S_FINISHED_ABNORMALLY=Symbol.get("finished-with-error");
+    public static class Index extends IndexedLibraryAdapter {
 
-    public SThread() {
-        define("thread?", THREADQ);
-        define("thread/new", THREADNEW);    
-        define("thread/start", THREADSTART);    
-        define("thread/yield", THREADYIELD);    
-        define("thread/interrupt", THREADINTERRUPT);
-        define("thread/join", THREADJOIN);
-        define("thread/result", THREADRESULT);
-        define("thread/current", THREADCURRENT);
-        define("thread/notify", THREADNOTIFY);
-        define("thread/notify-all", THREADNOTIFYALL);
-        define("thread/wait", THREADWAIT);
-        define("thread/name", THREADNAME);
-        define("thread/name!", SETTHREADNAME);
-        define("thread/priority", THREADPRIORITY);
-        define("thread/daemon?", THREADDAEMONQ);
-        define("thread/daemon!", SETTHREADDAEMON);
-        define("thread/priority!", SETTHREADPRIORITY);
-        define("thread/state", THREADSTATE);
-        define("thread/interrupted?", THREADINTERRUPTEDQ);
-        define("thread/holds-lock?", THREADHOLDSLOCKQ);
+        public Value construct(int id) {
+            return new SThread(id);
+        }
 
-        define("thread/_set-result!", THREADSETRESULT);
-        define("thread/_active-thread-count", THREADSRUNNING);
+        public Index() {
+            define("thread?", THREADQ);
+            define("thread/new", THREADNEW);
+            define("thread/start", THREADSTART);
+            define("thread/yield", THREADYIELD);
+            define("thread/interrupt", THREADINTERRUPT);
+            define("thread/join", THREADJOIN);
+            define("thread/result", THREADRESULT);
+            define("thread/current", THREADCURRENT);
+            define("thread/notify", THREADNOTIFY);
+            define("thread/notify-all", THREADNOTIFYALL);
+            define("thread/wait", THREADWAIT);
+            define("thread/name", THREADNAME);
+            define("thread/name!", SETTHREADNAME);
+            define("thread/priority", THREADPRIORITY);
+            define("thread/daemon?", THREADDAEMONQ);
+            define("thread/daemon!", SETTHREADDAEMON);
+            define("thread/priority!", SETTHREADPRIORITY);
+            define("thread/state", THREADSTATE);
+            define("thread/interrupted?", THREADINTERRUPTEDQ);
+            define("thread/holds-lock?", THREADHOLDSLOCKQ);
 
-        define("condvar?", CONDVARQ);
-        define("condvar/new", CONDVARNEW);
-        define("condvar/notify", CONDVARNOTIFY);
-        define("condvar/notify-all", CONDVARNOTIFYALL);
+            define("thread/_set-result!", THREADSETRESULT);
+            define("thread/_active-thread-count", THREADSRUNNING);
 
-        define("mutex?", MUTEXQ);
-        define("mutex-of", MUTEXOF);
-        define("mutex/new", MUTEXNEW);
-        define("mutex/lock!", MUTEXLOCK);
-        define("mutex/unlock!", MUTEXUNLOCK);
+            define("condvar?", CONDVARQ);
+            define("condvar/new", CONDVARNEW);
+            define("condvar/notify", CONDVARNOTIFY);
+            define("condvar/notify-all", CONDVARNOTIFYALL);
+
+            define("mutex?", MUTEXQ);
+            define("mutex-of", MUTEXOF);
+            define("mutex/new", MUTEXNEW);
+            define("mutex/lock!", MUTEXLOCK);
+            define("mutex/unlock!", MUTEXUNLOCK);
+        }
+    }
+    
+    public SThread(int id) {
+        super(id);
     }
 
+    public SThread() {}
+    
     public static class CondVar extends Value implements NamedValue {
 
         public CondVar() {}
@@ -265,10 +297,10 @@ public class SThread extends ModuleAdapter {
         }
     } 
 
-    public Value eval(int primid, Interpreter f) throws ContinuationException {
+    public Value doApply(Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
         case 0:
-            switch(primid) {
+            switch(id) {
             case MUTEXNEW:
                 return new Mutex();
             case CONDVARNEW:
@@ -286,7 +318,7 @@ public class SThread extends ModuleAdapter {
                 throwArgSizeException();
             }
         case 1:
-            switch(primid) {
+            switch(id) {
             case THREADQ:
                 return truth(f.vlr[0] instanceof SchemeThread);
             case MUTEXQ:
@@ -348,7 +380,7 @@ public class SThread extends ModuleAdapter {
                 throwArgSizeException();
             }
         case 2:
-            switch(primid) {
+            switch(id) {
             case MUTEXUNLOCK:
                 mutex(f.vlr[0]).unlock(condvar(f.vlr[1]));
                 return TRUE;
@@ -387,7 +419,7 @@ public class SThread extends ModuleAdapter {
                 throwArgSizeException();
             } 
         case 3:
-            switch(primid) {
+            switch(id) {
             case MUTEXUNLOCK:
                 return mutex(f.vlr[0]).unlock(condvar(f.vlr[1]), 
                                               num(f.vlr[2]).longValue());

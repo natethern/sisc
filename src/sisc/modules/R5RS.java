@@ -5,19 +5,19 @@ import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.env.SymbolicEnvironment;
 
-public class R5RS extends Module {
+public class R5RS extends NativeLibrary {
 
-    public String getModuleName() {
+    public String getLibraryName() {
         return "R5RS";
     }
 
-    public float getModuleVersion() {
+    public float getLibraryVersion() {
         return 0.0f;
     }
 
     public R5RS() {}
 
-    public Symbol[] getModuleBindingNames(Interpreter r) {
+    public Symbol[] getLibraryBindingNames(Interpreter r) {
         SymbolicEnvironment env = r.lookupContextEnv(REPORT);
         return (Symbol[])env.bindingKeys().toArray(new Symbol[] {});
     }
@@ -26,12 +26,6 @@ public class R5RS extends Module {
         throws NoSuchMethodError {
         SymbolicEnvironment env = r.lookupContextEnv(REPORT);
         return env.lookup(name);
-    }
-
-    public Value eval(int primid, Interpreter f)
-        throws ContinuationException {
-        throwArgSizeException();
-        return VOID;
     }
 }
 

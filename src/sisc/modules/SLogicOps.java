@@ -4,21 +4,33 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 
-public class SLogicOps extends ModuleAdapter {
+public class SLogicOps extends IndexedProcedure {
 
     protected static final Symbol LOGICOPSB =
         Symbol.intern("sisc.modules.Messages");
 
-    protected static final int
-        LOGAND=1, LOGOR=2, LOGXOR=3, LOGNOT=4;
+    protected static final int LOGAND = 1, LOGOR = 2, LOGXOR = 3, LOGNOT = 4;
 
-    public SLogicOps() {
-        define("logand", LOGAND);
-        define("logor",  LOGOR);
-        define("logxor", LOGXOR);
-        define("lognot", LOGNOT);
+    public static class Index extends IndexedLibraryAdapter {
+
+        public Value construct(int id) {
+            return new SLogicOps(id);
+        }
+
+        public Index() {
+            define("logand", LOGAND);
+            define("logor", LOGOR);
+            define("logxor", LOGXOR);
+            define("lognot", LOGNOT);
+        }
     }
-
+    
+    public SLogicOps(int id) {
+        super(id);
+    }
+    
+    public SLogicOps() {}
+    
     public int fixed(Value v) {
         try {
             Quantity q=(Quantity)v;
@@ -28,13 +40,13 @@ public class SLogicOps extends ModuleAdapter {
         return -1;
     }
 
-    public Value eval(int primid, Interpreter f) throws ContinuationException {
-        if (primid==LOGNOT) {
+    public Value doApply(Interpreter f) throws ContinuationException {
+        if (id==LOGNOT) {
             if (f.vlr.length > 1) throwArgSizeException();
             return Quantity.valueOf(~fixed(f.vlr[0]));
         } else {
             int v=fixed(f.vlr[0]);
-            switch(primid) {
+            switch(id) {
             case LOGAND:
                 for (int i=f.vlr.length-1; i>0; i--)
                     v&=fixed(f.vlr[i]);

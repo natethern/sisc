@@ -11,33 +11,55 @@ import sisc.data.*;
 /**
  * Scheme functions for manipulating files and directories.
  */
-public class FileManipulation extends ModuleAdapter {
+public class FileManipulation extends IndexedProcedure {
 
-    protected static final int
-        DIRECTORYQ = 1, FILEQ = 2, HIDDENQ = 3,
-        DIRLIST = 6, LASTMODIFIED = 7, SETLASTMODIFIED = 8,
-        SETREADONLY = 9, LENGTH = 10, GETPARENTURL = 11, MAKEDIRECTORY = 12,
-        MAKEDIRECTORIES = 13, RENAME = 14, DELETE=15, READABLE=16, 
-        WRITEABLE=17;
+    protected static final int DIRECTORYQ = 1,
+        FILEQ = 2,
+        HIDDENQ = 3,
+        DIRLIST = 6,
+        LASTMODIFIED = 7,
+        SETLASTMODIFIED = 8,
+        SETREADONLY = 9,
+        LENGTH = 10,
+        GETPARENTURL = 11,
+        MAKEDIRECTORY = 12,
+        MAKEDIRECTORIES = 13,
+        RENAME = 14,
+        DELETE = 15,
+        READABLE = 16,
+        WRITEABLE = 17;
 
-    public FileManipulation() {
-        define("file/hidden?"      , HIDDENQ);
-        define("file/is-directory?", DIRECTORYQ);
-        define("file/is-file?"     , FILEQ);
-        define("file/is-readable?" , READABLE);
-        define("file/is-writeable?", WRITEABLE);
-        define("directory/list"    , DIRLIST);
-        define("file/last-modified", LASTMODIFIED);
-        define("file/set-last-modified!", SETLASTMODIFIED);
-        define("file/set-read-only!", SETREADONLY);
-        define("file/length"       , LENGTH);
-        define("file/rename!"       , RENAME);
-        define("file/delete!"      , DELETE);
-        define("_get-parent-url"    , GETPARENTURL);
-        define("_make-directory!"    , MAKEDIRECTORY);
-        define("_make-directories!"  , MAKEDIRECTORIES);
+    public static class Index extends IndexedLibraryAdapter {
+
+        public Value construct(int id) {
+            return new FileManipulation(id);
+        }
+        
+        public Index() {
+            define("file/hidden?", HIDDENQ);
+            define("file/is-directory?", DIRECTORYQ);
+            define("file/is-file?", FILEQ);
+            define("file/is-readable?", READABLE);
+            define("file/is-writeable?", WRITEABLE);
+            define("directory/list", DIRLIST);
+            define("file/last-modified", LASTMODIFIED);
+            define("file/set-last-modified!", SETLASTMODIFIED);
+            define("file/set-read-only!", SETREADONLY);
+            define("file/length", LENGTH);
+            define("file/rename!", RENAME);
+            define("file/delete!", DELETE);
+            define("_get-parent-url", GETPARENTURL);
+            define("_make-directory!", MAKEDIRECTORY);
+            define("_make-directories!", MAKEDIRECTORIES);
+        }
     }
-
+    
+    public FileManipulation(int id) {
+        super(id);
+    }
+    
+    public FileManipulation() {}
+    
     public static final File fileHandle(Value o) {
         URL u=url(o);
         if (!"file".equals(u.getProtocol()))
@@ -46,11 +68,10 @@ public class FileManipulation extends ModuleAdapter {
         return new File(path);
     }
 
-    public Value eval(int primid, Interpreter f)
-        throws ContinuationException {
+    public Value doApply(Interpreter f) throws ContinuationException {
         switch (f.vlr.length) {
         case 1:
-            switch(primid) {
+            switch(id) {
             case DIRECTORYQ:
                 return truth(fileHandle(f.vlr[0]).isDirectory());
             case FILEQ:
@@ -91,7 +112,7 @@ public class FileManipulation extends ModuleAdapter {
                 throwArgSizeException();
             }
         case 2:
-            switch(primid) {
+            switch(id) {
             case SETLASTMODIFIED:
                 return truth(fileHandle(f.vlr[0]).setLastModified(num(f.vlr[1]).longValue()));
             case RENAME:
