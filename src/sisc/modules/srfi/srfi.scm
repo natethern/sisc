@@ -290,6 +290,7 @@
      modified-julian-day->time-tai
      modified-julian-day->time-monotonic
      date->string string->date)
+  (import srfi-6)
   (import srfi-8)
   (import record)
   (import optional-args)
@@ -397,6 +398,7 @@
      declare-bundle! store-bundle load-bundle! 
      localized-template)
   (import s2j)
+  (import srfi-6)
   (include "srfi-29.scm")
   (add-feature 'srfi-29))
 
