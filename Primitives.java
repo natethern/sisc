@@ -441,7 +441,6 @@ public class Primitives extends ModuleAdapter {
                     } catch (EOFException eof) {
                         v=EOF;
                     } catch (IOException e) {
-			e.printStackTrace();
                         f.pop(before);
                         throwPrimException( "error reading from "+p.write());
                     }
