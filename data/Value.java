@@ -29,9 +29,9 @@ public abstract class Value extends Expression implements Immediate {
      * @param limit The number of characters to display
      */
     public String synopsis(int limit) {
-        String v=write();
+        String v=toString();
         if (v.length() > limit)
-            return write().substring(0,limit)+"...";
+            return v.substring(0,limit)+"...";
         else return v;
     }
 
