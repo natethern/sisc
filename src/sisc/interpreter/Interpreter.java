@@ -5,6 +5,8 @@ import sisc.io.*;
 import sisc.compiler.Compiler;
 import sisc.data.*;
 import sisc.env.*;
+import sisc.ser.Deserializer;
+import sisc.ser.Serializer;
 import sisc.util.Util;
 
 /**
@@ -36,6 +38,9 @@ public class Interpreter extends Util {
         public Value express() {
             return list(Symbol.get("TSException"));
         }
+        
+        public void serialize(Serializer s) throws IOException {}
+        public void deserialize(Deserializer s) throws IOException {}
     }
 
     //the compiler is stateless; if that ever changes it would need to
