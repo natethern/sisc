@@ -23,18 +23,22 @@
   (if (null? segments) '()
       (let ((segment1 (car segments))
             (segments (cdr segments)))
+        (pretty-print segment1)
         (let ((symenv (car segment1))
               (bindings (map car (cdr segment1))))
-          (let ((symenv-id (string->symbol
-                            (string-append 
-                             segment-str
-                             (symbol->string symenv)))))
-            (add lib symenv-id bindings)
-            (for-each (lambda (binding)
-                        (add lib binding 
-                             (java-wrap (cdr (assoc binding (cdr segment1))))))
-                      bindings)
-            (cons symenv-id (apply _create-lib (cons lib segments))))))))
+          (if (null? bindings)
+              (apply _create-lib (cons lib segments))
+              (let ((symenv-id (string->symbol
+                                (string-append 
+                                 segment-str
+                                 (symbol->string symenv)))))
+                (add lib symenv-id (java-wrap bindings))
+                (for-each (lambda (binding)
+                            (add lib binding 
+                                 (java-wrap 
+                                  (cdr (assoc binding (cdr segment1))))))
+                          bindings)
+                (cons symenv-id (apply _create-lib (cons lib segments)))))))))
 
 (define (create-library name filename segment1 . segments)
   (let* ((lib (make <sisc.ser.LibraryBuilder> (->jboolean #f)))
@@ -128,6 +132,12 @@
                                            (map (lambda (b) 
                                                   (getprop b '*sc-expander*))
                                                 sc-expander))))))
-                          (pretty-print rv)
-                          (newline)
                           rv))))))
+
+;(import loadable-libraries)
+;(module bar ((foo))
+;  (define-syntax foo
+;    (syntax-rules ()
+;      ((_ x)
+;       (+ x 1)))))
+;(create-library-from-module 'bar "bar.sll")

@@ -101,6 +101,7 @@ public class Primitives extends ModuleAdapter {
         define("remainder", REMAINDER);
         define("remprop", REMPROP);
         define("round", ROUND);
+        define("rand", RAND);
         define("scheme-report-environment", REPORTENVIRONMENT);
         define("set-box!", SETBOX);
         define("set-car!", SETCAR);
@@ -183,11 +184,14 @@ public class Primitives extends ModuleAdapter {
         }
     }
 
+    protected java.util.Random rand=new java.util.Random();
+
     public Value eval(int primid, Interpreter f)
         throws ContinuationException {
         switch (f.vlr.length) {
         case 0:
             switch (primid) {
+            case RAND: return Quantity.valueOf(rand.nextInt());
             case _VOID: return VOID;
             case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
             case CURRENTWIND: return f.dynenv.wind;
@@ -626,7 +630,6 @@ public class Primitives extends ModuleAdapter {
 
     static final int
         //0-10
-        //13
         //16
         //26-30
         //33-34
@@ -713,6 +716,7 @@ public class Primitives extends ModuleAdapter {
         PROCEDUREQ = 120,
         PUTPROP = 140,
         QUOTIENT = 126,
+        RAND = 13,
         REALPART = 83,
         REMAINDER = 127,
         REMPROP = 62,
