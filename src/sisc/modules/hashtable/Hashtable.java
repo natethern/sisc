@@ -108,7 +108,7 @@ public abstract class Hashtable extends Value {
         Iterator i = ht.entrySet().iterator();
         while(i.hasNext()) {
             Map.Entry e = (Map.Entry)i.next();
-            s.writeExpression(getMapKey(e));
+            s.writeInitializedExpression(getMapKey(e));
             s.writeExpression(getMapValue(e));
         }
     }
@@ -116,7 +116,7 @@ public abstract class Hashtable extends Value {
     public void deserialize(Deserializer s) throws IOException {
         int sz = s.readInt();
         for (int i=0; i<sz; i++) {
-            Expression key = s.readExpression();
+            Expression key = s.readInitializedExpression();
             Expression val = s.readExpression();
             put((Value)key, (Value)val);
         }

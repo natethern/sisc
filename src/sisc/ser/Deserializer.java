@@ -15,6 +15,8 @@ public interface Deserializer extends ObjectInput {
     BigDecimal readBigDecimal() throws IOException;
 
     Expression readExpression() throws IOException;
+    Expression readInitializedExpression() throws IOException;
+
     SymbolicEnvironment readSymbolicEnvironment() throws IOException;
     Class readClass() throws IOException;
     Library getLibrary();

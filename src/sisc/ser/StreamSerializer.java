@@ -62,6 +62,14 @@ public class StreamSerializer extends SerializerImpl {
 
     public boolean SHOWEP;
 
+    public final void writeExpression(Expression e) throws IOException {
+        writeExpression(e, false);
+    }
+
+    public final void writeInitializedExpression(Expression e) throws IOException {
+        writeExpression(e, true);
+    }
+
     /**
      * Serializes expressions. We distinguish betweeen four types of
      * expressions:
@@ -73,7 +81,7 @@ public class StreamSerializer extends SerializerImpl {
      * @param e the expression to serialize
      * @exception IOException if an error occurs
      */
-    public void writeExpression(Expression e) throws IOException {
+    public void writeExpression(Expression e, boolean flush) throws IOException {
         if (e==null) {
             //null
             writeInt(1);
@@ -84,7 +92,6 @@ public class StreamSerializer extends SerializerImpl {
 
         int sizeStartOffset = -1;
         int posi=-1;
-        boolean flush=false;
 
         if (epIndex!=null) {
             posi=epIndex.intValue();

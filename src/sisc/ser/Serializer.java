@@ -15,6 +15,8 @@ public interface Serializer extends ObjectOutput {
     void writeBigInteger(BigInteger i) throws IOException;
 
     void writeExpression(Expression e) throws IOException;
+    void writeInitializedExpression(Expression e) throws IOException;
+
     void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException;
     void writeClass(Class c) throws IOException;
 

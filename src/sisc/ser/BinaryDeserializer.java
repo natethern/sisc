@@ -31,12 +31,19 @@ public class BinaryDeserializer extends DeserializerImpl {
     int indent=0;
     static final String indentionBase="                                                                                                       ";
 
-    public Expression readExpression() throws IOException {
+    public final Expression readExpression() throws IOException {
+        return readExpression(false);
+    }
+
+    public final Expression readInitializedExpression() throws IOException {
+        return readExpression(true);
+    }
+
+    public Expression readExpression(boolean flush) throws IOException {
         indent++;
         long pos=raf.getFilePointer();
         int type=readInt();
         int definingOid = -1;
-        boolean flush=false;
 
         try {
             //Read the stream object type, values above 15 of which represent
