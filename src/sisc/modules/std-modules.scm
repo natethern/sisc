@@ -406,6 +406,132 @@
   (import record)
   (include "generic-procedures.scm"))
 
+(module new-s2j
+    (java-new
+     ;;classes
+     java-class
+     java-class?
+     java-class-name
+     java-class-flags
+     java-class-declaring-class
+     java-class-declared-superclasses
+     java-class-declared-classes
+     java-class-declared-constructors
+     java-class-declared-methods
+     java-class-declared-fields
+     java-class-precedence-list
+     define-java-class
+     define-java-classes
+     ;;constructors
+     java-constructor?
+     java-constructor-name
+     java-constructor-flags
+     java-constructor-declaring-class
+     java-constructor-parameter-types
+     java-constructor-procedure
+     java-constructor-method
+     ;;methods
+     java-method?
+     java-method-name
+     java-method-flags
+     java-method-declaring-class
+     java-method-parameter-types
+     java-method-return-type
+     java-method-procedure
+     java-method-method
+     generic-java-method
+     define-generic-java-method
+     define-generic-java-methods
+     ;;fields
+     java-field?
+     java-field-name
+     java-field-flags
+     java-field-declaring-class
+     java-field-type
+     java-field-accessor-procedure
+     java-field-modifier-procedure
+     java-field-accessor-method
+     java-field-modifier-method
+     generic-java-field-accessor
+     generic-java-field-modifier
+     define-generic-java-field-accessor
+     define-generic-java-field-modifier
+     define-generic-java-field-accessors
+     define-generic-java-field-modifiers
+     ;;arrays
+     java-array-class
+     java-array?
+     java-array-new
+     java-array-ref
+     java-array-set!
+     java-array-length
+     ;;proxies
+     java-proxy-class
+     java-proxy-dispatcher
+     (define-java-proxy java-proxy-method-handler)
+     ;;misc
+     java-synchronized
+     java-wrap
+     java-unwrap
+     java-null
+     java-object?
+     java-interface?
+     java-null?
+     ;;primitive types
+     <jvalue>
+     <jvoid>
+     <jboolean>
+     <jchar>
+     <jbyte>
+     <jshort>
+     <jint>
+     <jlong>
+     <jfloat>
+     <jdouble>
+     ;;conversions
+     ->jboolean
+     ->jchar
+     ->jbyte
+     ->jshort
+     ->jint
+     ->jlong
+     ->jfloat
+     ->jdouble
+     ->jstring
+     ->jarray
+     ->boolean
+     ->character
+     ->number
+     ->string
+     ->symbol
+     ->vector
+     ->list
+     jnull)
+  (import* record
+           define-record-type)
+  (import* type-system
+           make-type
+           type<=
+           type-of-hook
+           type<=-hook
+           compare-types-hook)
+  (import* new-generic-procedures
+           make-method
+           make-generic-procedure
+           add-methods)
+  (import misc)
+  (import hashtable)
+  (import s2j-reflection)
+  (import s2j-conversion)
+  (define <jvalue> (make-type '|sisc.modules.s2j.JavaObject|))
+  (define jnull (java/null))
+  (include "s2j/reflection.scm")
+  (include "s2j/misc.scm")
+  (setup-memoized-procedures)
+  (type-of-hook       'java java-type-of-hook)
+  (type<=-hook        'java java-type<=-hook)
+  (compare-types-hook 'java java-compare-types-hook))
+
 (module s2j
   (java-class
    java-wrap

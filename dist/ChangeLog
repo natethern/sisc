@@ -1,3 +1,8 @@
+2003-06-02  Matthias Radestock  <matthias@sorted.org>
+
+	* Revised s2j, making several significant changes and
+	  improvements.
+
 2003-05-31  Matthias Radestock  <matthias@sorted.org>
 
 	* Revised generic procdures, making several significant

@@ -1,0 +1,141 @@
+;;;;;;;;;; HELPERS ;;;;;;;;;;
+
+(define (fold kons knil lis)
+  (let lp ((lis lis) (ans knil))
+	(if (null? lis)
+        ans
+	    (lp (cdr lis) (kons (car lis) ans)))))
+
+
+;;;;;;;;;; REFLECTION PASS-THROUGH ;;;;;;;;;;
+
+(define java-synchronized                       java/synchronized)
+(define java-wrap                               java/wrap)
+(define java-unwrap                             java/unwrap)
+(define java-null                               java/null)
+(define java-class                              java/class)
+(define java-array-class                        java/array-class)
+(define java-proxy-class                        java/proxy-class)
+(define java-object?                            java/object?)
+(define java-class?                             java/class?)
+(define java-interface?                         java/interface?)
+(define java-constructor?                       java/constructor?)
+(define java-method?                            java/method?)
+(define java-field?                             java/field?)
+(define java-array?                             java/array?)
+(define java-null?                              java/null?)
+(define java-array-length                       java/array-length)
+(define java-class-declared-classes             java/classes)
+(define java-class-declared-constructors        java/constructors)
+(define java-class-declared-methods             java/methods)
+(define java-class-declared-fields              java/fields)
+(define java-class-name                         java/name)
+(define java-constructor-name                   java/name)
+(define java-method-name                        java/name)
+(define java-field-name                         java/name)
+(define java-class-flags                        java/modifiers)
+(define java-constructor-flags                  java/modifiers)
+(define java-method-flags                       java/modifiers)
+(define java-field-flags                        java/modifiers)
+(define java-class-declaring-class              java/declaring-class)
+(define java-constructor-declaring-class        java/declaring-class)
+(define java-method-declaring-class             java/declaring-class)
+(define java-field-declaring-class              java/declaring-class)
+(define java-constructor-parameter-types        java/parameter-types)
+(define java-method-parameter-types             java/parameter-types)
+(define java-method-return-type                 java/return-type)
+(define java-field-type                         java/field-type)
+
+
+;;;;;;;;;; ARRAYS ;;;;;;;;;;
+
+(define (java-array-new jclass dims)
+  (java/array-new jclass
+                  (cond [(null? dims)
+                         (error "at least one dimension required")]
+                        [(pair? dims) dims]
+                        [(vector? dims) (vector->list dims)]
+                        [else (list dims)])))
+
+(define (java-array-ref array idx)
+  (if (null? idx)
+      array
+      (fold (lambda (idx array) (java/array-ref array idx))
+            array
+            (cond [(pair? idx)   idx]
+                  [(vector? idx) (vector->list idx)]
+                  [else          (list idx)]))))
+
+(define (java-array-set! array idx val)
+  (define (helper a l)
+    (if (null? l)
+        (error "at least one index required")
+        (let loop ([a a]
+                   [l l])
+          (let ([head (car l)]
+                [tail (cdr l)])
+            (if (null? tail)
+                (java/array-set! a head val)
+                (loop (java/array-ref a head) tail))))))
+  (helper array (cond [(null? idx)   idx]
+                      [(pair? idx)   idx]
+                      [(vector? idx) (vector->list idx)]
+                      [else          (list idx)])))
+
+
+;;;;;;;;;; PRIMITIVE TYPES ;;;;;;;;;;
+
+(define-syntax define-primitive-java-type
+  (lambda (x)
+    (syntax-case x ()
+      ((_ name)
+       (with-syntax ((sname (wrap-symbol "<j" (syntax name) ">")))
+         (syntax
+          (define sname (java/class 'name))))))))
+
+(define-simple-syntax (define-primitive-java-types name ...)
+  (begin (define-primitive-java-type name) ...))
+
+(define-primitive-java-types
+  void boolean double float long int short byte char)
+
+
+;;;;;;;;;; HOOKS ;;;;;;;;;;
+
+(define (java-type-of-hook next o)
+  (if (java/object? o)
+      (java/class-of o)
+      (next o)))
+
+(define (java-type<=-hook next x y)
+  (cond [(java/class? x)
+         (if (java/class? y)
+             (if (memv y (java-class-precedence-list x)) #t #f)
+             (type<= <jvalue> y))]
+        [(java/class? y) #f]
+        [else (next x y)]))
+
+(define (java-compare-types-hook next x y c)
+  (if (or (java/class? x) (java/class? y) (java/class? c))
+      (if (and (java/class? x)
+               (java/class? y)
+               (java/class? c))
+          ;;find first occurrence of x or y in c's cpl
+          (let loop ([cpl (java-class-precedence-list c)])
+            (if (null? cpl)
+                (error 'compare-types
+                       (string-append
+                        "~a and ~a do not appear in the "
+                        "type precedence list of ~a")
+                       (java/name x)
+                       (java/name y)
+                       (java/name c))
+                (let ([p (car cpl)])
+                  (cond [(eqv? p x) 'more-specific]
+                        [(eqv? p y) 'less-specific]
+                        [else (loop (cdr cpl))]))))
+          (error 'compare-types
+                 (string-append
+                  "~s or ~s is not a sub-type of ~s"
+                  x y c)))
+      (next x y c)))
