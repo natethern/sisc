@@ -11,7 +11,8 @@ public class AppContext extends Util {
     public Procedure evaluator;
     public SymbolicEnvironment symenv;
     public SymbolicEnvironment toplevel_env;
-    public LibraryManager libraries;
+
+    private LibraryManager libraries;
 
     public AppContext() {
     }
@@ -33,6 +34,12 @@ public class AppContext extends Util {
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
+    }
+
+    public Expression getExpression(Symbol name) {
+        try {
+            return libraries.getExpression(name);
+        } catch(java.io.IOException e) { return null; }
     }
 
     // Heapfile loading/saving

@@ -11,10 +11,6 @@ import sisc.interpreter.Context;
 
 public class LibraryManager extends Util {
     
-    public static LibraryManager getInstance() {
-        return Context.currentInterpreter().ctx.libraries;
-    }
-
     static class LoadableLibrary {
         URL path;
         Library handle;

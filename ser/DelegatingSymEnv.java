@@ -9,9 +9,7 @@ public class DelegatingSymEnv extends NamedValue implements SymbolicEnvironment 
 
     protected SymbolicEnvironment getEnv() {
         if (delegee == null) {
-            try {
-                delegee = (SymbolicEnvironment)LibraryManager.getInstance().getExpression(name);
-            } catch(java.io.IOException e) {}
+            delegee = (SymbolicEnvironment)sisc.interpreter.Context.currentInterpreter().ctx.getExpression(name);
         }
         return delegee;
     }
