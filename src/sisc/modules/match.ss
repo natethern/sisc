@@ -92,6 +92,11 @@
         (error 'match-equality-test "~s is not a procedure" x))
       x)))
 
+(define (last-pair lis)
+  (let lp ((lis lis))
+    (let ((tail (cdr lis)))
+      (if (pair? tail) (lp tail) lis))))
+
 (define-syntax match+
   (lambda (x)
     (syntax-case x ()
