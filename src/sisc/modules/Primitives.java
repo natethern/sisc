@@ -684,8 +684,7 @@ public class Primitives extends IndexedProcedure {
             int l = vls-2;
             Pair args=pair(vlr[l+1]);
             
-            r.replaceVLR(l + length(args));
-            Value newvlr[] = r.vlr;
+            Value newvlr[] = r.createValues(l+length(args));
             
             int j;
             for (j=0; j < l; j++) {
@@ -696,6 +695,8 @@ public class Primitives extends IndexedProcedure {
             }
             r.saveVLR=true;
             r.nxp = APPEVAL;
+            r.vlk=false;
+            r.vlr=newvlr;
             return proc;
         case LIST: return valArrayToList(vlr,0,vls);
         case ADD:
