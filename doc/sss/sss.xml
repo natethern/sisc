@@ -208,6 +208,160 @@ for <function>sqrt</function>, it is not clear what other mathematical
       </varlistentry>
     </variablelist>
   </appendix>
+  <appendix>
+    <title>Backend Details</title>
+    <note>
+      <para>
+        This appendix is under development
+      </para>
+    </note>
+    <para>
+      This appendix describes details of &SISC; on particular
+      backends.  This is not intended to guide programming.  The
+      programmer should code according to the main body of this
+      document.  However, this section still describes useful
+      performance tips and limitations of &SISC;'s operation.
+    </para>
+    <sect1>
+      <title>Limits</title>
+      <para>
+        This appendix lays out the various limits in &SISC; running on a
+        JVM backend.  These limits are <emphasis>not</emphasis>
+        specifications for an expected set of limits on all platforms,
+        but serve as a real-world guide.
+      </para>
+      <table id="JVMLimits">
+        <title>&SISC; Limits</title>
+        <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+          <colspec colname='Description'/>
+          <colspec colname='Limit'/>
+          <thead>
+            <row>
+              <entry>Description</entry>
+              <entry>Limit</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>Fixed-point Exact Integers</entry>
+              <entry>-2<superscript>31</superscript> &lt; n &lt;
+              +2<superscript>31</superscript>-1</entry>
+            </row>
+            <row>
+              <entry>AP Exact Integers</entry>
+              <entry>
+                -2<superscript>(2<superscript>32</superscript>-1)</superscript>
+                &lt; x &lt;
+                +2<superscript>(2<superscript>32</superscript>-1)</superscript>-1.
+              </entry>
+            </row>
+            <row>
+              <entry>Inexacts (<literal>32Float</literal>)</entry>
+              <entry>See IEEE 754-1985 Floating Point Standard</entry>
+            </row>
+            <row>
+              <entry>Inexacts (<literal>64Float</literal>)</entry>
+              <entry>See IEEE 754-1985 Floating Point Standard</entry>
+            </row>
+            <row>
+              <entry>Inexact Mantissa (<literal>APFloat</literal>)</entry>
+              <entry>same as AP Exact Integers</entry>
+            </row>
+            <row>
+              <entry>Inexact Exponent
+              (<literal>APFloat</literal>)</entry>
+              <entry>same as fixed-point exact integer</entry>
+            </row>
+            <row>
+              <entry>Max vector elements</entry>
+              <entry>Same as max fixed-point integer</entry>
+            </row>
+            <row>
+              <entry>Max string elements</entry>
+              <entry>Same as max fixed-point integer (?)</entry>
+            </row>
+            <row>
+              <entry>Representable characters</entry>
+              <entry>see <xref linkend="Characters"/></entry>
+            </row>
+            <row>
+              <entry>Maximum formal parameters</entry>
+              <entry>Same as max fixed-point integer</entry>
+            </row>
+            <row>
+              <entry>Maximum lexical depth</entry>
+              <entry>Same as max fixed-point integer</entry>
+            </row>
+            <row>
+              <entry>Maximum symbolic-environment bindings</entry>
+              <entry>Same as max fixed-point integer (?)</entry>
+            </row>
+            <row>
+              <entry>Addressable file size</entry>
+              <entry>min of 2<superscript>64</superscript>-1 and
+                operating system limit</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      <para>
+        Arbitrary precision integers aren't quite arbitrary precision.
+        &SISC; has a hard limit to the number of bits in an exact
+        integer and thus to the range of representable numbers.  Exact
+        integers are stored as two's complement signed integers, with
+        a bit limit (including the sign bit) of
+        2<superscript>32</superscript>.  This limits the range of
+        representable exact integers to the numbers quoted above.
+      </para>
+      <para>
+        <literal>
+                  </literal>
+      </para>
+      <para>
+        Likewise, arbitrary precision inexact numbers (when present)
+        have a similar hard limit.  The arbitrary precision inexact is
+        constructed with an arbitrary precision exact number with the
+        limits described above as the number's mantissa, and
+        an exponent whose range is equivalent to that of a  
+        fixed-point exact integer.
+        The inexact is then then
+        <literal>mantissa*10<superscript>exponent</superscript></literal>.
+      </para>
+    </sect1>
+    <sect1>
+      <title>Performance considerations</title>
+      <sect2>
+        <title>Math</title>
+        <para>
+          The &SISC; numeric library is most efficient when operating
+          on fixed bitlength numbers.  Exact numbers are in their
+          fixed bitlength mode if they are in the representable range
+          for fixed exact integers, as described in <xref
+          linkend="JVMLimits"/>.  Fixed bitlength inexact numbers are
+          only available in the <literal>64Float</literal> and
+          <literal>32Float</literal> libraries.  For &SISC; on Java,
+          the <literal>64Float</literal> library is generally more
+          efficient than the <literal>32Float</literal> library, while
+          both are more efficient than the <literal>APFloat</literal>
+          library.
+        </para>
+        <para>
+          Fixed bitlength exact integers are only used for whole
+          numbers.  Rational numbers use arbitrary precision
+          components and thus are less efficient than whole fixed
+          integers.
+        </para>
+        <para>
+          Arbitrary precision inexact numbers are progressively slower
+          as the bitlength of the mantissa and the scale of the
+          exponent increase.  Using the precision constraints can
+          prevent an unbounded increase in the scale of arbitrary
+          precision inexacts which will very rapidly slow
+          calculations.
+        </para>
+      </sect2>
+    </sect1>
+  </appendix>
 <!--  &index; -->
   &gfdl;
 </book>
