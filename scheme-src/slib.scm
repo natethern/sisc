@@ -39,13 +39,6 @@
 (define scheme-implementation-version
   (lambda () (getprop 'version '*sisc*)))
 
-;; The IMPLEMENTATION-VICINITY procedure returns a string giving the
-;; pathname of the directory that includes any auxiliary files used by this
-;; Scheme implementation.
-
-(define implementation-vicinity
-  (lambda () (getprop 'SISC_LIB '*environment-variables*)))
-
 ;; The GETENV returns the value of a shell environment variable.
 
 ;; In some implementations of Chez Scheme, this can be done with foreign
@@ -67,6 +60,15 @@
   (lambda (env-var)
     (getprop (string->symbol env-var) '*environment-variables*)))
 
+;; The IMPLEMENTATION-VICINITY procedure returns a string giving the
+;; pathname of the directory that includes any auxiliary files used by this
+;; Scheme implementation.
+
+(define implementation-vicinity
+  (let ((library-path (or (getenv "SISC_LIB")
+			  "/usr/local/lib/sisc/")))
+    (lambda () library-path)))
+
 ;; The LIBRARY-VICINITY procedure returns the pathname of the directory
 ;; where Scheme library functions reside.
 
@@ -80,7 +82,7 @@
 ;;; customize a computer environment for a user.
 
 (define home-vicinity
-  (let ((home-path (getenv "user.home")))
+  (let ((home-path (string-append (getenv "user.home") "/")))
     (lambda () home-path)))
 
 ;; The OUTPUT-PORT-WIDTH procedure returns the number of graphic characters
@@ -318,9 +320,7 @@
 ;; by the resulting string.
 
 (define slib:load-source
-  (lambda (f)
-    (display f) (newline)
-    (load (string-append f (scheme-file-suffix)))))
+  (lambda (f) (load (string-append f (scheme-file-suffix)))))
 
 ;;; defmacro:load and macro:load also need the default suffix.
 
