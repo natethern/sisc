@@ -31,6 +31,11 @@
 ;; GPL.
 ;;
 
+;;turn on syntax expansion and optimization
+
+(define current-optimizer
+  (lambda args (lambda (x) x)))
+
 (set! eval 
   ((lambda (old-eval)
      (lambda (x . env)
@@ -39,6 +44,8 @@
            ((lambda (e) (apply old-eval (cons e env)))
             ((current-optimizer) (sc-expand x '(E) '(E)))))))
    eval))
+
+;; native parameters
 
 (define current-input-port      (make-native-parameter "inputPort"))
 (define current-output-port     (make-native-parameter "outputPort"))
