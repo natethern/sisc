@@ -1,3 +1,15 @@
+2004-02-17  Scott G. Miller <scgmille@freenetproject.org>
+
+	* call-with-serial-*-file wasn't allowing functions
+	  to return multiple values. Fixed.
+
+2004-01-29  Scott G. Miller <scgmille@freenetproject.org>
+
+	* Fixed a bug in the optimizer which broke copy-propogations
+	  in letrec right hand sides.
+
+	* sisc.caseSensitive wasn't settable as a Java property.
+
 2004-01-20  Released SISC 1.8.7
 
 2004-01-16  Scott G. Miller <scgmille@freenetproject.org>
