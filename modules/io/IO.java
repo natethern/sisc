@@ -83,33 +83,51 @@ public class IO extends ModuleAdapter {
         define("write-char"         , WRITECHAR);
     }
 
-    private static Value readChar(SchemeInputPort i) throws ContinuationException {
+    static void throwIOException(Interpreter f, String message, IOException e) 
+        throws ContinuationException {
+        if (f.acc == null) {
+            error(f, message, list(new Pair(JEXCEPTION, 
+                                            Symbol.intern(e.getClass()
+                                                          .getName()))));
+        } else {
+            error(f, f.acc.getName(), message, 
+                  list(new Pair(JEXCEPTION, Symbol.intern(e.getClass()
+                                                          .getName()))));
+        }
+    }
+
+    private static Value readChar(Interpreter f, SchemeInputPort i) 
+        throws ContinuationException {
         try {
             int c=i.read();
             return new SchemeCharacter((char)c);
         } catch (EOFException e) {
             return EOF;
         } catch (IOException e2) {
-            throw new RuntimeException(liMessage(IOB, "errorreading",
-                                                 i.toString(),
-                                                 e2.getMessage()));
+            throwIOException(f, liMessage(IOB, "errorreading", i.toString(),
+                                       e2.getMessage()), e2);
         }
+        return null; //Should never happen
     }
 
-    private static Value read(Interpreter r, SchemeInputPort i, int flags) {
+    private static Value read(Interpreter r, SchemeInputPort i, int flags) 
+        throws ContinuationException {
         try {
             return r.dynenv.parser.nextExpression(i, flags);
         } catch (EOFException e) {
             return EOF;
         } catch (IOException e2) {
-            throw new RuntimeException(liMessage(IOB, "errorreading",
-                                                 i.toString(),
-                                                 e2.getMessage()));
+            throwIOException(r, liMessage(IOB, "errorreading", i.toString(),
+                                       e2.getMessage()), e2);
         }
+        return null; //Should never happen
+
     }
     
-    private static int readChars(SchemeInputPort is, char[] buff, int off,
-                                 int len) {
+    private static int readChars(Interpreter f,
+                                 SchemeInputPort is, char[] buff, int off,
+                                 int len) 
+        throws ContinuationException {
         byte[] buff2=new byte[len];
         try {
             int rc=is.read(buff2, 0, len);
@@ -118,17 +136,19 @@ public class IO extends ModuleAdapter {
             }
             return rc;
         } catch (IOException e) {
-            throw new RuntimeException(liMessage(IOB, "errorreading",
-                                                 is.toString(),
-                                                 e.getMessage()));
+            throwIOException(f, liMessage(IOB, "errorreading", is.toString(),
+                                       e.getMessage()), e);
         }
+        return -1; //should never happen
     }
 
-    public static Value read(Interpreter r, SchemeInputPort i) {
+    public static Value read(Interpreter r, SchemeInputPort i) 
+        throws ContinuationException {
         return read(r, i, 0);
     }
 
-    public static Value readCode(Interpreter r, SchemeInputPort i) {
+    public static Value readCode(Interpreter r, SchemeInputPort i) 
+        throws ContinuationException {
         return read(r, i, sisc.compiler.Parser.PRODUCE_ANNOTATIONS |
                     sisc.compiler.Parser.PRODUCE_IMMUTABLES);
     }
@@ -136,7 +156,8 @@ public class IO extends ModuleAdapter {
     public Value displayOrWrite(Interpreter r,
                                 OutputPort port,
                                 Value v,
-                                boolean display) {
+                                boolean display) 
+        throws ContinuationException {
         try {
             ValueWriter w = r.dynenv.printShared ?
                 new SharedValueWriter(port, r.dynenv.vectorLengthPrefixing):
@@ -144,9 +165,9 @@ public class IO extends ModuleAdapter {
             if (display) w.display(v);
             else w.write(v);
         } catch (IOException e) {
-            throwPrimException(liMessage(IOB, "errorwriting",
-                                         port.toString(),
-                                         e.getMessage()));
+            throwIOException(r, liMessage(IOB, "errorwriting", 
+                                       port.toString(),
+                                       e.getMessage()), e);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -194,7 +215,7 @@ public class IO extends ModuleAdapter {
             case CURRENTINPUTPORT: return f.dynenv.in;
             case OPENOUTPUTSTRING: return new WriterOutputPort(new StringWriter(), false);
             case PEEKCHAR:
-                Value v=readChar(f.dynenv.in);
+                Value v=readChar(f, f.dynenv.in);
                 if (v instanceof SchemeCharacter)
                     f.dynenv.in.pushback(((SchemeCharacter)v).c);
                 return v;
@@ -203,7 +224,7 @@ public class IO extends ModuleAdapter {
             case READ:
                 return read(f, f.dynenv.in);
             case READCHAR:
-                return readChar(f.dynenv.in);
+                return readChar(f, f.dynenv.in);
             case READCODE:
                 return readCode(f, f.dynenv.in);
             case VECTORLPREFIXING:
@@ -230,7 +251,7 @@ public class IO extends ModuleAdapter {
                 return new ReaderInputPort(new StringReader(string(f.vlr[0])));
             case PEEKCHAR:
                 inport=inport(f.vlr[0]);
-                Value v=readChar(inport);
+                Value v=readChar(f, inport);
                 if (v instanceof SchemeCharacter)
                     inport.pushback(((SchemeCharacter)v).c);
                 return v;
@@ -242,7 +263,7 @@ public class IO extends ModuleAdapter {
                 return read(f, inport);
             case READCHAR:
                 inport=inport(f.vlr[0]);
-                return readChar(inport);
+                return readChar(f, inport);
             case READCODE:
                 inport=inport(f.vlr[0]);
                 return readCode(f, inport);
@@ -271,7 +292,8 @@ public class IO extends ModuleAdapter {
                     conn.setDoOutput(false);
                     return new SourceInputPort(new BufferedInputStream(conn.getInputStream()), url.toString());
                 } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "erroropening", url.toString()));
+                    throwIOException(f, liMessage(IOB, "erroropening", 
+                                               url.toString()), e);
                 }
             case OPENINPUTFILE:
                 url = url(f.vlr[0]);
@@ -281,7 +303,8 @@ public class IO extends ModuleAdapter {
                     conn.setDoOutput(false);
                     return new StreamInputPort(new BufferedInputStream(conn.getInputStream()));
                 } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "erroropening", url.toString()));
+                    throwIOException(f, liMessage(IOB, "erroropening", 
+                                               url.toString()), e);
                 }
             case OPENOUTPUTFILE:
                 url = url(f.vlr[0]);
@@ -295,14 +318,16 @@ public class IO extends ModuleAdapter {
                     conn.setDoOutput(true);
                     return new StreamOutputPort(new BufferedOutputStream(conn.getOutputStream()), false);
                 } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "erroropening", url.toString()));
+                    throwIOException(f, liMessage(IOB, "erroropening", 
+                                               url.toString()), e);
                 }
             case FLUSHOUTPUTPORT:
                 SchemeOutputPort op=outport(f.vlr[0]);
                 try {
                     op.flush();
                 } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "errorflushing", op.toString()));
+                    throwIOException(f, liMessage(IOB, "errorflushing", 
+                                               op.toString()), e);
                 }
                 return VOID;
             case CLOSEINPUTPORT:
@@ -310,7 +335,9 @@ public class IO extends ModuleAdapter {
                 try {
                     if (inp!=f.dynenv.in) inp.close();
                 } catch (IOException e) {
-                    error(f, liMessage(IOB, "errorclosing", inp.toString()));
+                    throwIOException(f, liMessage(IOB, "errorclosing",
+                                                  inp.toString()),
+                                     e);
                 }
                 return VOID;
             case CLOSEOUTPUTPORT:
@@ -318,7 +345,9 @@ public class IO extends ModuleAdapter {
                 try {
                     if (op!=f.dynenv.out) op.close();
                 } catch (IOException e) {
-                    error(f, liMessage(IOB, "errorclosing", op.toString()));
+                    throwIOException(f, liMessage(IOB, "errorclosing",
+                                                  op.toString()),
+                                     e);
                 }
                 return VOID;
             case INPORTLOCATION:
@@ -342,7 +371,9 @@ public class IO extends ModuleAdapter {
                     conn.setDoOutput(false);
                     p=new SourceInputPort(new BufferedInputStream(conn.getInputStream()), url.toString());
                 } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "erroropening", url.toString()));
+                    throwIOException(f, liMessage(IOB, "erroropening",
+                                                  url.toString()),
+                                     e);
                 }
                 Interpreter r = Context.enter(f);
                 try {
@@ -366,9 +397,9 @@ public class IO extends ModuleAdapter {
                 try {
                     f.dynenv.out.write(character(f.vlr[0]));
                 } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "errorwriting",
-                                                 f.dynenv.out.toString(),
-                                                 e.getMessage()));
+                    throwIOException(f, liMessage(IOB, "errorwriting",
+                                                  f.dynenv.out.toString(),
+                                                  e.getMessage()), e);
                 }
                 return VOID;
             case CURRENTCLASSPATH:
@@ -432,9 +463,9 @@ public class IO extends ModuleAdapter {
                 try {
                     port.write(character(f.vlr[0]));
                 } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "errorwriting",
-                                                 port.toString(),
-                                                 e.getMessage()));
+                    throwIOException(f, liMessage(IOB, "errorwriting",
+                                                  port.toString(),
+                                                  e.getMessage()), e);
                 }
                 return VOID;
             case DISPLAY:
@@ -455,7 +486,8 @@ public class IO extends ModuleAdapter {
                     return new StreamOutputPort(new BufferedOutputStream(conn.getOutputStream()),
                                                 truth(f.vlr[1]));
                 } catch (IOException e) {
-                    throwPrimException(liMessage(IOB, "erroropening", url.toString()));
+                    throwIOException(f, liMessage(IOB, "erroropening",
+                                                  url.toString()), e);
                 }
             case NORMALIZEURL:
                 return new SchemeString(urlClean(url(f.vlr[0], f.vlr[1])).toString());
