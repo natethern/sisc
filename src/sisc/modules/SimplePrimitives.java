@@ -72,8 +72,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("inexact->exact", INEXACT2EXACT);
             define("inexact?", INEXACTQ);
             define("integer->char", INTEGER2CHAR);
-            define("integer?", INTEGERQ);
-            define("interaction-environment", INTERACTIONENVIRONMENT);
+            define("_integer?", INTEGERQ);
             define("length", LENGTH);
             define("list->vector", LIST2VECTOR);
             define("log", LOG);

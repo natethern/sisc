@@ -207,17 +207,6 @@
     (lambda (s)
       (s2l s '() (- (string-length s) 1)))))
 
-(define list->vector
-  (letrec [(l2v
-             (lambda (l v n)
-               (if (null? l) v
-                   (begin (vector-set! v n (car l))
-                          (l2v (cdr l) v (+ n 1))))))]
-     (lambda (l)
-       (if (proper-list? l)
-	   (l2v l (make-vector (length l)) 0)
-	   (error 'list->vector "can only convert a proper list." l)))))
-
 ;;;;;;;;;;;;; Constructors
 
 ;(if (lookup 'list) (void)
@@ -382,11 +371,10 @@
 	    (modulo (* x (modulo (* tmp tmp) N)) N)))))
 
 (define integer?
-  (let ((oldint? integer?))
-    (lambda (n)
-      (boolean-or (oldint? n) 
-	  (and (real? n)
-	       (= (round n) n))))))
+  (lambda (n)
+    (boolean-or (_integer? n) 
+                (and (real? n)
+                     (= (round n) n))))))
 
 (define real? 
  (let ((oldcomp? complex?))
