@@ -335,10 +335,9 @@ public abstract class Util implements Version {
     }
 
     public static final Pair truePair(Value o) {
-        Pair p = pair(o);
-        if (p == EMPTYLIST)
+        if (o == EMPTYLIST)
             typeError("pair", o);
-        return p;
+        return pair(o);
     }
 
     public static final char character(Value c) {
