@@ -196,5 +196,10 @@
     (lambda () 
       (with-input-from-string "'#(1 2 . ,(- 3))" read))))
 
-        
-          
+(should-be 1099750 #t
+           (with/fc (lambda (m e) #f)
+                    (lambda ()
+                      ((current-optimizer) 
+                       '(begin (lambda #t () () 3)
+                               (letrec #t () () 4)))
+                      #t)))
