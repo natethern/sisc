@@ -365,9 +365,13 @@
   (add-feature 'srfi-28))
 
 (display "srfi-29 ")
-(module srfi-29 (current-country current-language current-locale-details
-                 declare-bundle! store-bundle load-bundle! 
-                 localized-template format)
+(module srfi-29
+    (format
+     current-country current-language current-locale-details
+     declare-bundle! store-bundle load-bundle! 
+     localized-template)
+  (import s2j)
+  (import generic-procedures)
   (include "srfi/srfi-29.scm")
   (add-feature 'srfi-29))
 

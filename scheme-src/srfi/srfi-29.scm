@@ -7,8 +7,6 @@
 ;
 ; Currently unfinished, need to implement working store and load bundle,
 ; but they aren't required to be SRFI-29 compliant.
-(import s2j)
-(import generic-procedures)
 
 ;;An SRFI-28 and SRFI-29 compliant version of format.  It requires
 ;;SRFI-23 for error reporting.
