@@ -34,6 +34,12 @@
     <property name="heapjar" value="sisc-heap.jar"/>
     <property name="heap" value="${basedir}/sisc.shp"/>
     <property name="quantity-type" value="apfloat"/>
+
+    <!-- installation directories-->
+    <condition property="prefix" value="/usr/local">
+      <not><isset property="prefix"/></not>
+    </condition>
+
     <condition property="debugging" value="on">
       <isset property="beta"/>
     </condition>
@@ -56,6 +62,18 @@
                classpathref="classpath"/>
     <property name="xmldcl" value="/usr/share/sgml/declaration/xml.dcl"/>
     <property name="sss" value="sss"/>
+  </target>
+
+  <target name="prepare-install" depends="prepare">
+    <condition property="instlibdir" value="${prefix}/lib/sisc">
+      <not><isset property="instlibdir"/></not>
+    </condition>
+    <condition property="instdocdir" value="${prefix}/share/doc/sisc">
+      <not><isset property="instdocdir"/></not>
+    </condition>
+    <condition property="instbindir" value="${prefix}/bin">
+      <not><isset property="instbindir"/></not>
+    </condition>
   </target>
 
   <target name="clean" depends="prepare"
@@ -407,13 +425,13 @@
     <move file="sisc_s.jar" tofile="sisc.jar"/>-->
     <delete dir="${dist}/lite"/>
     <mkdir dir="${dist}/lite"/>
-    <mkdir dir="${dist}/lite/sisc"/>
+    <mkdir dir="${dist}/lite/sisc-lite-${specver}"/>
 
-    <copy todir="${dist}/lite/sisc"
+    <copy todir="${dist}/lite/sisc-lite-${specver}"
           file="${basedir}/${basejar}"/>
-    <copy todir="${dist}/lite/sisc"
+    <copy todir="${dist}/lite/sisc-lite-${specver}"
           file="${heap}"/>
-    <copy todir="${dist}/lite/sisc">
+    <copy todir="${dist}/lite/sisc-lite-${specver}">
       <fileset dir="${basedir}">
         <include name="ChangeLog"/>
         <include name="README"/>
@@ -425,15 +443,15 @@
     </copy>
 
     <copy file="${basedir}/sisc.sh"
-          tofile="${dist}/lite/sisc/sisc"/>
+          tofile="${dist}/lite/sisc-lite-${specver}/sisc"/>
 
     <tar tarfile="${dist}/sisc-lite-${version}.tar">
       <tarfileset dir="${dist}/lite" mode="755">
-        <include name="sisc/sisc"/>
+        <include name="sisc-lite-${specver}/sisc"/>
       </tarfileset>
       <tarfileset dir="${dist}/lite">
-        <include name="sisc/*"/>
-        <exclude name="sisc/sisc"/>
+        <include name="sisc-lite-${specver}/*"/>
+        <exclude name="sisc-lite-${specver}/sisc"/>
       </tarfileset>
     </tar>
 
@@ -448,36 +466,36 @@
   <target name="full-dist" depends="all" unless="lite">
     <delete dir="${dist}/full"/>
     <mkdir dir="${dist}/full"/>
-    <mkdir dir="${dist}/full/sisc"/>
+    <mkdir dir="${dist}/full/sisc-${specver}"/>
     <mkdir dir="${dist}/full/doc"/>
-    <mkdir dir="${dist}/full/sisc/scheme-src"/>
-    <mkdir dir="${dist}/full/sisc/scheme-src/srfi-22"/>
+    <mkdir dir="${dist}/full/sisc-${specver}/scheme-src"/>
+    <mkdir dir="${dist}/full/sisc-${specver}/scheme-src/srfi-22"/>
 
-    <copy todir="${dist}/full/sisc/scheme-src"
+    <copy todir="${dist}/full/sisc-${specver}/scheme-src"
           file="${srcdir}/sisc/modules/slib.scm"/>
-    <copy todir="${dist}/full/sisc/scheme-src"
+    <copy todir="${dist}/full/sisc-${specver}/scheme-src"
           file="${srfidir}/optional-args.scm"/>
 
-    <copy todir="${dist}/full/sisc/doc">
+    <copy todir="${dist}/full/sisc-${specver}/doc">
       <fileset dir="${gendocdir}/sss">
         <include name="*.html"/>
         <include name="*.css"/>
       </fileset>
     </copy>
-    <copy todir="${dist}/full/sisc/scheme-src/srfi-22/"
+    <copy todir="${dist}/full/sisc-${specver}/scheme-src/srfi-22/"
           file="${srfidir}/srfi-22/srfi-22.sh"/>
-    <copy todir="${dist}/full/sisc/"
+    <copy todir="${dist}/full/sisc-${specver}/"
           file="${basedir}/install-srfi22.sh"/>
 
-    <copy todir="${dist}/full/sisc"
+    <copy todir="${dist}/full/sisc-${specver}"
           file="${basedir}/${basejar}"/>
-    <copy todir="${dist}/full/sisc"
+    <copy todir="${dist}/full/sisc-${specver}"
           file="${basedir}/${optjar}"/>
-    <copy todir="${dist}/full/sisc"
+    <copy todir="${dist}/full/sisc-${specver}"
           file="${basedir}/${libjar}"/>
-    <copy todir="${dist}/full/sisc"
+    <copy todir="${dist}/full/sisc-${specver}"
           file="${heap}"/>
-    <copy todir="${dist}/full/sisc">
+    <copy todir="${dist}/full/sisc-${specver}">
       <fileset dir="${basedir}">
         <include name="ChangeLog"/>
         <include name="README"/>
@@ -489,18 +507,18 @@
     </copy>
 
     <copy file="${basedir}/sisc.sh"
-          tofile="${dist}/full/sisc/sisc"/>
+          tofile="${dist}/full/sisc-${specver}/sisc"/>
 
     <tar tarfile="${dist}/sisc-${version}.tar">
 
       <tarfileset dir="${dist}/full" mode="755">
-        <include name="sisc/sisc"/>
-        <include name="sisc/install-srfi22.sh"/>
+        <include name="sisc-${specver}/sisc"/>
+        <include name="sisc-${specver}/install-srfi22.sh"/>
       </tarfileset>
       <tarfileset dir="${dist}/full">
-        <include name="sisc/**"/>
-        <exclude name="sisc/sisc"/>
-        <exclude name="sisc/install-srfi22.sh"/>
+        <include name="sisc-${specver}/**"/>
+        <exclude name="sisc-${specver}/sisc"/>
+        <exclude name="sisc-${specver}/install-srfi22.sh"/>
       </tarfileset>
     </tar>
 
@@ -592,7 +610,53 @@
       </commandline>
     </cvs>
   </target> 
- 
+
+  <!-- Installation target -->
+  <target name="debian-install" depends="prepare-install">
+    <mkdir dir="${instlibdir}"/>
+    <mkdir dir="${instdocdir}"/>
+    <copy todir="${instlibdir}">
+      <fileset dir="${basedir}">
+        <include name="*.jar"/>
+        <include name="*.shp"/>
+      </fileset>
+    </copy>
+    <copy todir="${instdocdir}">
+      <fileset dir="${basedir}">
+        <include name="ChangeLog"/>
+        <include name="README"/>
+        <include name="COPYING"/>
+        <include name="GOALS"/>
+        <include name="TODO"/>
+      </fileset>
+      <fileset dir="${gendocdir}">
+        <include name="sss/**"/>
+      </fileset>
+    </copy>
+    <copy tofile="${instbindir}/sisc" 
+          file="${basedir}/sisc.sh"/>
+    <copy todir="${instbindir}" 
+          file="${srfidir}/srfi-22/srfi-22.sh"/>
+
+    <exec executable="bash">
+      <arg value="${basedir}/install-srfi22.sh"/>
+      <arg value="${instbindir}"/>
+      <arg value="${srfidir}/srfi-22/"/>
+    </exec>
+    <chmod file="${instbindir}/srfi-22.sh" perm="0755"/>
+  </target>
+
+  <target name="install" depends="debian-install">
+    <copy todir="${instdocdir}">
+      <fileset dir="${basedir}">
+        <include name="COPYING"/>
+      </fileset>
+    </copy>
+    <copy todir="${instbindir}" 
+          file="${basedir}/sisc.bat"/>
+    <chmod file="${instbindir}/sisc" perm="0755"/>
+  </target>
+
   <target name="release-full-dist" depends="clean,dist"/> 
   <target name="release" depends="tag,source-dist"/> 
 </project>

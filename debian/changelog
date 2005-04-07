@@ -1,0 +1,7 @@
+sisc (1.11.0-alpha-1) unstable; urgency=low
+
+  * Initial Release.
+  * First debianization of SISC.
+	
+ -- Scott G. Miller <sgmiller@gmail.com>  Thu,  7 Apr 2005 10:36:44 -0500
+

@@ -1,3 +1,8 @@
+2005-04-07  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Changes to the build environment and additions to 
+	  create a Debian package for SISC.
+	  
 2005-04-04  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed design flaw in the strict R5RS which raised
