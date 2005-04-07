@@ -625,7 +625,6 @@
       <fileset dir="${basedir}">
         <include name="ChangeLog"/>
         <include name="README"/>
-        <include name="COPYING"/>
         <include name="GOALS"/>
         <include name="TODO"/>
       </fileset>
