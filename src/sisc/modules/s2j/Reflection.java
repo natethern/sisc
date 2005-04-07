@@ -257,21 +257,6 @@ public class Reflection extends Util {
         }
     }
 
-    /**
-     * Attempts to set the objects accessible, so the JVM doesn't have to 
-     * do a security check on each call.
-     */
-    private static AccessibleObject[] setAccessible(AccessibleObject[] objs) {
-        for (int i=objs.length-1; i>=0; i--) {
-            try {
-                objs[i].setAccessible(true);
-            } catch (SecurityException se) {
-                //If we fail, its ok
-            }
-        }
-        return objs;
-    }
-
     public Reflection(int id) {
         super(id);
     }
@@ -300,15 +285,15 @@ public class Reflection extends Util {
                 else return makeJObj(c, Class.class);
             case JAVA_CONSTRUCTORS:
                 try {
-                    return objectsToList(setAccessible(jclass(f.vlr[0]).getDeclaredConstructors()));
+                    return objectsToList(jclass(f.vlr[0]).getDeclaredConstructors());
                 } catch (SecurityException e) { return FALSE; }
             case JAVA_METHODS:
                 try {
-                    return objectsToList(setAccessible(jclass(f.vlr[0]).getDeclaredMethods()));
+                    return objectsToList(jclass(f.vlr[0]).getDeclaredMethods());
                 } catch (SecurityException e) { return FALSE; }
             case JAVA_FIELDS:
                 try {
-                    return objectsToList(setAccessible(jclass(f.vlr[0]).getDeclaredFields()));
+                    return objectsToList(jclass(f.vlr[0]).getDeclaredFields());
                 } catch (SecurityException e) { return FALSE; }
             case JAVA_CLASSES:
                 try {
