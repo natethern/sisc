@@ -264,6 +264,51 @@ com/foo/lib3/Class2.class
      path names in the jar, for example
      <literal>com/foo/lib{1,2,3}</literal> in the above example.
     </para> 
+    <sect2>
+      <title><function>require-extension</function></title>
+      <para>          
+       	&SISC; supports <ulink url="http://srfi.schemers.org/srfi-55/srfi-55.html">SRFI-55</ulink> for loading libraries and extensions as well.
+      	SRFI-55 provides <function>require-extension</function>, which in &SISC; 
+      	simultaneously loads a library, then imports its module definition into the
+      	current interaction environment.  This may be more convenient than the
+      	combination of <function>require-library</function> and <function>import</function>,
+      	when one is loading dependent top-level libraries for a program.  
+      	It is less flexible, though, since you cannot import into a lexical scope.
+     </para>
+     <para>
+       SRFI-55 is supported in the initial &SISC; environment, no
+       <function>require-library</function> or
+       <function>import</function> is needed to use
+       <function>require-extension</function>.
+     </para>
+     <para>
+       At the time of this writing, &SISC; supports two extension identifier schemes,
+       the SRFI scheme as required by SRFI-55 itself, and a &SISC; specific
+       scheme for loading a &SISC; library.  To use the latter, use the
+       path name of the library as the <function>require-extension</function>
+       identifier, and the library file or files you wish to import
+       as the arguments.  Some examples:
+     </para>
+     <example>
+       <title>Loading and importing with <function>require-extension</function></title>
+       <programlisting>
+; Load and import SRFI 1
+(require-extension (srfi 1))
+
+; Load and import SISC library com/foo/lib1
+(require-extension (com/foo lib1))
+
+; Load and import SISC libraries com/foo/lib2 and com/foo/lib3
+(require-extension (com/foo lib2 lib3))
+       </programlisting>
+     </example>
+     <para>
+       &SISC; modules loaded in this way must either use the library file
+       name as their module name, or the full path and file as the module name.
+       For example, in the above example, <literal>lib1</literal>'s module 
+       name must either be <literal>lib1</literal> or <literal>com/foo/lib1</literal>.
+     </para>
+   </sect2>
   </sect1>
 </chapter>
 <!-- Keep this comment at the end of the file
