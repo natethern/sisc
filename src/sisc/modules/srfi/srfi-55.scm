@@ -25,7 +25,22 @@
                      (eval `(import ,(string->symbol srfi))
                            (interaction-environment))))
                  nums)))
-    (else (error 'require-extension
-                 "unknown extension identifier: ~a"
-                 id))))
+    (else 
+      (lambda (libs)
+        (for-each (lambda (lib)
+                    (let ([full-lib-name (string->symbol
+                                          (format "~a/~a" id lib))])
+                      (require-library full-lib-name)
+                      (with/fc (lambda (m e)
+                                 (with/fc (lambda (m e)                                                   
+                                            (error 'require-extension
+                                                   "unknown extension identifier: ~a"
+                                                   id))
+                                          (lambda (m e) 
+                                            (eval `(import ,full-lib-name)
+                                                  (interaction-environment)))))
+                               (lambda ()
+                                 (eval `(import ,lib)
+                                       (interaction-environment))))))
+                  libs))))
 
