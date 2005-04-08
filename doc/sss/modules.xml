@@ -264,7 +264,7 @@ com/foo/lib3/Class2.class
      path names in the jar, for example
      <literal>com/foo/lib{1,2,3}</literal> in the above example.
     </para> 
-    <sect2>
+    <sect2 id="SRFI55">
       <title><function>require-extension</function></title>
       <para>          
        	&SISC; supports <ulink url="http://srfi.schemers.org/srfi-55/srfi-55.html">SRFI-55</ulink> for loading libraries and extensions as well.

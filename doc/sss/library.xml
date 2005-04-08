@@ -1386,6 +1386,7 @@ com/foo/bar/baz/baz3.scm
           If, however, an SRFI is to be imported into the top-level,
           one can use the <function>require-extension</function>
           mechanism (see <xref linkend="SRFI55"/>).
+        </para>
       </sect3>
     </sect2>
     <sect2>
