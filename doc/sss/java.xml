@@ -265,6 +265,7 @@ Context.exit()
  	      relieved of the responsibility of calling <methodname>enter</methodname> and 
  	      <methodname>exit</methodname>, and additional steps are taken behind the scenes
  	      to prevent subtle sharing problems.  
+ 	    </para>
  	    <para>
  	      The contract for the <methodname>execute</methodname> in Context is as follows:
  	    </para>      
