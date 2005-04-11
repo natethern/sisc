@@ -91,7 +91,11 @@ public class Context extends Util {
         Interpreter r = tctx.popInterpreter();
         returnInterpreter(r);
     }
-    
+
+    public static Object execute(SchemeCaller caller) {
+        return execute(currentInterpreter().dynenv, caller);
+    }
+
     /**
      * Obtains a reference to an Interpreter context 
      * and calls caller.execute(Interpreter) with that
@@ -106,7 +110,15 @@ public class Context extends Util {
      * enter() calls.
      */
     public static Object execute(String appName, SchemeCaller caller) {
-        Interpreter r=Context.enter(appName);
+        return execute(lookup(appName), caller);
+    }
+
+    public static Object execute(AppContext ctx, SchemeCaller caller) {
+        return execute(new DynamicEnvironment(ctx), caller);
+    }
+    
+    public static Object execute(DynamicEnvironment env, SchemeCaller caller) {
+        Interpreter r=Context.enter(env);
         //Hold this reference.  Necessary because ThreadContext references
         //hostThread only weakly, which is in turn necessary so that
         //when threads terminate their associated SISC resources are
