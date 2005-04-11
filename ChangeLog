@@ -1,3 +1,8 @@
+2005-04-11  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Added the Context.execute()/SchemeCaller interface
+	  for simplified Java -> Scheme calls.
+	  
 2005-04-07  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Changes to the build environment and additions to 

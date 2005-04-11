@@ -56,8 +56,11 @@ public class Context extends Util {
     /**
        Returns a new Interpreter instance with the same
        AppContext and DynamicEnvironment of the argument
-       instance.
+       instance.  
 
+       The ThreadContext's hostThread will be set to a SchemeThread
+       wrapping the current thread.
+       
        Necessary when re-using the same Interpreter instance
        in a different thread.
        
@@ -78,6 +81,7 @@ public class Context extends Util {
     public static Interpreter enter(DynamicEnvironment dynenv) {
         ThreadContext tctx = lookupThreadContext();
         Interpreter res = createInterpreter(tctx, dynenv);
+        tctx.setHostThread(res, Thread.currentThread());
         tctx.pushInterpreter(res);
         return res;
     }
@@ -87,7 +91,30 @@ public class Context extends Util {
         Interpreter r = tctx.popInterpreter();
         returnInterpreter(r);
     }
-
+    
+    /**
+     * Obtains a reference to an Interpreter context 
+     * and calls caller.execute(Interpreter) with that
+     * reference.  Once execute returns, the Interpreter
+     * is freed, and the return value of caller.execute()
+     * is returned from this method.
+     * 
+     * @note It is critical that the Interpreter
+     * reference provided during the call is used only
+     * in the thread which calls this method.  New threads
+     * should obtain a different Interpreter via this or
+     * enter() calls.
+     */
+    public static Object execute(String appName, SchemeCaller caller) {
+        Interpreter r=Context.enter(appName);
+        try {
+            return caller.execute(r);
+        } finally {
+            if (r!=null)
+                Context.exit();
+        }
+    }
+    
     /*********** resource maintenance ***********/
 
     /**

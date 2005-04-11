@@ -2,6 +2,8 @@ package sisc.interpreter;
 
 import java.lang.ref.*;
 import java.util.*;
+
+import sisc.data.SchemeThread;
 import sisc.util.Util;
 
 public class ThreadContext extends Util {
@@ -40,6 +42,22 @@ public class ThreadContext extends Util {
 
     protected Interpreter popInterpreter() {
         return (Interpreter)interpreters.pop();
+    }
+
+    public Thread nativeThread() {
+        if (hostThread==null) return null;
+        SchemeThread st=(SchemeThread)hostThread.get();
+        if (st==null) return null;
+        else return st.thread;
+    }
+    
+    public void setHostThread(Interpreter r, Thread thread) {
+        if (nativeThread() != thread) {
+            //Wrap the thread in a SchemeThread with no thunk.
+            SchemeThread st=new SchemeThread(r, null);
+            st.thread=thread;
+            hostThread = new WeakReference(st);
+        }
     }
 
 }

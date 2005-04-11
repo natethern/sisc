@@ -52,7 +52,7 @@
       <sect3>
         <title>Internal Calls</title>
         <para>
-          When making an internal call, one typically wants to do that in an
+          When making an internal call, one typically wants to make the call in an
           interpreter that shares the same <classname>AppContext</classname> and
           <classname>DynamicEnvironment</classname> as the calling interpreter. One can
           get hold of such an interpreter using
