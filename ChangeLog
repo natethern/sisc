@@ -3,6 +3,10 @@
 	* Added the Context.execute()/SchemeCaller interface
 	  for simplified Java -> Scheme calls.
 	  
+	* Always associate the Java thread in Context.enter with
+	  the thread context, which should fix thread/current, at 
+	  least in a managed external call.
+	  
 2005-04-07  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Changes to the build environment and additions to 
