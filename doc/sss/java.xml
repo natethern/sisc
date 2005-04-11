@@ -243,7 +243,7 @@ Context.exit()
           managing the state involved in an executing Scheme program.  They
           do have some weaknesses, however.  Because they cannot enforce that
           all intervening calls to the Interpreter run in the same thread,
-          subtle issues can arrise if the Interpreter context saved as a reference
+          subtle issues can arrise if the Interpreter context is saved as a reference
           in a program and used by competing threads.  Other, more subtle
           issues exist, such as the association of a thread handle (as retrievable
           using SRFI-18) in Scheme with the Java thread which is making the call.
