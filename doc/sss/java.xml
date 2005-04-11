@@ -171,9 +171,9 @@ Context.exit()
       <sect3>
         <title>External Calls</title>
         <para>
-          The main challenge when making external calls is what
-          application and dynamic environment to make them
-          in. <classname>sisc.interpreter.Context</classname> maintains an application
+          The main challenge when making external calls is in which
+          application and dynamic environment to make the call.
+          <classname>sisc.interpreter.Context</classname> maintains an application
           registry. To register an application call
           <programlisting>
 Context.register("appname", appContext)
@@ -231,8 +231,96 @@ Interpreter r = Context.enter(appContext, dynamicEnv);
 Context.exit()
           </programlisting>
           in order to release the resources associated with the call
-          context.
+          context.  It is prefered that the managed external call 
+          approach be used instead, as described in the next section
         </para>
+      </sect3>
+      <sect3>
+        <title>Managed External Calls</title>
+        <para>
+          The methods <function>enter</function> and <function>exit</function> as 
+          described in the last section hide much of the complexity of
+          managing the state involved in an executing Scheme program.  They
+          do have some weaknesses, however.  Because they cannot enforce that
+          all intervening calls to the Interpreter run in the same thread,
+          subtle issues can arrise if the Interpreter context saved as a reference
+          in a program and used by competing threads.  Other, more subtle
+          issues exist, such as the association of a thread handle (as retrievable
+          using SRFI-18) in Scheme with the Java thread which is making the call.
+          For this reason, it is preferred that the programmer use 
+          a <emphasis>managed external call</emphasis> whenever possible.
+        </para>
+        <para>
+          A managed external call is performed calling <methodname>Context.execute</methodname>,
+          passing an optional application name and a required lightweight object
+          which implements the <classname>sisc.interpreter.SchemeCaller</classname>
+          interface, which is in turn required to implement the <methodname>execute</methodname>
+          method.  <literal>Context</literal> will create an Interpreter, associate
+          a Scheme thread handle, and call the visitor's <methodname>execute</methodname> method, 
+          passing the Interpreter.  
+        </para> 
+ 	    <para>
+ 	      The body of the visitor can then call the usual methods on Interpreter, still
+ 	      ensuring that all the calls happen with the same thread.  The programmer is
+ 	      relieved of the responsibility of calling <methodname>enter</methodname> and 
+ 	      <methodname>exit</methodname>, and additional steps are taken behind the scenes
+ 	      to prevent subtle sharing problems.  
+ 	    <para>
+ 	      The contract for the <methodname>execute</methodname> in Context is as follows:
+ 	    </para>      
+        <blockquote>
+          <para>
+            <indexterm><primary>execute</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>java.lang.Object</type>
+              <methodname>execute</methodname>
+              <methodparam choice="opt">
+                <type>String</type>
+                <parameter>appName</parameter>
+              </methodparam>
+              <methodparam>
+                <type>sisc.interpreter.SchemeCaller</type>
+                <parameter>caller</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates an Interpreter context for the named application
+                if provided, the current application otherwise, and calls
+                <methodname>execute</methodname> in the caller with the
+                Interpreter.  When the caller returns, the Interpreter
+                is freed, and the return value of the caller is returned.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+        <para>
+          And implementors of the <classname>sisc.interpreter.SchemeCaller</classname>
+          are responsible for implementing the following method:
+        </para>        
+        <blockquote>
+          <para>
+            <indexterm><primary>execute</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>java.lang.Object</type>
+              <methodname>execute</methodname>
+              <methodparam>
+                <type>sisc.interpreter.Interpreter</type>
+                <parameter>r</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Utilizes the given Interpreter to make Java to Scheme
+                calls.  Any Object may be returned.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
       </sect3>
     </sect2>
     <sect2>

@@ -107,6 +107,14 @@ public class Context extends Util {
      */
     public static Object execute(String appName, SchemeCaller caller) {
         Interpreter r=Context.enter(appName);
+        //Hold this reference.  Necessary because ThreadContext references
+        //hostThread only weakly, which is in turn necessary so that
+        //when threads terminate their associated SISC resources are
+        //garbage collected.  In this case, however, we want to guarantee that during 
+        //the lifetime of the call, the SchemeThread wrapper object
+        //remains available        
+        Object t=r.tctx.hostThread.get();
+
         try {
             return caller.execute(r);
         } finally {
