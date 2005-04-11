@@ -65,7 +65,7 @@ Interpreter current = Context.currentInterpreter();
 if (current == null) { ...make external call...}
 else { ...make internal call... }
           </programlisting>
-          The calls themselves are made using one of the three
+          The calls themselves are made using one of several
           <function>eval</function> methods on the
           <classname>sisc.interpreter.Interpreter</classname>:
           <indexterm><primary>eval</primary>
@@ -156,7 +156,7 @@ else { ...make internal call... }
               </blockquote>
             </listitem>
           </itemizedlist>
-          Several such calls can be made on the same interpreter.
+          Several such calls can be made consecutively on the same interpreter.
         </para>
         <para>
           Before returning from the code that is making the internal
@@ -251,7 +251,7 @@ Context.exit()
           a <emphasis>managed external call</emphasis> whenever possible.
         </para>
         <para>
-          A managed external call is performed calling <methodname>Context.execute</methodname>,
+          A managed external call is performed by calling <methodname>Context.execute</methodname>,
           passing an optional application name and a required lightweight object
           which implements the <classname>sisc.interpreter.SchemeCaller</classname>
           interface, which is in turn required to implement the <methodname>execute</methodname>
@@ -275,7 +275,8 @@ Context.exit()
             </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
-              <type>java.lang.Object</type>
+              <modifier>public static</modifier>
+              <type>Object</type>
               <methodname>execute</methodname>
               <methodparam choice="opt">
                 <type>String</type>
@@ -307,7 +308,7 @@ Context.exit()
             </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
-              <type>java.lang.Object</type>
+              <type>Object</type>
               <methodname>execute</methodname>
               <methodparam>
                 <type>sisc.interpreter.Interpreter</type>
