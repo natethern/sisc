@@ -1,3 +1,10 @@
+2005-04-12  SISC 1.11.0-alpha Released
+
+2005-04-12  Scott G. Miller  <sgmiller@gmail.com>
+
+    * Reintroduce copying of the vlr in closure, fixing bug 1181453.
+      Don't yet know why.
+
 2005-04-11  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Added the Context.execute()/SchemeCaller interface
