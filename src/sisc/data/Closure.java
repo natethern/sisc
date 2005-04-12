@@ -46,17 +46,9 @@ public class Closure extends Procedure implements NamedValue {
         final Value[] vlr;
         if (r.vlk) {
             vlr=r.createValues(vl);
-            switch(vlr.length) {
-            case 3: vlr[2]=r.vlr[2]; 
-            case 2: vlr[1]=r.vlr[1]; 
-            case 1: 
-                vlr[0]=r.vlr[0];
-                break;
-            default:
-                System.arraycopy(r.vlr, 0, vlr, 0, vl);
-            }
+            System.arraycopy(r.vlr, 0, vlr, 0, vl);
         } else {
-            return vlr=r.vlr;
+            vlr=r.vlr;
         }        
         
         if (!arity) {
