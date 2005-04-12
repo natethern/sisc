@@ -29,17 +29,36 @@ public class Closure extends Procedure implements NamedValue {
 
     private final Value[] matchArgs(Interpreter r)
         throws ContinuationException {
+      
         /**
-           It is safe to use the vlr directly as our arg array,
+         * NOTE: The following is for some reason incorrect.
+         * TODO: Figure out why
+         * 
+           "It is safe to use the vlr directly as our arg array,
            without copying. That is because any future or concurrent
            modification of the vlr is impossible since a) this code is
            the *application* of a function, so all writing to vlr in
            order to supply the arguments will have been done, b) k
-           invocations copy the vlr before modification.
+           invocations copy the vlr before modification."
         **/
         Value[] vals;
-        final Value[] vlr = r.vlr;
-        final int vl = vlr.length;
+        final int vl=r.vlr.length;
+        final Value[] vlr;
+        if (r.vlk) {
+            vlr=r.createValues(vl);
+            switch(vlr.length) {
+            case 3: vlr[2]=r.vlr[2]; 
+            case 2: vlr[1]=r.vlr[1]; 
+            case 1: 
+                vlr[0]=r.vlr[0];
+                break;
+            default:
+                System.arraycopy(r.vlr, 0, vlr, 0, vl);
+            }
+        } else {
+            return vlr=r.vlr;
+        }        
+        
         if (!arity) {
             if (vl != fcount) {
                 error(r, liMessage(SISCB,"notenoughargsto", toString(),

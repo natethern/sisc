@@ -240,3 +240,7 @@
   (let () 
     (import m)
     (a)))
+
+(should-be 1181453 #t
+  (procedure? ((call/cc call/cc) (lambda (f) f))))
+
