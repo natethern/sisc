@@ -18,7 +18,17 @@ checkIfNonInteractive() {
 
 if [ ! -d "$SISC_HOME" ]
 then
-   SISC_HOME="`dirname $0`" #/usr/local/lib/sisc
+   SISC_HOME="`dirname $0`"
+   if [ ! -f "$SISC_HOME/sisc.jar" ]
+   then 
+     if [ -f /usr/lib/sisc/sisc.jar ] 
+     then 
+       SISC_HOME="/usr/lib/sisc" 
+     elif [ -f /usr/local/lib/sisc/sisc.jar ]
+     then
+       SISC_HOME="/usr/local/lib/sisc"
+     fi
+   fi
 fi
 
 if [ -r "$HOME/sisc.properties" ]
