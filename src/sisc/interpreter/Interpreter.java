@@ -60,7 +60,7 @@ public class Interpreter extends Util {
                                                       new Value[3]};
 
     //ACCOUNTING REGISTERS
-    private boolean              vlk;      //vlk, when true, indicates the
+    public boolean               vlk;      //vlk, when true, indicates the
                                            //frame was captured.
     public Expression            lxp;      //Used for debugging
 
