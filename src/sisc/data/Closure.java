@@ -30,50 +30,50 @@ public class Closure extends Procedure implements NamedValue {
     private final Value[] matchArgs(Interpreter r)
         throws ContinuationException {
       
-        /**
-         * NOTE: The following is for some reason incorrect.
-         * TODO: Figure out why
-         * 
-           "It is safe to use the vlr directly as our arg array,
-           without copying. That is because any future or concurrent
-           modification of the vlr is impossible since a) this code is
-           the *application* of a function, so all writing to vlr in
-           order to supply the arguments will have been done, b) k
-           invocations copy the vlr before modification."
-        **/
         Value[] vals;
         final int vl=r.vlr.length;
-        final Value[] vlr;
-        if (r.vlk) {
-            vlr=r.createValues(vl);
-            System.arraycopy(r.vlr, 0, vlr, 0, vl);
-        } else {
-            vlr=r.vlr;
-        }        
         
         if (!arity) {
+            /**
+             * It is safe to use the vlr directly as our arg array,
+             * without copying. That is because any future or concurrent
+             * modification of the vlr is impossible since a) this code is
+             * the *application* of a function, so all writing to vlr in
+             * order to supply the arguments will have been done, b) k
+             * invocations copy the vlr before modification, and 
+             * c) this path will not side-effect the vlr, which in rare cases
+             * (such as ((call/cc call/cc) (lambda (f) f))) may
+             * corrupt another saved vlr.
+             **/
+            vals=r.vlr;
             if (vl != fcount) {
                 error(r, liMessage(SISCB,"notenoughargsto", toString(),
                                    fcount, vl));
                 return null;
             }
-            vals=vlr;
-        } else {        
+        } else {
             final int sm1=fcount-1;
             if (vl < sm1) {
                 error(r, liMessage(SISCB,"notenoughargstoinf", toString(),
                                    sm1, vl));
                 return null;
             }
-            if (vl < fcount) {
+
+            if (vl < fcount || r.vlk) {
+                /**
+                 * Here, however, we must copy the vlr if its locked, 
+                 * otherwise we may side-effect a captured vlr by 
+                 * creating the rest argument.
+                 */
                 vals=r.createValues(fcount);
-                System.arraycopy(vlr, 0, vals, 0, sm1);
+                System.arraycopy(r.vlr, 0, vals, 0, sm1);
+
+                vals[sm1]=valArrayToList(r.vlr, sm1, vl-sm1);
                 r.returnVLR(); //NB: this checks vlk first
             } else {
-                vals=vlr;
+                vals=r.vlr;
+                vals[sm1]=valArrayToList(r.vlr, sm1, vl-sm1);
             }
-
-            vals[sm1]=valArrayToList(vlr, sm1, vl-sm1);
         }
 
         for (int i=bl; i>=0; i--) {
@@ -84,11 +84,11 @@ public class Closure extends Procedure implements NamedValue {
     }
 
     public void apply(Interpreter r) throws ContinuationException {
-     r.lcl= matchArgs(r);
+        r.lcl=matchArgs(r);
         r.env=env;
         r.nxp=body;
     }
-
+    
     public void display(ValueWriter w) throws IOException {
         displayNamedOpaque(w, "procedure");
     }
