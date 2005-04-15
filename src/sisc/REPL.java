@@ -23,6 +23,7 @@ public class REPL {
     public REPL(String appName, SchemeThread primordialThread) {
         this.primordialThread = primordialThread;
         this.appName = appName;
+        primordialThread.thread.setDaemon(true);
     }
     
     public static SeekableInputStream findHeap(String heapLocation) {
