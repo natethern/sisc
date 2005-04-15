@@ -60,7 +60,7 @@ public class Interpreter extends Util {
                                                       new Value[3]};
 
     //ACCOUNTING REGISTERS
-    public boolean               vlk;      //vlk, when true, indicates the
+    private boolean              vlk;      //vlk, when true, indicates the
                                            //frame was captured.
     public Expression            lxp;      //Used for debugging
 
@@ -518,6 +518,40 @@ public class Interpreter extends Util {
             dv1=v;
             break;
         }
+    }
+
+    /**
+     * Returns a Value[] prepared as a value rib for a 
+     * for procedure expecting rest args in the last
+     * rib position.  This may or may not clone the VLR
+     * depending on whether it is safe to not do so.
+     * 
+     * @param fcount The number of arguments to prepare
+     * including the rest variable
+     */
+    public Value[] vlrToRestArgs(int fcount) {
+        Value[] vals;
+        int sm1=fcount - 1;
+        int vl=vlr.length; 
+        
+        if (vl < fcount || vlk) {
+            /**
+             * We must copy the vlr if its locked, 
+             * otherwise we may side-effect a captured vlr by 
+             * creating the rest argument.
+             * 
+             * @see Closure.matchArgs
+             */
+            vals=createValues(fcount);
+            System.arraycopy(vlr, 0, vals, 0, sm1);
+
+            vals[sm1]=valArrayToList(vlr, sm1, vl-sm1);
+            returnVLR(); //NB: this checks vlk first
+        } else {
+            vals=vlr;
+            vals[sm1]=valArrayToList(vlr, sm1, vl-sm1);
+        }
+        return vals;
     }
 }
 /*

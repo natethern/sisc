@@ -31,7 +31,6 @@ public class Closure extends Procedure implements NamedValue {
         throws ContinuationException {
       
         Value[] vals;
-        final int vl=r.vlr.length;
         
         if (!arity) {
             /**
@@ -46,34 +45,19 @@ public class Closure extends Procedure implements NamedValue {
              * corrupt another saved vlr.
              **/
             vals=r.vlr;
-            if (vl != fcount) {
+            if (vals.length != fcount) {
                 error(r, liMessage(SISCB,"notenoughargsto", toString(),
-                                   fcount, vl));
+                                   fcount, r.vlr.length));
                 return null;
             }
         } else {
-            final int sm1=fcount-1;
-            if (vl < sm1) {
+            if (r.vlr.length < (fcount-1)) {
                 error(r, liMessage(SISCB,"notenoughargstoinf", toString(),
-                                   sm1, vl));
+                                   fcount-1, r.vlr.length));
                 return null;
             }
 
-            if (vl < fcount || r.vlk) {
-                /**
-                 * Here, however, we must copy the vlr if its locked, 
-                 * otherwise we may side-effect a captured vlr by 
-                 * creating the rest argument.
-                 */
-                vals=r.createValues(fcount);
-                System.arraycopy(r.vlr, 0, vals, 0, sm1);
-
-                vals[sm1]=valArrayToList(r.vlr, sm1, vl-sm1);
-                r.returnVLR(); //NB: this checks vlk first
-            } else {
-                vals=r.vlr;
-                vals[sm1]=valArrayToList(r.vlr, sm1, vl-sm1);
-            }
+            vals=r.vlrToRestArgs(fcount);
         }
 
         for (int i=bl; i>=0; i--) {
