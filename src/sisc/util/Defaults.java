@@ -17,6 +17,7 @@ public abstract class Defaults {
     public static Value   INLINE_PRIMITIVES           = Util.FALSE;
     public static boolean HEDGED_INLINING             = true;
     public static boolean PERMISSIVE_PARSING          = false;
+    public static boolean INTERNAL_DEBUGGING          = false;
 }
  
 /*
