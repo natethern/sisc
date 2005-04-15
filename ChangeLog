@@ -1,3 +1,10 @@
+2005-04-14  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fixed bug in logand with big integers.
+	
+	* Fixed missing i18n'ed message for the above error.
+	  Thanks to Alessandro Colomba for spotting them.
+	
 2005-04-12  SISC 1.11.0-alpha Released
 
 2005-04-12  Scott G. Miller  <sgmiller@gmail.com>
