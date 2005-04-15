@@ -102,6 +102,7 @@
 (define emit-annotations        (make-native-parameter "emitAnnotations"))
 (define character-set           (make-native-parameter "characterSet"))
 (define permissive-parsing      (make-native-parameter "permissiveParsing"))
+(define internal-debugging      (make-native-parameter "internalDebugging"))
 
 ; Enable inlining and optimizer assumptions while expanding libraries
  
@@ -564,7 +565,7 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 (define dynamic-wind)
 (define call-with-current-continuation-unsafe call-with-current-continuation)
 (define call/cc-unsafe call-with-current-continuation)
-  
+
 ;;a point in the dynamic wind stack
 ;;-this would be easier if we had structures
 (let-syntax ([point-depth 
@@ -603,7 +604,7 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
     (define (make-wind-safe cont)
       (let* ((point (get-dynamic-point))
              (safe-k
-              (lambda results
+              (lambda results                
                 (travel-between-points (get-dynamic-point) point)
                 (apply cont results))))
         (set-annotation! safe-k 'unsafe-cont cont)

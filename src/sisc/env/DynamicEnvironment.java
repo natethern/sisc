@@ -24,6 +24,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public String characterSet = getDefaultCharacterSet();
     public boolean hedgedInlining = Defaults.HEDGED_INLINING;
     public boolean permissiveParsing = Defaults.PERMISSIVE_PARSING;
+    public boolean internalDebugging = Defaults.INTERNAL_DEBUGGING;
     
     private static String defaultPrintShared =
         new Boolean(Defaults.PRINT_SHARED).toString();
@@ -39,7 +40,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
         new Boolean(Defaults.CASE_SENSITIVE).toString();
     private static String defaultHedgedInlining = new Boolean(Defaults.HEDGED_INLINING).toString();
     private static String defaultPermissiveParsing = new Boolean(Defaults.PERMISSIVE_PARSING).toString();
-
+    private static String defaultInternalDebugging = new Boolean(Defaults.INTERNAL_DEBUGGING).toString();
+    
     public Value wind = FALSE; //top of wind stack
 
     //the lexer is stateful
@@ -229,6 +231,14 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public void setPermissiveParsing(Value v) {
         permissiveParsing=truth(v);
+    }
+
+    public Value getInternalDebugging() {
+        return truth(internalDebugging);
+    }
+
+    public void setInternalDebugging(Value v) {
+        internalDebugging=truth(v);
     }
 
     protected static String getDefaultCharacterSet() {
