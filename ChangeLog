@@ -1,3 +1,10 @@
+2005-04-15  Scott G. Miller  <sgmiller@gmail.com>
+
+	* More efficiently fixed bug 1181453.  
+	  Not copying the VLR in Closure on infinite-arity procedures 
+	  can in rare cases corrupt a captured continuation. 
+	  Moved most of the rest-args logic into Interpreter.	 
+
 2005-04-14  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed bug in logand with big integers.
