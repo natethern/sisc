@@ -9,7 +9,7 @@
 (define (sub1 x) (- x 1))
 (define (add1 x) (+ x 1))
 
-(define global-ht (make-hash-table))
+(define global-ht (make-hash-table 31))
 
 (define-syntax get
   (syntax-rules ()
@@ -25,7 +25,7 @@
         (list (apply min res) 'min 'ms)
         (let ((st (get-internal-real-time)))
           (begin (thunk)
-                 (loop (- x 1) (cons (- (get-internal-real-time) st) res)))))))
+                 (loop (- x 1) (cons (* 10 (- (get-internal-real-time) st)) res)))))))
 
 (define benchmark-results '())
 
