@@ -14,7 +14,7 @@
 (define (listn n)
   (if (not (= 0 n))
       (cons n (listn (- n 1)))
-      ()))
+      '()))
  
 (define l18 (listn 18))
 (define l12 (listn 12))
