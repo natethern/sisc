@@ -1,3 +1,10 @@
+;; r5rs_pitfalls.scm
+;; 
+;; This program attempts to test a Scheme implementation's conformance
+;; to various subtle edge-cases and consequences of the R5RS Scheme standard.
+;; Code was collected from public forums, and is hereby placed in the public domain.
+;;
+;; 
 (define-syntax should-be
   (syntax-rules ()
     ((_ test-id value expression)
