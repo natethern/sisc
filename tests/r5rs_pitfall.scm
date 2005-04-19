@@ -150,7 +150,7 @@
 ;; Section 7: First class continuations
 
 ;; Scott Miller
-;; No newsgroup posting associated.  The jist of this test and 7.2
+;; No newsgroup posting associated.  The gist of this test and 7.2
 ;; is that once captured, a continuation should be unmodified by the 
 ;; invocation of other continuations.  This test determines that this is 
 ;; the case by capturing a continuation and setting it aside in a temporary
