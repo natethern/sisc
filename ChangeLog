@@ -1,3 +1,8 @@
+2005-04-20  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fixed issues with trace, which annoyingly required
+	  an untrace then trace when a traced procedure is redefined.
+	  
 2005-04-15  Scott G. Miller  <sgmiller@gmail.com>
 
 	* More efficiently fixed bug 1181453.  

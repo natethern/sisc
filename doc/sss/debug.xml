@@ -45,6 +45,12 @@
       <emphasis>any</emphasis> continuation.
     </para>
     <blockquote>
+      <para>      
+        &requires; 
+        <emphasis role="bold">
+          (import <emphasis>debugging</emphasis>)
+        </emphasis>
+      </para>
       <para>
         <indexterm><primary>stack-trace</primary>
         </indexterm>
@@ -256,6 +262,14 @@
                 indicating the names of top-level procedures currently
                 being traced.
               </para>
+              <para>
+                If a traced procedure is redefined, it will not 
+                retain the instrumenting installed by
+                <function>trace</function>, until
+                <function>trace</function> is called again (with any 
+                arguments).  At that time, the traced procedures are 
+                reinspected and instrumenting reinstalled on 
+                redefined procedures.
             </blockquote>
           </para>
           <para>

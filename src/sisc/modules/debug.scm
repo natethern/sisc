@@ -84,25 +84,28 @@
        (trace-call (lambda () (list 'name var ...))
                    (lambda () (begin body ...)))))))
 
-(define (verify-traced proclist)
+(define (make-traced procedure-name procedure)
+  (lambda args
+    (trace-call (lambda () (cons procedure-name args))
+                (lambda () (apply procedure args)))))
+
+(define (verify-traced! proclist)
   (let loop ((x proclist))
     (if (null? x) 
         '()
         (let ([traced-procedure (car x)])
-          (if (eq? (cdr traced-procedure)
+          (if (eq? (caddr traced-procedure)
                    (getprop (car traced-procedure)))
-              (loop (cdr x))
-              (cons traced-procedure (loop (cdr x))))))))
+              (cons traced-procedure (loop (cdr x)))
+              (let* ([real-ps (sc-expand (car traced-procedure))]
+                     [proc (getprop real-ps)]
+                     [traced-proc (make-traced real-ps proc)])
+                (putprop real-ps traced-proc)
+                (cons (list real-ps proc traced-proc) (loop (cdr x)))))))))
               
 (define (trace . procs)
-  (define (make-traced procedure-name procedure)
-    (lambda args
-      (trace-call (lambda () (cons procedure-name args))
-                  (lambda () (apply procedure args)))))
-  (let ([traced-procedures (verify-traced
-                            (cond [(getprop 'traced-procedures '*debug*) => 
-                                   (lambda (x) x)]
-                                  [else '()]))])
+  (let ([traced-procedures (verify-traced!
+                            (getprop 'traced-procedures '*debug* '()))])
     (if (null? procs)
         (display (format "{currently traced procedures: ~a}~%" 
                          (map car traced-procedures)))
@@ -117,8 +120,8 @@
                      [(not (assq real-ps traced-procedures))
                       (let ([traced-proc (make-traced real-ps proc)])
                         (set! traced-procedures 
-                          (cons (cons real-ps (list proc traced-proc)) 
-                                traced-procedures))
+                              (cons (list real-ps proc traced-proc)
+                                    traced-procedures))
                         (putprop real-ps traced-proc))])))
            procs)))
     (putprop 'traced-procedures '*debug* traced-procedures)))
@@ -132,9 +135,7 @@
                     (remove-from-assoc procedure-name (cdr assoc)))]))
 
 (define (untrace proc1 . procs)
-  (let ([traced-procedures (cond [(getprop 'traced-procedures '*debug*) => 
-                                  (lambda (x) x)]
-                                 [else '()])])
+  (let ([traced-procedures (getprop 'traced-procedures '*debug* '())])
     (for-each 
      (lambda (procedure-symbol)
        (let* ([real-ps (sc-expand procedure-symbol)]
