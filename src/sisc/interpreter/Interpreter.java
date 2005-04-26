@@ -521,6 +521,23 @@ public class Interpreter extends Util {
     }
 
     /**
+     * Returns a Value[] prepared as a value rib
+     * for a procedure with a fixed argument count.
+     * This may or may not clone the VLR depending on
+     * whether it is safe to not do so.
+     */
+    public Value[] vlrToArgs() {
+        Value[] vals; 
+        if (vlk) {
+            vals=createValues(vlr.length);
+            System.arraycopy(vlr, 0, vals, 0, vals.length);
+        } else {
+            vals=vlr;
+        }
+        return vals;
+    }
+
+    /**
      * Returns a Value[] prepared as a value rib for a 
      * for procedure expecting rest args in the last
      * rib position.  This may or may not clone the VLR

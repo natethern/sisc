@@ -33,30 +33,51 @@ public class Closure extends Procedure implements NamedValue {
         Value[] vals;
         
         if (!arity) {
-            /**
-             * It is safe to use the vlr directly as our arg array,
-             * without copying. That is because any future or concurrent
-             * modification of the vlr is impossible since a) this code is
-             * the *application* of a function, so all writing to vlr in
-             * order to supply the arguments will have been done, b) k
-             * invocations copy the vlr before modification, and 
-             * c) this path will not side-effect the vlr, which in rare cases
-             * (such as ((call/cc call/cc) (lambda (f) f))) may
-             * corrupt another saved vlr.
-             **/
-            vals=r.vlr;
+            if (bl < 0) {
+                // No boxing will occur
+
+                /**
+                 * It is safe to use the vlr directly as our arg array,
+                 * without copying. That is because any future or concurrent
+                 * modification of the vlr is impossible since (a) this code is
+                 * the *application* of a function, so all writing to vlr in
+                 * order to supply the arguments will have been done, (b) k
+                 * invocations copy the vlr before modification, and 
+                 * (c) this path will not side-effect the vlr, which in rare cases
+                 * (such as ((call/cc call/cc) (lambda (f) f))) may
+                 * corrupt another saved vlr.
+                 **/
+                vals=r.vlr;
+            } else {
+                /**
+                 * Because we're boxing, we *will* side-effect the vlr, violating (c) 
+                 * from the above description, so we must copy if the vlr is locked,
+                 * otherwise the Box may leak into another continuation's, which 
+                 * may be unexpected and crash the LexicalReferenceExp, or at least 
+                 * allow set!'s on the box to propogate incorrectly to another context.
+                 */
+                vals=r.vlrToArgs();
+            }
+            
             if (vals.length != fcount) {
                 error(r, liMessage(SISCB,"notenoughargsto", toString(),
                                    fcount, r.vlr.length));
                 return null;
             }
         } else {
+            
             if (r.vlr.length < (fcount-1)) {
                 error(r, liMessage(SISCB,"notenoughargstoinf", toString(),
                                    fcount-1, r.vlr.length));
                 return null;
             }
-
+            
+            /**
+             * We must copy if the vlr is locked here, because the act of
+             * setting the last vlr slot to the prepared list of rest
+             * arguments is a side-effect, and can propogate to other
+             * captures of that vlr in continuations.
+             */
             vals=r.vlrToRestArgs(fcount);
         }
 
