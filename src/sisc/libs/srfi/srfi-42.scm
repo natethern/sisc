@@ -24,7 +24,7 @@
      :do
      :let
      (:parallel :parallel-1)
-     (:while :while-1)
+     (:while :while-1 :while-2)
      (:until :until-1)
      :list
      :string
