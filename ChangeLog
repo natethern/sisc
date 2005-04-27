@@ -1,3 +1,8 @@
+2005-04-27  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Updated SRFI-42, fixing a bug in :while reported on 
+	  comp.lang.scheme.
+
 2005-04-20  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed issues with trace, which annoyingly required
