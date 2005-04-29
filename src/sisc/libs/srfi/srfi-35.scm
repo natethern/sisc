@@ -15,8 +15,12 @@
      (condition type-field-alist->condition)
      &condition
      &message
+     message-condition?
+     condition-message
      &serious
-     &error)
+     serious-condition?
+     &error
+     error?)
   (import srfi-1)
   (import srfi-9)
   (import srfi-23)

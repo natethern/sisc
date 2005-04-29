@@ -1,3 +1,8 @@
+2005-04-29  Matthias Radestock  <matthias@sorted.org>
+
+	* Added some exports missing from srfi-35. Thanks to Andrew Wilcox
+	  for spotting them.
+
 2005-04-27  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Updated SRFI-42, fixing a bug in :while reported on 
