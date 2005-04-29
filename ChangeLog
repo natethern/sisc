@@ -1,3 +1,10 @@
+2005-04-29  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fixed a garbage leak in Closure which could result
+	  in unnecessary values being on the stack, and thus causing
+	  problems with serialization.  Thanks to Allesandro Colomba 
+	  for spotting the bug.
+	  
 2005-04-29  Matthias Radestock  <matthias@sorted.org>
 
 	* Added some exports missing from srfi-35. Thanks to Andrew Wilcox

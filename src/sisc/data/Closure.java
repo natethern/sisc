@@ -90,6 +90,15 @@ public class Closure extends Procedure implements NamedValue {
 
     public void apply(Interpreter r) throws ContinuationException {
         r.lcl=matchArgs(r);
+        
+        // The VLR register must be cleared here, since its no longer needed,
+        // otherwise it may be pushed onto the stack as garbage
+        // which can result in problems with for example serialization.
+        //
+        // Note that its *not* returned using r.returnVLR(), because
+        // we aren't saying that the VLR array itself is recyclable, just
+        // that in this evaluation subtree it shouldn't be visible.
+        r.vlr=null;
         r.env=env;
         r.nxp=body;
     }
