@@ -1,3 +1,7 @@
+2005-05-03  Matthias Radestock  <matthias@sorted.org>
+
+	* Made slib support a loadable library.
+
 2005-04-29  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed a garbage leak in Closure which could result

@@ -1457,6 +1457,11 @@ com/foo/bar/baz/baz3.scm
                   <computeroutput>-Dsisc.slib=...</computeroutput> to
                   the <envar>JAVAOPT</envar> environment variable.
                 </para>
+                <para>
+                  Note that the value of this property should be a
+                  fully qualified url,
+                  e.g. <computeroutput>file:///usr/share/slib</computeroutput>
+                </para>
               </formalpara>
             </listitem>
           </itemizedlist>
@@ -1464,12 +1469,6 @@ com/foo/bar/baz/baz3.scm
           <application>SLIB</application> have
           <emphasis>read</emphasis> permissions to files in the
           directories referred to by the above system properties.
-        </para>
-        <para>
-          You also need access to the file
-          <filename>slib.scm</filename>, which can be found in the
-          <filename>scheme-src</filename> directory of the &SISC;
-          distribution.
         </para>
       </sect3>
       <sect3>
@@ -1483,12 +1482,10 @@ com/foo/bar/baz/baz3.scm
         <para>
           Start &SISC; as you normally would. At the prompt type
           <programlisting>
-(load "<parameter>path</parameter>/slib.scm")
+(require-library 'sisc/libs/slib)
 (require 'new-catalog)
 (exit)
           </programlisting>
-          where <parameter>path</parameter> is the directory
-          containing the <filename>slib.scm</filename> file.
         </para>
         <para>
           The above should create a file <filename>slibcat</filename>
@@ -1500,10 +1497,10 @@ com/foo/bar/baz/baz3.scm
         <title>Using <application>SLIB</application></title>
         <para>
           Make sure the above system properties are set. Start
-            &SISC; as you normally would. At the prompt load
-          <filename>slib.scm</filename> as described above, i.e.
+            &SISC; as you normally would. At the prompt load the
+          &SISC; <application>SLIB</application> as described above, i.e.
           <programlisting>
-(load "<parameter>path</parameter>/slib.scm")
+(require-library 'sisc/libs/slib)
           </programlisting>
           You can now load <application>SLIB</application> modules
           using <function>require</function>, e.g.
