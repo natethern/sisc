@@ -81,7 +81,7 @@
 
 		       ;; Scheme report features
 
-	rev5-report			;conforms to
+	r5rs    			;conforms to
 	eval				;R5RS two-argument eval
 	values				;R5RS multiple values
 	dynamic-wind			;R5RS dynamic-wind
@@ -95,11 +95,11 @@
 					;STRING-FILL!, LIST->VECTOR,
 					;VECTOR->LIST, and VECTOR-FILL!
 
-	rev4-report			;conforms to
+	r4rs    			;conforms to
 
 	ieee-p1178			;conforms to
 
-	rev3-report			;conforms to
+	r3rs    			;conforms to
 
 ;	rev2-procedures			;SUBSTRING-MOVE-LEFT!,
 					;SUBSTRING-MOVE-RIGHT!,
