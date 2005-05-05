@@ -434,15 +434,18 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
                                                  new Integer(index),
                                                  v1.synopsis()}));
             }
-        case MAKEVECTOR:
-            return new SchemeVector(num(v1).indexValue(),
-                                    v2);
         case STRINGFILL:
             SchemeString st=str(v1);
             char c=character(v2);
             for (int i=0; i<st.length(); i++)
                 st.set(i, c);
             return VOID;
+        case VECTORFILL:
+            vec(v1).fill(v2);
+            return VOID;
+        case MAKEVECTOR:
+            return new SchemeVector(num(v1).indexValue(),
+                                    v2);
         case MAKESTRING:
             char newStr[]=new char[num(v1).indexValue()];
             char fillchar=character(v2);
@@ -493,9 +496,6 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
                                                  new Integer(index),
                                                  v1.synopsis()}));
             }
-            return VOID;
-        case VECTORFILL:
-            vec(v1).fill(v2);
             return VOID;
         case VECTORSET:
             index=num(v2).indexValue();

@@ -1,3 +1,7 @@
+2005-05-05  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed arity-bug in vector-fill! (bug 1195709).
+
 2005-05-03  Matthias Radestock  <matthias@sorted.org>
 
 	* Made slib support a loadable library.
