@@ -7,7 +7,7 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
 public class Quantity extends Value implements Singleton {
-
+    
     public static final BigInteger
         _BI_NEGONE=BigInteger.valueOf(-1),
         _BI_ZERO = BigInteger.valueOf(0),
@@ -16,19 +16,27 @@ public class Quantity extends Value implements Singleton {
         _INT_MAX = BigInteger.valueOf(Integer.MAX_VALUE),
         _INT_MIN = BigInteger.valueOf(Integer.MIN_VALUE);
 
+    public static final BigDecimal
+        _BD_NEGONE = BigDecimal.valueOf(-1),
+        _BD_ZERO   = BigDecimal.valueOf(0),
+        _BD_ONE    = BigDecimal.valueOf(1),
+        _BD_TWO    = BigDecimal.valueOf(2),
+        _BD_TEN    = BigDecimal.valueOf(10),
+        _BD_HUNDRED= BigDecimal.valueOf(100);
+
     public static final Quantity
         ZERO = Quantity.valueOf(0),
         IZERO = ZERO.toInexact(),
-        ONE  = Quantity.valueOf(1),
         NEGONE  = Quantity.valueOf(-1),
+        ONE  = Quantity.valueOf(1),
         TWO  = Quantity.valueOf(2),
-        I    = Quantity.valueOf(0.0f, 1.0f),
-        TWO_I= Quantity.valueOf(0.0f, 2.0f),
+        I    = Quantity.valueOf(_BD_ZERO, _BD_ONE),
+        TWO_I= Quantity.valueOf(_BD_ZERO, _BD_TWO),
+        HALF_PI = Quantity.valueOf(Math.PI/2),
         POSITIVE_INFINITY = Quantity.valueOf(Double.POSITIVE_INFINITY),
-        NEGATIVE_INFINITY = Quantity.valueOf(Double.NEGATIVE_INFINITY),  
-        HALF_PI = Quantity.valueOf((float)Math.PI/2),
+        NEGATIVE_INFINITY = Quantity.valueOf(Double.NEGATIVE_INFINITY),
         NaN = Quantity.valueOf(Double.NaN);
-    
+
     public static final int
         FIXED=1, EXACT=2, INEXACT=4, RATIONAL=8,
         IMAGINARY=16, INTEGER=32, DECIMAL=64;
@@ -36,7 +44,7 @@ public class Quantity extends Value implements Singleton {
     public static final int
         FIXEDINT = 0,
         DECIM = 1,
-        INTEG = 2,
+		INTEG = 2,
         RATIO = 3,
         COMPLEX = 4,
         POSINF  = 5,
@@ -48,67 +56,72 @@ public class Quantity extends Value implements Singleton {
         ( INEXACT | DECIMAL ), //DECIM
 	( EXACT | INTEGER | RATIONAL ), //INTEG
         ( EXACT | RATIONAL ), //RATIO
-        ( INEXACT | IMAGINARY ) //COMPLEX
+        ( INEXACT | IMAGINARY ), //COMPLEX
+        ( INEXACT | IMAGINARY ), //POSINF
+        ( INEXACT | DECIMAL ), //NEGINF
+        ( 0 ) //NAN
     };
 
-    public static Quantity valueOf(int val) { return new Quantity(val); }
+    public static final Quantity valueOf(int val) { 
+        return new Quantity(val); 
+    }
+
     public static Quantity valueOf(long val) { 
         Quantity rv=new Quantity(val);
         rv.simplify();
         return rv;
     }
-    public static Quantity valueOf(float val) { return new Quantity(val); }
-    public static Quantity valueOf(double val) { return new Quantity((float)val); }
+    public static Quantity valueOf(double val) { return new Quantity(val); }
     public static Quantity valueOf(BigInteger val) { return new Quantity(val); }
-    public static Quantity valueOf(BigDecimal val) { return new Quantity(val.floatValue()); }
+    public static Quantity valueOf(BigDecimal val) { return new Quantity(val); }
     public static Quantity valueOf(BigInteger num, BigInteger den) { 
+        return new Quantity(num, den);
+    }
+    public static Quantity valueOf(BigDecimal num, BigDecimal den) { 
         return new Quantity(num, den);
     }
 
     public static Quantity valueOf(Quantity real, Quantity imag) {
-        return new Quantity(real.toInexact().floatValue(),
-                            imag.toInexact().floatValue());
-    }
-
-    public static Quantity valueOf(float real, float imag) {
-        return new Quantity(real, imag);
+        return new Quantity(real.toInexact().decimal(),
+                            imag.toInexact().decimal());
     }
 
     public static Quantity valueOf(String v) {
         return valueOf(v, 10);
     }
 
-	public static final Quantity valueOf(String v, int radix) {
-		return valueOf(v, radix, true);
-	}
+    public static final Quantity valueOf(String v, int radix) {
+        return valueOf(v, radix, true);
+    }
 	
     public static Quantity valueOf(String v, int radix, boolean handleComplex) {
         int x;
-        if (handleComplex && (x=v.indexOf('i'))!=-1) {
-            float d,im;
-            if (x!=v.length()-1)
-                throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
-            x=v.lastIndexOf('+');
-            if (x==-1) {
-                x=v.lastIndexOf('-');
-                if (x==-1)
-                    throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
-                if (x==0)
-                    d=0.0f;
-                else
-                    d=valueOf(v.substring(0,x), radix, false).decimal();
-                im = ( (x+2)==v.length() ? -1.0f :
-                       valueOf(v.substring(x, v.length()-1), radix, false).decimal());
-            } else {
-                if (x==0)
-                    d=0.0f;
-                else
-                    d=valueOf(v.substring(0,x), radix, false).decimal();
-                im = ( (x+2)==v.length() ? 1.0f :
-                       valueOf(v.substring(x+1, v.length()-1), radix, false).decimal());
-            }
-            return new Quantity(d,im);
-        } else if ((x=v.indexOf('/'))!=-1) {
+	if (handleComplex && (x=v.indexOf('i'))!=-1) {
+	    BigDecimal d,im;
+	    if (x!=v.length()-1)
+		throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
+	    x=v.lastIndexOf('+');
+	    if (x==-1) {
+		x=v.lastIndexOf('-');
+		if (x==-1)
+		    throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
+		
+		if (x==0)
+		    d=_BD_ZERO;
+		else
+		    d=valueOf(v.substring(0,x), radix, false).decimal();
+		im = ( (x+2)==v.length() ? _BD_NEGONE :
+		       valueOf(v.substring(x, v.length()-1), radix, false).decimal());
+	    } else {
+		if (x==0)
+		    d=_BD_ZERO;
+		else
+		    d=valueOf(v.substring(0,x), radix, false).decimal();
+		im = ( (x+2)==v.length() ? _BD_ONE :
+		       valueOf(v.substring(x+1, v.length()-1), radix, false).decimal());
+	    }
+	    return new Quantity(d,im);
+	} else if ((x=v.indexOf('/'))!=-1) {
             Quantity 
                 num=parseUinteger(v.substring(0,x), radix),
                 den=parseUinteger(v.substring(x+1), radix);
@@ -118,35 +131,11 @@ public class Quantity extends Value implements Singleton {
                 return new Quantity(num.integer(), den.integer());
         } else if ((x=v.indexOf('@'))!=-1) {
             //R5RS Lexical structure violation:
-            float xd=parseDecimal(v.substring(0,x), radix, true);
-            float yd=parseDecimal(v.substring(x+1), radix, true);
-            return new Quantity((float)(xd*Math.cos(yd)), 
-                                (float)(xd*Math.sin(yd)));
-        } if ((x=v.indexOf('i'))!=-1) {
-            float d,im;
-            if (x!=v.length()-1)
-                throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
-            x=v.lastIndexOf('+');
-            if (x==-1) {
-                x=v.lastIndexOf('-');
-                if (x==-1)
-                    throw new NumberFormatException(liMessage(SISCB,"invalidcomplex"));
-                if (x==0)
-                    d=0.0f;
-                else
-                    d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ? -1.0f :
-                       parseDecimal(v.substring(x, v.length()-1), radix, true));
-            } else {
-                if (x==0)
-                    d=0.0f;
-                else
-                    d=parseDecimal(v.substring(0,x), radix, true);
-                im = ( (x+2)==v.length() ? 1.0f :
-                       parseDecimal(v.substring(x+1, v.length()-1), radix, true));
-            }
-            return new Quantity(d,im);
-       } else if (radix==10) {
+            double xd=parseDecimal(v.substring(0,x), radix, true).doubleValue();
+            double yd=parseDecimal(v.substring(x+1), radix, true).doubleValue();
+            return new Quantity(new BigDecimal(xd*Math.cos(yd)),
+                                new BigDecimal(xd*Math.sin(yd)));
+        } else if (radix==10) {
             String lv=v.toLowerCase();
             if (lv.indexOf('.') != -1 ||
                 lv.indexOf('e') != -1 ||
@@ -154,7 +143,7 @@ public class Quantity extends Value implements Singleton {
                 lv.indexOf('f') != -1 ||
                 lv.indexOf('d') != -1 ||
                 lv.indexOf('l') != -1) {
-                return new Quantity(parseDecimal(lv, radix));
+                return new Quantity(parseDecimal(lv, radix), true);
             }
         }  
         return parseUinteger(v, radix);
@@ -162,7 +151,7 @@ public class Quantity extends Value implements Singleton {
 
     public int type;
     public int val;
-    public float d, im=0.0f;
+    public BigDecimal d, im=_BD_ZERO;
     public BigInteger i, de=_BI_ONE;
 
     public Quantity() {}
@@ -172,9 +161,19 @@ public class Quantity extends Value implements Singleton {
         type=FIXEDINT;
     }
 
-    Quantity(float l) {
-        d=l;
-        type=DECIM;
+    Quantity(double l) {
+        try {
+            d=new BigDecimal(l);
+            type=DECIM;
+        } catch (NumberFormatException nfe) {
+            if (l==Double.POSITIVE_INFINITY) {
+                type=POSINF;
+            } else if (l==Double.NEGATIVE_INFINITY) {
+                type=NEGINF;
+            } else if (Double.isNaN(l)) {
+                type=NAN;
+            }
+        }
     }
 
     Quantity(long v) {
@@ -182,15 +181,23 @@ public class Quantity extends Value implements Singleton {
         type=INTEG;
     }
 
+    Quantity(BigDecimal d, boolean preserveScale) {
+        type=DECIM;
+        this.d=d;
+        if (!preserveScale)
+            simplify();
+    }
+
+    Quantity(BigDecimal d) {
+        type=DECIM;
+        this.d=d;
+        simplify();
+    }
+
     Quantity(BigInteger i) {
-        if (i.compareTo(_INT_MAX)<=0 &&
-            i.compareTo(_INT_MIN)>=0) {
-            val=i.intValue();
-            type=FIXEDINT;
-        } else {
-            type=INTEG;
-            this.i=i;
-        }
+        type=INTEG;
+        this.i=i;
+        simplify();
     }
 
     Quantity(BigInteger numerator, BigInteger denominator) {
@@ -200,19 +207,11 @@ public class Quantity extends Value implements Singleton {
         simplify();
     }
 
-    Quantity(float real, float imag) {
+    Quantity(BigDecimal real, BigDecimal imag) {
         d=real;
         im=imag;
         type=COMPLEX;
         simplify();
-    }
-
-    protected static int sign(float d) {
-        if (d<0)
-            return -1;
-        else if (d>0)
-            return 1;
-        else return 0;
     }
 
     protected static boolean parsePounds(char[] c) {
@@ -231,17 +230,17 @@ public class Quantity extends Value implements Singleton {
         boolean hadPounds=parsePounds(c);
         if (c[0]=='+' && c.length>1) c[0]='0';
         if (hadPounds)
-            return new Quantity((float)Double.parseDouble(new String(c)));
+            return new Quantity(Double.parseDouble(new String(c)));
         else
             return new Quantity(new BigInteger(new String(c), radix));
     }
 
-    protected static float parseDecimal(String dv, int radix) {
+    protected static BigDecimal parseDecimal(String dv, int radix) {
         return parseDecimal(dv, radix, false);
     }
 
-    protected static float parseDecimal(String dv, int radix,
-                                        boolean asDecimal) {
+    protected static BigDecimal parseDecimal(String dv, int radix,
+                                             boolean asDecimal) {
         try {
             if (radix==10) {
                 int x;
@@ -258,7 +257,6 @@ public class Quantity extends Value implements Singleton {
                             for (int i=0; i<c.length; i++)
                                 if (c[i]!='#')
                                     throw new NumberFormatException(liMessage(SISCB,"noncontigpounds"));
-                        
                         parsePounds(c);
                         b.append('.').append(c);
                     } else {
@@ -268,7 +266,7 @@ public class Quantity extends Value implements Singleton {
                     }
                     b.append(dv.substring(e));
                     dv=b.toString();
-                    return Float.parseFloat(dv);
+                    return new BigDecimal(dv);
                 } else if ((x=dv.indexOf('s'))!=-1 ||
                            (x=dv.indexOf('f'))!=-1 ||
                            (x=dv.indexOf('d'))!=-1 ||
@@ -285,7 +283,7 @@ public class Quantity extends Value implements Singleton {
                         c=dv.substring(x+1).toCharArray();
                         for (int i=0; i<c.length; i++)
                             if (c[i]!='#')
-                                throw new NumberFormatException("non-contiguous use of #s");
+                                throw new NumberFormatException(liMessage(SISCB,"noncontigpounds"));
                         parsePounds(c);
                     } else {
                         b.append(c);
@@ -294,13 +292,13 @@ public class Quantity extends Value implements Singleton {
                     }
                     b.append('.').append(c);
                     
-                    return Float.parseFloat(b.toString());
+                    return new BigDecimal(b.toString());
                 } else if (dv.indexOf('#')!=-1) {
                     char[] c=dv.toCharArray();
                     parsePounds(c);
-                    return Float.parseFloat(new String(c));
+                    return new BigDecimal(new String(c));
                 } else if (asDecimal)
-                    return Float.parseFloat(dv);
+                    return new BigDecimal(dv);
                 else
                     throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
             } else {
@@ -309,9 +307,9 @@ public class Quantity extends Value implements Singleton {
                     if (dv.indexOf('#')!=-1) {
                         char[] c=dv.toCharArray();
                         parsePounds(c);
-                        return Float.parseFloat(new String(c));
+                        return new BigDecimal(new String(c));
                     } else if (asDecimal)
-                        return Float.parseFloat(dv);
+                        return new BigDecimal(dv);
                     else
                         throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
                 else {
@@ -320,15 +318,18 @@ public class Quantity extends Value implements Singleton {
                     ipart=new BigDecimal(new BigInteger(dv.substring(0, x), radix));
                     String fpartstr=dv.substring(x+1);
                     fpart=new BigInteger(fpartstr, radix);
-                    return ipart.add(new BigDecimal(Double.toString(fpart.floatValue() /
-                                                                    Math.pow(radix, fpartstr.length())))).floatValue();
+                    return ipart.add(
+                     new BigDecimal(fpart).divide(
+                      new BigDecimal(Math.pow(radix, 
+                                              fpartstr.length())),
+                                     BigDecimal.ROUND_HALF_EVEN));
                 }
             }
         } catch (StringIndexOutOfBoundsException ioob) { 
             // Workaround for an IBM JVM bug, this exception is never
             // supposed to be thrown
             throw new NumberFormatException(liMessage(SISCB,"notadecimal"));
-        }        
+        }
     }
 
     protected void simplify() {
@@ -345,11 +346,23 @@ public class Quantity extends Value implements Singleton {
                 de=de.negate();
             }
             if (de.equals(_BI_ONE)) {
+                de=_BI_ONE;
                 type=INTEG;
             }
         } else if (type==COMPLEX) {
-            if (im==0.0f) {
+            if (d.scale()>maxFloatPrecision) {
+                d=d.setScale(maxFloatPrecision, BigDecimal.ROUND_HALF_EVEN);
+            }
+            if (im.compareTo(_BD_ZERO)==0) {
+	        im = _BD_ZERO;
                 type=DECIM;
+            }
+            if (im!=_BD_ZERO && im.scale()>maxFloatPrecision) {
+                im=im.setScale(maxFloatPrecision, BigDecimal.ROUND_HALF_EVEN);
+            }
+        } else if (type==DECIM) {
+            if (d.scale()>maxFloatPrecision) {
+                d=d.setScale(maxFloatPrecision, BigDecimal.ROUND_HALF_EVEN);
             }
         }
         if (type==INTEG) {
@@ -408,6 +421,7 @@ public class Quantity extends Value implements Singleton {
             break;
         case INTEG:
             b=o.i;
+            break;
         default:
             throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
         }
@@ -434,6 +448,7 @@ public class Quantity extends Value implements Singleton {
             break;
         case INTEG:
             b=o.i;
+            break;
         default:
             throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
         }
@@ -462,12 +477,13 @@ public class Quantity extends Value implements Singleton {
         }
     }
 
+
     public Quantity lsh(int num) throws NumberFormatException {
         switch (type) {
         case FIXEDINT: return new Quantity((long)val).lsh(num);
         case INTEG: return new Quantity(i.shiftLeft(num));
         default:
-            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+            throw new NumberFormatException(liMessage(SISCB,"onlyshiftintegers"));
         }
     }
 
@@ -476,7 +492,7 @@ public class Quantity extends Value implements Singleton {
         case FIXEDINT: return new Quantity((long)val).rsh(num);
         case INTEG: return new Quantity(i.shiftRight(num));
         default:
-            throw new NumberFormatException(liMessage(SISCB,"logicoprequiresint"));
+            throw new NumberFormatException(liMessage(SISCB,"onlyshiftintegers"));
         }
     }
 
@@ -496,35 +512,23 @@ public class Quantity extends Value implements Singleton {
         return round(BigDecimal.ROUND_HALF_EVEN);
     }
 
-    protected static BigInteger d2i(float d) {
-        return new BigDecimal(d).toBigInteger();
-    }
-
-    protected static float round(float d) {
-        float f=(float)Math.floor(d);
-        if (Math.abs(f-d)==0.5)
-            if (((int)f) % 2 == 0)
-                return f;
-            else return f+1;
-        else
-            return Math.round(d);
-    }
-
     public Quantity gcd(Quantity o) {
         switch (type) {
         case FIXEDINT:
             return o.gcd(new Quantity((long)val));
         case DECIM:
-            if (Math.floor(d)==d)
-                return new Quantity(d2i(d)).gcd(o).toInexact();
+            BigInteger o2=d.toBigInteger();
+            if (new BigDecimal(o2).compareTo(d)==0)
+                return new Quantity(o2).gcd(o).toInexact();
         case INTEG:
             if (o.type==FIXEDINT)
                 o=new Quantity((long)o.val);
             if (o.type==INTEG)
                 return new Quantity(i.gcd(o.i));
             if (o.type==DECIM) {
-                if (Math.floor(d)==d)
-                    return new Quantity(i.gcd(d2i(d))).toInexact();
+                o2=o.d.toBigInteger();
+                if (new BigDecimal(o2).compareTo(o.d)==0)
+                    return new Quantity(i.gcd(o2)).toInexact();
             }
         }
         throw new ArithmeticException(liMessage(SISCB,"isnotaninteger", this.toString()));
@@ -535,17 +539,19 @@ public class Quantity extends Value implements Singleton {
         case FIXEDINT:
             return o.lcm(new Quantity((long)val));
         case DECIM:
-            if (Math.floor(d)==d)
-                return new Quantity(d2i(d)).lcm(o).toInexact();
+            BigInteger o2=d.toBigInteger();
+            if (new BigDecimal(o2).compareTo(d)==0)
+                return new Quantity(o2).lcm(o).toInexact();
         case INTEG:
-            BigInteger o2=null;
+            o2=null;
             boolean inexact=false;
             if (o.type==FIXEDINT)
-                o2=BigInteger.valueOf(o.val);
+                o2=BigInteger.valueOf((long)o.val);
             if (o.type==INTEG)
                 o2=o.i;
             if (o.type==DECIM) {
-                if (Math.floor(o.d)==o.d)
+                o2=o.d.toBigInteger();
+                if (new BigDecimal(o2).compareTo(o.d)!=0)
                     inexact=true;
             }
             BigInteger L=o2.abs(), g=_BI_ONE;
@@ -562,17 +568,7 @@ public class Quantity extends Value implements Singleton {
     protected Quantity round(int rtype) {
         switch (type) {
         case DECIM:
-            switch (rtype) {
-            case BigDecimal.ROUND_FLOOR:
-                return new Quantity((float)Math.floor(d));
-            case BigDecimal.ROUND_CEILING:
-                return new Quantity((float)Math.ceil(d));
-            case BigDecimal.ROUND_HALF_EVEN:
-                return new Quantity(round(d));
-            case BigDecimal.ROUND_DOWN:
-                return new Quantity(d2i(d).floatValue());
-            }
-            return this;
+            return new Quantity(d.setScale(0, rtype));
         case COMPLEX:
             throw new ArithmeticException(liMessage(SISCB,"isnotareal", this.toString()));
         case RATIO:
@@ -593,12 +589,14 @@ public class Quantity extends Value implements Singleton {
             if (o.type==INTEG)
                 return new Quantity(i.mod(o.i));
             if (o.type==DECIM) {
-                if (Math.floor(d)==d)
-                    return new Quantity(i.mod(d2i(d))).toInexact();
+                BigInteger o2=o.d.toBigInteger();
+                if (new BigDecimal(o2).compareTo(o.d)==0)
+                    return new Quantity(i.mod(o2)).toInexact();
             }
         case DECIM:
-            if (Math.floor(d)==d)
-                return new Quantity(d2i(d)).modulo(o).toInexact();
+            BigInteger o2=d.toBigInteger();
+            if (new BigDecimal(o2).compareTo(d)==0)
+                return new Quantity(o2).modulo(o).toInexact();
         default:
             throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
         }
@@ -616,16 +614,17 @@ public class Quantity extends Value implements Singleton {
             if (o.type==INTEG)
                 return new Quantity(i.divide(o.i));
             if (o.type==DECIM) {
-                if (Math.floor(o.d)==o.d)
-                    return new Quantity(i.divide(d2i(o.d))).toInexact();
+                BigInteger o2=o.d.toBigInteger();
+                if (new BigDecimal(o2).compareTo(o.d)==0)
+                    return new Quantity(i.divide(o2)).toInexact();
             }
             break;
         case DECIM:
-            if (Math.floor(d)==d)
-                return new Quantity(d2i(d)).quotient(o).toInexact();
+            BigInteger o2=d.toBigInteger();
+            if (new BigDecimal(o2).compareTo(d)==0)
+                return new Quantity(o2).quotient(o).toInexact();
         }
         throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
-
     }
 
     public Quantity remainder(Quantity o) {
@@ -638,23 +637,26 @@ public class Quantity extends Value implements Singleton {
             if (o.type==INTEG)
                 return new Quantity(i.remainder(o.i));
             if (o.type==DECIM) {
-                if (Math.floor(o.d)==o.d)
-                    return new Quantity(i.remainder(d2i(o.d))).toInexact();
-            }
-            break;            
+                BigInteger o2=o.d.toBigInteger();
+                if (new BigDecimal(o2).compareTo(o.d)==0)
+                    return new Quantity(i.remainder(o2)).toInexact();
+            } 
+            break;
         case DECIM:
-            if (Math.floor(d)==d)
-                return new Quantity(d2i(d)).remainder(o).toInexact();
+            BigInteger o2=d.toBigInteger();
+            if (new BigDecimal(o2).compareTo(d)==0)
+                return new Quantity(o2).remainder(o).toInexact();
+        default:
         }
-        throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
+	    throw new NumberFormatException(liMessage(SISCB,"expectedintegers"));
     }
 
-    public static float sinh(float x) {
-        return (float)((float)Math.exp(x)-(float)Math.exp(-x))/2;
+    public static double sinh(double x) {
+        return (Math.exp(x)-Math.exp(-x))/2;
     }
 
-    public static float cosh(float x) {
-        return (float)((float)Math.exp(x)+(float)Math.exp(-x))/2;
+    public static double cosh(double x) {
+        return (Math.exp(x)+Math.exp(-x))/2;
     }
 
     public Quantity sin() {
@@ -664,7 +666,7 @@ public class Quantity extends Value implements Singleton {
             z=z.exp().sub(z.negate().exp());
             return z.div(TWO_I);
         } else
-            return new Quantity((float)Math.sin(floatValue()));
+            return new Quantity(Math.sin(doubleValue()));
     }
 
     public Quantity cos() {
@@ -673,7 +675,7 @@ public class Quantity extends Value implements Singleton {
             z=z.exp().add(z.negate().exp());
             return z.div(TWO);
         } else
-            return new Quantity((float)Math.cos(floatValue()));
+            return new Quantity(Math.cos(doubleValue()));
     }
 
     public Quantity tan() {
@@ -683,15 +685,15 @@ public class Quantity extends Value implements Singleton {
             Quantity n=z.negate().exp();
             return p.sub(n).div(I.mul(p.add(n)));
         } else
-            return new Quantity((float)Math.tan(floatValue()));
+            return new Quantity(Math.tan(doubleValue()));
     }
 
     public Quantity asin() {
         Quantity z=ONE.sub(mul(this)).sqrt();
         z=mul(I).add(z).log();
         return I.mul(z).negate();
-    }
 
+    }
     public Quantity acos() {
         return HALF_PI.sub(asin());
     }
@@ -707,36 +709,38 @@ public class Quantity extends Value implements Singleton {
             throw new ArithmeticException(liMessage(SISCB,"isnotareal", this.toString()));
         if (other.type==COMPLEX)
             throw new ArithmeticException(liMessage(SISCB,"isnotareal", other.toString()));
-        return new Quantity((float)Math.atan2(floatValue(), other.floatValue()));
+        return new Quantity(Math.atan2(doubleValue(), other.doubleValue()));
     }
 
     public Quantity exp() {
         if (type==COMPLEX) {
             //e^(x+I*y) = e^x (Cos[y]+I*Sin[y])
             //          = e^x*Cos[y] + I*e^x*Sin[y]
-            float etox=(float)Math.exp(d);
-            float y=im;
-            return new Quantity((float)(etox*Math.cos(y)),
-                                (float)(etox*Math.sin(y)));
+            double etox=Math.exp(d.doubleValue());
+            double y=im.doubleValue();
+            return new Quantity(new BigDecimal(etox*Math.cos(y)),
+                                new BigDecimal(etox*Math.sin(y)));
         } else
-            return new Quantity((float)Math.exp(floatValue()));
+            return new Quantity(Math.exp(doubleValue()));
     }
 
     public Quantity log() {
-        if (type==COMPLEX || (type==DECIM && d < 0.0f)) {
+        if (type==COMPLEX || comp(ZERO,-1)) {
             // Arg[w] = ArcTan(b/a)
             // |w| = sqrt(a^2 + b^2)
             // Log[w] = Log[|w|]+I*(Arg[w]+2*Pi*k), for any integer k.
             // select k=0 for principal value, giving:
             // Log[w] = Log[|w|]+I*Arg[w]
             //        = Log[sqrt(a^2 + b^2)] + I * ArcTan(b/a)
-            float a2=d*d;
-            float b2=im*im;
-            float arctan=(float)Math.atan2(im,d);
-            float x=(float)Math.log(Math.sqrt(a2+b2));
-            return new Quantity(x,arctan);
+	    	BigDecimal dv=(type==COMPLEX ? d : decimal());
+            BigDecimal a2=dv.multiply(dv);
+            BigDecimal b2=im.multiply(im);
+            double arctan=Math.atan2(im.doubleValue(),dv.doubleValue());
+            BigDecimal x=new BigDecimal(Math.log(Math.sqrt(a2.add(b2).doubleValue())));
+            BigDecimal y=new BigDecimal(arctan);
+            return new Quantity(x,y);
         } else
-            return new Quantity((float)Math.log(floatValue()));
+            return new Quantity(Math.log(doubleValue()));
     }
 
     public Quantity negate() {
@@ -746,13 +750,15 @@ public class Quantity extends Value implements Singleton {
         case INTEG:
             return new Quantity(i.negate());
         case DECIM:
-            return new Quantity(-d);
+            return new Quantity(d.negate());
         case RATIO:
             return new Quantity(i.negate(), de);
         case COMPLEX:
-            return new Quantity(-d, -im);
+            return new Quantity(d.negate(), im.negate());
+        case POSINF: return NEGATIVE_INFINITY;
+        case NEGINF: return POSITIVE_INFINITY;
         }
-        return null;
+        return NaN;
     }
 
     public static BigDecimal[] sqrtrem(BigDecimal x) throws ArithmeticException {
@@ -797,10 +803,6 @@ public class Quantity extends Value implements Singleton {
 
     public Quantity sqrt() {
         switch (type) {
-        case DECIM:
-            if (d<0)
-                return new Quantity(0.0f, (float)Math.sqrt(-d));
-            else return new Quantity((float)Math.sqrt(d));
         case FIXEDINT: case INTEG:
             BigInteger orig=integer();
             BigInteger i=orig.abs();
@@ -808,32 +810,31 @@ public class Quantity extends Value implements Singleton {
             if (rv[1].equals(_BI_ZERO))
                 if (orig.signum()>-1)
                     return new Quantity(rv[0]);
-                else return new Quantity(0.0f, rv[0].floatValue());
-            else {
-                float d=decimal();
-                if (d<0)
-                    return new Quantity(0.0f, (float)Math.sqrt(-d));
-                else return new Quantity((float)Math.sqrt(d));
-            }
-        case RATIO:
-            BigDecimal[] rvd=sqrtrem(new BigDecimal(decimal()));
-            return new Quantity(rvd[0].floatValue());
+                else return new Quantity(_BD_ZERO, new BigDecimal(rv[0]));
+        case DECIM: case RATIO:
+            BigDecimal dv=decimal();
+            BigDecimal[] rvd=sqrtrem(dv.abs());
+            if (dv.signum()>-1)
+                return new Quantity(rvd[0]);
+            else return new Quantity(_BD_ZERO, rvd[0]);
         case COMPLEX:
             // Take r=sqrt(a^2 + b^2)
-            float a2=d*d;
-            float b2=im*im;
-            float r=(float)Math.sqrt(a2 + b2);
+            BigDecimal a2=d.multiply(d);
+            BigDecimal b2=im.multiply(im);
+            BigDecimal r=new BigDecimal(Math.sqrt(a2.add(b2).doubleValue()));
 
             // The two square roots of a+bi are (x +yi) and -(x +yi) with
             //           y = sqrt((r - a)/2) and x = b/(2.y)
-            float y=(float)Math.sqrt((r-d)/2);
-            float x=im/(2*y);
-            if (x < 0) {
+            BigDecimal y=
+                new BigDecimal(Math.sqrt(div(r.subtract(d),
+                                             _BD_TWO).doubleValue()));
+            BigDecimal x=div(im,_BD_TWO.multiply(y));
+            if (x.signum()==-1) {
                 return new Quantity(x,y).negate();
             } else
                 return new Quantity(x, y);
         }
-        return new Quantity((float)Math.sqrt(floatValue()));
+        return new Quantity(Math.sqrt(doubleValue()));
     }
 
     public Quantity add(Quantity o) {
@@ -844,13 +845,13 @@ public class Quantity extends Value implements Singleton {
         case DECIM:
             switch (o.type) {
             case FIXEDINT:
-                return new Quantity(d+o.val);
+                return new Quantity(d.add(BigDecimal.valueOf(o.val)));
             case DECIM:
-                return new Quantity(d+o.d);
+                return new Quantity(d.add(o.d));
             case INTEG:
-                return new Quantity(d+o.i.floatValue());
+                return new Quantity(d.add(new BigDecimal(o.i)));
             case RATIO:
-                return new Quantity(ratioToDecimal(o.i, o.de) + d);
+                return new Quantity(ratioToDecimal(o.i, o.de).add(d));
             case COMPLEX:
                 return o.add(this);
             }
@@ -859,7 +860,7 @@ public class Quantity extends Value implements Singleton {
             case FIXEDINT:
                 return new Quantity(i.add(BigInteger.valueOf(o.val)));
             case DECIM:
-                return new Quantity(i.floatValue()+o.d);
+                return new Quantity(new BigDecimal(i).add(o.d));
             case INTEG:
                 return new Quantity(i.add(o.i));
             case RATIO:
@@ -875,7 +876,7 @@ public class Quantity extends Value implements Singleton {
                 BigInteger ores=de.multiply(BigInteger.valueOf(o.val));
                 return new Quantity(i.add(ores), de);
             case DECIM:
-                return new Quantity(ratioToDecimal(i, de)+o.d);
+                return new Quantity(ratioToDecimal(i, de).add(o.d));
             case INTEG:
                 ores=o.i.multiply(de);
                 return new Quantity(i.add(ores), de);
@@ -891,18 +892,32 @@ public class Quantity extends Value implements Singleton {
         case COMPLEX:
             switch (o.type) {
             case FIXEDINT:
-                return new Quantity(d+o.val, im);
+                return new Quantity(d.add(BigDecimal.valueOf(o.val)), im);
             case DECIM:
-                return new Quantity(d+o.d, im);
+                return new Quantity(d.add(o.d), im);
             case INTEG:
-                return new Quantity(d+o.i.floatValue(),im);
+                return new Quantity(d.add(new BigDecimal(o.i)), im);
             case RATIO:
-                return new Quantity(d+ratioToDecimal(o.i, o.de), im);
+                return new Quantity(d.add(ratioToDecimal(o.i, o.de)), im);
             case COMPLEX:
-                return new Quantity(d+o.d, im+o.im);
+                return new Quantity(d.add(o.d), im.add(o.im));
+            }
+        case POSINF:
+            switch (o.type) {
+            case NEGINF: return ZERO;
+            case NAN: return NaN;
+            default:
+                return POSITIVE_INFINITY;
+            }
+        case NEGINF:
+            switch (o.type) {
+            case POSINF: return ZERO;
+            case NAN: return NaN;
+            default:
+                return NEGATIVE_INFINITY;
             }
         }
-        return null;
+        return NaN;
     }
 
     public Quantity mul(Quantity o) {
@@ -913,20 +928,20 @@ public class Quantity extends Value implements Singleton {
         case DECIM:
             switch (o.type) {
             case FIXEDINT:
-                return new Quantity(d*o.val);
+                return new Quantity(d.multiply(BigDecimal.valueOf(o.val)));
             case DECIM:
-                return new Quantity(d*o.d);
+                return new Quantity(d.multiply(o.d));
             case COMPLEX:
                 return o.mul(this);
             default:
-                return new Quantity(d*o.floatValue());
+                return new Quantity(d.multiply(o.decimal()));
             }
         case INTEG:
             switch (o.type) {
             case FIXEDINT:
                 return new Quantity(i.multiply(BigInteger.valueOf(o.val)));
             case DECIM:
-                return new Quantity(i.floatValue()*o.d);
+                return new Quantity(new BigDecimal(i).multiply(o.d));
             case INTEG:
                 return new Quantity(i.multiply(o.i));
             case RATIO:
@@ -942,7 +957,7 @@ public class Quantity extends Value implements Singleton {
                 BigInteger new_n=i.multiply(BigInteger.valueOf(o.val));
                 return new Quantity(new_n, de);
             case DECIM:
-                return new Quantity(ratioToDecimal(i, de)*o.d);
+                return new Quantity(ratioToDecimal(i, de).multiply(o.d));
             case INTEG:
                 new_n=i.multiply(o.i);
                 return new Quantity(new_n, de);
@@ -957,10 +972,10 @@ public class Quantity extends Value implements Singleton {
             }
             break;
         case COMPLEX:
-            float g=0, h=0;
+            BigDecimal g=null, h=_BD_ZERO;
             switch (o.type) {
             case FIXEDINT:
-                g=(float)o.val;
+                g=BigDecimal.valueOf(o.val);
                 break;
             case COMPLEX:
                 g=o.d;
@@ -970,19 +985,32 @@ public class Quantity extends Value implements Singleton {
                 g=o.d;
                 break;
             case INTEG:
-                g=o.i.floatValue();
+                g=new BigDecimal(o.i);
                 break;
             case RATIO:
                 g=ratioToDecimal(o.i, o.de);
                 break;
-            default:
-                return NaN;                
+            default: 
+                return NaN;
             }
-            float nd=(d*g)-(im*h);
-            float nim=(d*h)+(im*g);
+            BigDecimal nd=d.multiply(g).subtract(im.multiply(h));
+            BigDecimal nim=d.multiply(h).add(im.multiply(g));
             return new Quantity(nd, nim);
+        case POSINF:
+            switch (o.type) {
+            case NEGINF: return NEGATIVE_INFINITY;
+            case NAN: return NaN;
+            default:
+                return POSITIVE_INFINITY;
+            }
+        case NEGINF:
+            switch (o.type) {
+            case NAN: return NaN;
+            default:
+                return NEGATIVE_INFINITY;
+            }
         }
-        return null;
+        return NaN;
     }
 
     public Quantity sub(Quantity o) {
@@ -992,31 +1020,32 @@ public class Quantity extends Value implements Singleton {
             case FIXEDINT:
                 return intBound((long)val-o.val);
             case DECIM:
-                return new Quantity(val-o.d);
+                return new Quantity(BigDecimal.valueOf(val).subtract(o.d));
             case COMPLEX:
-                return new Quantity(val-o.d, -o.im);
+                return new Quantity(BigDecimal.valueOf(val).subtract(o.d),
+                                    o.im.negate());
             default:
                 return new Quantity((long)val).sub(o);
             }
         case DECIM:
             switch (o.type) {
             case FIXEDINT:
-                return new Quantity(d-o.val);
+                return new Quantity(d.subtract(BigDecimal.valueOf(o.val)));
             case DECIM:
-                return new Quantity(d-o.d);
+                return new Quantity(d.subtract(o.d));
             case INTEG:
-                return new Quantity(d-o.i.floatValue());
+                return new Quantity(d.subtract(new BigDecimal(o.i)));
             case RATIO:
-                return new Quantity(d-ratioToDecimal(o.i, o.de));
+                return new Quantity(d.subtract(ratioToDecimal(o.i, o.de)));
             case COMPLEX:
-                return new Quantity(d-o.d, -o.im);
+                return new Quantity(d.subtract(o.d), o.im.negate());
             }
         case INTEG:
             switch (o.type) {
             case FIXEDINT:
                 return new Quantity(i.subtract(BigInteger.valueOf(o.val)));
             case DECIM:
-                return new Quantity(i.floatValue()-o.d);
+                return new Quantity(new BigDecimal(i).subtract(o.d));
             case INTEG:
                 return new Quantity(i.subtract(o.i));
             case RATIO:
@@ -1024,8 +1053,8 @@ public class Quantity extends Value implements Singleton {
                 BigInteger new_n=ores.subtract(o.i);
                 return new Quantity(new_n, o.de);
             case COMPLEX:
-                return new Quantity(i.floatValue()-o.d, -o.im);
-
+                return new Quantity(new BigDecimal(i).subtract(o.d),
+                                    o.im.negate());
             }
         case RATIO:
             switch (o.type) {
@@ -1034,7 +1063,7 @@ public class Quantity extends Value implements Singleton {
                 BigInteger new_n=i.subtract(ores);
                 return new Quantity(new_n, de);
             case DECIM:
-                return new Quantity(ratioToDecimal(i, de)-o.d);
+                return new Quantity(ratioToDecimal(i, de).subtract(o.d));
             case INTEG:
                 ores=o.i.multiply(de);
                 new_n=i.subtract(ores);
@@ -1046,28 +1075,46 @@ public class Quantity extends Value implements Singleton {
                 BigInteger res_n=common_n1.subtract(common_n2);
                 return new Quantity(res_n, common_d);
             case COMPLEX:
-                return new Quantity(ratioToDecimal(i, de)-o.d, -o.im);
+                return new Quantity(ratioToDecimal(i, de).subtract(o.d),
+                                    o.im.negate());
             }
         case COMPLEX:
             switch (o.type) {
             case FIXEDINT:
-                return new Quantity(d-o.val, im);
+                return new Quantity(d.subtract(BigDecimal.valueOf(o.val)),
+                                    im);
             case DECIM:
-                return new Quantity(d-o.d, im);
+                return new Quantity(d.subtract(o.d), im);
             case INTEG:
-                return new Quantity(d-o.i.floatValue(), im);
+                return new Quantity(d.subtract(new BigDecimal(o.i)),
+                                    im);
             case RATIO:
-                return new Quantity(d-ratioToDecimal(o.i, o.de), im);
+                return new Quantity(d.subtract(ratioToDecimal(o.i, o.de)),
+                                    im);
             case COMPLEX:
-                return new Quantity(d-o.d, im-o.im);
+                return new Quantity(d.subtract(o.d), im.subtract(o.im));
             }
-
+        case POSINF:
+            switch (o.type) {
+            case POSINF: return ZERO;
+            case NAN: return NaN;
+            default:
+                return POSITIVE_INFINITY;
+            }
+        case NEGINF:
+            switch (o.type) {
+            case NEGINF: return ZERO;
+            case NAN: return NaN;
+            default:
+                return NEGATIVE_INFINITY;
+            }
         }
-        return null;
+        return NaN;
     }
 
-    protected static float div(float d1, float d2) {
-        return d1/d2;
+    protected static BigDecimal div(BigDecimal d1, BigDecimal d2) {
+        return d1.divide(d2, scale(d1.scale(), d2.scale()),
+                         BigDecimal.ROUND_HALF_UP);
     }
 
     public Quantity div(Quantity o) {
@@ -1078,11 +1125,12 @@ public class Quantity extends Value implements Singleton {
                 return new Quantity(BigInteger.valueOf(val),
                                     BigInteger.valueOf(o.val));
             case DECIM:
-                return new Quantity(val/o.d);
+                return new Quantity(div(BigDecimal.valueOf(val),
+                                        o.d));
             case COMPLEX:
                 Quantity q=new Quantity();
-                q.d=val;
-                q.im=0.0f;
+                q.d=BigDecimal.valueOf(val);
+                q.im=_BD_ZERO;
                 q.type=COMPLEX;
                 return q.div(o);
             default:
@@ -1091,26 +1139,28 @@ public class Quantity extends Value implements Singleton {
         case DECIM:
             switch (o.type) {
             case FIXEDINT:
-                return new Quantity(d / o.val);
+                return new Quantity(div(d, BigDecimal.valueOf(o.val)));
             case DECIM:
-                return new Quantity(d/o.d);
+                return new Quantity(div(d, o.d));
             case INTEG:
-                return new Quantity(d/o.i.floatValue());
+                return new Quantity(div(d, new BigDecimal(o.i)));
             case RATIO:
                 return mul(new Quantity(o.de, o.i));
             case COMPLEX:
                 Quantity q=new Quantity();
                 q.d=d;
-                q.im=0.0f;
+                q.im=_BD_ZERO;
                 q.type=COMPLEX;
                 return q.div(o);
+            case NEGINF: case POSINF: return ZERO;
+            case NAN: return NaN;                
             }
         case INTEG:
             switch (o.type) {
             case FIXEDINT:
                 return new Quantity(i, BigInteger.valueOf(o.val));
             case DECIM:
-                return new Quantity(i.floatValue()/o.d);
+                return new Quantity(div(new BigDecimal(i), o.d));
             case INTEG:
                 return new Quantity(i, o.i);
             case RATIO:
@@ -1118,19 +1168,19 @@ public class Quantity extends Value implements Singleton {
                 return new Quantity(ores, o.i);
             case COMPLEX:
                 Quantity q=new Quantity();
-                q.d=i.floatValue();
-                q.im=0.0f;
+                q.d=new BigDecimal(i);
+                q.im=_BD_ZERO;
                 q.type=COMPLEX;
                 return q.div(o);
             case NEGINF: case POSINF: return ZERO;
-            case NAN: return NaN;                
+            case NAN: return NaN;
             }
         case RATIO:
             switch (o.type) {
             case FIXEDINT:
                 return new Quantity(i, de.multiply(BigInteger.valueOf(o.val)));
             case DECIM:
-                float r=ratioToDecimal(i,de);
+                BigDecimal r=ratioToDecimal(i,de);
                 return new Quantity(div(r, o.d));
             case INTEG:
                 BigInteger ores=de.multiply(o.i);
@@ -1143,18 +1193,18 @@ public class Quantity extends Value implements Singleton {
                 r=ratioToDecimal(i,de);
                 return new Quantity(div(r, o.d), o.im);
             case NEGINF: case POSINF: return ZERO;
-            case NAN: return NaN;                
+            case NAN: return NaN;
             }
         case COMPLEX:
-            float g=0.0f, h=0.0f;
+            BigDecimal g=null, h=_BD_ZERO;
             switch (o.type) {
             case FIXEDINT:
-                float oval=(float)o.val;
+                BigDecimal oval=BigDecimal.valueOf(o.val);
                 return new Quantity(div(d,oval), div(im,oval));
             case DECIM:
                 return new Quantity(div(d,o.d), div(im,o.d));
             case INTEG:
-                oval=o.i.floatValue();
+                oval=new BigDecimal(o.i);
                 return new Quantity(div(d,oval), div(im,oval));
             case RATIO:
                 oval=ratioToDecimal(o.i, o.de);
@@ -1165,20 +1215,21 @@ public class Quantity extends Value implements Singleton {
                 break;
             case NEGINF: case POSINF:
             case NAN: return NaN;
+                
             }
 
             // (a+ib)/(c+id)=(ac+bd+i(bc-ad))/(c^2+d^2)
 
-            float c2=g*g;
-            float d2=h*h;
-            Quantity c2_p_d2 = new Quantity(c2+d2);
-            float bd=im*h;
-            float ac=d*g;
-            float bc=im*g;
-            float ad=d*h;
+            BigDecimal c2=g.multiply(g);
+            BigDecimal d2=h.multiply(h);
+            Quantity c2_p_d2 = new Quantity(c2.add(d2));
+            BigDecimal bd=im.multiply(h);
+            BigDecimal ac=d.multiply(g);
+            BigDecimal bc=im.multiply(g);
+            BigDecimal ad=d.multiply(h);
 
-            Quantity rc1=new Quantity(ac+bd);
-            Quantity rc2=new Quantity(bc-ad);
+            Quantity rc1=new Quantity(ac.add(bd));
+            Quantity rc2=new Quantity(bc.subtract(ad));
             return rc1.add(I.mul(rc2)).div(c2_p_d2);
         case POSINF:
             switch (o.type) {
@@ -1209,16 +1260,17 @@ public class Quantity extends Value implements Singleton {
         case DECIM:
             switch (o.type) {
             case FIXEDINT:
-                return sign(d-o.val)==test;
+                return d.compareTo(BigDecimal.valueOf(o.val))==test;
             case DECIM:
-                return sign(d-o.d)==test;
+                return d.compareTo(o.d)==test;
             case INTEG:
-                return sign(d-o.i.floatValue())==test;
+                return d.compareTo(new BigDecimal(o.i))==test;
             case RATIO:
-                return sign(d-ratioToDecimal(o.i, o.de))==test;
+                return d.compareTo(ratioToDecimal(o.i, o.de))==test;
             case COMPLEX:
                 if (test==0)
-                    return (o.im==0) && d==o.d;
+                    return o.im.compareTo(_BD_ZERO)==0 &&
+                        o.d.compareTo(d)==0;
             case POSINF: return test==-1;
             case NEGINF: return test==1;
             }
@@ -1227,7 +1279,7 @@ public class Quantity extends Value implements Singleton {
             case FIXEDINT:
                 return i.compareTo(BigInteger.valueOf(o.val))==test;
             case DECIM:
-                return sign(i.floatValue()-o.d)==test;
+                return new BigDecimal(i).compareTo(o.d)==test;
             case INTEG:
                 return i.compareTo(o.i)==test;
             case RATIO:
@@ -1235,7 +1287,7 @@ public class Quantity extends Value implements Singleton {
                 return cnum.compareTo(o.i)==test;
             case COMPLEX:
                 if (test==0)
-                    return o.im==0 &&
+                    return o.im.compareTo(_BD_ZERO)==0 &&
                         comp(new Quantity(o.d), 0);
             case POSINF: return test==-1;
             case NEGINF: return test==1;
@@ -1247,7 +1299,7 @@ public class Quantity extends Value implements Singleton {
                 BigInteger cnum=BigInteger.valueOf(o.val).multiply(de);
                 return i.compareTo(cnum)==test;
             case DECIM:
-                return sign(ratioToDecimal(i, de)-o.d)==test;
+                return ratioToDecimal(i, de).compareTo(o.d)==test;
             case INTEG:
                 cnum=o.i.multiply(de);
                 return i.compareTo(cnum)==test;
@@ -1257,7 +1309,7 @@ public class Quantity extends Value implements Singleton {
                 return common_n1.compareTo(common_n2)==test;
             case COMPLEX:
                 if (test==0)
-                    return o.im==0 &&
+                    return o.im.compareTo(_BD_ZERO)==0 &&
                         comp(new Quantity(o.d), 0);
             case POSINF: return test==-1;
             case NEGINF: return test==1;
@@ -1266,27 +1318,30 @@ public class Quantity extends Value implements Singleton {
         case COMPLEX:
             if (o.type==COMPLEX) {
                 int x=0;
-                if ((x=sign(d-o.d))==0)
-                    return sign(im-o.im)==test;
+                if ((x=d.compareTo(o.d))==0)
+                    return im.compareTo(o.im)==test;
                 else return x==test;
             } else {
-                return o.comp(this, test);}
+                return o.comp(this, test);
+            }
+        case POSINF:
+            switch (o.type) {
+            case POSINF: return 0==test;
+            case COMPLEX:
+            case NAN: break;
+            default:
+                return 1==test;
+            }
+        case NEGINF:
+            switch (o.type) {
+            case NEGINF: return 0==test;
+            case COMPLEX:
+            case NAN: break;
+            default:
+                return -1==test;
+            }
         }
         throw new NumberFormatException(liMessage(SISCB,"nocomplexcomparison"));
-    }
-
-    public float floatValue() {
-        switch (type) {
-        case FIXEDINT:
-            return (float)val;
-        case DECIM:
-            return d;
-        case INTEG:
-            return i.floatValue();
-        case RATIO:
-            return ratioToDecimal(i,de);
-        }
-        return 0.0f;
     }
 
     public double doubleValue() {
@@ -1294,25 +1349,32 @@ public class Quantity extends Value implements Singleton {
         case FIXEDINT:
             return (double)val;
         case DECIM:
-            return d;
+            return d.doubleValue();
         case INTEG:
             return i.doubleValue();
         case RATIO:
-            return ratioToDecimal(i,de);
+            return ratioToDecimal(i,de).doubleValue();
+        case POSINF:
+            return Double.POSITIVE_INFINITY;
+        case NEGINF:
+            return Double.NEGATIVE_INFINITY;
+        case NAN:
+            return Double.NaN;
         }
-        return 0.0f;
+        
+        return 0.0;
     }
 
-    public float decimal() {
-        switch(type) {
+    public BigDecimal decimal() {
+        switch (type) {
         case FIXEDINT:
-            return (float)val;
-        case INTEG:
-            return i.floatValue();
+            return new BigDecimal(val);
         case DECIM:
             return d;
+        case INTEG:
+            return new BigDecimal(i);
         case RATIO:
-            return ratioToDecimal(i, de);
+            return ratioToDecimal(i,de);
         default:
             throw new NumberFormatException(liMessage(SISCB, "isnotareal", toString()));
         }
@@ -1323,7 +1385,7 @@ public class Quantity extends Value implements Singleton {
         case FIXEDINT:
             return val;
         case DECIM:
-            return (long)d;
+            return d.longValue();
         case INTEG:
             return i.longValue();
         case RATIO:
@@ -1345,7 +1407,7 @@ public class Quantity extends Value implements Singleton {
         case FIXEDINT:
             return val;
         case DECIM:
-            return (int)d;
+            return d.intValue();
         case INTEG:
             return i.intValue();
         case RATIO:
@@ -1368,15 +1430,18 @@ public class Quantity extends Value implements Singleton {
     public Quantity toExact() {
         switch (type) {
         case DECIM:
-            BigInteger ipart=d2i(d);
-            BigDecimal fpart=new BigDecimal(Float.toString((float)(d-ipart.floatValue())));
+            BigInteger ipart=d.toBigInteger();
+            BigDecimal fpart=d.subtract(new BigDecimal(ipart));
             int scale=fpart.scale();
             fpart=fpart.movePointRight(scale);
             BigInteger denominator=_BI_TEN.pow(scale);
             BigInteger numerator=ipart.multiply(denominator).add(fpart.toBigInteger());;
             return new Quantity(numerator, denominator);
         case COMPLEX:
-            return new Quantity(Math.round(d), Math.round(im));
+            return new Quantity(d.setScale(0, BigDecimal.ROUND_HALF_EVEN),
+                                im.setScale(0, BigDecimal.ROUND_HALF_EVEN));
+        case POSINF: case NEGINF: case NAN:
+            throw new NumberFormatException(liMessage(SISCB, "cannotrepresentexactly"));
         default:
             return this;
         }
@@ -1385,9 +1450,9 @@ public class Quantity extends Value implements Singleton {
     public Quantity toInexact() {
         switch (type) {
         case FIXEDINT:
-            return new Quantity((float)val);
+            return new Quantity((double)val);
         case INTEG:
-            return new Quantity(i.floatValue());
+            return new Quantity(new BigDecimal(i.multiply(BigInteger.valueOf(10)), 1));
         case RATIO:
             return new Quantity(ratioToDecimal(i, de));
         default:
@@ -1405,6 +1470,7 @@ public class Quantity extends Value implements Singleton {
         switch(type) {
         case DECIM: return IZERO;
         case COMPLEX: return new Quantity(im);
+        case NAN: return NaN;
         default: return ZERO;
         }
     }
@@ -1435,9 +1501,11 @@ public class Quantity extends Value implements Singleton {
         }
     }
 
-    protected static float ratioToDecimal(BigInteger numerator,
-                                          BigInteger denominator) {
-        return numerator.floatValue() / denominator.floatValue();
+    protected static BigDecimal ratioToDecimal(BigInteger numerator,
+                                               BigInteger denominator) {
+        BigDecimal d1=new BigDecimal(numerator);
+        BigDecimal d2=new BigDecimal(denominator);
+        return div(d1, d2);
     }
 
     protected static int scale(int scale1, int scale2) {
@@ -1448,7 +1516,7 @@ public class Quantity extends Value implements Singleton {
     protected final Quantity intBound(long v) {
         int x=(int)v;
         return (x==v)
-            ? new Quantity(x)
+            ? new Quantity(x) 
             : new Quantity(v);
     }
 
@@ -1491,14 +1559,19 @@ public class Quantity extends Value implements Singleton {
         case FIXEDINT:
             return hc^val;
         case DECIM:
-            int bits=Float.floatToIntBits(d);
-            return hc^bits;
+            return hc^d.hashCode();
         case INTEG:
             return hc^i.hashCode();
         case RATIO:
             return hc^i.hashCode()^de.hashCode();
         case COMPLEX:
-            return hc^Float.floatToIntBits(d)^Float.floatToIntBits(im);
+            return hc^d.hashCode()^im.hashCode();
+        case POSINF:
+            return 0x81f182e4;
+        case NEGINF:
+            return 0x81f182e5;
+        case NAN:
+            return 0x81f182e6;
         default:
             return hc;
         }
@@ -1515,7 +1588,7 @@ public class Quantity extends Value implements Singleton {
     protected static String zeroTrim(String s) {
         int y=s.indexOf('.');
         char c;
-        if (y!=-1 && s.indexOf('e')==-1) {
+        if (y!=-1) {
             for (int x=s.length()-1; x>1; x--)
                 if ((c=s.charAt(x))!='0')
                     return (c=='.' ? s.substring(0,x+2) : s.substring(0,x+1));
@@ -1526,29 +1599,44 @@ public class Quantity extends Value implements Singleton {
 
     public String toString(int radix) {
         StringBuffer b=new StringBuffer();
-        if (type==FIXEDINT)
+        switch(type) {
+        case FIXEDINT:
             b.append(Integer.toString(val,radix));
-        else if (type==DECIM) {
-            String s=zeroTrim(Float.toString(d).toLowerCase());
+            break;
+        case DECIM:
+            String s=zeroTrim(d.toString());
             b.append(s);
             if (s.indexOf('.')==-1) b.append(".0");
-        } else if (type==INTEG)
+            break;
+        case INTEG:
             b.append(i.toString(radix));
-        else if (type==RATIO)
+            break;
+        case RATIO:
             b.append(i.toString(radix)).append('/').append(de.toString(radix));
-        else if (type==COMPLEX) {
-            b.append(zeroTrim(Float.toString(d).toLowerCase()));
-            if (im>0) {
+            break;
+        case COMPLEX:
+            b.append(zeroTrim(d.toString()));
+            if (im.compareTo(_BD_ZERO)>=0) {
                 b.append('+');
-                if (im!=1.0f)
-                    b.append(Float.toString(im).toLowerCase());
+                if (im.compareTo(_BD_ONE)!=0)
+                    b.append(im.toString());
             } else {
-                if (im==-1.0f)
+                if (im.compareTo(_BD_NEGONE)==0)
                     b.append('-');
                 else
-                    b.append(zeroTrim(Float.toString(im).toLowerCase()));
+                    b.append(zeroTrim(im.toString()));
             }
             b.append('i');
+            break;
+        case POSINF:
+            b.append("#!+inf");
+            break;
+        case NEGINF:
+            b.append("#!-inf");
+            break;
+        case NAN:
+            b.append("#!nan");
+            break;
         }
         return b.toString();
     }
@@ -1563,15 +1651,15 @@ public class Quantity extends Value implements Singleton {
             i=s.readBigInteger();
             break;
         case DECIM:
-            d=s.readBigDecimal().floatValue();
+            d=s.readBigDecimal();
             break;
         case RATIO:
             i=s.readBigInteger();
             de=s.readBigInteger();
             break;
         case COMPLEX:
-            d=s.readBigDecimal().floatValue();
-            im=s.readBigDecimal().floatValue();
+            d=s.readBigDecimal();
+            im=s.readBigDecimal();
             break;
         }
         simplify();
@@ -1587,15 +1675,15 @@ public class Quantity extends Value implements Singleton {
             s.writeBigInteger(i);
             break;
         case DECIM:
-            s.writeBigDecimal(new BigDecimal(d));
+            s.writeBigDecimal(d);
             break;
         case RATIO:
             s.writeBigInteger(i);
             s.writeBigInteger(de);
             break;
         case COMPLEX:
-            s.writeBigDecimal(new BigDecimal(d));
-            s.writeBigDecimal(new BigDecimal(im));
+            s.writeBigDecimal(d);
+            s.writeBigDecimal(im);
             break;
         }
     }
