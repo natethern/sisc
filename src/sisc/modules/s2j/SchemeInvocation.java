@@ -47,7 +47,7 @@ public class SchemeInvocation implements InvocationHandler {
             throw Util.javaException(e);
         }
         Context.exit();
-        return Util.jobj(res);
+        return (m.getReturnType().isAssignableFrom(Void.TYPE) ? null : Util.jobj(res));
     }
 }
 

@@ -2,6 +2,9 @@
 
 	* Fixed error handling on list-ref (bug 1210879).
 
+	* Allow Java proxy methods to return anything if their Java return
+	  type is 'void' (feature 1111637).
+
 2005-05-05  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed arity-bug in vector-fill! (bug 1195709).
