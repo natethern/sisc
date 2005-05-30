@@ -151,9 +151,9 @@ public class OptionalPrimitives extends IndexedFixableProcedure {
         case VALUES: return new Values(new Value[] {v1, v2});
         case APPEND: return apply(new Value[] {v1,v2});
         case LISTREF:
-            Pair p1=pair(v1);
+            Pair p1=truePair(v1);
             for (int l=num(v2).intValue(); l>0; l--) {
-                p1=(Pair)p1.cdr;
+                p1=truePair(p1.cdr);
             }
             return p1.car;
         case ASSV:
