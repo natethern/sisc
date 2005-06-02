@@ -10,7 +10,7 @@ Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}, java2-runtime
 Recommends: rlwrap
 Suggests: slib
-Description: SISC is a Java integrated, fully R5RS compliant Scheme system.
+Description: A Java integrated, fully R5RS compliant Scheme system.
  SISC is an extensible Java based interpreter of the algorithmic language Scheme. 
  SISC uses modern interpretation techniques, and handily outperforms all existing 
  JVM interpreters (often by more than an order of magnitude).
