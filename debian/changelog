@@ -1,3 +1,10 @@
+sisc (1.11.1-alpha-1) unstable; urgency=low
+
+  * New upstream version.
+  * Added manpage for sisc.
+	
+ -- Scott G. Miller <sgmiller@gmail.com>  Thu,  2 Jun 2005 13:56:21 -0500
+
 sisc (1.11.0-alpha-1) unstable; urgency=low
 
   * Initial Release.
