@@ -71,6 +71,9 @@
     <condition property="instdocdir" value="${prefix}/share/doc/sisc">
       <not><isset property="instdocdir"/></not>
     </condition>
+    <condition property="instmandir" value="${prefix}/man">
+      <not><isset property="instdocdir"/></not>
+    </condition>
     <condition property="instbindir" value="${prefix}/bin">
       <not><isset property="instbindir"/></not>
     </condition>
@@ -469,6 +472,7 @@
     <mkdir dir="${dist}/full"/>
     <mkdir dir="${dist}/full/sisc-${specver}"/>
     <mkdir dir="${dist}/full/doc"/>
+    <mkdir dir="${dist}/full/doc/man"/>
     <mkdir dir="${dist}/full/sisc-${specver}/scheme-src"/>
     <mkdir dir="${dist}/full/sisc-${specver}/scheme-src/srfi-22"/>
 
@@ -481,6 +485,11 @@
       <fileset dir="${gendocdir}/sss">
         <include name="*.html"/>
         <include name="*.css"/>
+      </fileset>
+    </copy>
+    <copy todir="${dist}/full/sisc-${specver}/doc/man">
+      <fileset dir="${docdir}/man">
+        <include name="*.*"/>
       </fileset>
     </copy>
     <copy todir="${dist}/full/sisc-${specver}/scheme-src/srfi-22/"
@@ -637,7 +646,8 @@
           file="${basedir}/sisc.sh"/>
     <copy todir="${instbindir}" 
           file="${srfidir}/srfi-22/srfi-22.sh"/>
-
+    <copy todir="${instmandir}/man1"
+          file="${docdir}/man/sisc.1"/>
     <exec executable="bash">
       <arg value="${basedir}/install-srfi22.sh"/>
       <arg value="${instbindir}"/>
