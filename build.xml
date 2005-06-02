@@ -71,8 +71,8 @@
     <condition property="instdocdir" value="${prefix}/share/doc/sisc">
       <not><isset property="instdocdir"/></not>
     </condition>
-    <condition property="instmandir" value="${prefix}/man">
-      <not><isset property="instdocdir"/></not>
+    <condition property="instmandir" value="${prefix}/share/man">
+      <not><isset property="instmandir"/></not>
     </condition>
     <condition property="instbindir" value="${prefix}/bin">
       <not><isset property="instbindir"/></not>
@@ -625,6 +625,8 @@
   <target name="debian-install" depends="prepare-install">
     <mkdir dir="${instlibdir}"/>
     <mkdir dir="${instdocdir}"/>
+    <mkdir dir="${instmandir}"/>
+    <mkdir dir="${instmandir}/man1"/>
     <copy todir="${instlibdir}">
       <fileset dir="${basedir}">
         <include name="*.jar"/>
