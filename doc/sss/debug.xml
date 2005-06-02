@@ -270,6 +270,7 @@
                 arguments).  At that time, the traced procedures are 
                 reinspected and instrumenting reinstalled on 
                 redefined procedures.
+              </para>
             </blockquote>
           </para>
           <para>
