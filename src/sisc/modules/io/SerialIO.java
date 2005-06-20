@@ -61,7 +61,9 @@ public class SerialIO extends IndexedProcedure {
                                                  boolean aflush) 
         throws ContinuationException {
         try {
-            return new SerializerPort(f.getCtx(), sop.getOutputStream(), aflush);
+            SerializerPort sp=new SerializerPort(f.getCtx(), sop.getOutputStream(), aflush);
+            sp.flush();
+            return sp;
         } catch (IOException e) {
             IO.throwIOException(f, liMessage(BINARYB, "erroropening"), e);
         }
