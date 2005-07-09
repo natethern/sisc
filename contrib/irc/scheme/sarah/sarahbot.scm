@@ -62,8 +62,8 @@
 
 (define (onDisconnect)
   (let loop ()
-    (sleep 15)
     (unless (do-connect bot ircserver)
+      (sleep 60)
       (loop)))
   (for-each (lambda (channel)
               (display (format "Joining ~a...~%" channel))

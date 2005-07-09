@@ -12,12 +12,19 @@
 (define (expand channel message ignore expr)
   (with-input-from-string expr
     (lambda ()
-      (safe-pp-to-string (sc-expand (read-code) '(e) '(e))))))
+      (safe-pp-to-string 
+        (with/fc (lambda (m e) (string-append "Error: " (cdar m)))
+                 (lambda () 
+                   (sc-expand (read-code) '(e) '(e))))))))
 
 (define (do-optimize channel message ignore expr)
   (with-input-from-string expr
     (lambda ()
-      (safe-pp-to-string (optimize (sc-expand (read-code) '(e) '(e)))))))
+      (safe-pp-to-string 
+        (with/fc (lambda (m e) (string-append "Error: " (cdar m)))
+                 (lambda () 
+                   (optimize (sc-expand (read-code) '(e) '(e)))))))))
+
 
 (define (do-express channel message ignore expr)
   (with-input-from-string expr
@@ -48,7 +55,7 @@
     (lambda (in)
      (let loop ([expr (read-code in)])
        (unless (eof-object? expr)
-         (eval expr env)
+         (eval-within-n-ms expr 1000 env)
          (loop (read-code in)))))))
 
 (define (my-dynamic-wind pre in post)
@@ -107,7 +114,15 @@
 (define (safe-pp-to-string value)
   (if (circular? value)
       (with-output-to-string (lambda () (write value)))
-      (with-output-to-string (lambda () (pretty-print value)))))
+      (let ([pps 
+             (with-output-to-string (lambda () (pretty-print value)))])
+        (if (> (count-newlines pps) 5)
+            (with-output-to-string (lambda () (write value)))
+            pps))))
+
+(define (count-newlines str)
+  (import srfi-1)
+  (count (lambda (c) (char=? c #\newline)) (string->list str)))
 
 (define (make-resume k)
   (let ([system-time system-time]
@@ -137,7 +152,8 @@
           (thread/new
            (lambda ()
              (thread/join evaluation-thread ms)
-             (let* ([result
+             (let* ([console-out (current-output-port)]
+                    [result
                     (with-output-to-port os
                       (lambda () 
                         (with-failure-continuation
@@ -148,7 +164,8 @@
                                  (thread/interrupt evaluation-thread)
                                  (thread/join evaluation-thread)
                                  (with/fc (lambda (m e)
-                                            (putprop 'resume env (make-resume e)))
+                                            #;(putprop 'resume env (make-resume e))
+                                            #f)
                                           (lambda ()
                                             (thread/result evaluation-thread)))
                                  (display 

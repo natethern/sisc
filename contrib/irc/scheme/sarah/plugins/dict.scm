@@ -1,4 +1,5 @@
 (define (query-dictionary database word)
+  (import srfi-13)
   (let* ([sock (open-tcp-socket "dict.org" 2628)]
          [out (open-socket-output-port sock #t)]
          [def

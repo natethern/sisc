@@ -35,6 +35,10 @@
     ; Plugins go here, in the form:
     ; (crib help handler)
    ("botsnack" "Feed me!" (lambda args ":)"))
+   ("later tell " "\"tell <someone> <something>\" asks me to deliver a message to someone next time they speak."
+    (tell 'later))   
+   ("tell " "\"tell <someone> <something>\" asks me to deliver a message to someone as soon as I see them in a channel."
+    (tell 'now))
    ("what is "
     "\"What is <something>\" asks for information about the something."
     (*-is? 'what))
@@ -50,10 +54,6 @@
    ("who is "
     "\"Who is <someone>\" asks for information about someone."
     (*-is? 'what))
-   ("later tell " "\"tell <someone> <something>\" asks me to deliver a message to someone next time they speak."
-    (tell 'later))   
-   ("tell " "\"tell <someone> <something>\" asks me to deliver a message to someone as soon as I see them in a channel."
-    (tell 'now))
    ("seen " "\"seen <someone>\" asks for the last time I saw someone speak."
     seen)
    ("be quiet" "Asks me to only speak when spoken to" be-quiet)
@@ -72,11 +72,12 @@
    ("express " "\"express <s-expression>\" will print the uExp version of an optimized, compiled s-expression."
     do-express)
    ("dictionary" "\"dictionary <word>\" tells me to look up a word in Webster's dictionary." (dict "web1913"))
+   ("weather" "\"weather <city>\" asks me for the current weather in a city" get-weather)
    ("yow" "A bit of randomness from Zippy the Pinhead." yow)
    ("join " "\"join <channel-name>\" asks me to join the channel as an infobot"
     join-chan)
    ("scheme-channel " "\"scheme-channel <channel-name>\" creates a scheme channel with the given name" make-schemechan)
-   ("part " "\"part <channel-name>\" asks me to leave a channel I'm in." request-part)
+;   ("part " "\"part <channel-name>\" asks me to leave a channel I'm in." request-part)
    ("pasted " "" (lambda args (random-elem paste-responses)))
    ("locate " "\"locate <someone>\" asks me to tell you where I see someone."
     locate)

@@ -127,4 +127,8 @@ ALTER TABLE ONLY seen
 
 COMMENT ON SCHEMA public IS 'Standard public namespace';
 
-
+CREATE TABLE airport (
+  code char(3) not null,
+  city varchar(60) not null,
+  state char(2)
+);

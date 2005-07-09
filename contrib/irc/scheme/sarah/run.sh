@@ -1,6 +1,6 @@
 PATH=/usr/local/java/bin:$PATH
 CLASSPATH="libs/pircbot.jar:libs/sisc-pirc.jar:libs/postgresql.jar:.:$CLASSPATH"
-SISC_HOME=libs
+SISC_HOME=sisc
 JAVAOPT="-Dsisc.permitInterrupts=true -Dsisc.emitAnnotations=true -Dsisc.emitDebuggingSymbols=true"
 export CLASSPATH SISC_HOME JAVAOPT PATH
 cd anna
@@ -9,5 +9,5 @@ ANNAPID=$!
 echo $ANNAPID
 cd ..
 
-sh sisc/sisc ./config.scm ./libs.scc ./sarahbot.scc
+sisc/sisc ./config.scm ./libs.scm ./sarahbot.scm
 kill $ANNAPID
