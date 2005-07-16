@@ -89,9 +89,19 @@
     (learn 'where))
    (" is " "\"<something> is <something else>\" defines a term for later recollection by \"what is\"."
     (learn 'what))
-   (#t "<something>? asks me what something is" (*-is? #f))
+   (#t "<something>? asks me what something is" default-plugin)
 ))
 
+(define default-plugin 
+  (let ([is-? (*-is? #f)])
+   (lambda (channel message ignore term)
+     (let ([rv (is-? channel message ignore term)])
+       (if (string? rv)
+           rv 
+           (if (char=? (string-ref term 0) #\()
+               (stateless-eval channel message "" term)
+               #t))))))
+                
 (define paste-responses
  '("Wait, no I didn't.  Hey..."
    "Quit screwing around."
