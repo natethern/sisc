@@ -364,7 +364,7 @@
   <target name="heap" depends="full-heap,lite-heap">
   </target>
 
-  <target name="heap-jar"
+  <target name="heap-jar" depends="compile"
           description="Package the built heap into a JAR, accessible by sisc.boot.HeapAnchor">
     <jar jarfile="${basedir}/${heapjar}">
       <fileset dir="${classdir}" includes="sisc/boot/HeapAnchor.class"/>
