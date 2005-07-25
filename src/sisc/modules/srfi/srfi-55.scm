@@ -36,7 +36,7 @@
                                             (error 'require-extension
                                                    "unknown extension identifier: ~a"
                                                    id))
-                                          (lambda (m e) 
+                                          (lambda () 
                                             (eval `(import ,full-lib-name)
                                                   (interaction-environment)))))
                                (lambda ()
