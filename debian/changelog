@@ -12,3 +12,10 @@ sisc (1.11.0-alpha-1) unstable; urgency=low
 	
  -- Scott G. Miller <sgmiller@gmail.com>  Thu,  7 Apr 2005 10:36:44 -0500
 
+
+sisc (1.9.8-1) unstable; urgency=low
+
+  * Backport to 1.9 stable tree.
+	
+ -- Scott G. Miller <sgmiller@gmail.com>  Fri,  29 Jul 2005 10:16:02 -0500
+
