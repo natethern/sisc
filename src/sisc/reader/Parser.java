@@ -102,7 +102,7 @@ public class Parser extends Util implements Tokens {
             if (is==null) System.err.println(warn(message, arg));
             else warn(liMessage(SISCB, message, arg));
         else
-            throw new IOException(liMessage(SISCB, message));
+            throw new IOException(liMessage(SISCB, message, arg));
     }
 
     /**
