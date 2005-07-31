@@ -364,8 +364,9 @@
   <target name="heap" depends="full-heap,lite-heap">
   </target>
 
-  <target name="heap-jar" depends="compile"
-          description="Package the built heap into a JAR, accessible by sisc.boot.HeapAnchor">
+  <target name="heap-jar"
+          description="Package the built heap into a JAR, accessible by sisc.boot.HeapAnchor"
+          depends="heap">
     <jar jarfile="${basedir}/${heapjar}">
       <fileset dir="${classdir}" includes="sisc/boot/HeapAnchor.class"/>
       <zipfileset dir="${basedir}"
@@ -419,7 +420,7 @@
           description="Generate Documentation" unless="lite"/>
 
   <target name="all" depends="sisc-lib,docs"
-          description="Build lite edition">
+          description="Build SISC, its heap, docs, and the standard library">
   </target>
 
   <target name="lite-dist" depends="all,heap" if="lite">
