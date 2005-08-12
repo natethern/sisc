@@ -82,7 +82,7 @@ public class LambdaExp extends Expression implements Immediate, OptimisticHost {
     /* (non-Javadoc)
      * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
      */
-    public void alter(int uexpPosition, Expression replaceWith) {
+    public void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
         body=replaceWith;
         if (replaceWith instanceof OptimisticExpression) {
             ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);

@@ -26,12 +26,12 @@ public class FixedAppExp_1 extends FixedAppExp_0 implements OptimisticHost {
     /* (non-Javadoc)
      * @see sisc.exprs.fp.OptimisticHost#alter(int, sisc.data.Expression)
      */
-    public void alter(int uexpPosition, Expression replaceWith) {
-        revert();
+    public void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
+        revert(r);
     }
 
-    protected void revert() {
-        revert(new Expression[] {(Expression)op0});
+    protected void revert(Interpreter r) {
+        revert(r, new Expression[] {(Expression)op0});
     }
     
     public Value doGetValue(FixableProcedure proc, Interpreter r) throws ContinuationException {

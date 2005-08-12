@@ -29,8 +29,8 @@ public class FixedAppExp_3 extends FixedAppExp_2 {
         return proc.apply(op0.getValue(r), op1.getValue(r), op2.getValue(r));
     }
 
-    protected void revert() {
-        revert(new Expression[] {(Expression)op0, (Expression)op1, (Expression)op2});
+    protected void revert(Interpreter r) {
+        revert(r, new Expression[] {(Expression)op0, (Expression)op1, (Expression)op2});
     }    
     
     public Value express() {

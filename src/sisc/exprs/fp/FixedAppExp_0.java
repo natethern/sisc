@@ -1,8 +1,11 @@
 package sisc.exprs.fp;
 
 import java.io.*;
+
+import sisc.compiler.Compiler;
 import sisc.data.*;
 import sisc.exprs.AppExp;
+import sisc.exprs.FillRibExp;
 import sisc.exprs.FreeReferenceExp;
 import sisc.interpreter.*;
 import sisc.nativefun.FixableProcedure;
@@ -50,7 +53,7 @@ public class FixedAppExp_0 extends Expression
                 if (proc==null || (e instanceof FixableProcedure)) {    
                     proc=(FixableProcedure)e;
                 } else {
-                    revert();
+                    revert(r);
                 }
             }
             return doGetValue(proc, r);
@@ -61,10 +64,10 @@ public class FixedAppExp_0 extends Expression
                           liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
                           cc);
                 } else {
-                    revert();
+                    revert(r);
                 }
             } catch (UndefinedVarException udv) {
-                revert();
+                revert(r);
             }
         } catch (NestedPrimRuntimeException npr) {
             Procedure.error(r, getName(), npr);
@@ -77,27 +80,30 @@ public class FixedAppExp_0 extends Expression
                 msg = re.toString();
             error(r, ref.getName(), msg, re);
         } catch (UndefinedVarException ue) {
-            revert();
+            revert(r);
         }
         // Should be unreachable;
         return null;
     }
 
-    protected void revert() {
-        revert(ZV);
+    protected void revert(Interpreter r) {
+        revert(r, ZV);
     }
 
-    protected void revert(Expression[] rands) {
+    protected void revert(Interpreter r, Expression[] rands) {
         if (host == null) {
             Procedure.throwPrimException(liMessage(SISCB, "nosafeexpr"));
         }
-        
-        AppExp safeExpr=new AppExp(new FreeReferenceExp(ref), rands, APPEVAL, false);
-        if (safeExpr instanceof OptimisticHost) {
-            ((OptimisticHost)safeExpr).setHosts();
+        try {
+            AppExp safeExpr=(AppExp)Compiler.application(r, new FreeReferenceExp(ref), rands, 0, EMPTYLIST, r.getCtx().symenv);
+            if (safeExpr instanceof OptimisticHost) {
+                ((OptimisticHost)safeExpr).setHosts();
+            }
+            host.alter(r, uexpPosition, safeExpr);
+            throw new OptimismUnwarrantedException();
+        } catch (ContinuationException ce) {
+            Procedure.throwPrimException(ce.getMessage());
         }
-        host.alter(uexpPosition, safeExpr);
-        throw new OptimismUnwarrantedException();
     }
 
     public Value express() {

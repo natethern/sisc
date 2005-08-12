@@ -65,7 +65,7 @@ public class FreeReferenceExp extends Expression
             return ref.getValue();
         } catch (UndefinedVarException e) {
             error(r, liMessage(SISCB,"undefinedvar", e.var));
-            host.alter(uexpPosition, new NonImmediateFreeReferenceExp(this));
+            host.alter(r, uexpPosition, new NonImmediateFreeReferenceExp(this));
             return null; //won't get here
         }
     }

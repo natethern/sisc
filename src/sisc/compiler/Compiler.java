@@ -101,7 +101,7 @@ public class Compiler extends CompilerConstants {
         return APPLICATION;
     }
 
-    void addAnnotations(Expression e, Map m) {
+    static void addAnnotations(Expression e, Map m) {
         if (m!=null)
             if (e.annotations == null)
                 e.annotations = m;
@@ -109,7 +109,7 @@ public class Compiler extends CompilerConstants {
                 e.annotations.putAll(m);
     }
 
-    void setAnnotations(Expression e, Pair p) {
+    static void setAnnotations(Expression e, Pair p) {
         while (p!=EMPTYLIST) {
             Pair kv=(Pair)p.car;
             e.setAnnotation(symbol(kv.car), kv.cdr);
@@ -117,7 +117,7 @@ public class Compiler extends CompilerConstants {
         }
     }
 
-    boolean isImmediate(Expression e) {
+    static boolean isImmediate(Expression e) {
         return (e instanceof Immediate) ||
             ((e instanceof AnnotatedExpr) &&
              (((AnnotatedExpr)e).expr instanceof Immediate));
@@ -390,7 +390,7 @@ public class Compiler extends CompilerConstants {
         return new LetrecExp(lastRand, rands, nxp, copies[0], copies[1], allImmediate);
     }
 
-    public final Expression application(Interpreter r, 
+    public static final Expression application(Interpreter r, 
                                         Expression rator, Expression rands[], 
                                         int context, Pair annotation,
                                         SymbolicEnvironment env) throws ContinuationException{

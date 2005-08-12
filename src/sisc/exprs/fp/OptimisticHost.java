@@ -4,6 +4,7 @@
 package sisc.exprs.fp;
 
 import sisc.data.Expression;
+import sisc.interpreter.Interpreter;
 
 /**
  * An Optimistic uExp Host Expression provides a callback for
@@ -25,7 +26,7 @@ public interface OptimisticHost {
      * @param uexpPosition Expression dependent uExp index
      * @param replaceWith Expression to revert to
      */
-    public void alter(int uexpPosition, Expression replaceWith);
+    public void alter(Interpreter r, int uexpPosition, Expression replaceWith);
     
     public void setHosts();
     

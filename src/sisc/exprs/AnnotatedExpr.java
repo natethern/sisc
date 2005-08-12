@@ -72,7 +72,7 @@ public class AnnotatedExpr extends Value implements OptimisticHost {
     /* (non-Javadoc)
      * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
      */
-    public void alter(int uexpPosition, Expression replaceWith) {
+    public void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
         expr=replaceWith;
         if (replaceWith instanceof OptimisticExpression) {
             ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
