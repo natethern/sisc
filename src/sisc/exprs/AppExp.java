@@ -105,7 +105,7 @@ public class AppExp extends Expression implements OptimisticHost {
     /* (non-Javadoc)
      * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
      */
-    public void alter(int uexpPosition, Expression replaceWith) {
+    public void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
         switch(uexpPosition) {
         case POS_EXP:
             exp=replaceWith;
@@ -114,13 +114,19 @@ public class AppExp extends Expression implements OptimisticHost {
             nxp=replaceWith;
             break;
         default:
-            rands[uexpPosition]=replaceWith;
+            if (replaceWith instanceof Immediate)
+                rands[uexpPosition]=replaceWith;
+            else rands[uexpPosition]=null;
+            Expression oldExp=exp;
+            exp=replaceWith;
+            nxp=new FillRibExp(oldExp, uexpPosition, nxp, false);
         }
-        if (allImmediate && !(replaceWith instanceof Immediate)) 
+
+        if (allImmediate && !(replaceWith instanceof Immediate)) {
             allImmediate=false;
+        }
         if (replaceWith instanceof OptimisticHost) 
             ((OptimisticHost)replaceWith).setHosts();
-        
     }
 }
 
