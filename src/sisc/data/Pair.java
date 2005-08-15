@@ -69,10 +69,7 @@ public class Pair extends Value {
     public boolean valueEqual(Value v) {
         if (!(v instanceof Pair)) return false;
         Pair p=(Pair)v;
-        boolean carequal=car.valueEqual(p.car);
-        if (carequal)
-            return cdr.valueEqual(p.cdr);
-        else return false;
+        return car.valueEqual(p.car) && cdr.valueEqual(p.cdr);
     }
 
     public int valueHashCode() {
