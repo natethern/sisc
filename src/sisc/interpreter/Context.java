@@ -103,11 +103,10 @@ public class Context extends Util {
      * is freed, and the return value of caller.execute()
      * is returned from this method.
      * 
-     * @note It is critical that the Interpreter
-     * reference provided during the call is used only
-     * in the thread which calls this method.  New threads
-     * should obtain a different Interpreter via this or
-     * enter() calls.
+     * NB: It is critical that the Interpreter reference provided
+     * during the call is used only in the thread which calls this
+     * method.  New threads should obtain a different Interpreter via
+     * this or enter() calls.
      */
     public static Object execute(String appName, SchemeCaller caller) {
         return execute(lookup(appName), caller);
