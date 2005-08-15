@@ -90,6 +90,7 @@ public class Hashtable extends Value {
     }
 
     public boolean valueEqual(Value v) {
+        if (v==this) return true;
         if (!(v instanceof Hashtable)) return false;
         Hashtable o = (Hashtable)v;
         int sz = o.size();

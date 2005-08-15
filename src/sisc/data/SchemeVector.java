@@ -28,6 +28,7 @@ public class SchemeVector extends Value {
     }
 
     public boolean valueEqual(Value v) {
+        if (v==this) return true;
         if (!(v instanceof SchemeVector)) return false;
         SchemeVector o=(SchemeVector)v;
         if (o.vals.length!=vals.length)

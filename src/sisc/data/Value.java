@@ -63,7 +63,9 @@ public abstract class Value extends Expression implements Immediate {
 
     /**
      * Compares this value to another for semantic equality.  Used to
-     * implement Scheme's 'equal?'.
+     * implement Scheme's 'equal?'.  Subclasses <b>must</b> test for
+     * pointer equality as well as semantic equality, so that infinite loops 
+     * on recursive structures are less likely.
      * 
      * @param v the other Value
      */

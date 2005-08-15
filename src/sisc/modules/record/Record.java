@@ -28,6 +28,7 @@ public class Record extends Value {
     public int size() { return slots.length; }
 
     public boolean valueEqual(Value v) {
+        if (v==this) return true;
         if (!(v instanceof Record)) return false;
         Record r = (Record)v;
         if (type != r.getType() || size() != r.size()) return false;

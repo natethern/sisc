@@ -67,6 +67,7 @@ public class Pair extends Value {
     }
 
     public boolean valueEqual(Value v) {
+        if (v==this) return true;
         if (!(v instanceof Pair)) return false;
         Pair p=(Pair)v;
         return car.valueEqual(p.car) && cdr.valueEqual(p.cdr);

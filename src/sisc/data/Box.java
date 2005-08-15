@@ -23,6 +23,7 @@ public class Box extends Value {
     }
 
     public boolean valueEqual(Value v) {
+        if (v==this) return true; 
         if (!(v instanceof Box)) return false;
         Box b=(Box)v;
         if (val==null && b.val!=null) return false;
