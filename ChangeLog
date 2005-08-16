@@ -1,3 +1,9 @@
+2005-08-16  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed (or, rather, added) hash codes for boxes and uninterned
+	  symbols. This was breaking things when these kinds of values
+	  were used in equal?-based hash tables, for example.
+
 2005-08-12  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fix serious bug in the logic for AppExp when reverting

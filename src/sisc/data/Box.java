@@ -22,6 +22,10 @@ public class Box extends Value {
         w.append(val);
     }
 
+    public int valueHashCode() {
+        return val.valueHashCode();
+    }
+
     public boolean valueEqual(Value v) {
         if (v==this) return true; 
         if (!(v instanceof Box)) return false;

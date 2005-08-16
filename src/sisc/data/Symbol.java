@@ -53,6 +53,10 @@ public class Symbol extends Value {
         }
     }
 
+    public int valueHashCode() {
+        return symval.hashCode();
+    }
+
     public boolean valueEqual(Value v) {
         return super.valueEqual(v) ||
                   ((v instanceof Symbol) && ((Symbol)v).symval.equals(symval));
