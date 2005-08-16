@@ -7,7 +7,7 @@ public class MemoizedSymbol extends Symbol implements Singleton {
 
     public static WeakHashMap memo=new WeakHashMap(100);
 
-    public MemoizedSymbol(String symval) {
+    private MemoizedSymbol(String symval) {
         super(symval);
     }
 
