@@ -502,16 +502,6 @@ public class Quantity extends Value implements Singleton {
         return new BigDecimal(d).toBigInteger();
     }
 
-    protected static float round(float d) {
-        float f=(float)Math.floor(d);
-        if (Math.abs(f-d)==0.5)
-            if (((int)f) % 2 == 0)
-                return f;
-            else return f+1;
-        else
-            return Math.round(d);
-    }
-
     public Quantity gcd(Quantity o) {
         switch (type) {
         case FIXEDINT:
@@ -570,7 +560,7 @@ public class Quantity extends Value implements Singleton {
             case BigDecimal.ROUND_CEILING:
                 return new Quantity((float)Math.ceil(d));
             case BigDecimal.ROUND_HALF_EVEN:
-                return new Quantity(round(d));
+                return new Quantity(new BigDecimal(d).setScale(0, rtype).floatValue());
             case BigDecimal.ROUND_DOWN:
                 return new Quantity(d2i(d).floatValue());
             }
