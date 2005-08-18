@@ -4,6 +4,9 @@
 	  hit too early in some boundary cases.
 
 	* Fixed a mysterious problem with ROUND, in some boundary cases.
+
+	* Made double-precision floating point the default (previously it
+	  was arbitrary precision)
 	
 2005-08-16  Matthias Radestock  <matthias@sorted.org>
 
