@@ -1,3 +1,8 @@
+2005-08-18  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed a bug in EXPT that resulted in floating point limits to be
+	  hit too early in some boundary cases.
+
 2005-08-16  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed (or, rather, added) hash codes for boxes and uninterned

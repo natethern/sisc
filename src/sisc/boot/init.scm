@@ -331,21 +331,25 @@
                  (expt base-denominator exponent)))]
 	   [integer-expt 
 	    (lambda (base exponent)
-	      (cond
-	       ((negative? exponent) (/ (integer-expt base (abs exponent))))
-	       ((and (exact? base) (= base 2)) (ashl 1 exponent))
-	       (else
-		(let loop ([rest exponent]
-			   [result 1]
-			   [squaring base])
-		  (if (zero? rest)
-		      result
-		      (loop
-		       (quotient rest 2)
-		       (if (odd? rest)
-			   (* result squaring)
-			   result)
-		       (* squaring squaring)))))))])
+	      (if (and (exact? base) (= base 2))
+                  (if (negative? exponent)
+                      (/ (ashl 1 (abs exponent)))
+                      (ashl 1 exponent))
+                  (let loop ([rest      (if (negative? exponent)
+                                            (abs exponent)
+                                            exponent)]
+                             [result    1]
+                             [squaring  (if (negative? exponent)
+                                            (/ base)
+                                            base)])
+                    (if (zero? rest)
+                        result
+                        (loop
+                         (quotient rest 2)
+                         (if (odd? rest)
+                             (* result squaring)
+                             result)
+                         (* squaring squaring))))))])
     (lambda (base exponent)
       (cond
        ((zero? exponent) (if (exact? exponent) #e1 #i1))

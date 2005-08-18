@@ -1,146 +1,148 @@
 (#%program
-  ((|%%_iiIcPhmaw_make-arecord| . 1)
-   (|%%_iiqWEyoaw_env| . 1)
-   (|%%_iiMSC_oaw_arec| . 5)
-   (|%%_ii4-G5oaw_v| . 2)
+  ((|%%_LBtb5tq6T_make-arecord| . 1)
+   (|%%_LBbVWJs6T_env| . 1)
+   (|%%_LBxRUat6T_arec| . 5)
+   (|%%_LBRYYgs6T_v| . 2)
    (_expression-type . 1)
-   (|%%_iiaEmFGaw_v| . 3)
-   (|%%_iiypetIaw_oper| . 1)
-   (|%%_iiAe8QJaw_loop| . 2)
-   (|%%_iig74KKaw_rv| . 2)
-   (|%%_iiWa6hKaw_v| . 4)
-   (|%%_iiEUXxMaw_t| . 2)
-   (|%%_iiiYZ4Maw_t| . 2)
-   (|%%_iiY__DLaw_s| . 6)
-   (|%%_iis5vTSaw_binding| . 3)
-   (|%%_iiO1tkTaw_t| . 2)
+   (|%%_LBXCEQK6T_v| . 3)
+   (|%%_LBjowEM6T_oper| . 1)
+   (|%%_LBldq_N6T_loop| . 2)
+   (|%%_LB16mVO6T_rv| . 2)
+   (not . 1)
+   (|%%_LBH9osO6T_v| . 4)
+   (|%%_LBpTdJQ6T_t| . 2)
+   (|%%_LB3XfgQ6T_t| . 2)
+   (|%%_LBJ-hPP6T_s| . 6)
+   (|%%_LBd4N2X6T_binding| . 3)
+   (|%%_LBz0LvX6T_t| . 2)
    (map . 1)
    (cadar . 1)
-   (|%%_iiqgBwRaw_loop| . 2)
-   (|%%_ii69xqSaw_refs| . 2)
-   (|%%_iiMczZRaw_bindings| . 3)
+   (|%%_LBbfTHV6T_loop| . 2)
+   (|%%_LBT7PBW6T_refs| . 2)
+   (|%%_LBxbR8W6T_bindings| . 3)
    (cddr . 1)
-   (|%%_iiIyLfPaw_refs| . 1)
-   (|%%_iimCNOOaw_newlxs| . 2)
-   (|%%_ii2vJIPaw_v| . 1)
-   (|%%_ii0GPlOaw_locals| . 2)
-   (|%%_iiorH9Qaw_refs| . 2)
-   (|%%_ii4kD3Raw_lexicals| . 1)
-   (|%%_iikNTrNaw_v| . 7)
-   (|%%_ii-QV-Maw_analyzed| . 3)
-   (|%%_iiKnFCQaw_locally-frees| . 2)
+   (|%%_LBtx1rT6T_refs| . 1)
+   (|%%_LB7B3-S6T_newlxs| . 2)
+   (|%%_LBPt_TT6T_v| . 1)
+   (|%%_LBNE5xS6T_locals| . 2)
+   (|%%_LB9qZkU6T_refs| . 2)
+   (|%%_LBRiVeV6T_lexicals| . 1)
+   (|%%_LB5M9DR6T_v| . 7)
+   (|%%_LBLPbaR6T_analyzed| . 3)
+   (|%%_LBvmXNU6T_locally-frees| . 2)
    (eq? . 2)
-   (|%%_iiuWoeUaw_v| . 3)
-   (|%%_iiSwizHaw_env| . 9)
+   (|%%_LBfVGpY6T_v| . 3)
+   (|%%_LBDvAKL6T_env| . 9)
    (cadr . 3)
-   (|%%_iio5Lbnaw_analyze!| . 9)
-   (|%%_iiQSmHUaw_locals| . 2)
-   (|%%_iiwLiBVaw_refs| . 2)
-   (|%%_ii4EK7X9w_in| . 2)
+   (|%%_LB941nr6T_analyze!| . 9)
+   (|%%_LBBRESY6T_locals| . 2)
+   (|%%_LBhKAMZ6T_refs| . 2)
+   (|%%_LBRC0j_5T_in| . 2)
    (set-car! . 2)
-   (|%%_iiyAcYWaw_lexicals| . 1)
-   (|%%_iiaPk8Vaw_v| . 5)
-   (|%%_ii8-qNTaw_analyzed| . 3)
-   (|%%_iiwAk6Haw_arec| . 19)
-   (|%%_iiaiqHdaw_arecord-union-frees!| . 2)
-   (|%%_iictg0Iaw_lxs| . 12)
-   (|%%_iiSHg2Waw_locally-frees| . 3)
-   (|%%_iioLOdW9w_difference| . 5)
-   (|%%_iiUlcWIaw_v| . 12)
+   (|%%_LBjzu7_6T_lexicals| . 1)
+   (|%%_LBXNCjZ6T_v| . 5)
+   (|%%_LBVYIYX6T_analyzed| . 3)
+   (|%%_LBhzChL6T_arec| . 19)
+   (|%%_LBXgISh6T_arecord-union-frees!| . 2)
+   (|%%_LBZrybM6T_lxs| . 12)
+   (|%%_LBDGyd-6T_locally-frees| . 3)
+   (|%%_LB9K4p-5T_difference| . 5)
+   (|%%_LBFku5N6T_v| . 12)
    (map-car . 1)
-   (|%%_iieianJaw_exp-type| . 8)
+   (|%%_LB_gsyN6T_exp-type| . 8)
    (= . 8)
-   (|%%_ii8PsiFaw_env| . 1)
-   (|%%_iiK1JEnaw_analyze-app!| . 1)
-   (|%%_iiQlsedaw_arecord-add-free!| . 1)
-   (|%%_iiuLqLFaw_lxs| . 2)
+   (|%%_LBVNKtJ6T_env| . 1)
+   (|%%_LBv0_Pr6T_analyze-app!| . 1)
+   (|%%_LBBkKph6T_arecord-add-free!| . 1)
+   (|%%_LBfKIWJ6T_lxs| . 2)
    (assq . 4)
-   (|%%_iiOSuREaw_arec| . 5)
-   (|%%_iiir3E4aw_inc-cdr!| . 4)
-   (|%%_iiQHocGaw_t| . 2)
-   (|%%_iisWwoEaw_v| . 8)
+   (|%%_LBzRM0J6T_arec| . 5)
+   (|%%_LB3qlP86T_inc-cdr!| . 4)
+   (|%%_LBBGGnK6T_t| . 2)
+   (|%%_LBdVOzI6T_v| . 8)
    (symbol? . 2)
-   (|%%_ii29NKmaw_build-refs| . 4)
+   (|%%_LBP73Wq6T_build-refs| . 4)
    (cdar . 1)
    (zero? . 1)
-   (|%%_ii6-yXDaw_vals| . 5)
-   (|%%_iiM1BuDaw_v| . 1)
+   (|%%_LBTYQ6I6T_vals| . 5)
+   (|%%_LBx0TFH6T_v| . 1)
    (vector . 1)
    (list . 6)
-   (|%%_iimgRQlaw_->proper-list| . 2)
+   (|%%_LB7f70q6T_->proper-list| . 2)
    (pair? . 3)
-   (|%%_iiq5D1Daw_elem| . 5)
-   (|%%_ii2kLdBaw_v| . 2)
+   (|%%_LBb4VcH6T_elem| . 5)
+   (|%%_LBPi1pF6T_v| . 2)
    (> . 1)
-   (|%%_iiInNMAaw_newfrees| . 1)
-   (|%%_ii2PQMV9w_union| . 6)
-   (|%%_iimrPjAaw_arec| . 2)
-   (|%%_iikCVYyaw_arec| . 1)
+   (|%%_LBtm3YE6T_newfrees| . 1)
+   (|%%_LBPN6YZ5T_union| . 6)
+   (|%%_LB7q5vE6T_arec| . 2)
+   (|%%_LB5Bb8D6T_arec| . 1)
    (vector-ref . 19)
-   (|%%_ii0vRSzaw_afrees| . 3)
-   (|%%_iiGyTpzaw_newfree| . 2)
+   (|%%_LBNt72E6T_afrees| . 3)
+   (|%%_LBrx9BD6T_newfree| . 2)
    (+ . 1)
-   (|%%_ii-FXvyaw_v| . 2)
-   (|%%_iiEJZ2yaw_ls2| . 1)
-   (|%%_iiiN_Bxaw_ls1| . 1)
-   (|%%_iiKHMGW9w_intersection| . 1)
+   (|%%_LBLEdHC6T_v| . 2)
+   (|%%_LBpIfeC6T_ls2| . 1)
+   (|%%_LB3MhNB6T_ls1| . 1)
+   (|%%_LBvG2S-5T_intersection| . 1)
    (reverse . 1)
-   (|%%_iiA3alvaw_ls1| . 1)
-   (|%%_iigY5fwaw_loop| . 3)
-   (|%%_iiW_7Ovaw_ls2| . 1)
-   (|%%_iiYQ19xaw_acc| . 3)
-   (|%%_iiCU3Iwaw_ls1| . 5)
-   (|%%_iiSlk4taw_ls1| . 1)
-   (%%_iiyeg-taw_loop . 3)
-   (%%_iiciixtaw_ls2 . 1)
-   (|%%_iie7cUuaw_acc| . 3)
-   (|%%_iiUaeruaw_ls1| . 5)
-   (|%%_ii6PAspaw_ls1| . 1)
+   (|%%_LBl2swz6T_ls1| . 1)
+   (|%%_LB1XnqA6T_loop| . 3)
+   (|%%_LBH-pZz6T_ls2| . 1)
+   (|%%_LBJPjkB6T_acc| . 3)
+   (|%%_LBnTlTA6T_ls1| . 5)
+   (|%%_LBDkCfx6T_ls1| . 1)
+   (|%%_LBjdy9y6T_loop| . 3)
+   (|%%_LBZgAIx6T_ls2| . 1)
+   (|%%_LB_5u3z6T_acc| . 3)
+   (|%%_LBF9wCy6T_ls1| . 5)
+   (|%%_LBTNSDt6T_ls1| . 1)
    (cons . 19)
-   (%%_iiatoasaw_cc . 2)
+   (|%%_LBXrGlw6T_cc| . 2)
    (cdr . 35)
-   (|%%_iiOHwmqaw_loop| . 3)
+   (|%%_LBzGOxu6T_loop| . 3)
    (car . 25)
    (memq . 5)
-   (|%%_iiQwqJraw_acc| . 3)
-   (|%%_iisLyVpaw_ls2| . 3)
+   (|%%_LBBvIUv6T_acc| . 3)
+   (|%%_LBdKQ4u6T_ls2| . 3)
    (set-cdr! . 10)
-   (|%%_iiuAsgraw_tail| . 5)
-   (|%%_ii8EuPqaw_ls1| . 5)
+   (|%%_LBfzKrv6T_tail| . 5)
+   (|%%_LBVCM-u6T_ls1| . 5)
    (null? . 7)
    ($sc-put-cte . 1))
-  ((|%%_iiAe8QJaw_loop| . 1)
-   (|%%_iiqgBwRaw_loop| . 1)
-   (|%%_iigY5fwaw_loop| . 1)
-   (%%_iiyeg-taw_loop . 1)
-   (|%%_iiOHwmqaw_loop| . 1)
-   (|%%_iiK1JEnaw_analyze-app!| . 1)
-   (|%%_iio5Lbnaw_analyze!| . 1)
-   (|%%_ii29NKmaw_build-refs| . 1)
-   (|%%_iiIcPhmaw_make-arecord| . 1)
-   (|%%_iimgRQlaw_->proper-list| . 1)
-   (|%%_iiGnVWkaw__cdr>0| . 1)
-   (|%%_iiaiqHdaw_arecord-union-frees!| . 1)
-   (|%%_iiQlsedaw_arecord-add-free!| . 1)
-   (|%%_iiir3E4aw_inc-cdr!| . 1)
-   (|%%_ii4EK7X9w_in| . 1)
-   (|%%_iiKHMGW9w_intersection| . 1)
-   (|%%_iioLOdW9w_difference| . 1)
-   (|%%_ii2PQMV9w_union| . 1)
-   (|%%_iimWUSU9w__letrec| . 1)
-   (|%%_ii0-WpU9w_makeannotation| . 1)
-   (|%%_iiG1ZYT9w__define| . 1)
-   (|%%_iik5_vT9w_set| . 1)
-   (|%%_ii-813T9w__quote| . 1)
-   (|%%_iiYj7IR9w__lambda| . 1)
-   (|%%_iiCn9fR9w_application| . 1)
-   (|%%_iigrbOQ9w_program| . 1))
+  ((|%%_LBldq_N6T_loop| . 1)
+   (|%%_LBbfTHV6T_loop| . 1)
+   (|%%_LB1XnqA6T_loop| . 1)
+   (|%%_LBjdy9y6T_loop| . 1)
+   (|%%_LBzGOxu6T_loop| . 1)
+   (|%%_LBv0_Pr6T_analyze-app!| . 1)
+   (|%%_LB941nr6T_analyze!| . 1)
+   (|%%_LBP73Wq6T_build-refs| . 1)
+   (|%%_LBtb5tq6T_make-arecord| . 1)
+   (|%%_LB7f70q6T_->proper-list| . 1)
+   (|%%_LBrmb6p6T__cdr>0| . 1)
+   (|%%_LBXgISh6T_arecord-union-frees!| . 1)
+   (|%%_LBBkKph6T_arecord-add-free!| . 1)
+   (|%%_LB3qlP86T_inc-cdr!| . 1)
+   (|%%_LBRC0j_5T_in| . 1)
+   (|%%_LBvG2S-5T_intersection| . 1)
+   (|%%_LB9K4p-5T_difference| . 1)
+   (|%%_LBPN6YZ5T_union| . 1)
+   (|%%_LB7Va2Z5T__letrec| . 1)
+   (|%%_LBNYcBY5T_makeannotation| . 1)
+   (|%%_LBr0f8Y5T__define| . 1)
+   (|%%_LB54hHX5T_set| . 1)
+   (|%%_LBL7jeX5T__quote| . 1)
+   (|%%_LBJipTV5T__lambda| . 1)
+   (|%%_LBnmrqV5T_application| . 1)
+   (|%%_LB1qtZU5T_program| . 1))
   ($sc-put-cte
     _expression-type
     =
     eq?
     cadr
     set-car!
+    not
     cddr
     cadar
     map
@@ -168,713 +170,712 @@
       (#%quote (global . _analyze!)))
     (#%define _analyze!
       (#%letrec #t
-        ((|%%_iigrbOQ9w_program| 0)
-         (|%%_iiCn9fR9w_application| 1)
-         (|%%_iiYj7IR9w__lambda| 2)
-         (|%%_ii-813T9w__quote| 5)
-         (|%%_iik5_vT9w_set| 6)
-         (|%%_iiG1ZYT9w__define| 7)
-         (|%%_ii0-WpU9w_makeannotation| 8)
-         (|%%_iimWUSU9w__letrec| 9)
-         (|%%_ii2PQMV9w_union|
+        ((|%%_LB1qtZU5T_program| 0)
+         (|%%_LBnmrqV5T_application| 1)
+         (|%%_LBJipTV5T__lambda| 2)
+         (|%%_LBL7jeX5T__quote| 5)
+         (|%%_LB54hHX5T_set| 6)
+         (|%%_LBr0f8Y5T__define| 7)
+         (|%%_LBNYcBY5T_makeannotation| 8)
+         (|%%_LB7Va2Z5T__letrec| 9)
+         (|%%_LBPN6YZ5T_union|
            (#%lambda #t
-             (|%%_ii6PAspaw_ls1| |%%_iisLyVpaw_ls2|)
+             (|%%_LBTNSDt6T_ls1| |%%_LBdKQ4u6T_ls2|)
              ()
              ((#%letrec #t
-                ((|%%_iiOHwmqaw_loop|
+                ((|%%_LBzGOxu6T_loop|
                    (#%lambda #t
-                     (|%%_ii8EuPqaw_ls1|
-                       |%%_iiuAsgraw_tail|
-                       |%%_iiQwqJraw_acc|)
-                     (|%%_iiOHwmqaw_loop| |%%_iisLyVpaw_ls2|)
-                     (#%if (null? |%%_ii8EuPqaw_ls1|)
-                       (#%if |%%_iiuAsgraw_tail|
+                     (|%%_LBVCM-u6T_ls1|
+                       |%%_LBfzKrv6T_tail|
+                       |%%_LBBvIUv6T_acc|)
+                     (|%%_LBzGOxu6T_loop| |%%_LBdKQ4u6T_ls2|)
+                     (#%if (null? |%%_LBVCM-u6T_ls1|)
+                       (#%if |%%_LBfzKrv6T_tail|
                          (#%begin
-                           (set-cdr! |%%_iiuAsgraw_tail| |%%_iisLyVpaw_ls2|)
-                           |%%_iiQwqJraw_acc|)
-                         |%%_iisLyVpaw_ls2|)
-                       (#%if (memq (car |%%_ii8EuPqaw_ls1|)
-                                   |%%_iisLyVpaw_ls2|)
-                         (|%%_iiOHwmqaw_loop|
-                           (cdr |%%_ii8EuPqaw_ls1|)
-                           |%%_iiuAsgraw_tail|
-                           |%%_iiQwqJraw_acc|)
+                           (set-cdr! |%%_LBfzKrv6T_tail| |%%_LBdKQ4u6T_ls2|)
+                           |%%_LBBvIUv6T_acc|)
+                         |%%_LBdKQ4u6T_ls2|)
+                       (#%if (memq (car |%%_LBVCM-u6T_ls1|)
+                                   |%%_LBdKQ4u6T_ls2|)
+                         (|%%_LBzGOxu6T_loop|
+                           (cdr |%%_LBVCM-u6T_ls1|)
+                           |%%_LBfzKrv6T_tail|
+                           |%%_LBBvIUv6T_acc|)
                          ((#%lambda #t
-                            (%%_iiatoasaw_cc)
-                            (|%%_iiuAsgraw_tail|
-                              |%%_ii8EuPqaw_ls1|
-                              |%%_iiOHwmqaw_loop|)
-                            (|%%_iiOHwmqaw_loop|
-                              (cdr |%%_ii8EuPqaw_ls1|)
-                              (#%if |%%_iiuAsgraw_tail|
-                                |%%_iiuAsgraw_tail|
-                                %%_iiatoasaw_cc)
-                              %%_iiatoasaw_cc))
-                          (cons (car |%%_ii8EuPqaw_ls1|)
-                                |%%_iiQwqJraw_acc|)))))))
-                (|%%_iisLyVpaw_ls2|)
-                |%%_iiOHwmqaw_loop|)
-              |%%_ii6PAspaw_ls1|
+                            (|%%_LBXrGlw6T_cc|)
+                            (|%%_LBfzKrv6T_tail|
+                              |%%_LBVCM-u6T_ls1|
+                              |%%_LBzGOxu6T_loop|)
+                            (|%%_LBzGOxu6T_loop|
+                              (cdr |%%_LBVCM-u6T_ls1|)
+                              (#%if |%%_LBfzKrv6T_tail|
+                                |%%_LBfzKrv6T_tail|
+                                |%%_LBXrGlw6T_cc|)
+                              |%%_LBXrGlw6T_cc|))
+                          (cons (car |%%_LBVCM-u6T_ls1|)
+                                |%%_LBBvIUv6T_acc|)))))))
+                (|%%_LBdKQ4u6T_ls2|)
+                |%%_LBzGOxu6T_loop|)
+              |%%_LBTNSDt6T_ls1|
               #f
               ())))
-         (|%%_iioLOdW9w_difference|
+         (|%%_LB9K4p-5T_difference|
            (#%lambda #t
-             (|%%_iiSlk4taw_ls1| %%_iiciixtaw_ls2)
+             (|%%_LBDkCfx6T_ls1| |%%_LBZgAIx6T_ls2|)
              ()
              ((#%letrec #t
-                ((%%_iiyeg-taw_loop
+                ((|%%_LBjdy9y6T_loop|
                    (#%lambda #t
-                     (|%%_iiUaeruaw_ls1| |%%_iie7cUuaw_acc|)
-                     (%%_iiyeg-taw_loop %%_iiciixtaw_ls2)
-                     (#%if (null? |%%_iiUaeruaw_ls1|)
-                       |%%_iie7cUuaw_acc|
-                       (#%if (memq (car |%%_iiUaeruaw_ls1|) %%_iiciixtaw_ls2)
-                         (%%_iiyeg-taw_loop
-                           (cdr |%%_iiUaeruaw_ls1|)
-                           |%%_iie7cUuaw_acc|)
-                         (%%_iiyeg-taw_loop
-                           (cdr |%%_iiUaeruaw_ls1|)
-                           (cons (car |%%_iiUaeruaw_ls1|)
-                                 |%%_iie7cUuaw_acc|)))))))
-                (%%_iiciixtaw_ls2)
-                %%_iiyeg-taw_loop)
-              |%%_iiSlk4taw_ls1|
+                     (|%%_LBF9wCy6T_ls1| |%%_LB_5u3z6T_acc|)
+                     (|%%_LBjdy9y6T_loop| |%%_LBZgAIx6T_ls2|)
+                     (#%if (null? |%%_LBF9wCy6T_ls1|)
+                       |%%_LB_5u3z6T_acc|
+                       (#%if (memq (car |%%_LBF9wCy6T_ls1|)
+                                   |%%_LBZgAIx6T_ls2|)
+                         (|%%_LBjdy9y6T_loop|
+                           (cdr |%%_LBF9wCy6T_ls1|)
+                           |%%_LB_5u3z6T_acc|)
+                         (|%%_LBjdy9y6T_loop|
+                           (cdr |%%_LBF9wCy6T_ls1|)
+                           (cons (car |%%_LBF9wCy6T_ls1|)
+                                 |%%_LB_5u3z6T_acc|)))))))
+                (|%%_LBZgAIx6T_ls2|)
+                |%%_LBjdy9y6T_loop|)
+              |%%_LBDkCfx6T_ls1|
               ())))
-         (|%%_iiKHMGW9w_intersection|
+         (|%%_LBvG2S-5T_intersection|
            (#%lambda #t
-             (|%%_iiA3alvaw_ls1| |%%_iiW_7Ovaw_ls2|)
+             (|%%_LBl2swz6T_ls1| |%%_LBH-pZz6T_ls2|)
              ()
              ((#%letrec #t
-                ((|%%_iigY5fwaw_loop|
+                ((|%%_LB1XnqA6T_loop|
                    (#%lambda #t
-                     (|%%_iiCU3Iwaw_ls1| |%%_iiYQ19xaw_acc|)
-                     (|%%_iigY5fwaw_loop| |%%_iiW_7Ovaw_ls2|)
-                     (#%if (null? |%%_iiCU3Iwaw_ls1|)
-                       |%%_iiYQ19xaw_acc|
-                       (#%if (memq (car |%%_iiCU3Iwaw_ls1|)
-                                   |%%_iiW_7Ovaw_ls2|)
-                         (|%%_iigY5fwaw_loop|
-                           (cdr |%%_iiCU3Iwaw_ls1|)
-                           (cons (car |%%_iiCU3Iwaw_ls1|)
-                                 |%%_iiYQ19xaw_acc|))
-                         (|%%_iigY5fwaw_loop|
-                           (cdr |%%_iiCU3Iwaw_ls1|)
-                           |%%_iiYQ19xaw_acc|))))))
-                (|%%_iiW_7Ovaw_ls2|)
-                |%%_iigY5fwaw_loop|)
-              |%%_iiA3alvaw_ls1|
+                     (|%%_LBnTlTA6T_ls1| |%%_LBJPjkB6T_acc|)
+                     (|%%_LB1XnqA6T_loop| |%%_LBH-pZz6T_ls2|)
+                     (#%if (null? |%%_LBnTlTA6T_ls1|)
+                       |%%_LBJPjkB6T_acc|
+                       (#%if (memq (car |%%_LBnTlTA6T_ls1|)
+                                   |%%_LBH-pZz6T_ls2|)
+                         (|%%_LB1XnqA6T_loop|
+                           (cdr |%%_LBnTlTA6T_ls1|)
+                           (cons (car |%%_LBnTlTA6T_ls1|)
+                                 |%%_LBJPjkB6T_acc|))
+                         (|%%_LB1XnqA6T_loop|
+                           (cdr |%%_LBnTlTA6T_ls1|)
+                           |%%_LBJPjkB6T_acc|))))))
+                (|%%_LBH-pZz6T_ls2|)
+                |%%_LB1XnqA6T_loop|)
+              |%%_LBl2swz6T_ls1|
               ())))
-         (|%%_ii4EK7X9w_in|
+         (|%%_LBRC0j_5T_in|
            (#%lambda #t
-             (|%%_iiiN_Bxaw_ls1| |%%_iiEJZ2yaw_ls2|)
-             (|%%_iiKHMGW9w_intersection|)
+             (|%%_LB3MhNB6T_ls1| |%%_LBpIfeC6T_ls2|)
+             (|%%_LBvG2S-5T_intersection|)
              (reverse
-               (|%%_iiKHMGW9w_intersection|
-                 |%%_iiiN_Bxaw_ls1|
-                 |%%_iiEJZ2yaw_ls2|))))
-         (|%%_iiir3E4aw_inc-cdr!|
+               (|%%_LBvG2S-5T_intersection|
+                 |%%_LB3MhNB6T_ls1|
+                 |%%_LBpIfeC6T_ls2|))))
+         (|%%_LB3qlP86T_inc-cdr!|
            (#%lambda #t
-             (|%%_ii-FXvyaw_v|)
+             (|%%_LBLEdHC6T_v|)
              ()
              (set-cdr!
-               |%%_ii-FXvyaw_v|
-               (+ 1 (cdr |%%_ii-FXvyaw_v|)))))
-         (|%%_iiQlsedaw_arecord-add-free!|
+               |%%_LBLEdHC6T_v|
+               (+ 1 (cdr |%%_LBLEdHC6T_v|)))))
+         (|%%_LBBkKph6T_arecord-add-free!|
            (#%lambda #t
-             (|%%_iikCVYyaw_arec| |%%_iiGyTpzaw_newfree|)
+             (|%%_LB5Bb8D6T_arec| |%%_LBrx9BD6T_newfree|)
              ()
              ((#%lambda #t
-                (|%%_ii0vRSzaw_afrees|)
-                (|%%_iiGyTpzaw_newfree|)
-                (#%if (memq |%%_iiGyTpzaw_newfree|
-                            (cdr |%%_ii0vRSzaw_afrees|))
+                (|%%_LBNt72E6T_afrees|)
+                (|%%_LBrx9BD6T_newfree|)
+                (#%if (memq |%%_LBrx9BD6T_newfree|
+                            (cdr |%%_LBNt72E6T_afrees|))
                   #!void
                   (set-cdr!
-                    |%%_ii0vRSzaw_afrees|
-                    (cons |%%_iiGyTpzaw_newfree|
-                          (cdr |%%_ii0vRSzaw_afrees|)))))
-              (vector-ref |%%_iikCVYyaw_arec| 2))))
-         (|%%_iiaiqHdaw_arecord-union-frees!|
+                    |%%_LBNt72E6T_afrees|
+                    (cons |%%_LBrx9BD6T_newfree|
+                          (cdr |%%_LBNt72E6T_afrees|)))))
+              (vector-ref |%%_LB5Bb8D6T_arec| 2))))
+         (|%%_LBXgISh6T_arecord-union-frees!|
            (#%lambda #t
-             (|%%_iimrPjAaw_arec| |%%_iiInNMAaw_newfrees|)
-             (|%%_ii2PQMV9w_union|)
+             (|%%_LB7q5vE6T_arec| |%%_LBtm3YE6T_newfrees|)
+             (|%%_LBPN6YZ5T_union|)
              (set-cdr!
-               (vector-ref |%%_iimrPjAaw_arec| 2)
-               (|%%_ii2PQMV9w_union|
-                 (cdr (vector-ref |%%_iimrPjAaw_arec| 2))
-                 |%%_iiInNMAaw_newfrees|))))
-         (|%%_iiGnVWkaw__cdr>0|
+               (vector-ref |%%_LB7q5vE6T_arec| 2)
+               (|%%_LBPN6YZ5T_union|
+                 (cdr (vector-ref |%%_LB7q5vE6T_arec| 2))
+                 |%%_LBtm3YE6T_newfrees|))))
+         (|%%_LBrmb6p6T__cdr>0|
            (#%lambda #t
-             (|%%_ii2kLdBaw_v|)
+             (|%%_LBPi1pF6T_v|)
              ()
-             (#%if (> (cdr |%%_ii2kLdBaw_v|) 0)
-               (cdr |%%_ii2kLdBaw_v|)
+             (#%if (> (cdr |%%_LBPi1pF6T_v|) 0)
+               (cdr |%%_LBPi1pF6T_v|)
                #f)))
-         (|%%_iimgRQlaw_->proper-list|
+         (|%%_LB7f70q6T_->proper-list|
            (#%lambda #t
-             (|%%_iiq5D1Daw_elem|)
-             (|%%_iimgRQlaw_->proper-list|)
-             (#%if (null? |%%_iiq5D1Daw_elem|)
+             (|%%_LBb4VcH6T_elem|)
+             (|%%_LB7f70q6T_->proper-list|)
+             (#%if (null? |%%_LBb4VcH6T_elem|)
                ()
-               (#%if (pair? |%%_iiq5D1Daw_elem|)
-                 (cons (car |%%_iiq5D1Daw_elem|)
-                       (|%%_iimgRQlaw_->proper-list|
-                         (cdr |%%_iiq5D1Daw_elem|)))
-                 (list |%%_iiq5D1Daw_elem|)))))
-         (|%%_iiIcPhmaw_make-arecord|
+               (#%if (pair? |%%_LBb4VcH6T_elem|)
+                 (cons (car |%%_LBb4VcH6T_elem|)
+                       (|%%_LB7f70q6T_->proper-list|
+                         (cdr |%%_LBb4VcH6T_elem|)))
+                 (list |%%_LBb4VcH6T_elem|)))))
+         (|%%_LBtb5tq6T_make-arecord|
            (#%lambda #t
-             (|%%_iiM1BuDaw_v|)
+             (|%%_LBx0TFH6T_v|)
              ()
              (vector
                (list (#%quote *refs*))
                (list (#%quote *sets*))
                (list (#%quote *frees*))
-               |%%_iiM1BuDaw_v|)))
-         (|%%_ii29NKmaw_build-refs|
+               |%%_LBx0TFH6T_v|)))
+         (|%%_LBP73Wq6T_build-refs|
            (#%lambda #t
-             (|%%_ii6-yXDaw_vals|)
-             (|%%_ii29NKmaw_build-refs|)
-             (#%if (null? |%%_ii6-yXDaw_vals|)
+             (|%%_LBTYQ6I6T_vals|)
+             (|%%_LBP73Wq6T_build-refs|)
+             (#%if (null? |%%_LBTYQ6I6T_vals|)
                ()
-               (#%if (zero? (cdar |%%_ii6-yXDaw_vals|))
-                 (|%%_ii29NKmaw_build-refs|
-                   (cdr |%%_ii6-yXDaw_vals|))
-                 (cons (car |%%_ii6-yXDaw_vals|)
-                       (|%%_ii29NKmaw_build-refs|
-                         (cdr |%%_ii6-yXDaw_vals|)))))))
-         (|%%_iio5Lbnaw_analyze!|
+               (#%if (zero? (cdar |%%_LBTYQ6I6T_vals|))
+                 (|%%_LBP73Wq6T_build-refs|
+                   (cdr |%%_LBTYQ6I6T_vals|))
+                 (cons (car |%%_LBTYQ6I6T_vals|)
+                       (|%%_LBP73Wq6T_build-refs|
+                         (cdr |%%_LBTYQ6I6T_vals|)))))))
+         (|%%_LB941nr6T_analyze!|
            (#%lambda #t
-             (|%%_iisWwoEaw_v|
-               |%%_iiOSuREaw_arec|
-               |%%_ii8PsiFaw_env|
-               |%%_iiuLqLFaw_lxs|)
-             (|%%_iiK1JEnaw_analyze-app!|
-               |%%_iiQlsedaw_arecord-add-free!|
-               |%%_iiir3E4aw_inc-cdr!|)
-             (#%if (symbol? |%%_iisWwoEaw_v|)
+             (|%%_LBdVOzI6T_v|
+               |%%_LBzRM0J6T_arec|
+               |%%_LBVNKtJ6T_env|
+               |%%_LBfKIWJ6T_lxs|)
+             (|%%_LBv0_Pr6T_analyze-app!|
+               |%%_LBBkKph6T_arecord-add-free!|
+               |%%_LB3qlP86T_inc-cdr!|)
+             (#%if (symbol? |%%_LBdVOzI6T_v|)
                (#%begin
                  ((#%lambda #t
-                    (|%%_iiQHocGaw_t|)
-                    (|%%_iiOSuREaw_arec|
-                      |%%_iisWwoEaw_v|
-                      |%%_iiir3E4aw_inc-cdr!|)
-                    (#%if |%%_iiQHocGaw_t|
-                      (|%%_iiir3E4aw_inc-cdr!| |%%_iiQHocGaw_t|)
+                    (|%%_LBBGGnK6T_t|)
+                    (|%%_LBzRM0J6T_arec|
+                      |%%_LBdVOzI6T_v|
+                      |%%_LB3qlP86T_inc-cdr!|)
+                    (#%if |%%_LBBGGnK6T_t|
+                      (|%%_LB3qlP86T_inc-cdr!| |%%_LBBGGnK6T_t|)
                       (set-cdr!
-                        (vector-ref |%%_iiOSuREaw_arec| 0)
-                        (cons (cons |%%_iisWwoEaw_v| 1)
-                              (cdr (vector-ref |%%_iiOSuREaw_arec| 0))))))
-                  (assq |%%_iisWwoEaw_v|
-                        (cdr (vector-ref |%%_iiOSuREaw_arec| 0))))
-                 (#%if (memq |%%_iisWwoEaw_v| |%%_iiuLqLFaw_lxs|)
+                        (vector-ref |%%_LBzRM0J6T_arec| 0)
+                        (cons (cons |%%_LBdVOzI6T_v| 1)
+                              (cdr (vector-ref |%%_LBzRM0J6T_arec| 0))))))
+                  (assq |%%_LBdVOzI6T_v|
+                        (cdr (vector-ref |%%_LBzRM0J6T_arec| 0))))
+                 (#%if (memq |%%_LBdVOzI6T_v| |%%_LBfKIWJ6T_lxs|)
                    #!void
-                   (|%%_iiQlsedaw_arecord-add-free!|
-                     |%%_iiOSuREaw_arec|
-                     |%%_iisWwoEaw_v|))
-                 (list |%%_iisWwoEaw_v|))
-               (#%if (pair? |%%_iisWwoEaw_v|)
-                 (|%%_iiK1JEnaw_analyze-app!|
-                   |%%_iisWwoEaw_v|
-                   |%%_iiOSuREaw_arec|
-                   |%%_ii8PsiFaw_env|
-                   |%%_iiuLqLFaw_lxs|)
+                   (|%%_LBBkKph6T_arecord-add-free!|
+                     |%%_LBzRM0J6T_arec|
+                     |%%_LBdVOzI6T_v|))
+                 (list |%%_LBdVOzI6T_v|))
+               (#%if (pair? |%%_LBdVOzI6T_v|)
+                 (|%%_LBv0_Pr6T_analyze-app!|
+                   |%%_LBdVOzI6T_v|
+                   |%%_LBzRM0J6T_arec|
+                   |%%_LBVNKtJ6T_env|
+                   |%%_LBfKIWJ6T_lxs|)
                  ()))))
-         (|%%_iiK1JEnaw_analyze-app!|
+         (|%%_LBv0_Pr6T_analyze-app!|
            (#%lambda #t
-             (|%%_iiaEmFGaw_v|
-               |%%_iiwAk6Haw_arec|
-               |%%_iiSwizHaw_env|
-               |%%_iictg0Iaw_lxs|)
-             (|%%_iio5Lbnaw_analyze!|
-               |%%_iimgRQlaw_->proper-list|
-               |%%_iiaiqHdaw_arecord-union-frees!|
-               |%%_iiir3E4aw_inc-cdr!|
-               |%%_ii4EK7X9w_in|
-               |%%_iioLOdW9w_difference|
-               |%%_ii2PQMV9w_union|)
+             (|%%_LBXCEQK6T_v|
+               |%%_LBhzChL6T_arec|
+               |%%_LBDvAKL6T_env|
+               |%%_LBZrybM6T_lxs|)
+             (|%%_LB941nr6T_analyze!|
+               |%%_LB7f70q6T_->proper-list|
+               |%%_LBXgISh6T_arecord-union-frees!|
+               |%%_LB3qlP86T_inc-cdr!|
+               |%%_LBRC0j_5T_in|
+               |%%_LB9K4p-5T_difference|
+               |%%_LBPN6YZ5T_union|)
              ((#%lambda #t
-                (|%%_iiypetIaw_oper|
-                  |%%_iiUlcWIaw_v|
-                  |%%_iieianJaw_exp-type|)
-                (|%%_iictg0Iaw_lxs|
-                  |%%_iiSwizHaw_env|
-                  |%%_iiwAk6Haw_arec|
-                  |%%_iio5Lbnaw_analyze!|
-                  |%%_iimgRQlaw_->proper-list|
-                  |%%_iiaiqHdaw_arecord-union-frees!|
-                  |%%_iiir3E4aw_inc-cdr!|
-                  |%%_ii4EK7X9w_in|
-                  |%%_iioLOdW9w_difference|
-                  |%%_ii2PQMV9w_union|)
-                (#%if (= |%%_iieianJaw_exp-type| 5)
+                (|%%_LBjowEM6T_oper|
+                  |%%_LBFku5N6T_v|
+                  |%%_LB_gsyN6T_exp-type|)
+                (|%%_LBZrybM6T_lxs|
+                  |%%_LBDvAKL6T_env|
+                  |%%_LBhzChL6T_arec|
+                  |%%_LB941nr6T_analyze!|
+                  |%%_LB7f70q6T_->proper-list|
+                  |%%_LBXgISh6T_arecord-union-frees!|
+                  |%%_LB3qlP86T_inc-cdr!|
+                  |%%_LBRC0j_5T_in|
+                  |%%_LB9K4p-5T_difference|
+                  |%%_LBPN6YZ5T_union|)
+                (#%if (= |%%_LB_gsyN6T_exp-type| 5)
                   ()
-                  (#%if (= |%%_iieianJaw_exp-type| 0)
-                    (map-car (car |%%_iiUlcWIaw_v|))
-                    (#%if (= |%%_iieianJaw_exp-type| 2)
+                  (#%if (= |%%_LB_gsyN6T_exp-type| 0)
+                    (map-car (car |%%_LBFku5N6T_v|))
+                    (#%if (= |%%_LB_gsyN6T_exp-type| 2)
                       ((#%lambda #t
-                         (|%%_ii8-qNTaw_analyzed|)
-                         (|%%_iiUlcWIaw_v|
-                           |%%_iictg0Iaw_lxs|
-                           |%%_iiSwizHaw_env|
-                           |%%_iiwAk6Haw_arec|
-                           |%%_iio5Lbnaw_analyze!|
-                           |%%_iimgRQlaw_->proper-list|
-                           |%%_iiaiqHdaw_arecord-union-frees!|
-                           |%%_ii4EK7X9w_in|
-                           |%%_iioLOdW9w_difference|
-                           |%%_ii2PQMV9w_union|)
+                         (|%%_LBVYIYX6T_analyzed|)
+                         (|%%_LBFku5N6T_v|
+                           |%%_LBZrybM6T_lxs|
+                           |%%_LBDvAKL6T_env|
+                           |%%_LBhzChL6T_arec|
+                           |%%_LB941nr6T_analyze!|
+                           |%%_LB7f70q6T_->proper-list|
+                           |%%_LBXgISh6T_arecord-union-frees!|
+                           |%%_LBRC0j_5T_in|
+                           |%%_LB9K4p-5T_difference|
+                           |%%_LBPN6YZ5T_union|)
                          ((#%lambda #t
-                            (|%%_iiuWoeUaw_v|)
-                            (|%%_ii8-qNTaw_analyzed|
-                              |%%_iictg0Iaw_lxs|
-                              |%%_iiSwizHaw_env|
-                              |%%_iiwAk6Haw_arec|
-                              |%%_iio5Lbnaw_analyze!|
-                              |%%_iimgRQlaw_->proper-list|
-                              |%%_iiaiqHdaw_arecord-union-frees!|
-                              |%%_ii4EK7X9w_in|
-                              |%%_iioLOdW9w_difference|
-                              |%%_ii2PQMV9w_union|)
+                            (|%%_LBfVGpY6T_v|)
+                            (|%%_LBVYIYX6T_analyzed|
+                              |%%_LBZrybM6T_lxs|
+                              |%%_LBDvAKL6T_env|
+                              |%%_LBhzChL6T_arec|
+                              |%%_LB941nr6T_analyze!|
+                              |%%_LB7f70q6T_->proper-list|
+                              |%%_LBXgISh6T_arecord-union-frees!|
+                              |%%_LBRC0j_5T_in|
+                              |%%_LB9K4p-5T_difference|
+                              |%%_LBPN6YZ5T_union|)
                             ((#%lambda #t
-                               (|%%_iiQSmHUaw_locals|)
-                               (|%%_iiuWoeUaw_v|
-                                 |%%_ii8-qNTaw_analyzed|
-                                 |%%_iictg0Iaw_lxs|
-                                 |%%_iiSwizHaw_env|
-                                 |%%_iiwAk6Haw_arec|
-                                 |%%_iio5Lbnaw_analyze!|
-                                 |%%_iiaiqHdaw_arecord-union-frees!|
-                                 |%%_ii4EK7X9w_in|
-                                 |%%_iioLOdW9w_difference|
-                                 |%%_ii2PQMV9w_union|)
+                               (|%%_LBBRESY6T_locals|)
+                               (|%%_LBfVGpY6T_v|
+                                 |%%_LBVYIYX6T_analyzed|
+                                 |%%_LBZrybM6T_lxs|
+                                 |%%_LBDvAKL6T_env|
+                                 |%%_LBhzChL6T_arec|
+                                 |%%_LB941nr6T_analyze!|
+                                 |%%_LBXgISh6T_arecord-union-frees!|
+                                 |%%_LBRC0j_5T_in|
+                                 |%%_LB9K4p-5T_difference|
+                                 |%%_LBPN6YZ5T_union|)
                                ((#%lambda #t
-                                  (|%%_iiaPk8Vaw_v|)
-                                  (|%%_iiQSmHUaw_locals|
-                                    |%%_ii8-qNTaw_analyzed|
-                                    |%%_iictg0Iaw_lxs|
-                                    |%%_iiSwizHaw_env|
-                                    |%%_iiwAk6Haw_arec|
-                                    |%%_iio5Lbnaw_analyze!|
-                                    |%%_iiaiqHdaw_arecord-union-frees!|
-                                    |%%_ii4EK7X9w_in|
-                                    |%%_iioLOdW9w_difference|
-                                    |%%_ii2PQMV9w_union|)
+                                  (|%%_LBXNCjZ6T_v|)
+                                  (|%%_LBBRESY6T_locals|
+                                    |%%_LBVYIYX6T_analyzed|
+                                    |%%_LBZrybM6T_lxs|
+                                    |%%_LBDvAKL6T_env|
+                                    |%%_LBhzChL6T_arec|
+                                    |%%_LB941nr6T_analyze!|
+                                    |%%_LBXgISh6T_arecord-union-frees!|
+                                    |%%_LBRC0j_5T_in|
+                                    |%%_LB9K4p-5T_difference|
+                                    |%%_LBPN6YZ5T_union|)
                                   ((#%lambda #t
-                                     (|%%_iiwLiBVaw_refs|)
-                                     (|%%_iiaPk8Vaw_v|
-                                       |%%_iiQSmHUaw_locals|
-                                       |%%_ii8-qNTaw_analyzed|
-                                       |%%_iictg0Iaw_lxs|
-                                       |%%_iiwAk6Haw_arec|
-                                       |%%_iiaiqHdaw_arecord-union-frees!|
-                                       |%%_ii4EK7X9w_in|
-                                       |%%_iioLOdW9w_difference|)
+                                     (|%%_LBhKAMZ6T_refs|)
+                                     (|%%_LBXNCjZ6T_v|
+                                       |%%_LBBRESY6T_locals|
+                                       |%%_LBVYIYX6T_analyzed|
+                                       |%%_LBZrybM6T_lxs|
+                                       |%%_LBhzChL6T_arec|
+                                       |%%_LBXgISh6T_arecord-union-frees!|
+                                       |%%_LBRC0j_5T_in|
+                                       |%%_LB9K4p-5T_difference|)
                                      ((#%lambda #t
-                                        (|%%_iiSHg2Waw_locally-frees|)
-                                        (|%%_iiwLiBVaw_refs|
-                                          |%%_iiaPk8Vaw_v|
-                                          |%%_ii8-qNTaw_analyzed|
-                                          |%%_iictg0Iaw_lxs|
-                                          |%%_iiwAk6Haw_arec|
-                                          |%%_iiaiqHdaw_arecord-union-frees!|
-                                          |%%_ii4EK7X9w_in|
-                                          |%%_iioLOdW9w_difference|)
+                                        (|%%_LBDGyd-6T_locally-frees|)
+                                        (|%%_LBhKAMZ6T_refs|
+                                          |%%_LBXNCjZ6T_v|
+                                          |%%_LBVYIYX6T_analyzed|
+                                          |%%_LBZrybM6T_lxs|
+                                          |%%_LBhzChL6T_arec|
+                                          |%%_LBXgISh6T_arecord-union-frees!|
+                                          |%%_LBRC0j_5T_in|
+                                          |%%_LB9K4p-5T_difference|)
                                         (#%begin
-                                          (|%%_iioLOdW9w_difference|
-                                            |%%_iiSHg2Waw_locally-frees|
-                                            |%%_iictg0Iaw_lxs|)
+                                          (|%%_LB9K4p-5T_difference|
+                                            |%%_LBDGyd-6T_locally-frees|
+                                            |%%_LBZrybM6T_lxs|)
                                           ((#%lambda #t
-                                             (|%%_iiyAcYWaw_lexicals|)
-                                             (|%%_iiSHg2Waw_locally-frees|
-                                               |%%_iiaPk8Vaw_v|
-                                               |%%_ii8-qNTaw_analyzed|
-                                               |%%_iictg0Iaw_lxs|
-                                               |%%_iiwAk6Haw_arec|
-                                               |%%_iiaiqHdaw_arecord-union-frees!|
-                                               |%%_iioLOdW9w_difference|)
+                                             (|%%_LBjzu7_6T_lexicals|)
+                                             (|%%_LBDGyd-6T_locally-frees|
+                                               |%%_LBXNCjZ6T_v|
+                                               |%%_LBVYIYX6T_analyzed|
+                                               |%%_LBZrybM6T_lxs|
+                                               |%%_LBhzChL6T_arec|
+                                               |%%_LBXgISh6T_arecord-union-frees!|
+                                               |%%_LB9K4p-5T_difference|)
                                              (#%begin
-                                               (|%%_iiaiqHdaw_arecord-union-frees!|
-                                                 |%%_iiwAk6Haw_arec|
-                                                 (|%%_iioLOdW9w_difference|
-                                                   |%%_iiSHg2Waw_locally-frees|
-                                                   |%%_iictg0Iaw_lxs|))
-                                               (#%if |%%_ii8-qNTaw_analyzed|
+                                               (|%%_LBXgISh6T_arecord-union-frees!|
+                                                 |%%_LBhzChL6T_arec|
+                                                 (|%%_LB9K4p-5T_difference|
+                                                   |%%_LBDGyd-6T_locally-frees|
+                                                   |%%_LBZrybM6T_lxs|))
+                                               (#%if |%%_LBVYIYX6T_analyzed|
                                                  #!void
                                                  (#%begin
                                                    (set-cdr!
-                                                     |%%_iiaPk8Vaw_v|
-                                                     (cons (car |%%_iiaPk8Vaw_v|)
-                                                           (cons |%%_iiyAcYWaw_lexicals|
-                                                                 (cdr |%%_iiaPk8Vaw_v|))))
+                                                     |%%_LBXNCjZ6T_v|
+                                                     (cons (car |%%_LBXNCjZ6T_v|)
+                                                           (cons |%%_LBjzu7_6T_lexicals|
+                                                                 (cdr |%%_LBXNCjZ6T_v|))))
                                                    (set-car!
-                                                     |%%_iiaPk8Vaw_v|
+                                                     |%%_LBXNCjZ6T_v|
                                                      #t)))
-                                               |%%_iiSHg2Waw_locally-frees|))
-                                           (|%%_ii4EK7X9w_in|
-                                             |%%_iictg0Iaw_lxs|
-                                             |%%_iiwLiBVaw_refs|))))
-                                      (|%%_iioLOdW9w_difference|
-                                        |%%_iiwLiBVaw_refs|
-                                        |%%_iiQSmHUaw_locals|)))
-                                   (|%%_iio5Lbnaw_analyze!|
-                                     (cadr |%%_iiaPk8Vaw_v|)
-                                     |%%_iiwAk6Haw_arec|
-                                     |%%_iiSwizHaw_env|
-                                     (|%%_ii2PQMV9w_union|
-                                       |%%_iiQSmHUaw_locals|
-                                       |%%_iictg0Iaw_lxs|))))
-                                (#%if |%%_ii8-qNTaw_analyzed|
-                                  (cdr |%%_iiuWoeUaw_v|)
-                                  |%%_iiuWoeUaw_v|)))
-                             (|%%_iimgRQlaw_->proper-list|
-                               (car |%%_iiuWoeUaw_v|))))
-                          (#%if |%%_ii8-qNTaw_analyzed|
-                            (cdr |%%_iiUlcWIaw_v|)
-                            |%%_iiUlcWIaw_v|)))
-                       (eq? (car |%%_iiUlcWIaw_v|) #t))
-                      (#%if (= |%%_iieianJaw_exp-type| 9)
+                                               |%%_LBDGyd-6T_locally-frees|))
+                                           (|%%_LBRC0j_5T_in|
+                                             |%%_LBZrybM6T_lxs|
+                                             |%%_LBhKAMZ6T_refs|))))
+                                      (|%%_LB9K4p-5T_difference|
+                                        |%%_LBhKAMZ6T_refs|
+                                        |%%_LBBRESY6T_locals|)))
+                                   (|%%_LB941nr6T_analyze!|
+                                     (cadr |%%_LBXNCjZ6T_v|)
+                                     |%%_LBhzChL6T_arec|
+                                     |%%_LBDvAKL6T_env|
+                                     (|%%_LBPN6YZ5T_union|
+                                       |%%_LBBRESY6T_locals|
+                                       |%%_LBZrybM6T_lxs|))))
+                                (#%if |%%_LBVYIYX6T_analyzed|
+                                  (cdr |%%_LBfVGpY6T_v|)
+                                  |%%_LBfVGpY6T_v|)))
+                             (|%%_LB7f70q6T_->proper-list|
+                               (car |%%_LBfVGpY6T_v|))))
+                          (#%if |%%_LBVYIYX6T_analyzed|
+                            (cdr |%%_LBFku5N6T_v|)
+                            |%%_LBFku5N6T_v|)))
+                       (eq? (car |%%_LBFku5N6T_v|) #t))
+                      (#%if (= |%%_LB_gsyN6T_exp-type| 9)
                         ((#%lambda #t
-                           (|%%_ii-QV-Maw_analyzed|)
-                           (|%%_iiUlcWIaw_v|
-                             |%%_iictg0Iaw_lxs|
-                             |%%_iiSwizHaw_env|
-                             |%%_iiwAk6Haw_arec|
-                             |%%_iio5Lbnaw_analyze!|
-                             |%%_iiaiqHdaw_arecord-union-frees!|
-                             |%%_iiir3E4aw_inc-cdr!|
-                             |%%_ii4EK7X9w_in|
-                             |%%_iioLOdW9w_difference|
-                             |%%_ii2PQMV9w_union|)
+                           (|%%_LBLPbaR6T_analyzed|)
+                           (|%%_LBFku5N6T_v|
+                             |%%_LBZrybM6T_lxs|
+                             |%%_LBDvAKL6T_env|
+                             |%%_LBhzChL6T_arec|
+                             |%%_LB941nr6T_analyze!|
+                             |%%_LBXgISh6T_arecord-union-frees!|
+                             |%%_LB3qlP86T_inc-cdr!|
+                             |%%_LBRC0j_5T_in|
+                             |%%_LB9K4p-5T_difference|
+                             |%%_LBPN6YZ5T_union|)
                            ((#%lambda #t
-                              (|%%_iikNTrNaw_v|)
-                              (|%%_ii-QV-Maw_analyzed|
-                                |%%_iictg0Iaw_lxs|
-                                |%%_iiSwizHaw_env|
-                                |%%_iiwAk6Haw_arec|
-                                |%%_iio5Lbnaw_analyze!|
-                                |%%_iiaiqHdaw_arecord-union-frees!|
-                                |%%_iiir3E4aw_inc-cdr!|
-                                |%%_ii4EK7X9w_in|
-                                |%%_iioLOdW9w_difference|
-                                |%%_ii2PQMV9w_union|)
+                              (|%%_LB5M9DR6T_v|)
+                              (|%%_LBLPbaR6T_analyzed|
+                                |%%_LBZrybM6T_lxs|
+                                |%%_LBDvAKL6T_env|
+                                |%%_LBhzChL6T_arec|
+                                |%%_LB941nr6T_analyze!|
+                                |%%_LBXgISh6T_arecord-union-frees!|
+                                |%%_LB3qlP86T_inc-cdr!|
+                                |%%_LBRC0j_5T_in|
+                                |%%_LB9K4p-5T_difference|
+                                |%%_LBPN6YZ5T_union|)
                               ((#%lambda #t
-                                 (|%%_ii0GPlOaw_locals|)
-                                 (|%%_iikNTrNaw_v|
-                                   |%%_ii-QV-Maw_analyzed|
-                                   |%%_iictg0Iaw_lxs|
-                                   |%%_iiSwizHaw_env|
-                                   |%%_iiwAk6Haw_arec|
-                                   |%%_iio5Lbnaw_analyze!|
-                                   |%%_iiaiqHdaw_arecord-union-frees!|
-                                   |%%_ii4EK7X9w_in|
-                                   |%%_iioLOdW9w_difference|
-                                   |%%_ii2PQMV9w_union|)
+                                 (|%%_LBNE5xS6T_locals|)
+                                 (|%%_LB5M9DR6T_v|
+                                   |%%_LBLPbaR6T_analyzed|
+                                   |%%_LBZrybM6T_lxs|
+                                   |%%_LBDvAKL6T_env|
+                                   |%%_LBhzChL6T_arec|
+                                   |%%_LB941nr6T_analyze!|
+                                   |%%_LBXgISh6T_arecord-union-frees!|
+                                   |%%_LBRC0j_5T_in|
+                                   |%%_LB9K4p-5T_difference|
+                                   |%%_LBPN6YZ5T_union|)
                                  ((#%lambda #t
-                                    (|%%_iimCNOOaw_newlxs|)
-                                    (|%%_ii0GPlOaw_locals|
-                                      |%%_iikNTrNaw_v|
-                                      |%%_ii-QV-Maw_analyzed|
-                                      |%%_iictg0Iaw_lxs|
-                                      |%%_iiSwizHaw_env|
-                                      |%%_iiwAk6Haw_arec|
-                                      |%%_iio5Lbnaw_analyze!|
-                                      |%%_iiaiqHdaw_arecord-union-frees!|
-                                      |%%_ii4EK7X9w_in|
-                                      |%%_iioLOdW9w_difference|
-                                      |%%_ii2PQMV9w_union|)
+                                    (|%%_LB7B3-S6T_newlxs|)
+                                    (|%%_LBNE5xS6T_locals|
+                                      |%%_LB5M9DR6T_v|
+                                      |%%_LBLPbaR6T_analyzed|
+                                      |%%_LBZrybM6T_lxs|
+                                      |%%_LBDvAKL6T_env|
+                                      |%%_LBhzChL6T_arec|
+                                      |%%_LB941nr6T_analyze!|
+                                      |%%_LBXgISh6T_arecord-union-frees!|
+                                      |%%_LBRC0j_5T_in|
+                                      |%%_LB9K4p-5T_difference|
+                                      |%%_LBPN6YZ5T_union|)
                                     ((#%lambda #t
-                                       (|%%_iiIyLfPaw_refs|)
-                                       (|%%_iimCNOOaw_newlxs|
-                                         |%%_ii0GPlOaw_locals|
-                                         |%%_iikNTrNaw_v|
-                                         |%%_ii-QV-Maw_analyzed|
-                                         |%%_iictg0Iaw_lxs|
-                                         |%%_iiSwizHaw_env|
-                                         |%%_iiwAk6Haw_arec|
-                                         |%%_iio5Lbnaw_analyze!|
-                                         |%%_iiaiqHdaw_arecord-union-frees!|
-                                         |%%_ii4EK7X9w_in|
-                                         |%%_iioLOdW9w_difference|
-                                         |%%_ii2PQMV9w_union|)
+                                       (|%%_LBtx1rT6T_refs|)
+                                       (|%%_LB7B3-S6T_newlxs|
+                                         |%%_LBNE5xS6T_locals|
+                                         |%%_LB5M9DR6T_v|
+                                         |%%_LBLPbaR6T_analyzed|
+                                         |%%_LBZrybM6T_lxs|
+                                         |%%_LBDvAKL6T_env|
+                                         |%%_LBhzChL6T_arec|
+                                         |%%_LB941nr6T_analyze!|
+                                         |%%_LBXgISh6T_arecord-union-frees!|
+                                         |%%_LBRC0j_5T_in|
+                                         |%%_LB9K4p-5T_difference|
+                                         |%%_LBPN6YZ5T_union|)
                                        ((#%lambda #t
-                                          (|%%_ii2vJIPaw_v|)
-                                          (|%%_iiIyLfPaw_refs|
-                                            |%%_iimCNOOaw_newlxs|
-                                            |%%_ii0GPlOaw_locals|
-                                            |%%_iikNTrNaw_v|
-                                            |%%_ii-QV-Maw_analyzed|
-                                            |%%_iictg0Iaw_lxs|
-                                            |%%_iiSwizHaw_env|
-                                            |%%_iiwAk6Haw_arec|
-                                            |%%_iio5Lbnaw_analyze!|
-                                            |%%_iiaiqHdaw_arecord-union-frees!|
-                                            |%%_ii4EK7X9w_in|
-                                            |%%_iioLOdW9w_difference|
-                                            |%%_ii2PQMV9w_union|)
+                                          (|%%_LBPt_TT6T_v|)
+                                          (|%%_LBtx1rT6T_refs|
+                                            |%%_LB7B3-S6T_newlxs|
+                                            |%%_LBNE5xS6T_locals|
+                                            |%%_LB5M9DR6T_v|
+                                            |%%_LBLPbaR6T_analyzed|
+                                            |%%_LBZrybM6T_lxs|
+                                            |%%_LBDvAKL6T_env|
+                                            |%%_LBhzChL6T_arec|
+                                            |%%_LB941nr6T_analyze!|
+                                            |%%_LBXgISh6T_arecord-union-frees!|
+                                            |%%_LBRC0j_5T_in|
+                                            |%%_LB9K4p-5T_difference|
+                                            |%%_LBPN6YZ5T_union|)
                                           ((#%lambda #t
-                                             (|%%_iiorH9Qaw_refs|)
-                                             (|%%_ii0GPlOaw_locals|
-                                               |%%_iikNTrNaw_v|
-                                               |%%_ii-QV-Maw_analyzed|
-                                               |%%_iictg0Iaw_lxs|
-                                               |%%_iiwAk6Haw_arec|
-                                               |%%_iiaiqHdaw_arecord-union-frees!|
-                                               |%%_ii4EK7X9w_in|
-                                               |%%_iioLOdW9w_difference|)
+                                             (|%%_LB9qZkU6T_refs|)
+                                             (|%%_LBNE5xS6T_locals|
+                                               |%%_LB5M9DR6T_v|
+                                               |%%_LBLPbaR6T_analyzed|
+                                               |%%_LBZrybM6T_lxs|
+                                               |%%_LBhzChL6T_arec|
+                                               |%%_LBXgISh6T_arecord-union-frees!|
+                                               |%%_LBRC0j_5T_in|
+                                               |%%_LB9K4p-5T_difference|)
                                              ((#%lambda #t
-                                                (|%%_iiKnFCQaw_locally-frees|)
-                                                (|%%_iiorH9Qaw_refs|
-                                                  |%%_iikNTrNaw_v|
-                                                  |%%_ii-QV-Maw_analyzed|
-                                                  |%%_iictg0Iaw_lxs|
-                                                  |%%_iiwAk6Haw_arec|
-                                                  |%%_iiaiqHdaw_arecord-union-frees!|
-                                                  |%%_ii4EK7X9w_in|
-                                                  |%%_iioLOdW9w_difference|)
+                                                (|%%_LBvmXNU6T_locally-frees|)
+                                                (|%%_LB9qZkU6T_refs|
+                                                  |%%_LB5M9DR6T_v|
+                                                  |%%_LBLPbaR6T_analyzed|
+                                                  |%%_LBZrybM6T_lxs|
+                                                  |%%_LBhzChL6T_arec|
+                                                  |%%_LBXgISh6T_arecord-union-frees!|
+                                                  |%%_LBRC0j_5T_in|
+                                                  |%%_LB9K4p-5T_difference|)
                                                 ((#%lambda #t
-                                                   (|%%_ii4kD3Raw_lexicals|)
-                                                   (|%%_iiKnFCQaw_locally-frees|
-                                                     |%%_iikNTrNaw_v|
-                                                     |%%_ii-QV-Maw_analyzed|
-                                                     |%%_iictg0Iaw_lxs|
-                                                     |%%_iiwAk6Haw_arec|
-                                                     |%%_iiaiqHdaw_arecord-union-frees!|
-                                                     |%%_iioLOdW9w_difference|)
+                                                   (|%%_LBRiVeV6T_lexicals|)
+                                                   (|%%_LBvmXNU6T_locally-frees|
+                                                     |%%_LB5M9DR6T_v|
+                                                     |%%_LBLPbaR6T_analyzed|
+                                                     |%%_LBZrybM6T_lxs|
+                                                     |%%_LBhzChL6T_arec|
+                                                     |%%_LBXgISh6T_arecord-union-frees!|
+                                                     |%%_LB9K4p-5T_difference|)
                                                    (#%begin
-                                                     (|%%_iiaiqHdaw_arecord-union-frees!|
-                                                       |%%_iiwAk6Haw_arec|
-                                                       (|%%_iioLOdW9w_difference|
-                                                         |%%_iiKnFCQaw_locally-frees|
-                                                         |%%_iictg0Iaw_lxs|))
-                                                     (#%if |%%_ii-QV-Maw_analyzed|
+                                                     (|%%_LBXgISh6T_arecord-union-frees!|
+                                                       |%%_LBhzChL6T_arec|
+                                                       (|%%_LB9K4p-5T_difference|
+                                                         |%%_LBvmXNU6T_locally-frees|
+                                                         |%%_LBZrybM6T_lxs|))
+                                                     (#%if |%%_LBLPbaR6T_analyzed|
                                                        #!void
                                                        (#%begin
                                                          (set-cdr!
-                                                           |%%_iikNTrNaw_v|
-                                                           (cons (car |%%_iikNTrNaw_v|)
-                                                                 (cons |%%_ii4kD3Raw_lexicals|
-                                                                       (cdr |%%_iikNTrNaw_v|))))
+                                                           |%%_LB5M9DR6T_v|
+                                                           (cons (car |%%_LB5M9DR6T_v|)
+                                                                 (cons |%%_LBRiVeV6T_lexicals|
+                                                                       (cdr |%%_LB5M9DR6T_v|))))
                                                          (set-car!
-                                                           |%%_iikNTrNaw_v|
+                                                           |%%_LB5M9DR6T_v|
                                                            #t)))
-                                                     |%%_iiKnFCQaw_locally-frees|))
-                                                 (|%%_ii4EK7X9w_in|
-                                                   |%%_iictg0Iaw_lxs|
-                                                   |%%_iiorH9Qaw_refs|)))
-                                              (|%%_iioLOdW9w_difference|
-                                                |%%_iiorH9Qaw_refs|
-                                                |%%_ii0GPlOaw_locals|)))
-                                           (|%%_ii2PQMV9w_union|
-                                             (|%%_iio5Lbnaw_analyze!|
-                                               (car |%%_ii2vJIPaw_v|)
-                                               |%%_iiwAk6Haw_arec|
-                                               |%%_iiSwizHaw_env|
-                                               |%%_iimCNOOaw_newlxs|)
-                                             |%%_iiIyLfPaw_refs|)))
-                                        ((#%if |%%_ii-QV-Maw_analyzed|
+                                                     |%%_LBvmXNU6T_locally-frees|))
+                                                 (|%%_LBRC0j_5T_in|
+                                                   |%%_LBZrybM6T_lxs|
+                                                   |%%_LB9qZkU6T_refs|)))
+                                              (|%%_LB9K4p-5T_difference|
+                                                |%%_LB9qZkU6T_refs|
+                                                |%%_LBNE5xS6T_locals|)))
+                                           (|%%_LBPN6YZ5T_union|
+                                             (|%%_LB941nr6T_analyze!|
+                                               (car |%%_LBPt_TT6T_v|)
+                                               |%%_LBhzChL6T_arec|
+                                               |%%_LBDvAKL6T_env|
+                                               |%%_LB7B3-S6T_newlxs|)
+                                             |%%_LBtx1rT6T_refs|)))
+                                        ((#%if |%%_LBLPbaR6T_analyzed|
                                            cddr
                                            cdr)
-                                         |%%_iikNTrNaw_v|)))
+                                         |%%_LB5M9DR6T_v|)))
                                      ((#%letrec #t
-                                        ((|%%_iiqgBwRaw_loop|
+                                        ((|%%_LBbfTHV6T_loop|
                                            (#%lambda #t
-                                             (|%%_iiMczZRaw_bindings|
-                                               |%%_ii69xqSaw_refs|)
-                                             (|%%_iiqgBwRaw_loop|
-                                               |%%_iimCNOOaw_newlxs|
-                                               |%%_iiSwizHaw_env|
-                                               |%%_iiwAk6Haw_arec|
-                                               |%%_iio5Lbnaw_analyze!|
-                                               |%%_ii2PQMV9w_union|)
-                                             (#%if (null? |%%_iiMczZRaw_bindings|)
-                                               |%%_ii69xqSaw_refs|
-                                               (|%%_iiqgBwRaw_loop|
-                                                 (cdr |%%_iiMczZRaw_bindings|)
-                                                 (|%%_ii2PQMV9w_union|
-                                                   (|%%_iio5Lbnaw_analyze!|
-                                                     (cadar |%%_iiMczZRaw_bindings|)
-                                                     |%%_iiwAk6Haw_arec|
-                                                     |%%_iiSwizHaw_env|
-                                                     |%%_iimCNOOaw_newlxs|)
-                                                   |%%_ii69xqSaw_refs|))))))
-                                        (|%%_iimCNOOaw_newlxs|
-                                          |%%_iiSwizHaw_env|
-                                          |%%_iiwAk6Haw_arec|
-                                          |%%_iio5Lbnaw_analyze!|
-                                          |%%_ii2PQMV9w_union|)
-                                        |%%_iiqgBwRaw_loop|)
-                                      (car |%%_iikNTrNaw_v|)
+                                             (|%%_LBxbR8W6T_bindings|
+                                               |%%_LBT7PBW6T_refs|)
+                                             (|%%_LBbfTHV6T_loop|
+                                               |%%_LB7B3-S6T_newlxs|
+                                               |%%_LBDvAKL6T_env|
+                                               |%%_LBhzChL6T_arec|
+                                               |%%_LB941nr6T_analyze!|
+                                               |%%_LBPN6YZ5T_union|)
+                                             (#%if (null? |%%_LBxbR8W6T_bindings|)
+                                               |%%_LBT7PBW6T_refs|
+                                               (|%%_LBbfTHV6T_loop|
+                                                 (cdr |%%_LBxbR8W6T_bindings|)
+                                                 (|%%_LBPN6YZ5T_union|
+                                                   (|%%_LB941nr6T_analyze!|
+                                                     (cadar |%%_LBxbR8W6T_bindings|)
+                                                     |%%_LBhzChL6T_arec|
+                                                     |%%_LBDvAKL6T_env|
+                                                     |%%_LB7B3-S6T_newlxs|)
+                                                   |%%_LBT7PBW6T_refs|))))))
+                                        (|%%_LB7B3-S6T_newlxs|
+                                          |%%_LBDvAKL6T_env|
+                                          |%%_LBhzChL6T_arec|
+                                          |%%_LB941nr6T_analyze!|
+                                          |%%_LBPN6YZ5T_union|)
+                                        |%%_LBbfTHV6T_loop|)
+                                      (car |%%_LB5M9DR6T_v|)
                                       ())))
-                                  (|%%_ii2PQMV9w_union|
-                                    |%%_ii0GPlOaw_locals|
-                                    |%%_iictg0Iaw_lxs|)))
+                                  (|%%_LBPN6YZ5T_union|
+                                    |%%_LBNE5xS6T_locals|
+                                    |%%_LBZrybM6T_lxs|)))
                                (map (#%lambda #t
-                                      (|%%_iis5vTSaw_binding|)
-                                      (|%%_iiwAk6Haw_arec|
-                                        |%%_iiir3E4aw_inc-cdr!|)
+                                      (|%%_LBd4N2X6T_binding|)
+                                      (|%%_LBhzChL6T_arec|
+                                        |%%_LB3qlP86T_inc-cdr!|)
                                       (#%begin
                                         ((#%lambda #t
-                                           (|%%_iiO1tkTaw_t|)
-                                           (|%%_iis5vTSaw_binding|
-                                             |%%_iiwAk6Haw_arec|
-                                             |%%_iiir3E4aw_inc-cdr!|)
-                                           (#%if |%%_iiO1tkTaw_t|
-                                             (|%%_iiir3E4aw_inc-cdr!|
-                                               |%%_iiO1tkTaw_t|)
+                                           (|%%_LBz0LvX6T_t|)
+                                           (|%%_LBd4N2X6T_binding|
+                                             |%%_LBhzChL6T_arec|
+                                             |%%_LB3qlP86T_inc-cdr!|)
+                                           (#%if |%%_LBz0LvX6T_t|
+                                             (|%%_LB3qlP86T_inc-cdr!|
+                                               |%%_LBz0LvX6T_t|)
                                              (set-cdr!
                                                (vector-ref
-                                                 |%%_iiwAk6Haw_arec|
+                                                 |%%_LBhzChL6T_arec|
                                                  1)
-                                               (cons (cons (car |%%_iis5vTSaw_binding|)
+                                               (cons (cons (car |%%_LBd4N2X6T_binding|)
                                                            1)
                                                      (cdr (vector-ref
-                                                            |%%_iiwAk6Haw_arec|
+                                                            |%%_LBhzChL6T_arec|
                                                             1))))))
-                                         (assq (car |%%_iis5vTSaw_binding|)
+                                         (assq (car |%%_LBd4N2X6T_binding|)
                                                (cdr (vector-ref
-                                                      |%%_iiwAk6Haw_arec|
+                                                      |%%_LBhzChL6T_arec|
                                                       1))))
-                                        (car |%%_iis5vTSaw_binding|)))
-                                    (car |%%_iikNTrNaw_v|))))
-                            (#%if |%%_ii-QV-Maw_analyzed|
-                              (cdr |%%_iiUlcWIaw_v|)
-                              |%%_iiUlcWIaw_v|)))
-                         (eq? (car |%%_iiUlcWIaw_v|) #t))
-                        (#%if (= |%%_iieianJaw_exp-type| 6)
+                                        (car |%%_LBd4N2X6T_binding|)))
+                                    (car |%%_LB5M9DR6T_v|))))
+                            (#%if |%%_LBLPbaR6T_analyzed|
+                              (cdr |%%_LBFku5N6T_v|)
+                              |%%_LBFku5N6T_v|)))
+                         (eq? (car |%%_LBFku5N6T_v|) #t))
+                        (#%if (= |%%_LB_gsyN6T_exp-type| 6)
                           ((#%lambda #t
-                             (|%%_iiY__DLaw_s|)
-                             (|%%_iiUlcWIaw_v|
-                               |%%_iictg0Iaw_lxs|
-                               |%%_iiSwizHaw_env|
-                               |%%_iiwAk6Haw_arec|
-                               |%%_iio5Lbnaw_analyze!|
-                               |%%_iiir3E4aw_inc-cdr!|)
+                             (|%%_LBJ-hPP6T_s|)
+                             (|%%_LBFku5N6T_v|
+                               |%%_LBZrybM6T_lxs|
+                               |%%_LBDvAKL6T_env|
+                               |%%_LBhzChL6T_arec|
+                               |%%_LB941nr6T_analyze!|
+                               |%%_LB3qlP86T_inc-cdr!|)
                              (#%begin
-                               (#%if (symbol? |%%_iiY__DLaw_s|)
+                               (#%if (symbol? |%%_LBJ-hPP6T_s|)
                                  (#%begin
                                    ((#%lambda #t
-                                      (|%%_iiiYZ4Maw_t|)
-                                      (|%%_iiY__DLaw_s|
-                                        |%%_iiwAk6Haw_arec|
-                                        |%%_iiir3E4aw_inc-cdr!|)
-                                      (#%if |%%_iiiYZ4Maw_t|
-                                        (|%%_iiir3E4aw_inc-cdr!|
-                                          |%%_iiiYZ4Maw_t|)
+                                      (|%%_LB3XfgQ6T_t|)
+                                      (|%%_LBJ-hPP6T_s|
+                                        |%%_LBhzChL6T_arec|
+                                        |%%_LB3qlP86T_inc-cdr!|)
+                                      (#%if |%%_LB3XfgQ6T_t|
+                                        (|%%_LB3qlP86T_inc-cdr!|
+                                          |%%_LB3XfgQ6T_t|)
                                         (set-cdr!
-                                          (vector-ref |%%_iiwAk6Haw_arec| 0)
-                                          (cons (cons |%%_iiY__DLaw_s| 1)
+                                          (vector-ref |%%_LBhzChL6T_arec| 0)
+                                          (cons (cons |%%_LBJ-hPP6T_s| 1)
                                                 (cdr (vector-ref
-                                                       |%%_iiwAk6Haw_arec|
+                                                       |%%_LBhzChL6T_arec|
                                                        0))))))
-                                    (assq |%%_iiY__DLaw_s|
+                                    (assq |%%_LBJ-hPP6T_s|
                                           (cdr (vector-ref
-                                                 |%%_iiwAk6Haw_arec|
+                                                 |%%_LBhzChL6T_arec|
                                                  0))))
                                    ((#%lambda #t
-                                      (|%%_iiEUXxMaw_t|)
-                                      (|%%_iiY__DLaw_s|
-                                        |%%_iiwAk6Haw_arec|
-                                        |%%_iiir3E4aw_inc-cdr!|)
-                                      (#%if |%%_iiEUXxMaw_t|
-                                        (|%%_iiir3E4aw_inc-cdr!|
-                                          |%%_iiEUXxMaw_t|)
+                                      (|%%_LBpTdJQ6T_t|)
+                                      (|%%_LBJ-hPP6T_s|
+                                        |%%_LBhzChL6T_arec|
+                                        |%%_LB3qlP86T_inc-cdr!|)
+                                      (#%if |%%_LBpTdJQ6T_t|
+                                        (|%%_LB3qlP86T_inc-cdr!|
+                                          |%%_LBpTdJQ6T_t|)
                                         (set-cdr!
-                                          (vector-ref |%%_iiwAk6Haw_arec| 1)
-                                          (cons (cons |%%_iiY__DLaw_s| 1)
+                                          (vector-ref |%%_LBhzChL6T_arec| 1)
+                                          (cons (cons |%%_LBJ-hPP6T_s| 1)
                                                 (cdr (vector-ref
-                                                       |%%_iiwAk6Haw_arec|
+                                                       |%%_LBhzChL6T_arec|
                                                        1))))))
-                                    (assq |%%_iiY__DLaw_s|
+                                    (assq |%%_LBJ-hPP6T_s|
                                           (cdr (vector-ref
-                                                 |%%_iiwAk6Haw_arec|
+                                                 |%%_LBhzChL6T_arec|
                                                  1)))))
                                  #!void)
-                               (cons |%%_iiY__DLaw_s|
-                                     (|%%_iio5Lbnaw_analyze!|
-                                       (cadr |%%_iiUlcWIaw_v|)
-                                       |%%_iiwAk6Haw_arec|
-                                       |%%_iiSwizHaw_env|
-                                       |%%_iictg0Iaw_lxs|))))
-                           (car |%%_iiUlcWIaw_v|))
-                          (#%if (= |%%_iieianJaw_exp-type| 7)
-                            (|%%_iio5Lbnaw_analyze!|
-                              (cadr |%%_iiUlcWIaw_v|)
-                              |%%_iiwAk6Haw_arec|
-                              |%%_iiSwizHaw_env|
-                              |%%_iictg0Iaw_lxs|)
-                            (#%if (= |%%_iieianJaw_exp-type| 8)
-                              (|%%_iio5Lbnaw_analyze!|
-                                (car |%%_iiUlcWIaw_v|)
-                                |%%_iiwAk6Haw_arec|
-                                |%%_iiSwizHaw_env|
-                                |%%_iictg0Iaw_lxs|)
+                               (cons |%%_LBJ-hPP6T_s|
+                                     (|%%_LB941nr6T_analyze!|
+                                       (cadr |%%_LBFku5N6T_v|)
+                                       |%%_LBhzChL6T_arec|
+                                       |%%_LBDvAKL6T_env|
+                                       |%%_LBZrybM6T_lxs|))))
+                           (car |%%_LBFku5N6T_v|))
+                          (#%if (= |%%_LB_gsyN6T_exp-type| 7)
+                            (|%%_LB941nr6T_analyze!|
+                              (cadr |%%_LBFku5N6T_v|)
+                              |%%_LBhzChL6T_arec|
+                              |%%_LBDvAKL6T_env|
+                              |%%_LBZrybM6T_lxs|)
+                            (#%if (= |%%_LB_gsyN6T_exp-type| 8)
+                              (|%%_LB941nr6T_analyze!|
+                                (car |%%_LBFku5N6T_v|)
+                                |%%_LBhzChL6T_arec|
+                                |%%_LBDvAKL6T_env|
+                                |%%_LBZrybM6T_lxs|)
                               ((#%letrec #t
-                                 ((|%%_iiAe8QJaw_loop|
+                                 ((|%%_LBldq_N6T_loop|
                                     (#%lambda #t
-                                      (|%%_iiWa6hKaw_v| |%%_iig74KKaw_rv|)
-                                      (|%%_iiAe8QJaw_loop|
-                                        |%%_iictg0Iaw_lxs|
-                                        |%%_iiSwizHaw_env|
-                                        |%%_iiwAk6Haw_arec|
-                                        |%%_iio5Lbnaw_analyze!|
-                                        |%%_ii2PQMV9w_union|)
-                                      (#%if (#%if (null? |%%_iiWa6hKaw_v|)
+                                      (|%%_LBH9osO6T_v| |%%_LB16mVO6T_rv|)
+                                      (|%%_LBldq_N6T_loop|
+                                        |%%_LBZrybM6T_lxs|
+                                        |%%_LBDvAKL6T_env|
+                                        |%%_LBhzChL6T_arec|
+                                        |%%_LB941nr6T_analyze!|
+                                        |%%_LBPN6YZ5T_union|)
+                                      (#%if (#%if (null? |%%_LBH9osO6T_v|)
                                               #t
-                                              (#%if (pair? |%%_iiWa6hKaw_v|)
-                                                #f
-                                                #t))
-                                        |%%_iig74KKaw_rv|
-                                        (|%%_iiAe8QJaw_loop|
-                                          (cdr |%%_iiWa6hKaw_v|)
-                                          (|%%_ii2PQMV9w_union|
-                                            (|%%_iio5Lbnaw_analyze!|
-                                              (car |%%_iiWa6hKaw_v|)
-                                              |%%_iiwAk6Haw_arec|
-                                              |%%_iiSwizHaw_env|
-                                              |%%_iictg0Iaw_lxs|)
-                                            |%%_iig74KKaw_rv|))))))
-                                 (|%%_iictg0Iaw_lxs|
-                                   |%%_iiSwizHaw_env|
-                                   |%%_iiwAk6Haw_arec|
-                                   |%%_iio5Lbnaw_analyze!|
-                                   |%%_ii2PQMV9w_union|)
-                                 |%%_iiAe8QJaw_loop|)
-                               |%%_iiUlcWIaw_v|
-                               (#%if (= |%%_iieianJaw_exp-type| 1)
-                                 (|%%_iio5Lbnaw_analyze!|
-                                   |%%_iiypetIaw_oper|
-                                   |%%_iiwAk6Haw_arec|
-                                   |%%_iiSwizHaw_env|
-                                   |%%_iictg0Iaw_lxs|)
+                                              (not (pair? |%%_LBH9osO6T_v|)))
+                                        |%%_LB16mVO6T_rv|
+                                        (|%%_LBldq_N6T_loop|
+                                          (cdr |%%_LBH9osO6T_v|)
+                                          (|%%_LBPN6YZ5T_union|
+                                            (|%%_LB941nr6T_analyze!|
+                                              (car |%%_LBH9osO6T_v|)
+                                              |%%_LBhzChL6T_arec|
+                                              |%%_LBDvAKL6T_env|
+                                              |%%_LBZrybM6T_lxs|)
+                                            |%%_LB16mVO6T_rv|))))))
+                                 (|%%_LBZrybM6T_lxs|
+                                   |%%_LBDvAKL6T_env|
+                                   |%%_LBhzChL6T_arec|
+                                   |%%_LB941nr6T_analyze!|
+                                   |%%_LBPN6YZ5T_union|)
+                                 |%%_LBldq_N6T_loop|)
+                               |%%_LBFku5N6T_v|
+                               (#%if (= |%%_LB_gsyN6T_exp-type| 1)
+                                 (|%%_LB941nr6T_analyze!|
+                                   |%%_LBjowEM6T_oper|
+                                   |%%_LBhzChL6T_arec|
+                                   |%%_LBDvAKL6T_env|
+                                   |%%_LBZrybM6T_lxs|)
                                  ()))))))))))
-              (car |%%_iiaEmFGaw_v|)
-              (cdr |%%_iiaEmFGaw_v|)
+              (car |%%_LBXCEQK6T_v|)
+              (cdr |%%_LBXCEQK6T_v|)
               (_expression-type
-                |%%_iiSwizHaw_env|
-                (car |%%_iiaEmFGaw_v|))))))
+                |%%_LBDvAKL6T_env|
+                (car |%%_LBXCEQK6T_v|))))))
         ()
         (#%lambda #t
-          (|%%_ii4-G5oaw_v| |%%_iiqWEyoaw_env|)
-          (|%%_iio5Lbnaw_analyze!|
-            |%%_ii29NKmaw_build-refs|
-            |%%_iiIcPhmaw_make-arecord|)
+          (|%%_LBRYYgs6T_v| |%%_LBbVWJs6T_env|)
+          (|%%_LB941nr6T_analyze!|
+            |%%_LBP73Wq6T_build-refs|
+            |%%_LBtb5tq6T_make-arecord|)
           ((#%lambda #t
-             (|%%_iiMSC_oaw_arec|)
-             (|%%_iiqWEyoaw_env|
-               |%%_ii4-G5oaw_v|
-               |%%_iio5Lbnaw_analyze!|
-               |%%_ii29NKmaw_build-refs|)
+             (|%%_LBxRUat6T_arec|)
+             (|%%_LBbVWJs6T_env|
+               |%%_LBRYYgs6T_v|
+               |%%_LB941nr6T_analyze!|
+               |%%_LBP73Wq6T_build-refs|)
              (#%begin
-               (|%%_iio5Lbnaw_analyze!|
-                 |%%_ii4-G5oaw_v|
-                 |%%_iiMSC_oaw_arec|
-                 |%%_iiqWEyoaw_env|
+               (|%%_LB941nr6T_analyze!|
+                 |%%_LBRYYgs6T_v|
+                 |%%_LBxRUat6T_arec|
+                 |%%_LBbVWJs6T_env|
                  ())
                (list #%program
-                     (|%%_ii29NKmaw_build-refs|
-                       (cdr (vector-ref |%%_iiMSC_oaw_arec| 0)))
-                     (|%%_ii29NKmaw_build-refs|
-                       (cdr (vector-ref |%%_iiMSC_oaw_arec| 1)))
-                     (cdr (vector-ref |%%_iiMSC_oaw_arec| 2))
-                     (vector-ref |%%_iiMSC_oaw_arec| 3))))
-           (|%%_iiIcPhmaw_make-arecord| |%%_ii4-G5oaw_v|)))))))
+                     (|%%_LBP73Wq6T_build-refs|
+                       (cdr (vector-ref |%%_LBxRUat6T_arec| 0)))
+                     (|%%_LBP73Wq6T_build-refs|
+                       (cdr (vector-ref |%%_LBxRUat6T_arec| 1)))
+                     (cdr (vector-ref |%%_LBxRUat6T_arec| 2))
+                     (vector-ref |%%_LBxRUat6T_arec| 3))))
+           (|%%_LBtb5tq6T_make-arecord| |%%_LBRYYgs6T_v|)))))))
