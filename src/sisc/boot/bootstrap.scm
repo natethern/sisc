@@ -1,4 +1,3 @@
-(inline-usual-primitives)
 (display "Expanding init.scm...\n")
 (expand-file "init.scm" "init.sce" '(e) '(e))
 (display "Expanding compat.scm...\n")
