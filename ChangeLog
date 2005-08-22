@@ -2,6 +2,8 @@
 
 	* Indicate support for srfi-62.
 
+	* Updated slib support to latest version (3a2).
+
 2005-08-18  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a bug in EXPT that resulted in floating point limits to be
