@@ -1,3 +1,7 @@
+2005-08-22  Matthias Radestock  <matthias@sorted.org>
+
+	* Indicate support for srfi-62.
+
 2005-08-18  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a bug in EXPT that resulted in floating point limits to be
