@@ -47,7 +47,6 @@ public class AppExp extends Expression implements OptimisticHost {
                 }
                 r.next(nxp);
             } else {
-                r.push(nxp);
                 // Load the immediates from right to left
                 Expression ex;
                 for (int i = l-1; i>=0; i--) {
@@ -55,10 +54,11 @@ public class AppExp extends Expression implements OptimisticHost {
                     if (ex != null)
                         r.vlr[i] = ex.getValue(r);
                 }
+                r.push(nxp);
                 r.next(exp);
             }         
         } catch (OptimismUnwarrantedException uwe) {
-            eval(r);
+            r.nxp=this;
         }
     }
 
@@ -118,7 +118,9 @@ public class AppExp extends Expression implements OptimisticHost {
                 replaceWith : null;
             Expression oldExp=exp;
             exp=replaceWith;
-            nxp=new FillRibExp(oldExp, uexpPosition, nxp, false);
+            FillRibExp fre=new FillRibExp(oldExp, uexpPosition, nxp, false);
+            nxp=fre;
+            fre.setHosts();
         }
 
         if (allImmediate && !(replaceWith instanceof Immediate)) {

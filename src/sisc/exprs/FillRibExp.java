@@ -27,7 +27,7 @@ public class FillRibExp extends Expression implements OptimisticHost {
 
     public void setHosts() {
         Utils.linkOptimistic(this, exp, POS_EXP);
-        Utils.linkOptimistic(this, exp, POS_NXP);
+        Utils.linkOptimistic(this, nxp, POS_NXP);
     }
     
     public void eval(Interpreter r) throws ContinuationException {

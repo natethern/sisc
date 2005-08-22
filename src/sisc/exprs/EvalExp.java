@@ -39,7 +39,7 @@ public class EvalExp extends Expression implements OptimisticHost {
                 r.next(pre);
             }      
      } catch (OptimismUnwarrantedException uwe) {
-       eval(r);
+         r.nxp=this;
      }
     }
 
