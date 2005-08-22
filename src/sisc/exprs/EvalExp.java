@@ -68,7 +68,7 @@ public class EvalExp extends Expression implements OptimisticHost {
     /* (non-Javadoc)
      * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
      */
-    public void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
+    public synchronized void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
         switch(uexpPosition) {
         case POS_PRE:
             pre=replaceWith;

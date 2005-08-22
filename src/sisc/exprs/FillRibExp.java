@@ -69,7 +69,7 @@ public class FillRibExp extends Expression implements OptimisticHost {
         return v.visit(exp) &&  v.visit(nxp);
     }
 
-    public void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
+    public synchronized void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
         switch(uexpPosition) {
         case POS_NXP:
             nxp=replaceWith;

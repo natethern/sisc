@@ -3,6 +3,8 @@
 	* Fixed a second optimistic expression bug in AppExp which would 
 	  create a crufty uExp on the stack after some reverts.
 	  
+	* Made the alter methods thread safe.
+	
 2005-08-22  Matthias Radestock  <matthias@sorted.org>
 
 	* Indicate support for srfi-62.
