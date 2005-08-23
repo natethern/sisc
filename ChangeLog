@@ -1,3 +1,5 @@
+2005-08-23  SISC 1.11.3 Released
+
 2005-08-23  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed unit scale bug in srfi-19. See bug 1266449.
