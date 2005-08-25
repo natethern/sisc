@@ -197,7 +197,7 @@
   (apply char-set-delete! (char-set-copy rs) chars))
 
 (define (char-set-delete! rs . chars)
-  (for-each (lambda (char)
+  (for-each (lambda (c)
               (%unset1! rs (%char->code-point c)))
             chars)
   rs)

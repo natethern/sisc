@@ -1,3 +1,7 @@
+2005-08-26  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug in srfi-14's char-set-delete. See bug 1273434.
+
 2005-08-23  SISC 1.11.3 Released
 
 2005-08-23  Matthias Radestock  <matthias@sorted.org>
