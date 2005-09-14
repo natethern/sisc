@@ -178,7 +178,7 @@ public class REPL {
 
         SeekableInputStream heap = findHeap((String)args.get("heap"));
         if (heap==null) {
-            System.err.println(Util.liMessage(Util.SISCB, "noheap"));
+            System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
             return;
         }
 
