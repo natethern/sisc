@@ -1,3 +1,8 @@
+2005-10-01  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed detection and handling of syntax errors in lists. See bug
+	  1309820.
+
 2005-08-26  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in srfi-14's char-set-delete. See bug 1273434.

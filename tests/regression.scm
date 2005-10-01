@@ -244,3 +244,12 @@
 (should-be 1181453 #t
   (procedure? ((call/cc call/cc) (lambda (f) f))))
 
+(should-be 1309820 '(#t #t #t #t #t #t #t #t #t)
+           (let ()
+             (import string-io)
+             (define (try-read s)
+               (with/fc (lambda (m e) #t)
+                 (lambda () (call-with-input-string s read))))
+             (map try-read '("("        "(."            "(.)"
+                             "(1"       "(1 ."          "(1 .)"
+                             "(1 . 2"   "(1 . 2 3"      "(1 . 2 3)"))))

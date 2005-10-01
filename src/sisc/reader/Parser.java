@@ -105,6 +105,10 @@ public class Parser extends Util implements Tokens {
             throw new IOException(liMessage(SISCB, message, arg));
     }
 
+    private Value lastValue(HashMap state, Object l) {
+        return (Value)(l instanceof Integer ? state.get(l) : l);
+    }
+
     /**
      * Reads an s-expression from the given input port.
      *
@@ -396,12 +400,9 @@ public class Parser extends Util implements Tokens {
                 for (int i=0; i<v.length; i++) {
                     if (p!=EMPTYLIST) {
                         lastObject=p.car;
-                        v[i]=(Value)(lastObject instanceof Integer ?
-                                     state.get(lastObject) : lastObject);
                         p=(Pair)p.cdr;
-                    } else
-                        v[i]=(Value)(lastObject instanceof Integer ?
-                                     state.get(lastObject) : lastObject);
+                    }
+                    v[i] = lastValue(state, lastObject);
                 }
                 iv.vals=v;
                 break;
@@ -425,32 +426,45 @@ public class Parser extends Util implements Tokens {
         boolean readingVector = readingVector(flags);
         flags &= ~READING_VECTOR;
         
-        Object l=_nextExpression(is, state, null, flags);
         try {
+            Object l=_nextExpression(is, state, null, flags);
             while (l!=ENDPAIR) {
                 if (p==null) {
-                    h=p=(produceImmutables(flags) ? new ImmutablePair() :
+                    h=p=(produceImmutables(flags) ?
+                         new ImmutablePair() :
                          new Pair());
                     if (def!=null) state.put(def, p);
-                } else
+                } else {
                     if (l == DOT) {
                         if (readingVector) {
                             potentialError(flags, "dotwhenreadingvector", is);
                         }
                         l=_nextExpression(is, state, null, flags);
-                        if (l==ENDPAIR)
+                        try {
+                            p.cdr = lastValue(state, l);
+                        } catch(ClassCastException cce) {
                             potentialError(flags, "expectedexprincdr", is);
-                        p.cdr=(Value)(l instanceof Integer ? state.get(l) : l);
-                        if (_nextExpression(is, state, null, flags)
-                            !=ENDPAIR)
-                            potentialError(flags, "toomanyafterdot", is);
+                            if (l == ENDPAIR) return h;
+                        }
+                        if (_nextExpression(is, state, null, flags) == ENDPAIR)
+                            return h;
+                        potentialError(flags, "toomanyafterdot", is);
+                        //recover by skipping to end of list
+                        while (_nextExpression(is, state, null, flags) !=
+                               ENDPAIR) {}
                         return h;
                     } else
                         p.cdr=p=(produceImmutables(flags) ? 
                                  new ImmutablePair() :
                                  new Pair ());
-                p.car=(Value)(l instanceof Integer ? state.get(l) : l);
-                l=_nextExpression(is, state, null, flags & ~READING_VECTOR);
+                }
+                try {
+                    p.car = lastValue(state, l);
+                } catch(ClassCastException cce) {
+                    potentialError(flags, "expectedexprincar", is);
+                    p.car = VOID;
+                }
+                l=_nextExpression(is, state, null, flags);
             }
         } catch (EOFException e) {
             potentialError(flags, "unexpectedeof", is);
