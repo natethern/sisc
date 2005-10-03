@@ -253,3 +253,9 @@
              (map try-read '("("        "(."            "(.)"
                              "(1"       "(1 ."          "(1 .)"
                              "(1 . 2"   "(1 . 2 3"      "(1 . 2 3)"))))
+
+(should-be 1311739 #t
+           (let ()
+             (import string-io)
+             (set-car! (call-with-input-string "'(foo)" read) 1)
+             #t))

@@ -1,3 +1,8 @@
+2005-10-03  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug in reader that resulted in |read| returning immutable
+	  data when it shouldn't. See bug 1311739.
+
 2005-10-01  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed detection and handling of syntax errors in lists. See bug
