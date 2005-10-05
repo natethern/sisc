@@ -152,13 +152,23 @@ public class Parser extends Util implements Tokens {
     protected Object listSpecial(Symbol car, InputPort is,
                                  HashMap state, Integer def, 
                                  int flags) throws IOException {
-        Pair t=new Pair();
-        Pair p = (produceImmutables(flags) ?
-                  new ImmutablePair(car, t) :
-                  new Pair(car, t));
+        Pair t, p;
+        
+        boolean immutables=produceImmutables(flags);
+        if (immutables) {
+            t=new ImmutablePair(EMPTYLIST, EMPTYLIST, false);
+            p=new ImmutablePair(car, t);
+        } else {
+            t=new Pair();
+            p=new Pair(car, t);
+        }
         if (def!=null)
             state.put(def, p);
+        
         t.setCar(nextExpression(is, state, flags));
+        
+        if (immutables) 
+            ((ImmutablePair)t).makeImmutable();
         return p;
     }
 
