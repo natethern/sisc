@@ -69,9 +69,9 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            for (; p != EMPTYLIST; p = pair(p.cdr)) {
-                Pair entry = pair(p.car);
-                super.put(entry.car, entry.cdr);
+            for (; p != EMPTYLIST; p = pair(p.cdr())) {
+                Pair entry = pair(p.car());
+                super.put(entry.car(), entry.cdr());
             }
         } finally {
             m.unlock();

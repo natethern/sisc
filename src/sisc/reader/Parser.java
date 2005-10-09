@@ -152,23 +152,19 @@ public class Parser extends Util implements Tokens {
     protected Object listSpecial(Symbol car, InputPort is,
                                  HashMap state, Integer def, 
                                  int flags) throws IOException {
-        Pair t, p;
-        
-        boolean immutables=produceImmutables(flags);
-        if (immutables) {
-            t=new ImmutablePair(EMPTYLIST, EMPTYLIST, false);
-            p=new ImmutablePair(car, t);
-        } else {
-            t=new Pair();
-            p=new Pair(car, t);
-        }
+        boolean produceImmutables = produceImmutables(flags);
+        Pair t = (produceImmutables ?
+                  new ImmutablePair(EMPTYLIST, EMPTYLIST, false) :
+                  new Pair(EMPTYLIST, EMPTYLIST));
+        Pair p = (produceImmutables ?
+                  new ImmutablePair(car, t) :
+                  new Pair(car, t));
         if (def!=null)
             state.put(def, p);
-        
         t.setCar(nextExpression(is, state, flags));
-        
-        if (immutables) 
+        if (produceImmutables) {
             ((ImmutablePair)t).makeImmutable();
+        }
         return p;
     }
 
@@ -340,7 +336,7 @@ public class Parser extends Util implements Tokens {
             case '@': 
                 //Annotation
                 Pair p=(Pair)nextExpression(is, state, flags);
-                o=new AnnotatedExpr(p.cdr, p.car);
+                o=new AnnotatedExpr(p.cdr(), p.car());
                 break;
             case '|': 
                 //Nested multiline comment
@@ -407,8 +403,8 @@ public class Parser extends Util implements Tokens {
 
                 for (int i=0; i<v.length; i++) {
                     if (p!=EMPTYLIST) {
-                        lastObject=p.car;
-                        p=(Pair)p.cdr;
+                        lastObject=p.car();
+                        p=(Pair)p.cdr();
                     }
                     v[i] = lastValue(state, lastObject);
                 }
@@ -425,6 +421,25 @@ public class Parser extends Util implements Tokens {
         return o;
     }
 
+    private Value readAfterDot(InputPort is, HashMap state, int flags)
+        throws IOException {
+        Object l = _nextExpression(is, state, null, flags);
+        Value v = VOID;
+        try {
+            v = lastValue(state, l);
+        } catch(ClassCastException cce) {
+            potentialError(flags, "expectedexprincdr", is);
+            if (l == ENDPAIR) return EMPTYLIST;
+        }
+        if (_nextExpression(is, state, null, flags) == ENDPAIR)
+            return v;
+        potentialError(flags, "toomanyafterdot", is);
+        //recover by skipping to end of list
+        while (_nextExpression(is, state, null, flags) !=
+               ENDPAIR) {}
+        return v;
+    }
+
     public Value readList(InputPort is, HashMap state, Integer def,
                           int flags)
         throws IOException {
@@ -432,54 +447,66 @@ public class Parser extends Util implements Tokens {
         Pair h=null;
         Pair p=null;
         boolean readingVector = readingVector(flags);
+        boolean produceImmutables = produceImmutables(flags);
         flags &= ~READING_VECTOR;
-        
+
         try {
-            Object l=_nextExpression(is, state, null, flags);
-            while (l!=ENDPAIR) {
-                if (p==null) {
-                    h=p=(produceImmutables(flags) ?
-                         new ImmutablePair() :
-                         new Pair());
-                    if (def!=null) state.put(def, p);
-                } else {
-                    if (l == DOT) {
-                        if (readingVector) {
-                            potentialError(flags, "dotwhenreadingvector", is);
-                        }
-                        l=_nextExpression(is, state, null, flags);
-                        try {
-                            p.cdr = lastValue(state, l);
-                        } catch(ClassCastException cce) {
-                            potentialError(flags, "expectedexprincdr", is);
-                            if (l == ENDPAIR) return h;
-                        }
-                        if (_nextExpression(is, state, null, flags) == ENDPAIR)
-                            return h;
-                        potentialError(flags, "toomanyafterdot", is);
-                        //recover by skipping to end of list
-                        while (_nextExpression(is, state, null, flags) !=
-                               ENDPAIR) {}
-                        return h;
-                    } else
-                        p.cdr=p=(produceImmutables(flags) ? 
-                                 new ImmutablePair() :
-                                 new Pair ());
-                }
-                try {
-                    p.car = lastValue(state, l);
-                } catch(ClassCastException cce) {
-                    potentialError(flags, "expectedexprincar", is);
-                    p.car = VOID;
-                }
-                l=_nextExpression(is, state, null, flags);
+            Object l = _nextExpression(is, state, null, flags);
+            if (l == ENDPAIR) {
+                return EMPTYLIST;
             }
+            Value v = VOID;
+            try {
+                v = lastValue(state, l);
+            } catch(ClassCastException cce) {
+                potentialError(flags, "expectedexprincar", is);
+            }
+            h=p=(produceImmutables ?
+                 new ImmutablePair(v, EMPTYLIST, false) :
+                 new Pair(v, EMPTYLIST));
+            if (def!=null) state.put(def, p);
+
+            while (true) {
+                l = _nextExpression(is, state, null, flags);
+                if (l == ENDPAIR) {
+                    break;
+                } else if (l == DOT) {
+                    if (readingVector) {
+                        potentialError(flags, "dotwhenreadingvector", is);
+                    }
+                    p.setCdr(readAfterDot(is, state, flags));
+                    if (produceImmutables) {
+                        ((ImmutablePair)p).makeImmutable();
+                    }
+                    break;
+                } else {
+                    try {
+                        v = lastValue(state, l);
+                    } catch(ClassCastException cce) {
+                        potentialError(flags, "expectedexprincar", is);
+                        v = VOID;
+                    }
+                    Pair pp = (produceImmutables ? 
+                               new ImmutablePair(v, EMPTYLIST, false) :
+                               new Pair (v, EMPTYLIST));
+                    p.setCdr(pp);
+                    if (produceImmutables) {
+                        ((ImmutablePair)p).makeImmutable();
+                    }
+                    p = pp;
+                }
+            }
+
+            if (produceImmutables) {
+                ((ImmutablePair)p).makeImmutable();
+            }
+
         } catch (EOFException e) {
             potentialError(flags, "unexpectedeof", is);
             return VOID;
         }
 
-        return (h==null ? (Value)EMPTYLIST : (Value)h);
+        return h;
     }
 
     protected final boolean caseSensitive(int flags) {

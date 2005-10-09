@@ -111,9 +111,9 @@ public class Compiler extends CompilerConstants {
 
     static void setAnnotations(Expression e, Pair p) {
         while (p!=EMPTYLIST) {
-            Pair kv=(Pair)p.car;
-            e.setAnnotation(symbol(kv.car), kv.cdr);
-            p=(Pair)p.cdr;
+            Pair kv=(Pair)p.car();
+            e.setAnnotation(symbol(kv.car()), kv.cdr());
+            p=(Pair)p.cdr();
         }
     }
 
@@ -174,53 +174,53 @@ public class Compiler extends CompilerConstants {
 
         Expression tmp, rv;
         
-        Value oper=expr.car;
+        Value oper=expr.car();
         int eType=getExpType(env, oper);
-        expr=(Pair)expr.cdr;
+        expr=(Pair)expr.cdr();
         
         switch (eType) {
         case QUOTE:
-            rv=expr.car;
+            rv=expr.car();
             break;
         case PROGRAM:
             //References
-            expr=(Pair)expr.cdr;
+            expr=(Pair)expr.cdr();
             //Sets
-            sets=append((Pair)expr.car, sets);
-            expr=(Pair)expr.cdr;
+            sets=append((Pair)expr.car(), sets);
+            expr=(Pair)expr.cdr();
             //Frees
-            expr=(Pair)expr.cdr;
-            rv=compile(r, expr.car, sets, rf, TAIL | LAMBDA | REALTAIL, 
+            expr=(Pair)expr.cdr();
+            rv=compile(r, expr.car(), sets, rf, TAIL | LAMBDA | REALTAIL, 
                        env, null);
             break;
         case LAMBDA:
          {
              boolean infArity=false;
              // Skip #t
-             expr=(Pair)expr.cdr;
+             expr=(Pair)expr.cdr();
  
              Symbol[] formals=null;
-             Value ftmp=expr.car;
+             Value ftmp=expr.car();
              if (ftmp instanceof Pair && ftmp != EMPTYLIST) {
                  formals=argsToSymbols((Pair)ftmp);
                  do {
-                     ftmp=((Pair)ftmp).cdr; 
+                     ftmp=((Pair)ftmp).cdr(); 
                  } while (ftmp != EMPTYLIST && ftmp instanceof Pair);
                  infArity=ftmp instanceof Symbol;
-             } else if (expr.car instanceof Symbol) {
-                 formals=new Symbol[] {(Symbol)expr.car};
+             } else if (expr.car() instanceof Symbol) {
+                 formals=new Symbol[] {(Symbol)expr.car()};
                  infArity=true;
              } else {
                  formals=new Symbol[0];
              }
              
-             expr=(Pair)expr.cdr;
+             expr=(Pair)expr.cdr();
  
-             Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car);
-             expr=(Pair)expr.cdr;
+             Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car());
+             expr=(Pair)expr.cdr();
                           ReferenceFactory nf=new ReferenceFactory(formals, lexicalSyms);
  
-             tmp=compile(r, expr.car, sets, nf, TAIL | LAMBDA | REALTAIL, 
+             tmp=compile(r, expr.car(), sets, nf, TAIL | LAMBDA | REALTAIL, 
                          env, null);
              int[][] copies=resolveCopies(rf, lexicalSyms);
              int[] boxes=findBoxes(formals, sets);
@@ -235,19 +235,19 @@ public class Compiler extends CompilerConstants {
         case LETREC:
          {
              // Skip the #t marker
-             expr=(Pair)expr.cdr;
+             expr=(Pair)expr.cdr();
  
-             Pair tmpp=(Pair)expr.car;
+             Pair tmpp=(Pair)expr.car();
  
              Vector formv=new Vector();
              Vector expv=new Vector();
              
              while (tmpp != EMPTYLIST) {
-                 Pair bp=(Pair)tmpp.car;
+                 Pair bp=(Pair)tmpp.car();
  
-                 formv.add(bp.car);
-                 expv.add(((Pair)bp.cdr).car);
-                 tmpp=(Pair)tmpp.cdr;
+                 formv.add(bp.car());
+                 expv.add(((Pair)bp.cdr()).car());
+                 tmpp=(Pair)tmpp.cdr();
              }
              
              Symbol[] formals=new Symbol[formv.size()];
@@ -255,23 +255,23 @@ public class Compiler extends CompilerConstants {
              formv.copyInto(formals);
              expv.copyInto(rhses);
  
-             expr=(Pair)expr.cdr;
-             Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car);
-             expr=(Pair)expr.cdr;
+             expr=(Pair)expr.cdr();
+             Symbol[] lexicalSyms=argsToSymbols((Pair)expr.car());
+             expr=(Pair)expr.cdr();
              
-             rv=compileLetrec(r, formals, lexicalSyms, rhses, expr.car, 
+             rv=compileLetrec(r, formals, lexicalSyms, rhses, expr.car(), 
                               sets, rf, env, context);
                 ((OptimisticHost)rv).setHosts();
          }
          break;
         case _IF:
-            tmp=compile(r, expr.car, sets, rf, PREDICATE, env, null);
-            expr=(Pair)expr.cdr;
+            tmp=compile(r, expr.car(), sets, rf, PREDICATE, env, null);
+            expr=(Pair)expr.cdr();
             
-            Expression conseq=compile(r, expr.car, sets, rf, TAIL | context,
+            Expression conseq=compile(r, expr.car(), sets, rf, TAIL | context,
                                       env, null);
-            expr=(Pair)expr.cdr;
-            Expression altern=compile(r, expr.car, sets, rf, TAIL | context,
+            expr=(Pair)expr.cdr();
+            Expression altern=compile(r, expr.car(), sets, rf, TAIL | context,
                                       env, null);
             //if (isImmediate(conseq) && isImmediate(altern))
             //rv=new IfEval_imm(conseq, altern);
@@ -285,10 +285,10 @@ public class Compiler extends CompilerConstants {
             rv=compileBegin(r, pairToExpressions(expr), context, sets, rf, env);
             break;
         case SET:
-            Symbol sym=(Symbol)expr.car;
+            Symbol sym=(Symbol)expr.car();
             tmp=compile(r, sym, sets, rf, 0, env, null);
-            expr=(Pair)expr.cdr;
-            Expression rhs=compile(r, expr.car, sets, rf, 0, env, null);
+            expr=(Pair)expr.cdr();
+            Expression rhs=compile(r, expr.car(), sets, rf, 0, env, null);
             if (tmp instanceof FreeReferenceExp) 
                 rv=new FreeSetEval(sym, env);
             else
@@ -297,21 +297,21 @@ public class Compiler extends CompilerConstants {
             rv= makeEvalExp(rhs, rv);
             break;
         case DEFINE:
-            Symbol lhs=(Symbol)expr.car;
-            expr=(Pair)expr.cdr;
-            rhs = compile(r, expr.car, sets, rf, 0, env, null);
+            Symbol lhs=(Symbol)expr.car();
+            expr=(Pair)expr.cdr();
+            rhs = compile(r, expr.car(), sets, rf, 0, env, null);
             rv = new DefineEval(lhs, env);
             addAnnotations(rv, rhs.annotations);
             rv = makeEvalExp(rhs, rv);
             break;
         case MAKEANNOTATION:
-            Value aexpr=expr.car;
-            expr=(Pair)expr.cdr;
+            Value aexpr=expr.car();
+            expr=(Pair)expr.cdr();
             Pair annot=null;
-            if (expr.car instanceof Pair)
-                annot=pair(expr.car);
+            if (expr.car() instanceof Pair)
+                annot=pair(expr.car());
             else
-                annot=list(new Pair(OTHER, expr.car));
+                annot=list(new Pair(OTHER, expr.car()));
             rv=compile(r, aexpr, sets, rf, context, env, annot);
             an=null;
             break;

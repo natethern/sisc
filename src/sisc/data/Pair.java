@@ -7,7 +7,7 @@ import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
 public class Pair extends Value {
-    public Value car, cdr;
+    private Value car, cdr;
 
     public Pair() {
         car=cdr=EMPTYLIST;
@@ -16,6 +16,14 @@ public class Pair extends Value {
     public Pair(Value car, Value cdr) {
         this.car=car;
         this.cdr=cdr;
+    }
+
+    public Value car() {
+        return car;
+    }
+
+    public Value cdr() {
+        return cdr;
     }
 
     public void setCar(Value v) {
@@ -27,7 +35,7 @@ public class Pair extends Value {
     }
 
     private static boolean quasiquote(ValueWriter w, String prefix, Value q, Value v) throws IOException {
-        if (v instanceof Pair && ((Pair)v).cdr == EMPTYLIST) {
+        if (v instanceof Pair && ((Pair)v).cdr() == EMPTYLIST) {
             String qq = null;
             if (q==QUOTE) {
                 qq = "'";
@@ -38,7 +46,7 @@ public class Pair extends Value {
             } else if (q==UNQUOTE_SPLICING) {
                 qq = ",@";
             } else return false;
-            w.append(prefix).append(qq).append(((Pair)v).car);
+            w.append(prefix).append(qq).append(((Pair)v).car());
             return true;
         } else {
             return false;
@@ -53,8 +61,8 @@ public class Pair extends Value {
         while (ccdr != EMPTYLIST) {
             if ((ccdr instanceof Pair) && w.isInlinable(ccdr)) {
                 Pair p = (Pair)ccdr;
-                ccar = p.car;
-                ccdr = p.cdr;
+                ccar = p.car();
+                ccdr = p.cdr();
                 if (quasiquote(w, " . ", ccar, ccdr)) break;
                 w.append(' ').append(ccar);
             } else {
@@ -70,7 +78,7 @@ public class Pair extends Value {
         if (v==this) return true;
         if (!(v instanceof Pair)) return false;
         Pair p=(Pair)v;
-        return car.valueEqual(p.car) && cdr.valueEqual(p.cdr);
+        return car.valueEqual(p.car()) && cdr.valueEqual(p.cdr());
     }
 
     public int valueHashCode() {

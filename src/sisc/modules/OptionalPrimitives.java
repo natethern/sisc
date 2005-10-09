@@ -56,12 +56,12 @@ public class OptionalPrimitives extends IndexedFixableProcedure {
     public OptionalPrimitives() {}
     
     public static final Value cadr(Value p) {
-        return ((Pair) ((Pair)p).cdr).car;
+        return ((Pair) ((Pair)p).cdr()).car();
     }
 
 
     public static final Value cddr(Value p) {
-        return ((Pair)((Pair)p).cdr).cdr;
+        return ((Pair)((Pair)p).cdr()).cdr();
     }
 
     public static boolean jnumQuery(Value v, int mask) {
@@ -89,13 +89,13 @@ public class OptionalPrimitives extends IndexedFixableProcedure {
         case APPEND: return pair(v1);
         case NOT: return truth(v1) ? FALSE : TRUE;
         case CADR:
-            return truePair(truePair(v1).cdr).car;
+            return truePair(truePair(v1).cdr()).car();
         case CDAR:
-            return truePair(truePair(v1).car).cdr;
+            return truePair(truePair(v1).car()).cdr();
         case CAAR:
-            return truePair(truePair(v1).car).car;
+            return truePair(truePair(v1).car()).car();
         case CDDR:
-            return truePair(truePair(v1).cdr).cdr;
+            return truePair(truePair(v1).cdr()).cdr();
         case STRINGUPCASE:
             SchemeString str=str(v1);
             return new SchemeString(str.asString().toUpperCase());
@@ -106,8 +106,8 @@ public class OptionalPrimitives extends IndexedFixableProcedure {
             Pair lists=pair(v1);
             Pair c=EMPTYLIST;
             while (lists != EMPTYLIST) {
-                c=new Pair(truePair(lists.car).cdr, c);
-                lists=pair(lists.cdr);
+                c=new Pair(truePair(lists.car()).cdr(), c);
+                lists=pair(lists.cdr());
             }
             return reverseInPlace(c);
         case MAPCAR:
@@ -153,16 +153,16 @@ public class OptionalPrimitives extends IndexedFixableProcedure {
         case LISTREF:
             Pair p1=truePair(v1);
             for (int l=num(v2).intValue(); l>0; l--) {
-                p1=truePair(p1.cdr);
+                p1=truePair(p1.cdr());
             }
-            return p1.car;
+            return p1.car();
         case ASSV:
             p1=pair(v2);
             while (p1!=EMPTYLIST) {
-                Pair assc=pair(p1.car);
-                if (assc.car.eqv(v1))
+                Pair assc=pair(p1.car());
+                if (assc.car().eqv(v1))
                     return assc;
-                p1=pair(p1.cdr);
+                p1=pair(p1.cdr());
             }
             return FALSE;
         case ASSQ:
@@ -172,26 +172,26 @@ public class OptionalPrimitives extends IndexedFixableProcedure {
         case MEMV:
             p1=pair(v2);
             while (p1!=EMPTYLIST) {
-                if (p1.car.eqv(v1))
+                if (p1.car().eqv(v1))
                     return p1;
-                p1=pair(p1.cdr);
+                p1=pair(p1.cdr());
             }
             return FALSE;
         case ASSOC:
             p1=pair(v2);
             while (p1!=EMPTYLIST) {
-                Pair assc=pair(p1.car);
-                if (assc.car.valueEqual(v1))
+                Pair assc=pair(p1.car());
+                if (assc.car().valueEqual(v1))
                     return assc;
-                p1=pair(p1.cdr);
+                p1=pair(p1.cdr());
             }
             return FALSE;
         case MEMBER:
             p1=pair(v2);
             while (p1!=EMPTYLIST) {
-                if (p1.car.valueEqual(v1))
+                if (p1.car().valueEqual(v1))
                     return p1;
-                p1=pair(p1.cdr);
+                p1=pair(p1.cdr());
             }
             return FALSE;
         case STRINGORDER:
@@ -379,20 +379,20 @@ public class OptionalPrimitives extends IndexedFixableProcedure {
                 Pair working_pair = pair(vlr[x]);
                 while (working_pair != EMPTYLIST) {
                     if (current_pair == null) {
-                        head_pair=current_pair=new Pair(working_pair.car, 
+                        head_pair=current_pair=new Pair(working_pair.car(), 
                                                         null);
                     } else {
-                        tmp_pair=new Pair(working_pair.car, EMPTYLIST);
-                        current_pair.cdr=tmp_pair;
+                        tmp_pair=new Pair(working_pair.car(), EMPTYLIST);
+                        current_pair.setCdr(tmp_pair);
                         current_pair=tmp_pair;
                     }
-                    working_pair=(Pair)working_pair.cdr;
+                    working_pair=(Pair)working_pair.cdr();
                 }
             } while (((++x) + 1) < vlr.length);
             if (head_pair == null)
                 return vlr[x];
             else 
-                current_pair.cdr=vlr[x];
+                current_pair.setCdr(vlr[x]);
             return head_pair;
         default:
             throwArgSizeException();

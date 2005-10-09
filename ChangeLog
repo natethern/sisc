@@ -1,3 +1,9 @@
+2005-10-09  Matthias Radestock  <matthias@sorted.org>
+
+	* Made sisc.data.Pair.{car,cdr} private. NB: This may break
+	  existing Java code that manipulates SISC values; such code
+	  should use the provided accessor/modifier methods instead.
+
 2005-10-03  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in reader that resulted in |read| returning immutable

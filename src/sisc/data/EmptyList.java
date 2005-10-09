@@ -10,7 +10,8 @@ public class EmptyList extends Pair implements Singleton {
     public static EmptyList EMPTYLIST=new EmptyList();
 
     static {
-        EMPTYLIST.car=EMPTYLIST.cdr=EMPTYLIST;
+        EMPTYLIST.setCar(EMPTYLIST);
+        EMPTYLIST.setCdr(EMPTYLIST);
     }
 
     public EmptyList() {}

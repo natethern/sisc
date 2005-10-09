@@ -299,8 +299,8 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             for (j=0; j < l; j++) {
                 newvlr[j] = vlr[j+1];
             }
-            for (; args != EMPTYLIST; args = (Pair)args.cdr) {
-                newvlr[j++] = args.car;
+            for (; args != EMPTYLIST; args = (Pair)args.cdr()) {
+                newvlr[j++] = args.car();
             }
             r.setupTailCall(newvlr);
             return proc;

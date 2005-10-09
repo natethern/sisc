@@ -471,7 +471,7 @@ public class IO extends IndexedProcedure {
                     pa.setCar(new SchemeString((String)e.nextElement()));
                     if (!e.hasMoreElements()) break;
                     pa.setCdr(new Pair());
-                    pa = (Pair)pa.cdr;
+                    pa = (Pair)pa.cdr();
                 }
                 return pa;
             case ABSPATHQ:

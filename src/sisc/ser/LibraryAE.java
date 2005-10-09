@@ -75,8 +75,8 @@ public class LibraryAE extends MemorySymEnv {
     }
      
     public void addSymbolicBindings(Library lib, Pair s) {
-    for (;s!=EMPTYLIST; s=(Pair)s.cdr) {
-       Symbol nsym=(Symbol)s.car;
+    for (;s!=EMPTYLIST; s=(Pair)s.cdr()) {
+       Symbol nsym=(Symbol)s.car();
        addBinding(lib, nsym, lib.getEntryPoint(nsym));
     }
     }

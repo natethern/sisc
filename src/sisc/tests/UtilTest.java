@@ -442,8 +442,8 @@ public class UtilTest extends TestCase
 
         assertNotSame(testee1, testee2);
         assertTrue(testee1.valueEqual(testee2));
-        assertSame(testee1.cdr, l2);
-        assertSame(testee1.cdr, testee2.cdr);
+        assertSame(testee1.cdr(), l2);
+        assertSame(testee1.cdr(), testee2.cdr());
     }
 
     /*

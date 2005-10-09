@@ -137,8 +137,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public void setClassPath(Value v) {
         Pair pa = pair(v);
         URL[] urls = new URL[length(pa)];
-        for (int i=0; pa != EMPTYLIST; i++, pa = (Pair)pa.cdr) {
-            urls[i] = url(pa.car);
+        for (int i=0; pa != EMPTYLIST; i++, pa = (Pair)pa.cdr()) {
+            urls[i] = url(pa.car());
         }
         try {
             urlClassLoader =  new URLClassLoader(urls, classLoader);

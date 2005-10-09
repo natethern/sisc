@@ -234,7 +234,7 @@ public abstract class Util implements Version {
         try {
             int i = 0;
             for (; p != EMPTYLIST; i++) {
-                p = (Pair) p.cdr;
+                p = (Pair) p.cdr();
             }
             return i;
         } catch (ClassCastException ce) {
@@ -250,8 +250,8 @@ public abstract class Util implements Version {
      */
     public static Vector pairToExpVect(Pair p) {
         Vector v = new Vector();
-        for (; p != EMPTYLIST; p = (Pair) p.cdr) {
-            v.addElement(p.car);
+        for (; p != EMPTYLIST; p = (Pair) p.cdr()) {
+            v.addElement(p.car());
         }
 
         return v;
@@ -262,8 +262,8 @@ public abstract class Util implements Version {
         Expression[] es  = new Expression[len];
 
         for (int i = 0; i < len; ++i) {
-            es[i] = p.car;
-            p     = (Pair)p.cdr;
+            es[i] = p.car();
+            p     = (Pair)p.cdr();
         }
         
         return es;
@@ -275,8 +275,8 @@ public abstract class Util implements Version {
 
         Value[] vs  = new Value[len];
         for (int i = 0; i < len; ++i) {
-            vs[i] = p.car;
-            p     = (Pair)p.cdr;
+            vs[i] = p.car();
+            p     = (Pair)p.cdr();
         }
         
         return vs;
@@ -289,10 +289,10 @@ public abstract class Util implements Version {
 
         // Count the proper elements ignoring the tail: 
         int    l = 1;
-        Value q = p.cdr;
+        Value q = p.cdr();
         while ((q instanceof Pair) && (q != EMPTYLIST)) {
             ++l;
-            q = ((Pair)q).cdr;
+            q = ((Pair)q).cdr();
         }
 
         // Allocate result array:
@@ -309,7 +309,7 @@ public abstract class Util implements Version {
         // Copy the proper elements into the result
         int i = 0;
         for (;;) {
-            result[i++] = (Symbol)p.car;
+            result[i++] = (Symbol)p.car();
 
             if (i == l) {
                 // An update of p as done below would throw a
@@ -317,7 +317,7 @@ public abstract class Util implements Version {
                 break;
             }
 
-            p = (Pair)p.cdr;
+            p = (Pair)p.cdr();
         }
         
         return result;
@@ -552,11 +552,11 @@ public abstract class Util implements Version {
     /* List functions */
     public static Value assq(Value v, Pair p) {
         while (p!=EMPTYLIST) {
-            Pair assc=pair(p.car);
-            if (assc.car == v) {
+            Pair assc=pair(p.car());
+            if (assc.car() == v) {
                 return assc;
             }
-            p=pair(p.cdr);
+            p=pair(p.cdr());
         }
         return FALSE;
     }
@@ -564,8 +564,8 @@ public abstract class Util implements Version {
     public static Pair mapcar(Pair list) {
         Pair c=EMPTYLIST;
         while (list != EMPTYLIST) {
-            c=new Pair(truePair(list.car).car, c);
-            list=pair(list.cdr);
+            c=new Pair(truePair(list.car()).car(), c);
+            list=pair(list.cdr());
         }
         return reverseInPlace(c);
     }
@@ -573,8 +573,8 @@ public abstract class Util implements Version {
     public static Pair reverse(Pair p) {
         Pair n=EMPTYLIST;
         while (p!=EMPTYLIST) {
-            n=new Pair(p.car, n);
-            p=(Pair)p.cdr;
+            n=new Pair(p.car(), n);
+            p=(Pair)p.cdr();
         }
         return n;
     }
@@ -586,8 +586,8 @@ public abstract class Util implements Version {
         Pair r=EMPTYLIST;
         Value d;
         for (;;) {
-            d=s.cdr;
-            s.cdr=r;
+            d=s.cdr();
+            s.setCdr(r);
             r=s;
             if (d==EMPTYLIST) {
                 break;
@@ -600,7 +600,7 @@ public abstract class Util implements Version {
     public static Pair append(Pair p1, Pair p2) {
         if (p1 == EMPTYLIST)
             return p2;
-        return new Pair(p1.car, append((Pair) p1.cdr, p2));
+        return new Pair(p1.car(), append((Pair) p1.cdr(), p2));
     }
 
     public static final Pair list(Value o1) {
@@ -625,10 +625,10 @@ public abstract class Util implements Version {
 
     public static Value memq(Value v, Pair p) {
         while (p!=EMPTYLIST) {
-            if (p.car == v) {
+            if (p.car() == v) {
                 return p;
             }
-            p=pair(p.cdr);
+            p=pair(p.cdr());
         }
         return FALSE;
     }

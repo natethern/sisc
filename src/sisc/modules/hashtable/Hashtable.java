@@ -64,9 +64,9 @@ public class Hashtable extends Value {
     }
 
     public void addAList(Pair p) {
-        for (; p != EMPTYLIST; p = pair(p.cdr)) {
-            Pair entry = pair(p.car);
-            put(entry.car, entry.cdr);
+        for (; p != EMPTYLIST; p = pair(p.cdr())) {
+            Pair entry = pair(p.car());
+            put(entry.car(), entry.cdr());
         }
     }
 

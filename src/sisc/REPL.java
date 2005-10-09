@@ -51,14 +51,14 @@ public class REPL {
         String message=null;
         Pair parent = null;
         while (p!=Util.EMPTYLIST && (location==null || message==null)) {
-            Pair cp=(Pair)p.car;
-            if (cp.car.equals(Util.MESSAGE))
-                message=cp.cdr.toString();
-            else if (cp.car.equals(Util.LOCATION))
-                location=cp.cdr.toString();
-            else if (cp.car.equals(Util.PARENT))
-                parent=(Pair)cp.cdr;
-            p=(Pair)p.cdr;
+            Pair cp=(Pair)p.car();
+            if (cp.car().equals(Util.MESSAGE))
+                message=cp.cdr().toString();
+            else if (cp.car().equals(Util.LOCATION))
+                location=cp.cdr().toString();
+            else if (cp.car().equals(Util.PARENT))
+                parent=(Pair)cp.cdr();
+            p=(Pair)p.cdr();
         }
         if (location==null)
             b.append(Util.liMessage(Util.SISCB, "error"));

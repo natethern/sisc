@@ -293,9 +293,9 @@ public class JavaObject extends Procedure {
         case 1: //get element
             Object ar = null;
             if (args[0] instanceof Pair) {
-                for (Pair p = pair(args[0]); p != EMPTYLIST; p = pair(p.cdr)) {
+                for (Pair p = pair(args[0]); p != EMPTYLIST; p = pair(p.cdr())) {
                     ar = obj;
-                    obj = Array.get(obj, num(p.car).indexValue());
+                    obj = Array.get(obj, num(p.car()).indexValue());
                 }
             } else if (args[0] instanceof SchemeVector) {
                 Value[] vals = ((SchemeVector)args[0]).vals;
@@ -313,10 +313,10 @@ public class JavaObject extends Procedure {
             if (args[0] instanceof Pair) {
                 Pair p = pair(args[0]);
                 if (p == EMPTYLIST) return VOID;
-                for (; p.cdr != EMPTYLIST; p = pair(p.cdr)) {
-                    obj = Array.get(obj, num(p.car).indexValue());
+                for (; p.cdr() != EMPTYLIST; p = pair(p.cdr())) {
+                    obj = Array.get(obj, num(p.car()).indexValue());
                 }
-                idx = p.car;
+                idx = p.car();
             } else if (args[0] instanceof SchemeVector) {
                 Value[] vals = ((SchemeVector)args[0]).vals;
                 for (int i=0; i < vals.length-1; i++) {
@@ -414,11 +414,11 @@ public class JavaObject extends Procedure {
             FieldAccessor fa = null;
             Pair p = pair(args[0]);
             while (true) {
-                fieldName = Util.mangleFieldName(symval(p.car));
+                fieldName = Util.mangleFieldName(symval(p.car()));
                 fa = accessField(obj.getClass(), fieldName);
-                if (p.cdr == EMPTYLIST) break;
+                if (p.cdr() == EMPTYLIST) break;
                 obj = fa.get(obj);
-                p = pair(p.cdr);
+                p = pair(p.cdr());
             }
 
             switch (args.length) {

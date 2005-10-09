@@ -16,6 +16,11 @@ public class ImmutablePair extends Pair {
         super(car, cdr);
     }
 
+    public ImmutablePair(boolean isImmutable) {
+        super();
+        this.isImmutable = isImmutable;
+    }
+
     public ImmutablePair(Value car, Value cdr, boolean isImmutable) {
         super(car, cdr);
         this.isImmutable = isImmutable;

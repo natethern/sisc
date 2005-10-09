@@ -22,11 +22,11 @@ public abstract class Util extends IndexedProcedure {
     public static Throwable javaException(SchemeException e) {
         Throwable ex = e;
         Value message = null;
-        for (Pair l = e.m; l != EMPTYLIST; l = (Pair)l.cdr) {
-            if (l.car instanceof Pair) {
-                Pair el = (Pair)l.car;
-                if (el.car == MESSAGE) {
-                    message = el.cdr;
+        for (Pair l = e.m; l != EMPTYLIST; l = (Pair)l.cdr()) {
+            if (l.car() instanceof Pair) {
+                Pair el = (Pair)l.car();
+                if (el.car() == MESSAGE) {
+                    message = el.cdr();
                     break;
                 }
             }
@@ -122,8 +122,8 @@ public abstract class Util extends IndexedProcedure {
 
     public static Vector pairToObjVect(Pair p) {
         Vector v=new Vector();
-        for (; p!=EMPTYLIST; p=(Pair)p.cdr) {
-            v.addElement(jobj(p.car));
+        for (; p!=EMPTYLIST; p=(Pair)p.cdr()) {
+            v.addElement(jobj(p.car()));
         }
         return v;
     }

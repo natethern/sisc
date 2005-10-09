@@ -242,8 +242,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         throws ContinuationException {      
         switch (id) {
         case NULLQ: return truth(v1==EMPTYLIST);
-        case CAR: return truePair( v1).car;
-        case CDR: return truePair( v1).cdr;
+        case CAR: return truePair( v1).car();
+        case CDR: return truePair( v1).cdr();
         case PAIRQ:
             return truth(v1 instanceof Pair &&
                          v1!=EMPTYLIST);

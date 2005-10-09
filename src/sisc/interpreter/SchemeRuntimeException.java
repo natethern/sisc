@@ -25,7 +25,7 @@ public class SchemeRuntimeException extends RuntimeException {
      * @return the bare Scheme message text 
      */
     public String getMessageText() {
-     return ((Pair)m.car).cdr.toString();
+     return ((Pair)m.car()).cdr().toString();
     }
 
     public SchemeException promote() {
