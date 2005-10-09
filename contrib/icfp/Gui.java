@@ -53,8 +53,8 @@ public class Gui extends JFrame {
             try {
                 Pair robot=(Pair)r.eval("(robot-position "+id+")");
                 path=(Pair)r.eval("last-path");
-                rx=((Quantity)robot.car).intValue();
-                ry=((Quantity)((Pair)robot.cdr).car).intValue();
+                rx=((Quantity)robot.car()).intValue();
+                ry=((Quantity)((Pair)robot.cdr()).car()).intValue();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -70,12 +70,12 @@ public class Gui extends JFrame {
                 g.drawString(toDraw, 0, yp+fh);
             }
             while (path!=Util.EMPTYLIST) {
-                Pair pe=(Pair)path.car;
-                int x = ((Quantity)pe.car).intValue();
-                int y = ((Quantity)((Pair)pe.cdr).car).intValue();
+                Pair pe=(Pair)path.car();
+                int x = ((Quantity)pe.car()).intValue();
+                int y = ((Quantity)((Pair)pe.cdr()).car()).intValue();
                 g.setColor(Color.green);
                 g.drawString("0", fw*(x-1), fh*(wh-(y-1)));
-                path=(Pair)path.cdr;
+                path=(Pair)path.cdr();
             }
         } 
     }

@@ -163,8 +163,8 @@ public class Regexp extends IndexedProcedure
       Pair pv = (Pair)value;
 
       while (pv != EMPTYLIST) {
-        options |= optionsFromScheme(pv.car, type);
-        pv = (Pair)pv.cdr;
+          options |= optionsFromScheme(pv.car(), type);
+          pv = (Pair)pv.cdr();
       }
 
       return options;
@@ -331,10 +331,10 @@ public class Regexp extends IndexedProcedure
         for (int i = 0, length = matchResult.groups(); i < length; i++) {
           Pair m = new Pair(new SchemeString(matchResult.group(i)), EMPTYLIST);
           if (result == null)
-            result = prev = m;
+              result = prev = m;
           else {
-            prev.cdr = m;
-            prev = m;
+              prev.setCdr(m);
+              prev = m;
           }
         }
       }
@@ -366,10 +366,10 @@ public class Regexp extends IndexedProcedure
                             Quantity.valueOf(matchResult.endOffset(i)));
           Pair elem = new Pair(m, EMPTYLIST);
           if (result == null)
-            result = prev = elem;
+              result = prev = elem;
           else {
-            prev.cdr = elem;
-            prev = elem;
+              prev.setCdr(elem);
+              prev = elem;
           }
         }
       }
