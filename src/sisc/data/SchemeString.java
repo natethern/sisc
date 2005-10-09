@@ -10,8 +10,8 @@ public class SchemeString extends Value {
     //trade off speed vs memory
     public static boolean compactRepresentation = false;
 
-    protected char[] data_c = null;
-    protected String data_s = null;
+    private char[] data_c = null;
+    private String data_s = null;
 
     public SchemeString() {}
 
@@ -23,14 +23,6 @@ public class SchemeString extends Value {
         data_c=data;
     }
 
-    public final boolean stringRepAvailable() {
-        return (data_s != null);
-    }
-
-    public final boolean charRepAvailable() {
-        return (data_c != null);
-    }
-
     public String asString() {
         if (data_s == null) {
             data_s=new String(data_c);
@@ -39,7 +31,7 @@ public class SchemeString extends Value {
         return data_s;
     }
 
-    public char[] asCharArray() {
+    private char[] asCharArray() {
         if (data_c == null) {
             data_c=data_s.toCharArray();
             if (compactRepresentation) data_s = null;
@@ -59,8 +51,8 @@ public class SchemeString extends Value {
         if (!(v instanceof SchemeString)) return false;
         SchemeString o=(SchemeString)v;
 
-        if (data_c != null && o.charRepAvailable()) {
-            char[] oc=o.asCharArray();
+        if (data_c != null && o.data_c != null) {
+            char[] oc=o.data_c;
             if (data_c.length!=oc.length) return false;
             for (int i=0; i<oc.length; i++) {
                 if (data_c[i]!=oc[i]) return false;
@@ -76,14 +68,25 @@ public class SchemeString extends Value {
     }
 
     public SchemeString append(SchemeString other) {
-        if (data_c != null && other.charRepAvailable()) {
-            char[] oc=other.asCharArray();
+        if (data_c != null && other.data_c != null) {
+            char[] oc=other.data_c;
             char[] newstr=new char[data_c.length + oc.length];
             System.arraycopy(data_c, 0, newstr, 0, data_c.length);
             System.arraycopy(oc, 0, newstr, data_c.length, oc.length);
             return new SchemeString(newstr);
         } else {
             return new SchemeString(asString()+other.asString());
+        }
+    }
+
+    public SchemeString substring(int from, int to) {
+        if (data_s != null) {
+            return new SchemeString(data_s.substring(from, to));
+        } else {
+            int len=to-from;
+            char[] newstr=new char[len];
+            System.arraycopy(data_c, from, newstr, 0, len);
+            return new SchemeString(newstr);
         }
     }
 

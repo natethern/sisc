@@ -270,15 +270,7 @@ public class OptionalPrimitives extends IndexedFixableProcedure {
             SchemeString str=str(v1);
             int lidx=num(v2).indexValue();
             int uidx=num(v3).indexValue();
-            if (str.stringRepAvailable())
-                return new SchemeString(str.asString().substring(lidx, uidx));
-            else {
-                int len=uidx-lidx;
-                char[] cdata=str.asCharArray();
-                char[] newstr=new char[len];
-                System.arraycopy(cdata, lidx, newstr, 0, len);
-                return new SchemeString(newstr);
-            }
+            return str.substring(lidx, uidx);
         default:
             throwArgSizeException();            
         }
