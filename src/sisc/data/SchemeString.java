@@ -103,6 +103,20 @@ public class SchemeString extends Value {
         data_s = null;
     }
 
+    public int readFromReader(Reader r, int off, int len)
+        throws IOException {
+
+        asCharArray();
+        return r.read(data_c, off, len);
+    }
+
+    public void writeToWriter(Writer w, int off, int len)
+        throws IOException {
+
+        asCharArray();
+        w.write(data_c, off, len);
+    }
+
     public void display(ValueWriter w) throws IOException {
         w.append(asString());
     }

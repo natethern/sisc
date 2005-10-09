@@ -259,3 +259,11 @@
              (import string-io)
              (set-car! (call-with-input-string "'(foo)" read) 1)
              #t))
+
+(should-be 1320475 #t
+           (let ()
+             (import string-io)
+             (call-with-input-string "bar"
+               (lambda (port)
+                 (with/fc (lambda (m e) #t)
+                   (lambda () (read-string "foo" 0 3 port)))))))

@@ -4,6 +4,9 @@
 	  existing Java code that manipulates SISC values; such code
 	  should use the provided accessor/modifier methods instead.
 
+	* Fixed bug in |read-string| that allowed modification of
+	  immutable strings. See bug 1320475.
+
 2005-10-03  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in reader that resulted in |read| returning immutable

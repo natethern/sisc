@@ -524,21 +524,23 @@ public class IO extends IndexedProcedure {
             switch (id) {
             case READSTRING:
                 try {
-                    char[] buf=str(f.vlr[0]).asCharArray();
-                    return Quantity.valueOf(((ReaderInputPort)f.dynenv.in).getReader().read(buf, num(f.vlr[1]).intValue(), num(f.vlr[2]).intValue()));
+                    return Quantity.valueOf(str(f.vlr[0]).readFromReader(((ReaderInputPort)f.dynenv.in).getReader(),
+                                                                         num(f.vlr[1]).intValue(),
+                                                                         num(f.vlr[2]).intValue()));
                 } catch (IOException e) {
                     throwIOException(f, e.getMessage(), e);
                 }
                 return VOID;
             case WRITESTRING:
                 try {
-                    char[] buf=str(f.vlr[0]).asCharArray();
-                    ((WriterOutputPort)f.dynenv.out).getWriter().write(buf, num(f.vlr[1]).intValue(), num(f.vlr[2]).intValue());
+                    str(f.vlr[0]).writeToWriter(((WriterOutputPort)f.dynenv.out).getWriter(),
+                                                num(f.vlr[1]).intValue(),
+                                                num(f.vlr[2]).intValue());
                 } catch (IOException e) {
                     throwIOException(f, e.getMessage(), e);
                 }
                 return VOID;
-                case OPENOUTPUTFILE:
+            case OPENOUTPUTFILE:
                 URL url = url(f.vlr[0]);
                 return openCharOutFile(f, url, string(f.vlr[1]), 
                                        truth(f.vlr[2]));
@@ -549,16 +551,18 @@ public class IO extends IndexedProcedure {
             switch (id) {
             case READSTRING:
                 try {
-                    char[] buf=str(f.vlr[0]).asCharArray();
-                    return Quantity.valueOf(((ReaderInputPort)f.vlr[3]).getReader().read(buf, num(f.vlr[1]).intValue(), num(f.vlr[2]).intValue()));
+                    return Quantity.valueOf(str(f.vlr[0]).readFromReader(((ReaderInputPort)f.vlr[3]).getReader(),
+                                                                         num(f.vlr[1]).intValue(),
+                                                                         num(f.vlr[2]).intValue()));
                 } catch (IOException e) {
                     throwIOException(f, e.getMessage(), e);
                 }
                 return VOID;
             case WRITESTRING:
                 try {
-                    char[] buf=str(f.vlr[0]).asCharArray();
-                    ((WriterOutputPort)f.vlr[3]).getWriter().write(buf, num(f.vlr[1]).intValue(), num(f.vlr[2]).intValue());
+                    str(f.vlr[0]).writeToWriter(((WriterOutputPort)f.vlr[3]).getWriter(),
+                                                num(f.vlr[1]).intValue(),
+                                                num(f.vlr[2]).intValue());
                 } catch (IOException e) {
                     throwIOException(f, e.getMessage(), e);
                 }

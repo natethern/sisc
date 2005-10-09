@@ -1,5 +1,7 @@
 package sisc.data;
 
+import java.io.Reader;
+
 public class ImmutableString extends SchemeString {
 
     public ImmutableString() {}
@@ -21,6 +23,10 @@ public class ImmutableString extends SchemeString {
     }
     
     public void set(char[] ca) {
+        throw new RuntimeException(liMessage(SISCB, "stringisimmutable"));
+    }
+
+    public int readFromReader(Reader r, int off, int len) {
         throw new RuntimeException(liMessage(SISCB, "stringisimmutable"));
     }
 
