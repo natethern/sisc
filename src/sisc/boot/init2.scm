@@ -685,13 +685,7 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
           [else (atan (imag-part x) (real-part x))])))
 
 (define (string-copy x)
-  (letrec ([newstr (make-string (string-length x))]
-           [string-loop (lambda (sl n)
-                          (if (null? sl) newstr
-                              (begin
-                                (string-set! newstr n (car sl))
-                                (string-loop (cdr sl) (+ n 1)))))])
-    (string-loop (string->list x) 0)))
+  (string-append x))
 
 ;(define (unquote x)
 ;  (error 'unquote "expression ~s not valid outside of a quasiquote."
