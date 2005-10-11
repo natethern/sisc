@@ -465,8 +465,6 @@
            r))))
 
 ;;;;;;;;;;;;;; String functions
-(define string-append (_make-left-pairwise-nary _string-append ""))
-
 (define char-downcase
   (let* ((a (char->integer #\A))
          (z (char->integer #\Z))

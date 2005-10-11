@@ -138,14 +138,27 @@
 (should-be 5.3 #f
   (equal? #f '()))
 
-;; Section 6: string->symbol case sensitivity
+;; Section 6:
 
 ;; Jens Axel S?gaard
+;; string->symbol case sensitivity
 ;; In thread:
 ;; Symbols in DrScheme - bug? 
 ;; http://groups.google.com/groups?selm=3be55b4f%240%24358%24edfadb0f%40dspool01.news.tele.dk
 (should-be 6.1 #f
   (eq? (string->symbol "f") (string->symbol "F")))
+
+;;Matthias Radestock
+;;|string-append| must always return a (mutable) copy
+(should-be 6.3 '("foo" "boo" "boo" "boo")
+           (let* ((s1 "foo")
+                  (s2 (string-append s1))
+                  (s3 (string-append "" s1))
+                  (s4 (string-append s1 "")))
+             (string-set! s2 0 #\b)
+             (string-set! s3 0 #\b)
+             (string-set! s4 0 #\b)
+             (list s1 s2 s3 s4)))
 
 ;; Section 7: First class continuations
 
@@ -327,4 +340,3 @@
       (display "Map is call/cc safe, but probably not tail recursive or inefficient.")
       (display "Map is not call/cc safe, but probably tail recursive and efficient."))
   (newline))
-

@@ -1746,13 +1746,6 @@
            |%%_LBzpanIPS_r|))
        (remainder |%%_LBTwetHPS_x| |%%_LBdtcWHPS_y|)))))
 (#%program
-  ((_string-append . 1)
-   (_make-left-pairwise-nary . 1))
-  ()
-  (_string-append _make-left-pairwise-nary)
-  (#%define string-append
-    (_make-left-pairwise-nary _string-append "")))
-(#%program
   ((- . 1)
    (char->integer . 4)
    (|%%_LBXa2bKPS_c| . 2)

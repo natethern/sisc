@@ -1,3 +1,8 @@
+2005-10-11  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug in |string-append| - it was not copying the string
+	  when called with a single argument. See bug 1320677.
+
 2005-10-09  Matthias Radestock  <matthias@sorted.org>
 
 	* Made sisc.data.Pair.{car,cdr} private. NB: This may break

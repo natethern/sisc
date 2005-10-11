@@ -34,7 +34,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define(">", GRT);
             define("_gcd", GCD);
             define("_lcm", LCM);
-            define("_string-append", STRINGAPPEND);
+            define("string-append", STRINGAPPEND);
             define("acos", ACOS);
             define("ashl", ASHL);
             define("ashr", ASHR);
@@ -356,7 +356,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             SchemeString.compactRepresentation=truth(v1);
             return VOID;
         case STRINGAPPEND:
-            return str(v1);
+            return str(v1).copy();
         case LIST: return new Pair(v1, EMPTYLIST);
         case SEALIMMUTABLEPAIR:
             immutablePair(v1).makeImmutable();
@@ -454,7 +454,12 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             }
             return new SchemeString(newStr);
         case STRINGAPPEND:
-            return str(v1).append(str(v2));
+            SchemeString s1 = str(v1);
+            SchemeString s2 = str(v2);
+            StringBuffer sbuf = new StringBuffer(s1.length() + s2.length());
+            s1.appendTo(sbuf);
+            s2.appendTo(sbuf);
+            return new SchemeString(sbuf.toString());
         case MAKERECTANGULAR:
             return Quantity.valueOf(num(v1),
                                     num(v2));
@@ -486,6 +491,15 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
     public final Value apply(Value v1, Value v2, Value v3) 
         throws ContinuationException {      
         switch(id) {
+        case STRINGAPPEND:
+            SchemeString s1 = str(v1);
+            SchemeString s2 = str(v2);
+            SchemeString s3 = str(v3);
+            StringBuffer sbuf = new StringBuffer(s1.length() + s2.length() + s3.length());
+            s1.appendTo(sbuf);
+            s2.appendTo(sbuf);
+            s3.appendTo(sbuf);
+            return new SchemeString(sbuf.toString());
         case STRINGSET:
             int index=num(v2).indexValue();
             try {
@@ -587,6 +601,12 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             while (--x >= 1) 
                 quantity=quantity.mul(num(v[x]));
             return num(v[0]).div(quantity);
+        case STRINGAPPEND:
+            StringBuffer sbuf = new StringBuffer();
+            for (int i=0; i<vls; i++) {
+                str(v[i]).appendTo(sbuf);
+            }
+            return new SchemeString(sbuf.toString());
         default:
             throwArgSizeException();
         }

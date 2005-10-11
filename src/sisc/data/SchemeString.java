@@ -67,15 +67,21 @@ public class SchemeString extends Value {
         return asString().hashCode();
     }
 
-    public SchemeString append(SchemeString other) {
-        if (data_c != null && other.data_c != null) {
-            char[] oc=other.data_c;
-            char[] newstr=new char[data_c.length + oc.length];
+    public void appendTo(StringBuffer buf) {
+        if (data_c != null) {
+            buf.append(data_c);
+        } else {
+            buf.append(data_s);
+        }
+    }
+
+    public SchemeString copy() {
+        if (data_c != null) {
+            char[] newstr=new char[data_c.length];
             System.arraycopy(data_c, 0, newstr, 0, data_c.length);
-            System.arraycopy(oc, 0, newstr, data_c.length, oc.length);
             return new SchemeString(newstr);
         } else {
-            return new SchemeString(asString()+other.asString());
+            return new SchemeString(asString());
         }
     }
 
