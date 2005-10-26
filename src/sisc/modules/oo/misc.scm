@@ -40,7 +40,6 @@
                         [(eq? p y) 'less-specific]
                         [else (loop (cdr cpl))]))))
           (error 'compare-types
-                 (string-append
-                  "~s or ~s is not a sub-type of ~s"
-                  x y c)))
+                 "~s or ~s is not a sub-type of ~s"
+                 x y c))
       (next x y c)))
