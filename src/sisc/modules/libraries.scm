@@ -13,6 +13,22 @@
 (define (provide-library lib)
   (hashtable/put! *libraries* lib #t))
 
+(define *tracker* #f)
+
+(define (track item thunk)
+  (let ([tracker #f])
+    (dynamic-wind
+     (lambda ()
+       (set! tracker *tracker*)
+       (set! *tracker* '()))
+     (lambda ()
+       (thunk)
+       (let ([res (cons item *tracker*)])
+         (if tracker (set! tracker (append tracker (list res))))
+         res))
+     (lambda ()
+       (set! *tracker* tracker)))))
+
 (define (require-library lib)
   (synchronized
    *libraries*
@@ -22,8 +38,9 @@
            (let ([url (locate-library lib)])
              (if (not url)
                  (error "library ~a not found" lib))
-             (load url)
-             (provide-library lib)))))))
+             (track lib (lambda ()
+                          (load url)
+                          (provide-library lib)))))))))
 
 (define (library-exists? lib)
   (let ([lib (normalize-lib-name lib)])
