@@ -44,6 +44,4 @@
   (include "../../modules/srfi/srfi-43.scm")
   (add-feature 'srfi-43))
 
-(display "srfi-43\n")
-
 

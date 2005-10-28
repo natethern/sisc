@@ -4,5 +4,3 @@
   (import srfi-0)
   (include "../../modules/srfi/srfi-7.scm")
   (add-feature 'srfi-7))
-
-(display "srfi-7\n")

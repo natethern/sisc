@@ -4,5 +4,3 @@
   (import _srfi-48)
   (define format _format)
   (add-feature 'srfi-48))
-
-(display "srfi-48\n")

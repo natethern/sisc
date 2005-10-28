@@ -18,5 +18,3 @@
   (define (bitwise-and . args)
     (error "bitwise-and not implemented"))
   (include "../../modules/srfi/optional-args.scm"))
-
-(display "optional-args\n")

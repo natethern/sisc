@@ -4,5 +4,3 @@
   (import srfi-23) ;ERROR
   (include "../../modules/srfi/srfi-16.scm")
   (add-feature 'srfi-16))
-
-(display "srfi-16\n")

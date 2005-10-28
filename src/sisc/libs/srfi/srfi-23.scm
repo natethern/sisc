@@ -7,5 +7,3 @@
         (_error msg)
         (_error (string-append msg ": ~a") (apply list args))))
   (add-feature 'srfi-23))
-
-(display "srfi-23\n")

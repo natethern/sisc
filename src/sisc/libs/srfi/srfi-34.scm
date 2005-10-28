@@ -4,5 +4,3 @@
      (guard guard-aux))
   (include "../../modules/srfi/srfi-34.scm")
   (add-feature 'srfi-34))
-
-(display "srfi-34\n")

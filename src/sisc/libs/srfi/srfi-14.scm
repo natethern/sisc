@@ -57,5 +57,3 @@
   (include "../../modules/srfi/srfi-14/support.scm")
   (include "../../modules/srfi/srfi-14/srfi-14.scm")
   (add-feature 'srfi-14))
-
-(display "srfi-14\n")

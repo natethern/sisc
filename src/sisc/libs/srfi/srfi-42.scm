@@ -38,5 +38,3 @@
      (: :-dispatch))
   (import srfi-23)
   (include "../../modules/srfi/srfi-42/ec.scm"))
-
-(display "srfi-42\n")

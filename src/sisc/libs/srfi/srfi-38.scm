@@ -5,5 +5,3 @@
   (define read/ss read-with-shared-structure)
   (define write/ss write-with-shared-structure)
   (add-feature 'srfi-38))
-
-(display "srfi-38\n")

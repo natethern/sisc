@@ -9,5 +9,3 @@
   (import string-io)
   (include "../../modules/srfi/srfi-29.scm")
   (add-feature 'srfi-29))
-
-(display "srfi-29\n")

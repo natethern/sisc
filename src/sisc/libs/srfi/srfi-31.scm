@@ -2,5 +2,3 @@
     (rec)
   (include "../../modules/srfi/srfi-31.scm")
   (add-feature 'srfi-31))
-
-(display "srfi-31\n")

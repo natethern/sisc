@@ -44,5 +44,3 @@
   (import record)
   (import* optional-args :optional)
   (include "../../modules/srfi/srfi-19/srfi-19.scm"))
-
-(display "srfi-19\n")

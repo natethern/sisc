@@ -26,5 +26,3 @@
   (import srfi-23)
   (include "../../modules/srfi/srfi-35.scm")
   (add-feature 'srfi-35))
-
-(display "srfi-35\n")

@@ -6,5 +6,3 @@
   (import misc)
   (import record)
   (include "../../modules/srfi/srfi-45.scm"))
-
-(display "srfi-45\n")

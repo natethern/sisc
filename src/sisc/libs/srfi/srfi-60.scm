@@ -53,6 +53,3 @@
   (define any-bits-set? logtest)
   (define first-set-bit log2-binary-factors)
   (define bitwise-merge bitwise-if))
-
-
-(display "srfi-60\n")

@@ -31,5 +31,3 @@
      share-nths)
   (import srfi-25)
   (include "../../modules/srfi/srfi-25/arlib.scm"))
-
-(display "srfi-25-lib\n")

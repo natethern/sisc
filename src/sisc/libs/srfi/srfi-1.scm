@@ -59,5 +59,3 @@
   (import srfi-8) ;RECEIVE
   (include "../../modules/srfi/srfi-1.scm")
   (add-feature 'srfi-1))
-
-(display "srfi-1\n")

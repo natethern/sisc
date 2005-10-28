@@ -57,5 +57,3 @@
   (define char-titlecase char-upcase)
   (include "../../modules/srfi/srfi-13.scm")
   (add-feature 'srfi-13))
-
-(display "srfi-13\n")

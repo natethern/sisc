@@ -18,5 +18,3 @@
   (include "../../modules/srfi/srfi-27.scm")
   (srfi-27-init)
   (add-feature 'srfi-27))
-
-(display "srfi-27\n")

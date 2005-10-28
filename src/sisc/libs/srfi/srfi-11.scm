@@ -2,5 +2,3 @@
   (let-values let*-values)
   (include "../../modules/srfi/srfi-11.scm")
   (add-feature 'srfi-11))
-
-(display "srfi-11\n")

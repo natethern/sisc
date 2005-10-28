@@ -21,5 +21,3 @@
   ;;(include "../../modules/srfi/srfi-25/ix-tter.scm")
   ;;(include "../../modules/srfi/srfi-25/op-tter.scm")
   (include "../../modules/srfi/srfi-25/array.scm"))
-
-(display "srfi-25\n")

@@ -23,5 +23,3 @@
   (import* srfi-1 any every)
   (import srfi-9)
   (include "../../modules/srfi/srfi-40.scm"))
-
-(display "srfi-40\n")
