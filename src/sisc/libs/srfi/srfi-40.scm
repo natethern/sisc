@@ -22,4 +22,5 @@
      stream-filter)
   (import* srfi-1 any every)
   (import srfi-9)
-  (include "../../modules/srfi/srfi-40.scm"))
+  (include "../../modules/srfi/srfi-40.scm")
+  (add-feature 'srfi-40))

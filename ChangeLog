@@ -1,3 +1,8 @@
+2005-10-28  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed minor problem with some of the srfi modules - they were
+	  not registering the srfi as a feature.	  
+
 2005-10-11  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in |string-append| - it was not copying the string

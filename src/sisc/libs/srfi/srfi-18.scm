@@ -27,4 +27,5 @@
            time-second
            time-nanosecond)
   (import* srfi-1 delete!)
-  (include "../../modules/srfi/srfi-18.scm"))
+  (include "../../modules/srfi/srfi-18.scm")
+  (add-feature 'srfi-18))

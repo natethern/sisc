@@ -52,4 +52,5 @@
   (define bit-set?   logbit?)
   (define any-bits-set? logtest)
   (define first-set-bit log2-binary-factors)
-  (define bitwise-merge bitwise-if))
+  (define bitwise-merge bitwise-if)
+  (add-feature 'srfi-60))

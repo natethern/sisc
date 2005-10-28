@@ -43,4 +43,5 @@
   (import srfi-8)
   (import record)
   (import* optional-args :optional)
-  (include "../../modules/srfi/srfi-19/srfi-19.scm"))
+  (include "../../modules/srfi/srfi-19/srfi-19.scm")
+  (add-feature 'srfi-19))

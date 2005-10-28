@@ -20,4 +20,5 @@
   ;;(include "../../modules/srfi/srfi-25/op-mbda.scm")
   ;;(include "../../modules/srfi/srfi-25/ix-tter.scm")
   ;;(include "../../modules/srfi/srfi-25/op-tter.scm")
-  (include "../../modules/srfi/srfi-25/array.scm"))
+  (include "../../modules/srfi/srfi-25/array.scm")
+  (add-feature 'srfi-25))

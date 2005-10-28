@@ -5,4 +5,5 @@
      force)
   (import misc)
   (import record)
-  (include "../../modules/srfi/srfi-45.scm"))
+  (include "../../modules/srfi/srfi-45.scm")
+  (add-feature 'srfi-45))
