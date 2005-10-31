@@ -16,29 +16,6 @@ import sisc.util.UndefinedVarException;
 public class FreeReferenceExp extends Expression 
     implements Immediate, OptimisticExpression {
 
-    public class NonImmediateFreeReferenceExp extends Expression {
-
-        FreeReferenceExp base;
-        
-        public NonImmediateFreeReferenceExp(FreeReferenceExp base) {
-            this.base=base;
-        }
-        
-        /* (non-Javadoc)
-         * @see sisc.data.Expression#eval(sisc.interpreter.Interpreter)
-         */
-        public void eval(Interpreter r) throws ContinuationException {
-            base.eval(r);
-        }
-
-        /* (non-Javadoc)
-         * @see sisc.data.Expression#express()
-         */
-        public Value express() {
-            return list(sym("NIFreeReference-exp"), ref.getName());
-        }
-    }
-    
     private FreeReference ref;
     private OptimisticHost host;
     private int uexpPosition;
@@ -65,7 +42,6 @@ public class FreeReferenceExp extends Expression
             return ref.getValue();
         } catch (UndefinedVarException e) {
             error(r, liMessage(SISCB,"undefinedvar", e.var));
-            host.alter(r, uexpPosition, new NonImmediateFreeReferenceExp(this));
             return null; //won't get here
         }
     }
