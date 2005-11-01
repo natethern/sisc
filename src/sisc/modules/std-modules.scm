@@ -872,34 +872,32 @@
 (initialize)
 (set! current-optimizer (make-parameter optimize))
 
-;;load and import srfi-0
-(module srfi-0 (cond-expand)
-  (include "srfi/srfi-0.scm")
-  (add-feature 'srfi-0))
+;;natively supported srfis
+(for-each require-library
+          '(sisc/libs/srfi/srfi-24
+            sisc/libs/srfi/srfi-28
+            sisc/libs/srfi/srfi-30
+            sisc/libs/srfi/srfi-39
+            sisc/libs/srfi/srfi-48
+            sisc/libs/srfi/srfi-62))
+(import srfi-24)
+(import srfi-28)
+(import srfi-30)
+(import srfi-39)
+(import srfi-48)
+(import srfi-62)
+
+;;load and import various srfis for scripting
+;;we do this so we don't have to load the srfi lib in scripts
+(for-each require-library
+          '(sisc/libs/srfi/srfi-0
+            sisc/libs/srfi/srfi-7
+            sisc/libs/srfi/srfi-22
+            sisc/libs/srfi/srfi-55))
 (import srfi-0)
-
-;;load and import srfi-22, 7
-;; we support this directly so we don't have to load srfi.scc in scripts
-(module srfi-22 (srfi-22-prepare main main-hook)
-  (include "srfi/srfi-22/srfi-22.scm")
-  (add-feature 'srfi-22))
-
-(module srfi-7 (program)
-  (import srfi-0)
-  (include "srfi/srfi-7.scm")
-  (add-feature 'srfi-7))
-
-;;load and import srfi-55
-
-(module srfi-55
-  ((require-extension srfi-55-clause-handler))
-  (include "srfi/srfi-55.scm")
-  (add-feature 'srfi-55))
-
-(import srfi-0)
+(import srfi-7)
 (import srfi-22)
 (import srfi-55)
-
 
 ;;Final initialization
 (let ()

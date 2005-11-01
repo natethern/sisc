@@ -1,1 +1,4 @@
-;;srfi-0 is loaded and imported by default
+(module srfi-0 (cond-expand)
+  (include "../../modules/srfi/srfi-0.scm")
+  (add-feature 'srfi-0))
+

@@ -305,9 +305,12 @@
 
   <target name="full-heap" depends="jars,build-full-heap" if="buildFullHeap">
     <java classname="sisc.boot.GenerateHeap"
-          classpath="${classdir}"
           dir="${bootdir}"
           fork="yes">
+      <classpath>
+        <pathelement location="${classdir}"/>
+        <pathelement location="${srcdir}"/> <!-- for srfi libs -->
+      </classpath>
       <jvmarg value="-Dsisc.debugging=${siscDebugging}"/>
       <arg value="-out"/>
       <arg value="${heap}"/>

@@ -1,3 +1,8 @@
+2005-11-01  Matthias Radestock  <matthias@sorted.org>
+
+	* Improved handling of natively supported srfis. They now all
+	  have an associated module and appear as pre-imported libraries.
+
 2005-10-28  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed minor problem with some of the srfi modules - they were
