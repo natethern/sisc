@@ -50,12 +50,11 @@ public class StreamSerializer extends SLL2Serializer {
         Integer epIndex=(Integer)entryPoints.get(e);
         if (epIndex != null) {
             writeSeenEntryPoint(epIndex.intValue());
-            return;
         }  else {
             entryPoints.put(e, new Integer(nextEp));
             sizeStartOffset=writeNewEntryPointMarker(nextEp++, e);
+            writeExpression(e, posi, sizeStartOffset, flush);
         }
-        writeExpression(e, posi, sizeStartOffset, flush);
     }
     
     public void writeClass(Class c) throws IOException {
