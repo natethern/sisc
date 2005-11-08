@@ -143,7 +143,7 @@
 
 ;;exception handling
 (define-generic-java-method char-at)
-(with/fc (lambda (m e) (print-exception (make-exception m e)))
+(with/fc print-error
   (lambda () (char-at (->jstring "foo") (->jint 3))))
 
 ;;throwing exceptions from within proxy
@@ -178,7 +178,7 @@
 (display i) ;;-> #<java $Proxy1 list-iterator>
 
 ;;catching an exception thrown by a proxy.
-(with/fc (lambda (m e) (print-exception (make-exception m e)) #f)
+(with/fc print-error
   (lambda () (remove i)))
 
 ;garbage collection
