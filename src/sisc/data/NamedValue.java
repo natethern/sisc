@@ -11,7 +11,7 @@ public interface NamedValue {
      * Retrieves the name of a named object, or null if the
      * object has not yet been given a name
      */
-    Value getName();
+    Symbol getName();
 }
 /*
  * The contents of this file are subject to the Mozilla Public

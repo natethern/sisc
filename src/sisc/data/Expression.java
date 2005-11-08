@@ -94,8 +94,8 @@ public abstract class Expression extends Util
         setAnnotation(NAME, s);
     }
 
-    public Value getName() {
-        return getAnnotation(NAME, null);
+    public Symbol getName() {
+        return (Symbol)getAnnotation(NAME, null);
     }
 
     /**

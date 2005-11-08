@@ -129,7 +129,7 @@ public abstract class Value extends Expression implements Immediate {
         throws IOException {
         w.append("#<").append(type);
 
-        Value name=getName();
+        Symbol name=getName();
         if (name!=null)
             w.append(' ').append(name);
         w.append('>');
