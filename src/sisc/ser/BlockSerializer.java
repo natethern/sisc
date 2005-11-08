@@ -79,17 +79,7 @@ public class BlockSerializer extends SLL2Serializer {
                 flush=true;
             }
         } 
-
-        LibraryBinding lb=ctx.reverseLookup(e);
-        boolean contiguous;
-        if (lb==null) {
-            contiguous=writeExpressionSerialization(e, new SerJobEnd(posi, sizeStartOffset), 
-                            flush);
-        } else {
-            contiguous=writeLibraryReference(lb, new SerJobEnd(posi, sizeStartOffset), 
-                    flush);
-        }
-        
+        boolean contiguous = writeExpression(e, posi, sizeStartOffset, flush);
         if (contiguous) {
             //If true, the item was serialized contiguously, so we can
             //record its size now

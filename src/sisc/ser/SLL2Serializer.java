@@ -135,6 +135,22 @@ public abstract class SLL2Serializer extends SerializerImpl {
         serLoop(start);
     }
 
+    protected boolean writeExpression(Expression e, int pos, int offset,
+                                      boolean flush) throws IOException {
+        SerJobEnd job = new SerJobEnd(pos, offset);
+        boolean contiguous;
+        if (e instanceof Singleton) {
+            contiguous = writeExpressionSerialization(e, job, flush);
+        } else {
+            LibraryBinding lb=ctx.reverseLookup(e);
+            contiguous = (lb==null) ?
+                writeExpressionSerialization(e, job, flush) :
+                writeLibraryReference(lb, job, flush);
+        }
+        return contiguous;
+    }
+
+
     protected void serLoop(int start) throws IOException {
         while (serQueue.size()>start) {
             Object o=serQueue.removeFirst();

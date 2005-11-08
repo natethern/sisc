@@ -55,13 +55,7 @@ public class StreamSerializer extends SLL2Serializer {
             entryPoints.put(e, new Integer(nextEp));
             sizeStartOffset=writeNewEntryPointMarker(nextEp++, e);
         }
-        LibraryBinding lb=ctx.reverseLookup(e);
-        if (lb==null) {
-            writeExpressionSerialization(e, new SerJobEnd(posi, sizeStartOffset), 
-                    flush);
-        } else {
-            writeLibraryReference(lb, new SerJobEnd(posi, sizeStartOffset), flush);
-        }
+        writeExpression(e, posi, sizeStartOffset, flush);
     }
     
     public void writeClass(Class c) throws IOException {
