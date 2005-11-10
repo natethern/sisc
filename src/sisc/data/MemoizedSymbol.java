@@ -5,7 +5,7 @@ import java.lang.ref.WeakReference;
 
 public class MemoizedSymbol extends Symbol implements Singleton {
 
-    public static WeakHashMap memo=new WeakHashMap(100);
+    private static WeakHashMap memo=new WeakHashMap(100);
 
     private MemoizedSymbol(String symval) {
         super(symval);
