@@ -44,6 +44,7 @@ public class SharedValueWriter extends PortValueWriter {
 
     public boolean visit(ExpressionVisitee e) {
         if (e == null ||
+            e instanceof sisc.data.Singleton ||
             e instanceof sisc.env.SymbolicEnvironment) return true;
         Object i = shared.get(e);
         if (i == null) {
