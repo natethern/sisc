@@ -33,7 +33,6 @@ public class JavaSerializer implements Serializer {
 
     public void writeExpression(Expression e) throws IOException {
         os.writeObject(e);
-        if (e != null) e.serializeAnnotations(this);
     }
 
     public void writeExpressionArray(Expression[] v) throws IOException {

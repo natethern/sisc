@@ -1,3 +1,8 @@
+2005-11-11  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed serialisation of annotations in Java serialisation of SISC
+	  values. See bug 1353781.
+
 2005-11-01  Matthias Radestock  <matthias@sorted.org>
 
 	* Improved handling of natively supported srfis. They now all

@@ -59,9 +59,7 @@ public class JavaDeserializer implements Deserializer {
     }
 
     public Expression readExpression() throws IOException {
-        Expression e = (Expression)readObjectIOExceptionOnly();
-        if (e != null) e.deserializeAnnotations(this);
-        return e;
+        return (Expression)readObjectIOExceptionOnly();
     }
 
     public Value[] readValueArray() throws IOException {

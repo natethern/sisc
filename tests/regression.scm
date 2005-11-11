@@ -267,3 +267,40 @@
                (lambda (port)
                  (with/fc (lambda (m e) #t)
                    (lambda () (read-string "foo" 0 3 port)))))))
+
+(should-be 1353781 #t
+           (let ()
+             (import* file-manipulation file-delete!)
+             (import procedure-properties)
+             (import s2j)
+             (define-java-classes
+               <java.io.file-output-stream>
+               <java.io.object-output-stream>
+               <java.io.file-input-stream>
+               <java.io.object-input-stream>)
+             (define-generic-java-methods
+               write-object
+               read-object
+               flush
+               close)
+             (define ser-file "test.ser")
+             (define (proc) #t)
+             (set-procedure-property! proc 'foo 'bar)
+             (dynamic-wind
+              (lambda ()
+                (let ([p (java-new <java.io.object-output-stream>
+                                   (java-new <java.io.file-output-stream>
+                                             (->jstring ser-file)))])
+                  (write-object p (java-wrap proc))
+                  (flush p)
+                  (close p)))
+              (lambda ()
+                (let ([p (java-new <java.io.object-input-stream>
+                                   (java-new <java.io.file-input-stream>
+                                             (->jstring ser-file)))])
+                  (define proc1 (java-unwrap (read-object p)))
+                  (close p)
+                  (eq? (procedure-property proc1 'foo) 'bar)))
+              (lambda ()
+                (file-delete! ser-file)))))
+     
