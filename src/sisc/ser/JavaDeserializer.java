@@ -8,14 +8,22 @@ import sisc.data.Symbol;
 import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.DelegatingSymEnv;
+import sisc.util.InternedValue;
 
 public class JavaDeserializer implements Deserializer {
 
     protected ObjectInput is;
 
-    public JavaDeserializer(ObjectInput i) throws IOException {
+    private JavaDeserializer(ObjectInput i) throws IOException {
         is=i;
     }
+
+    public static Deserializer create(ObjectInput i) throws IOException {
+        return (i instanceof NestedObjectInputStream) ?
+            ((NestedObjectInputStream)i).getDeserializerInstance() :
+            new JavaDeserializer(i);
+    }
+
 
     protected Object readObjectIOExceptionOnly() throws IOException {
         try {

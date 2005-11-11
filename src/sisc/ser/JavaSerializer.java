@@ -9,8 +9,14 @@ public class JavaSerializer implements Serializer {
     
     protected ObjectOutput os;
 
-    public JavaSerializer(ObjectOutput o) throws IOException {
+    private JavaSerializer(ObjectOutput o) throws IOException {
         os=o;
+    }
+
+    public static Serializer create(ObjectOutput o) throws IOException {
+        return (o instanceof NestedObjectOutputStream) ?
+            ((NestedObjectOutputStream)o).getSerializerInstance() :
+            new JavaSerializer(o);
     }
 
     public void flush() throws IOException {
