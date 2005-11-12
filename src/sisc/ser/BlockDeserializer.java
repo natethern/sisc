@@ -41,20 +41,10 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
         return readExpression(true, -1);
     }
     
-    int indent=0;
     public Expression readExpression(boolean flush, int definingOid) throws IOException {
         int type=readInt();
 
         try {
-            /*
-            StringBuffer b=new StringBuffer();
-            for (int i=0; i<indent; i++) {
-                b.append(' ');
-            }
-            b.append(type).append(", ").append(definingOid);
-            System.out.println(b.toString());
-            */
-
             //Read the stream object type, values above 15 of which represent
             //shared objects
             switch(type) {
@@ -88,11 +78,6 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
                 return e;
             case 1: //null
                 return null;
-            case 3: //Class Definitions (SLL3)
-                int cid=readInt();
-                Class c=readClass();
-                classPool.put(new Integer(cid), c);
-                return readExpression(flush, -1);
             case 4: //External library references
                 String libName=readUTF();
                 int epid=readInt();
@@ -109,7 +94,7 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
         } catch (IllegalAccessException iae) {
             iae.printStackTrace();
             throw new IOException(iae.getMessage());
-        } finally { indent --; }
+        }
     }
 
     Expression deser() throws IOException {

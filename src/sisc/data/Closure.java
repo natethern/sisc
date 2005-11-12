@@ -3,10 +3,8 @@ package sisc.data;
 import java.io.*;
 import sisc.interpreter.*;
 import sisc.io.ValueWriter;
-import sisc.ser.DeserializerImpl;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
-import sisc.ser.SerializerImpl;
 import sisc.util.ExpressionVisitor;
 import sisc.env.LexicalUtils;
 
