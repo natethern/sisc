@@ -69,6 +69,10 @@ public class BlockSerializer extends SLL2Serializer {
         writeInt(((Integer)ci.get(c)).intValue());
     }
 
+    public void writeObject(Object o) throws IOException {
+        throw new IOException("cannot serialize " + o);
+    }
+
     protected void serializeEnd(SerJobEnd j) {
         if (j.sizeStartOffset != -1)
             sizes[j.posi] = cos.position - j.sizeStartOffset;

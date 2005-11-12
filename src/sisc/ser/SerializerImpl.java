@@ -24,20 +24,6 @@ public abstract class SerializerImpl extends BerEncoding implements Serializer {
         write(buffer);
     }
 
-    public void writeObject(Object o) throws IOException {
-        throw new IOException("cannot serialize " + o);
-    }
-
-    public void flush() throws IOException {
-    }
-
-    public void close() throws IOException {
-    }
-
-    public abstract void writeExpression(Expression e) throws IOException;
-    public abstract void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException;
-    public abstract void writeClass(Class c) throws IOException;
-
     public void writeExpressionArray(Expression[] v) throws IOException {
         if (v==null) writeInt(0);
         else {
