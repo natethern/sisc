@@ -7,18 +7,44 @@ import sisc.interpreter.AppContext;
 
 public class BlockSerializer extends SLL2Serializer {
 
+    private static class CountingOutputStream extends FilterOutputStream {
+
+        public int position;
+
+        public CountingOutputStream(OutputStream out) {
+            super(out);
+            position=0;
+        }
+
+        public void write(int b) throws IOException {
+            position++;
+            out.write(b);
+        }
+
+        public void write(byte[] b, int offset, int len) throws IOException {
+            position+=len;
+            out.write(b, offset, len);
+        }
+    }
+
+    private CountingOutputStream cos;
+    private Map offsets;
     private Set seen;
     private Vector classes;
     private int[] sizes;
     private Expression[] entryPoints;
     private HashMap epi, ci;
 
-    public BlockSerializer(AppContext ctx, OutputStream out, Vector classes, 
-                           Expression[] entryPoints) throws IOException {
-        super(ctx, out);
+    private BlockSerializer(AppContext ctx, CountingOutputStream cos,
+                            Vector classes, Expression[] entryPoints)
+        throws IOException {
+
+        super(ctx, cos);
+        this.cos = cos;
         this.classes=classes;
         this.entryPoints=entryPoints;
         sizes=new int[entryPoints.length];
+        offsets=new HashMap();
         seen=new HashSet();
 
         ci=new HashMap();
@@ -32,7 +58,12 @@ public class BlockSerializer extends SLL2Serializer {
         }
     }
 
-    int[] getSizes() {
+    public BlockSerializer(AppContext ctx, OutputStream out, Vector classes, 
+                           Expression[] entryPoints) throws IOException {
+        this(ctx, new CountingOutputStream(out), classes, entryPoints);
+    }
+
+    public int[] getSizes() {
         return sizes;
     }
 
@@ -52,7 +83,9 @@ public class BlockSerializer extends SLL2Serializer {
                 return;
             }  else {
                 seen.add(e);
-                sizeStartOffset=writeNewEntryPointMarker(posi, e);
+                offsets.put(new Integer(posi), new Integer(cos.position));
+                writeNewEntryPointMarker(posi, e);
+                sizeStartOffset = cos.position;
                 flush=true;
             }
         } 
@@ -62,7 +95,7 @@ public class BlockSerializer extends SLL2Serializer {
             //record its size now
             if (sizeStartOffset != -1)
                 sizes[posi] = cos.position - sizeStartOffset;
-        } // else we'll get it in a callback with a SerJobEnd
+        } // else we'll get it in a serializeEnd() callback
     }
 
     public void writeClass(Class c) throws IOException {
@@ -73,9 +106,18 @@ public class BlockSerializer extends SLL2Serializer {
         throw new IOException("cannot serialize " + o);
     }
 
-    protected void serializeEnd(SerJobEnd j) {
-        if (j.sizeStartOffset != -1)
-            sizes[j.posi] = cos.position - j.sizeStartOffset;
+    protected void serializeEnd(int posi, int sizeStartOffset) {
+        if (sizeStartOffset != -1)
+            sizes[posi] = cos.position - sizeStartOffset;
+    }
+
+    public int[] getOffsets() {
+        int[] i=new int[offsets.size()];
+        for (Iterator x=offsets.keySet().iterator(); x.hasNext();) {
+            Integer key=(Integer)x.next();
+            i[key.intValue()]=((Integer)offsets.get(key)).intValue();
+        }
+        return i;
     }
 }
 

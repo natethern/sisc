@@ -9,19 +9,24 @@ import sisc.interpreter.AppContext;
 
 public abstract class SLL2Serializer extends SerializerImpl {
 
-    private Map offsets;
-    protected DataOutputStream datout;
-    protected CountingOutputStream cos;
-    protected LinkedList serQueue;
+    private static class SerJobEnd {
+        public int posi;
+        public int sizeStartOffset;
+        
+        public SerJobEnd(int posi, int sizeStartOffset) {
+            this.posi=posi;
+            this.sizeStartOffset=sizeStartOffset;
+        }
+    }
+
     protected AppContext ctx;       
+    protected DataOutputStream datout;
+    private LinkedList serQueue;
     
     protected SLL2Serializer(AppContext ctx, OutputStream out) throws IOException {
         this.ctx=ctx;
-        cos=new CountingOutputStream(out);
-        datout=new DataOutputStream(cos);
-        
+        datout = new DataOutputStream(out);
         serQueue=new LinkedList();
-        offsets=new HashMap();
     }
    
     /**
@@ -33,13 +38,7 @@ public abstract class SLL2Serializer extends SerializerImpl {
      */     
     protected abstract void writeExpression(Expression e, boolean flush) throws IOException;
    
-    /**
-     * Callback that indicates the end of serializing an entry point
-     * 
-     * @param e The end-of-job token
-     * @throws IOExceptioon
-     */
-    protected abstract void serializeEnd(SerJobEnd e) throws IOException;
+    protected abstract void serializeEnd(int posi, int sizeStartOffset);
 
     public void writeExpression(Expression e) throws IOException {
         writeExpressionHelper(e, false);
@@ -177,7 +176,8 @@ public abstract class SLL2Serializer extends SerializerImpl {
             if (o instanceof Expression) {
                 serializeDetails((Expression)o);
             } else if (o instanceof SerJobEnd) {
-                serializeEnd((SerJobEnd)o);
+                SerJobEnd job = (SerJobEnd)o;
+                serializeEnd(job.posi, job.sizeStartOffset);
             } 
         }
     }
@@ -185,36 +185,26 @@ public abstract class SLL2Serializer extends SerializerImpl {
     
     public void close() throws IOException {
         flush();
-        cos.close();
+        datout.close();
     }
 
     public void flush() throws IOException {
         if (serQueue.size() > 0) {
             serLoop(0);
         }
+        datout.flush();
     }
 
     protected void writeSeenEntryPoint(int posi) throws IOException {
         writeInt(posi+16);
     }
 
-    protected void setOffset(int posi, int bpos) {
-        offsets.put(new Integer(posi), new Integer(bpos));
-    }
-    
-    protected int writeNewEntryPointMarker(int posi, Expression e) throws IOException {
-        setOffset(posi, cos.position);
-        
+    protected void writeNewEntryPointMarker(int posi, Expression e) throws IOException {
         writeInt(2);
         writeInt(posi);
-        return cos.position;
     }
     
-    protected void writeOrdinaryExpressionMarker() throws IOException {
-        writeInt(0);
-    }
-
-    protected boolean writeExpressionSerialization(Expression e, SerJobEnd end, boolean flush) throws IOException {
+    private boolean writeExpressionSerialization(Expression e, SerJobEnd end, boolean flush) throws IOException {
         writeInt(0);
         writeClass(e.getClass());
         if (e instanceof Singleton) {
@@ -230,21 +220,13 @@ public abstract class SLL2Serializer extends SerializerImpl {
         }
     }
 
-    protected boolean writeLibraryReference(LibraryBinding lb, SerJobEnd end, boolean flush) throws IOException {
+    private boolean writeLibraryReference(LibraryBinding lb, SerJobEnd end, boolean flush) throws IOException {
         writeInt(4);
         writeUTF(lb.name);
         writeInt(lb.epid);
         return true;
     }
 
-    protected int[] getOffsets() {
-        int[] i=new int[offsets.size()];
-        for (Iterator x=offsets.keySet().iterator(); x.hasNext();) {
-            Integer key=(Integer)x.next();
-            i[key.intValue()]=((Integer)offsets.get(key)).intValue();
-        }
-        return i;
-    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

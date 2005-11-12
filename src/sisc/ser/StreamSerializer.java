@@ -13,7 +13,7 @@ public class StreamSerializer extends SLL2Serializer {
 
     public StreamSerializer(AppContext ctx, OutputStream out) throws IOException {
         super(ctx, out);
-        objout=new NestedObjectOutputStream(cos,this);
+        objout=new NestedObjectOutputStream(datout,this);
         this.classes=new HashMap();
         this.entryPoints=new HashMap();
     }
@@ -29,8 +29,8 @@ public class StreamSerializer extends SLL2Serializer {
             writeSeenEntryPoint(epIndex.intValue());
         }  else {
             entryPoints.put(e, new Integer(nextEp));
-            sizeStartOffset=writeNewEntryPointMarker(nextEp++, e);
-            writeExpression(e, posi, sizeStartOffset, flush);
+            writeNewEntryPointMarker(nextEp++, e);
+            writeExpression(e, posi, -1, flush);
         }
     }
     
@@ -49,8 +49,9 @@ public class StreamSerializer extends SLL2Serializer {
         objout.writeObject(o);
     }
        
-    protected void serializeEnd(SerJobEnd j) {
+    protected void serializeEnd(int posi, int sizeStartOffset) {
     }
+
 }
 
 /*
