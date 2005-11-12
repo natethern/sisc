@@ -102,7 +102,7 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
             while (!serQueue.isEmpty()) {
                 Expression e=(Expression)serQueue.removeFirst();
                 if (e!=null) {
-                    if (seen(e)) {
+                    if (seen.contains(e)) {
                         if (!entryPoints.contains(e) && !newEntryPoints.contains(e)) {
                             duplicates.add(e);
                         }
@@ -202,9 +202,6 @@ public class LibraryBuilder extends BerEncoding implements ExpressionVisitor {
         return true;
     }
     
-    public boolean seen(Expression e) { 
-        return seen.contains(e);
-    }
 }
 
 /*

@@ -36,31 +36,8 @@ public class BlockSerializer extends SLL2Serializer {
         return sizes;
     }
 
-    public final void writeExpression(Expression e) throws IOException {
-        writeExpression(e, false);
-    }
-
-    public final void writeInitializedExpression(Expression e) throws IOException {
-        writeExpression(e, true);
-    }
-
-    /**
-     * Serializes expressions. We distinguish betweeen four types of
-     * expressions:
-     * Type 0: normal expression
-     * Type 1: null
-     * Type 2: first encounter of entry point / shared expression
-     * Type 16+n: reference to entry point / shared expression n
-     *
-     * @param e the expression to serialize
-     * @exception IOException if an error occurs
-     */
-    public void writeExpression(Expression e, boolean flush) throws IOException {
-        if (e==null) {
-            //null
-            writeInt(1);
-            return;
-        } 
+    protected void writeExpression(Expression e, boolean flush)
+        throws IOException {
 
         Integer epIndex=(Integer)epi.get(e);
 
@@ -70,7 +47,7 @@ public class BlockSerializer extends SLL2Serializer {
         if (epIndex!=null) {
             posi=epIndex.intValue();
             //entry point / shared expression
-            if (seen(e)) {
+            if (seen.contains(e)) {
                 writeSeenEntryPoint(posi);
                 return;
             }  else {
@@ -88,10 +65,6 @@ public class BlockSerializer extends SLL2Serializer {
         } // else we'll get it in a callback with a SerJobEnd
     }
 
-    protected boolean seen(Expression e) {
-        return seen.contains(e);
-    }
-    
     public void writeClass(Class c) throws IOException {
         writeInt(((Integer)ci.get(c)).intValue());
     }

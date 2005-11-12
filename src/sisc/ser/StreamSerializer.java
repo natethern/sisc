@@ -18,31 +18,8 @@ public class StreamSerializer extends SLL2Serializer {
         this.entryPoints=new HashMap();
     }
     
-    public final void writeExpression(Expression e) throws IOException {
-        writeExpression(e, false);
-    }
-
-    public final void writeInitializedExpression(Expression e) throws IOException {
-        writeExpression(e, true);
-    }
-
-    /**
-     * Serializes expressions. We distinguish betweeen four types of
-     * expressions:
-     * Type 0: normal expression
-     * Type 1: null
-     * Type 2: first encounter of entry point / shared expression
-     * Type 16+n: reference to entry point / shared expression n
-     *
-     * @param e the expression to serialize
-     * @exception IOException if an error occurs
-     */
-    public void writeExpression(Expression e, boolean flush) throws IOException {
-        if (e==null) {
-            //null
-            writeInt(1);
-            return;
-        } 
+    protected void writeExpression(Expression e, boolean flush)
+        throws IOException {
 
         int sizeStartOffset = -1;
         int posi=nextEp;

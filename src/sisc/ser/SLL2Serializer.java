@@ -42,14 +42,34 @@ public abstract class SLL2Serializer extends SerializerImpl {
     protected abstract void serializeEnd(SerJobEnd e) throws IOException;
 
     public void writeExpression(Expression e) throws IOException {
-        writeExpression(e, false);
+        writeExpressionHelper(e, false);
     }
 
-    /* (non-Javadoc)
-     * @see sisc.ser.Serializer#writeInitializedExpression(sisc.data.Expression)
-     */
     public void writeInitializedExpression(Expression e) throws IOException {
-        writeExpression(e, true);
+        writeExpressionHelper(e, true);
+    }
+
+    /**
+     * Serializes expressions. We distinguish betweeen five types of
+     * expressions:
+     * Type 0: normal expression
+     * Type 1: null
+     * Type 2: first encounter of entry point / shared expression
+     * Type 4: entry point into other library
+     * Type 16+n: reference to entry point / shared expression n
+     *
+     * @param e the expression to serialize
+     * @param flush force complete, immediate serialisation
+     * @exception IOException if an error occurs
+     */
+    private void writeExpressionHelper(Expression e, boolean flush)
+        throws IOException {
+
+        if (e == null) {
+            writeInt(1);
+            return;
+        }
+        writeExpression(e, flush);
     }
 
     public void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException {
