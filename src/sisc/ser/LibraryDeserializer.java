@@ -3,7 +3,7 @@ package sisc.ser;
 public interface LibraryDeserializer extends Deserializer{
 
     Library getLibrary();
-    
+    void setLibrary(Library lib);
 }
 /*
  * The contents of this file are subject to the Mozilla Public

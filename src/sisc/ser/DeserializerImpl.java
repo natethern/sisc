@@ -1,7 +1,7 @@
 package sisc.ser;
 
 import java.io.IOException;
-import java.io.DataInput;
+import java.io.ObjectInput;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -11,9 +11,9 @@ import sisc.util.Util;
 
 public abstract class DeserializerImpl extends BerEncoding implements Deserializer {
 
-    protected DataInput datin;
+    protected ObjectInput datin;
 
-    protected DeserializerImpl(DataInput in) {
+    protected DeserializerImpl(ObjectInput in) {
         datin = in;
     }
 
@@ -84,6 +84,38 @@ public abstract class DeserializerImpl extends BerEncoding implements Deserializ
 
     public int skipBytes(int bc) throws IOException {
         return datin.skipBytes(bc);
+    }
+
+    public int read(byte[] b) throws IOException {
+        return datin.read(b);
+    }
+
+    public int read(byte[] b, int off, int len) throws IOException {
+        return datin.read(b, off, len);
+    }
+
+    public int read() throws IOException {
+        return datin.read();
+    }
+
+    public String readLine() throws IOException {
+        return datin.readLine();
+    }
+
+    public Object readObject() throws IOException, ClassNotFoundException {
+        return datin.readObject();
+    }
+
+    public long skip(long n) throws IOException {
+        return datin.skip(n);
+    }
+
+    public int available() throws IOException {
+        return datin.available();
+    }
+
+    public void close() throws IOException {
+        datin.close();
     }
 
     public Value[] readValueArray() throws IOException {

@@ -151,38 +151,6 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
         return (Class)classPool.get(new Integer(readInt()));
     }
         
-    public int read(byte[] b) throws IOException {
-        return ((DataInputStream)datin).read(b);
-    }
-
-    public int read(byte[] b, int off, int len) throws IOException {
-        return ((DataInputStream)datin).read(b, off, len);
-    }
-
-    public int read() throws IOException {
-        return ((DataInputStream)datin).read();
-    }
-
-    public String readLine() throws IOException {
-        return ((DataInputStream)datin).readLine();
-    }
-
-    public Object readObject() throws IOException, ClassNotFoundException {
-        throw new IOException(Util.liMessage(Util.SISCB, "cannotdeserialize"));
-    }
-
-    public long skip(long n) throws IOException {
-        return ((DataInputStream)datin).skip(n);
-    }
-
-    public int available() throws IOException {
-        return ((DataInputStream)datin).available();
-    }
-
-    public void close() throws IOException {
-        ((DataInputStream)datin).close();
-    }
-
 }
 
 /*

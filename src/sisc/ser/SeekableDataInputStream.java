@@ -1,8 +1,9 @@
 package sisc.ser;
 
 import java.io.*;
+import sisc.util.Util;
 
-public class SeekableDataInputStream extends DataInputStream implements SeekableDataInput {
+public class SeekableDataInputStream extends DataInputStream implements SeekableDataInput, ObjectInput {
 
     protected Seekable sis;
 
@@ -18,6 +19,11 @@ public class SeekableDataInputStream extends DataInputStream implements Seekable
     public long getFilePointer() throws IOException {
         return sis.getFilePointer();
     }
+
+    public Object readObject() throws IOException, ClassNotFoundException {
+        throw new IOException(Util.liMessage(Util.SISCB, "cannotdeserialize"));
+    }
+
 }
 
 /*

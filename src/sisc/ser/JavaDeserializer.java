@@ -31,38 +31,6 @@ public class JavaDeserializer extends DeserializerImpl {
         }
     }
 
-    public int read(byte[] b) throws IOException {
-        return ((ObjectInput)datin).read(b);
-    }
-
-    public int read(byte[] b, int off, int len) throws IOException {
-        return ((ObjectInput)datin).read(b, off, len);
-    }
-
-    public int read() throws IOException {
-        return ((ObjectInput)datin).read();
-    }
-
-    public String readLine() throws IOException {
-        return ((ObjectInput)datin).readLine();
-    }
-
-    public Object readObject() throws IOException, ClassNotFoundException {
-        return ((ObjectInput)datin).readObject();
-    }
-
-    public long skip(long n) throws IOException {
-        return ((ObjectInput)datin).skip(n);
-    }
-
-    public int available() throws IOException {
-        return ((ObjectInput)datin).available();
-    }
-
-    public void close() throws IOException {
-        ((ObjectInput)datin).close();
-    }
-
     public Expression readExpression() throws IOException {
         return (Expression)readObjectIOExceptionOnly();
     }
@@ -79,11 +47,6 @@ public class JavaDeserializer extends DeserializerImpl {
 
     public Class readClass() throws IOException {
         return (Class)readObjectIOExceptionOnly();
-    }
-
-    public Library getLibrary() {
-        //FIXME?
-        return null;
     }
 
 }
