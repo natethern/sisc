@@ -63,7 +63,7 @@ public class AppContext extends Util {
     }
 
     // Heapfile loading/saving
-    public void loadEnv(Interpreter r, SeekableDataInput i)
+    public void loadEnv(Interpreter r, SeekableDataInputStream i)
         throws IOException, ClassNotFoundException {
 
         Library s=Library.load(r.getCtx(), i);
