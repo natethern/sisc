@@ -9,19 +9,15 @@ import sisc.interpreter.AppContext;
 
 public class StreamDeserializer extends DeserializerImpl {
 
-    AppContext ctx;
-    Map classPool, alreadyReadObjects;
-    DataInputStream in;
-    NestedObjectInputStream objin;
-    Object[] thisArray=new Object[] { this };
-    LinkedList deserQueue;
+    private AppContext ctx;
+    private Map classPool, alreadyReadObjects;
+    private ObjectInputStream objin;
+    private LinkedList deserQueue;
 
     public StreamDeserializer(AppContext ctx, InputStream input) throws IOException {
         this.ctx=ctx;
-        this.in=new DataInputStream(input);
         this.objin=new NestedObjectInputStream(input,this);
         classPool=new HashMap();
-        
         alreadyReadObjects=new HashMap();
         deserQueue=new LinkedList();
     }
@@ -32,6 +28,14 @@ public class StreamDeserializer extends DeserializerImpl {
 
     public final Expression readInitializedExpression() throws IOException {
         return readExpression(true, -1);
+    }
+
+    private void recordReadObject(int definingOid, Expression e) {
+        if (definingOid!=-1) {
+            Integer epIdx=new Integer(definingOid);
+            if (alreadyReadObjects.get(epIdx)==null)
+                alreadyReadObjects.put(epIdx, e);
+        }
     }
 
     public Expression readExpression(boolean flush, int definingOid) throws IOException {
@@ -50,17 +54,9 @@ public class StreamDeserializer extends DeserializerImpl {
                 if (e instanceof Singleton) {
                     e.deserialize(this);
                     e = ((Singleton)e).singletonValue();
-                    if (definingOid!=-1) {
-                        Integer epIdx=new Integer(definingOid);
-                        if (alreadyReadObjects.get(epIdx)==null)
-                            alreadyReadObjects.put(epIdx, e);
-                    }
+                    recordReadObject(definingOid, e);
                 } else {
-                    if (definingOid!=-1) {
-                        Integer epIdx=new Integer(definingOid);
-                        if (alreadyReadObjects.get(epIdx)==null)
-                            alreadyReadObjects.put(epIdx, e);
-                    }
+                    recordReadObject(definingOid, e);
                     int start=deserQueue.size();
                     deserQueue.addFirst(e);
                     if (flush) deserLoop(start);
@@ -72,11 +68,7 @@ public class StreamDeserializer extends DeserializerImpl {
                 String libName=readUTF();
                 int epid=readInt();
                 e=ctx.getExpression(libName, epid);
-                if (definingOid!=-1) {
-                    Integer epIdx=new Integer(definingOid);
-                    if (alreadyReadObjects.get(epIdx)==null)
-                        alreadyReadObjects.put(epIdx, e);
-                }
+                recordReadObject(definingOid, e);
                 return e;
             default: //expression references
                 return fetchShared(type-16);
@@ -144,28 +136,28 @@ public class StreamDeserializer extends DeserializerImpl {
     }
         
     public int read(byte[] b) throws IOException {
-        return in.read(b);
+        return objin.read(b);
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
-        return in.read(b, off, len);
+        return objin.read(b, off, len);
     }
 
     public int read() throws IOException {
-        return in.read();
+        return objin.read();
     }
 
     public boolean readBoolean() throws IOException {
-        return in.readBoolean();
+        return objin.readBoolean();
     }
 
     public byte readByte() throws IOException {
-        return (byte)readBer(in);
+        return (byte)readBer(objin);
     }
 
 
     public char readChar() throws IOException {
-        return in.readChar();
+        return objin.readChar();
     }
 
     public double readDouble() throws IOException {
@@ -177,26 +169,19 @@ public class StreamDeserializer extends DeserializerImpl {
     }
 
     public int readInt() throws IOException {
-        return readBer(in);
+        return readBer(objin);
     }
 
     public long readLong() throws IOException {
-        return readBerLong(in);
+        return readBerLong(objin);
     }
 
     public short readShort() throws IOException {
-        return BerEncoding.readBerShort(in);
+        return readBerShort(objin);
     }
 
     public String readUTF() throws IOException {
-        try {
-            byte[] sb=new byte[readInt()];
-            in.readFully(sb);
-            return new String(sb, "UTF8");
-        } catch (UnsupportedEncodingException use) {
-            //Not possible
-            throw new IOException("UTF8 Unsupported");
-        }
+        return objin.readUTF();
     }
 
     public void readFully(byte[] b) throws IOException {
@@ -216,38 +201,14 @@ public class StreamDeserializer extends DeserializerImpl {
         if (rc==-1) throw new EOFException();
     }
 
-    public int readUnsignedByte() throws IOException {
-        return readByte() & 0xff;
-    }
-
-    public int readUnsignedShort() throws IOException {
-        return readShort() & 0xffff;
-    }
-
     public int skipBytes(int bc) throws IOException {
-        return (int)in.skip(bc);
-    }
-
-    public String readLine() throws IOException {
-        return null; //not supported;
+        return objin.skipBytes(bc);
     }
 
     public Object readObject() throws IOException, ClassNotFoundException {
         return objin.readObject();
     }
 
-    public static void main(String[] args) throws IOException {
-        ByteArrayOutputStream bos=new ByteArrayOutputStream();
-        DataOutputStream dos=new DataOutputStream(bos);
-        BlockSerializer.writeBer(-1, dos);
-        byte[] b=bos.toByteArray();
-        for (int i=0; i<b.length; i++) {
-            System.err.println(Integer.toHexString(b[i]&0xff));
-        }
-        ByteArrayInputStream bis=new ByteArrayInputStream(b);
-        DataInputStream dis=new DataInputStream(bis);
-        System.err.println(readBerLong(dis));
-    }
 }
 
 /*

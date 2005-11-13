@@ -20,15 +20,14 @@ public abstract class SLL2Serializer extends SerializerImpl {
     }
 
     protected AppContext ctx;       
-    protected DataOutputStream datout;
     private LinkedList serQueue;
     
-    protected SLL2Serializer(AppContext ctx, OutputStream out) throws IOException {
+    protected SLL2Serializer(AppContext ctx, DataOutput out) throws IOException {
+        super(out);
         this.ctx=ctx;
-        datout = new DataOutputStream(out);
         serQueue=new LinkedList();
     }
-   
+
     /**
      * Required call which actually writes out the bytes of an expression
      * 
@@ -71,83 +70,6 @@ public abstract class SLL2Serializer extends SerializerImpl {
         writeExpression(e, flush);
     }
 
-    public void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException {
-        if (e==null) {
-            writeExpression((Expression)null);
-        } else if (e.getName()==null) { 
-            writeExpression(e.asValue());
-        } else 
-            writeExpression(e.getName());
-    }
-
-    public void write(byte[] b) throws IOException {
-        datout.write(b);
-    }
-
-    public void write(byte[] b, int off, int len) throws IOException {
-        datout.write(b, off, len);
-    }
-
-    public void write(int b) throws IOException {
-        datout.write(b);
-    }
-
-    public void writeBoolean(boolean v) throws IOException {
-        datout.writeBoolean(v);
-    }
-
-    public void writeByte(int v) throws IOException {
-        datout.writeByte(v);
-    }
-
-    public void writeBytes(String s) throws IOException {
-        datout.writeBytes(s);
-    }
-
-    public void writeChar(int v) throws IOException {
-        datout.writeChar(v);
-    }
-
-    public void writeChars(String v) throws IOException {
-        datout.writeChars(v);
-    }
-
-    public void writeDouble(double v) throws IOException {
-        writeLong(Double.doubleToLongBits(v));
-    }
-
-    public void writeLong(long v) throws IOException {
-        writeBer(v, datout);
-    }
-
-    public void writeShort(int v) throws IOException {
-        writeBer(v, datout);
-    }
-
-    public void writeUTF(String v) throws IOException {
-        try {
-            byte[] b=v.getBytes("UTF8");
-            writeInt(b.length);
-            datout.write(b);
-        } catch (UnsupportedEncodingException use) {
-            //Not possible
-            throw new IOException("UTF8 Unsupported");
-        }
-    }
-
-    public void writeFloat(float v) throws IOException {
-        writeInt(Float.floatToIntBits(v));
-    }
-
-    public void writeInt(int v) throws IOException {
-        writeBer(v, datout);
-    }
-
-    protected void serializeDetails(Expression e) throws IOException {
-        e.serialize(this);
-        e.serializeAnnotations(this);
-    }
-
     public void serialize(Expression e) throws IOException {
         int start=serQueue.size();
         writeExpression(e);
@@ -169,8 +91,7 @@ public abstract class SLL2Serializer extends SerializerImpl {
         return contiguous;
     }
 
-
-    protected void serLoop(int start) throws IOException {
+    private void serLoop(int start) throws IOException {
         while (serQueue.size()>start) {
             Object o=serQueue.removeFirst();
             if (o instanceof Expression) {
@@ -182,17 +103,19 @@ public abstract class SLL2Serializer extends SerializerImpl {
         }
     }
 
-    
+    private void serializeDetails(Expression e) throws IOException {
+        e.serialize(this);
+        e.serializeAnnotations(this);
+    }
+
     public void close() throws IOException {
         flush();
-        datout.close();
+        ((Closeable)datout).close();
     }
 
     public void flush() throws IOException {
-        if (serQueue.size() > 0) {
-            serLoop(0);
-        }
-        datout.flush();
+        serLoop(0);
+        ((Flushable)datout).flush();
     }
 
     protected void writeSeenEntryPoint(int posi) throws IOException {

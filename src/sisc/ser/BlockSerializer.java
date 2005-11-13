@@ -39,7 +39,7 @@ public class BlockSerializer extends SLL2Serializer {
                             Vector classes, Expression[] entryPoints)
         throws IOException {
 
-        super(ctx, cos);
+        super(ctx, new DataOutputStream(cos));
         this.cos = cos;
         this.classes=classes;
         this.entryPoints=entryPoints;

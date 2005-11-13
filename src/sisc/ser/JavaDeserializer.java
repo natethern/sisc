@@ -10,7 +10,7 @@ import sisc.env.SymbolicEnvironment;
 import sisc.env.DelegatingSymEnv;
 import sisc.util.InternedValue;
 
-public class JavaDeserializer implements Deserializer {
+public class JavaDeserializer extends DeserializerImpl {
 
     protected ObjectInput is;
 
@@ -50,36 +50,8 @@ public class JavaDeserializer implements Deserializer {
         is.close();
     }
 
-    public BigInteger readBigInteger() throws IOException {
-        return (BigInteger)readObjectIOExceptionOnly();
-    }
-
-    public BigDecimal readBigDecimal() throws IOException {
-        return (BigDecimal)readObjectIOExceptionOnly();
-    }
-
     public Expression readExpression() throws IOException {
         return (Expression)readObjectIOExceptionOnly();
-    }
-
-    public Value[] readValueArray() throws IOException {
-        int l=readInt();
-        Value[] v=new Value[l];
-        readExpressionArray(v);
-        return v;
-    }
-    
-    public Expression[] readExpressionArray() throws IOException {
-        int l=readInt();
-        Expression[] v=new Expression[l];
-        readExpressionArray(v);
-        return v;
-    }
-    
-    void readExpressionArray(Expression[] target) throws IOException {        
-        for (int i=0; i<target.length; i++) {
-            target[i]=readExpression();
-        }
     }
 
     public Expression readInitializedExpression() throws IOException {
@@ -135,15 +107,15 @@ public class JavaDeserializer implements Deserializer {
     }
 
     public int readInt() throws IOException {
-        return is.readInt();
+        return readBer(is);
     }
 
     public long readLong() throws IOException {
-        return is.readLong();
+        return readBerLong(is);
     }
 
     public short readShort() throws IOException {
-        return is.readShort();
+        return readBerShort(is);
     }
 
     public String readUTF() throws IOException {
@@ -156,14 +128,6 @@ public class JavaDeserializer implements Deserializer {
 
     public void readFully(byte[] b, int offset, int len) throws IOException {
         is.readFully(b, offset, len);
-    }
-
-    public int readUnsignedByte() throws IOException {
-        return is.readUnsignedByte();
-    }
-
-    public int readUnsignedShort() throws IOException {
-        return is.readUnsignedShort();
     }
 
     public int skipBytes(int bc) throws IOException {

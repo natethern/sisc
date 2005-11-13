@@ -23,6 +23,14 @@ public abstract class DeserializerImpl extends BerEncoding implements Deserializ
         return new BigDecimal(new BigInteger(buffer), scale);
     }
 
+    public int readUnsignedByte() throws IOException {
+        return readByte() & 0xff;
+    }
+
+    public int readUnsignedShort() throws IOException {
+        return readShort() & 0xffff;
+    }
+
     public Object readObject() throws IOException, ClassNotFoundException {
         throw new IOException(Util.liMessage(Util.SISCB, "cannotdeserialize"));
     }
@@ -36,6 +44,10 @@ public abstract class DeserializerImpl extends BerEncoding implements Deserializ
     }
 
     public void close() throws IOException {
+    }
+
+    public String readLine() throws IOException {
+        return null; //not supported;
     }
 
     public Value[] readValueArray() throws IOException {

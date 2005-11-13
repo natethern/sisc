@@ -23,7 +23,7 @@ public class Library extends Util {
         }
     }
        
-    public static Library load(AppContext ctx, SeekableDataInput di) throws IOException, ClassNotFoundException {
+    public static Library load(AppContext ctx, SeekableDataInputStream di) throws IOException, ClassNotFoundException {
         String libver=di.readUTF();
         if (!libver.equals(LIBRARY_VERSION))
             throw new IOException(liMessage(SISCB, "unsuplib"));

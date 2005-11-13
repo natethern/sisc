@@ -1,6 +1,7 @@
 package sisc.ser;
 
 import java.io.IOException;
+import java.io.DataOutput;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -9,6 +10,12 @@ import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
 
 public abstract class SerializerImpl extends BerEncoding implements Serializer {
+
+    protected DataOutput datout;
+
+    protected SerializerImpl(DataOutput out) {
+        datout = out;
+    }
 
     public void writeBigDecimal(BigDecimal d) throws IOException {
         int scale=d.scale();
@@ -33,6 +40,72 @@ public abstract class SerializerImpl extends BerEncoding implements Serializer {
             }
         }
     }
+
+    public void writeSymbolicEnvironment(SymbolicEnvironment e) throws IOException {
+        if (e==null) {
+            writeExpression((Expression)null);
+        } else if (e.getName()==null) { 
+            writeExpression(e.asValue());
+        } else 
+            writeExpression(e.getName());
+    }
+
+    public void write(byte[] b) throws IOException {
+        datout.write(b);
+    }
+
+    public void write(byte[] b, int off, int len) throws IOException {
+        datout.write(b, off, len);
+    }
+
+    public void write(int b) throws IOException {
+        datout.write(b);
+    }
+
+    public void writeBoolean(boolean v) throws IOException {
+        datout.writeBoolean(v);
+    }
+
+    public void writeByte(int v) throws IOException {
+        datout.writeByte(v);
+    }
+
+    public void writeBytes(String s) throws IOException {
+        datout.writeBytes(s);
+    }
+
+    public void writeChar(int v) throws IOException {
+        datout.writeChar(v);
+    }
+
+    public void writeChars(String v) throws IOException {
+        datout.writeChars(v);
+    }
+
+    public void writeFloat(float v) throws IOException {
+        writeInt(Float.floatToIntBits(v));
+    }
+
+    public void writeDouble(double v) throws IOException {
+        writeLong(Double.doubleToLongBits(v));
+    }
+
+    public void writeInt(int v) throws IOException {
+        writeBer(v, datout);
+    }
+
+    public void writeLong(long v) throws IOException {
+        writeBer(v, datout);
+    }
+
+    public void writeShort(int v) throws IOException {
+        writeBer(v, datout);
+    }
+
+    public void writeUTF(String v) throws IOException {
+        datout.writeUTF(v);
+    }
+
 }
 
 /*

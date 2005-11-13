@@ -13,18 +13,18 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
     Map classPool;
     Expression[] alreadyReadObjects;
     int[] offsets, sizes;
-    SeekableDataInput raf;
+    DataInputStream datin;
     Object[] thisArray=new Object[] { this };
     long base;
     Library baseLib;
     LinkedList deserQueue;
     AppContext ctx;
     
-    public BlockDeserializer(AppContext ctx, SeekableDataInput input, 
+    public BlockDeserializer(AppContext ctx, SeekableDataInputStream input, 
                              Map classes, int[] o, int[] l) throws IOException {
         this.ctx=ctx;
-        this.raf=input;
-        base=raf.getFilePointer();
+        this.datin=input;
+        base=input.getFilePointer();
         classPool=classes;
         
         offsets=o;
@@ -40,7 +40,12 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
     public final Expression readInitializedExpression() throws IOException {
         return readExpression(true, -1);
     }
-    
+
+    private void recordReadObject(int definingOid, Expression e) {
+        if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)
+            alreadyReadObjects[definingOid]=e;
+    }
+
     public Expression readExpression(boolean flush, int definingOid) throws IOException {
         int type=readInt();
 
@@ -53,7 +58,7 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
                 if (alreadyReadObjects[definingOid] != null) {
                     int sc=sizes[definingOid];
                     while (sc>0) {
-                        sc-=raf.skipBytes(sc);
+                        sc-=datin.skipBytes(sc);
                     }
                     return alreadyReadObjects[definingOid];
                 } else {
@@ -66,11 +71,9 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
                 if (e instanceof Singleton) {
                     e.deserialize(this);
                     e = ((Singleton)e).singletonValue();
-                    if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)
-                        alreadyReadObjects[definingOid]=e;
+                    recordReadObject(definingOid, e);
                 } else {
-                    if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)             
-                        alreadyReadObjects[definingOid]=e;
+                    recordReadObject(definingOid, e);
                     int start=deserQueue.size();
                     deserQueue.addFirst(e);
                     if (flush) deserLoop(start);
@@ -82,8 +85,7 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
                 String libName=readUTF();
                 int epid=readInt();
                 e=ctx.getExpression(libName, epid);
-                if (definingOid!=-1 && alreadyReadObjects[definingOid]==null)             
-                    alreadyReadObjects[definingOid]=e;
+                recordReadObject(definingOid, e);
                 return e;
             default: //expression references
                 return fetchShared(type-16);
@@ -120,10 +122,10 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
         try {
             Expression e=alreadyReadObjects[oid];
             if (e==null) {
-                long currentPos=raf.getFilePointer();
-                raf.seek(base + offsets[oid]);
+                long currentPos=((Seekable)datin).getFilePointer();
+                ((Seekable)datin).seek(base + offsets[oid]);
                 e=deser();
-                raf.seek(currentPos);
+                ((Seekable)datin).seek(currentPos);
             }
             return e;
         } catch (ArrayIndexOutOfBoundsException aib) {
@@ -148,28 +150,28 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
     }
         
     public int read(byte[] b) throws IOException {
-        return raf.read(b);
+        return datin.read(b);
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
-        return raf.read(b, off, len);
+        return datin.read(b, off, len);
     }
 
     public int read() throws IOException {
-        return raf.read();
+        return datin.read();
     }
 
     public boolean readBoolean() throws IOException {
-        return raf.readBoolean();
+        return datin.readBoolean();
     }
 
     public byte readByte() throws IOException {
-        return (byte)readBer(raf);
+        return (byte)readBer(datin);
     }
 
 
     public char readChar() throws IOException {
-        return raf.readChar();
+        return datin.readChar();
     }
 
     public double readDouble() throws IOException {
@@ -181,26 +183,19 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
     }
 
     public int readInt() throws IOException {
-        return readBer(raf);
+        return readBer(datin);
     }
 
     public long readLong() throws IOException {
-        return readBerLong(raf);
+        return readBerLong(datin);
     }
 
     public short readShort() throws IOException {
-        return BerEncoding.readBerShort(raf);
+        return BerEncoding.readBerShort(datin);
     }
 
     public String readUTF() throws IOException {
-        try {
-            byte[] sb=new byte[readInt()];
-            raf.readFully(sb);
-            return new String(sb, "UTF8");
-        } catch (UnsupportedEncodingException use) {
-            //Not possible
-            throw new IOException("UTF8 Unsupported");
-        }
+        return datin.readUTF();
     }
 
     public void readFully(byte[] b) throws IOException {
@@ -220,34 +215,10 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
         if (rc==-1) throw new EOFException();
     }
 
-    public int readUnsignedByte() throws IOException {
-        return readByte() & 0xff;
-    }
-
-    public int readUnsignedShort() throws IOException {
-        return readShort() & 0xffff;
-    }
-
     public int skipBytes(int bc) throws IOException {
-        return raf.skipBytes(bc);
+        return datin.skipBytes(bc);
     }
 
-    public String readLine() throws IOException {
-        return null; //not supported;
-    }
-
-    public static void main(String[] args) throws IOException {
-        ByteArrayOutputStream bos=new ByteArrayOutputStream();
-        DataOutputStream dos=new DataOutputStream(bos);
-        BlockSerializer.writeBer(-1, dos);
-        byte[] b=bos.toByteArray();
-        for (int i=0; i<b.length; i++) {
-            System.err.println(Integer.toHexString(b[i]&0xff));
-        }
-        ByteArrayInputStream bis=new ByteArrayInputStream(b);
-        DataInputStream dis=new DataInputStream(bis);
-        System.err.println(readBerLong(dis));
-    }
 }
 
 /*
