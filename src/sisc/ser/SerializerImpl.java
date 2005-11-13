@@ -1,7 +1,7 @@
 package sisc.ser;
 
 import java.io.IOException;
-import java.io.DataOutput;
+import java.io.ObjectOutput;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -11,9 +11,9 @@ import sisc.env.SymbolicEnvironment;
 
 public abstract class SerializerImpl extends BerEncoding implements Serializer {
 
-    protected DataOutput datout;
+    protected ObjectOutput datout;
 
-    protected SerializerImpl(DataOutput out) {
+    protected SerializerImpl(ObjectOutput out) {
         datout = out;
     }
 
@@ -104,6 +104,18 @@ public abstract class SerializerImpl extends BerEncoding implements Serializer {
 
     public void writeUTF(String v) throws IOException {
         datout.writeUTF(v);
+    }
+
+    public void writeObject(Object o) throws IOException {
+        datout.writeObject(o);
+    }
+
+    public void flush() throws IOException {
+        datout.flush();
+    }
+
+    public void close() throws IOException {
+        datout.close();
     }
 
 }

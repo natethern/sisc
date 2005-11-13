@@ -49,10 +49,6 @@ public class StreamSerializer extends SLL2Serializer {
         }
     }
 
-    public void writeObject(Object o) throws IOException {
-        ((ObjectOutput)datout).writeObject(o);
-    }
-       
     protected void serializeEnd(int posi, int sizeStartOffset) {
     }
 

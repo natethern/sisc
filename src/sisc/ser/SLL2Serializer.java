@@ -22,7 +22,7 @@ public abstract class SLL2Serializer extends SerializerImpl {
     protected AppContext ctx;       
     private LinkedList serQueue;
     
-    protected SLL2Serializer(AppContext ctx, DataOutput out) throws IOException {
+    protected SLL2Serializer(AppContext ctx, ObjectOutput out) throws IOException {
         super(out);
         this.ctx=ctx;
         serQueue=new LinkedList();
@@ -110,12 +110,12 @@ public abstract class SLL2Serializer extends SerializerImpl {
 
     public void close() throws IOException {
         flush();
-        ((Closeable)datout).close();
+        super.close();
     }
 
     public void flush() throws IOException {
         serLoop(0);
-        ((Flushable)datout).flush();
+        super.flush();
     }
 
     protected void writeSeenEntryPoint(int posi) throws IOException {

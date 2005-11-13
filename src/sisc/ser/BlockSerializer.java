@@ -27,6 +27,18 @@ public class BlockSerializer extends SLL2Serializer {
         }
     }
 
+    private static class WrappedDataOutputStream extends DataOutputStream implements ObjectOutput {
+
+        public WrappedDataOutputStream(OutputStream out) {
+            super(out);
+        }
+
+        public void writeObject(Object o) throws IOException {
+            throw new IOException("cannot serialize " + o);
+        }
+
+    }
+
     private CountingOutputStream cos;
     private Map offsets;
     private Set seen;
@@ -39,7 +51,7 @@ public class BlockSerializer extends SLL2Serializer {
                             Vector classes, Expression[] entryPoints)
         throws IOException {
 
-        super(ctx, new DataOutputStream(cos));
+        super(ctx, new WrappedDataOutputStream(cos));
         this.cos = cos;
         this.classes=classes;
         this.entryPoints=entryPoints;
@@ -100,10 +112,6 @@ public class BlockSerializer extends SLL2Serializer {
 
     public void writeClass(Class c) throws IOException {
         writeInt(((Integer)ci.get(c)).intValue());
-    }
-
-    public void writeObject(Object o) throws IOException {
-        throw new IOException("cannot serialize " + o);
     }
 
     protected void serializeEnd(int posi, int sizeStartOffset) {

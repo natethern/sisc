@@ -17,18 +17,6 @@ public class JavaSerializer extends SerializerImpl {
             new JavaSerializer(o);
     }
 
-    public void flush() throws IOException {
-        ((ObjectOutput)datout).flush();
-    }
-
-    public void close() throws IOException {
-        ((ObjectOutput)datout).close();
-    }
-
-    public void writeObject(Object o) throws IOException {
-        ((ObjectOutput)datout).writeObject(o);
-    }
-
     public void writeExpression(Expression e) throws IOException {
         writeObject(e);
     }
