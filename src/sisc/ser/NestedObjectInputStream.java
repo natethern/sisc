@@ -4,15 +4,18 @@ import java.io.*;
 
 public class NestedObjectInputStream extends ObjectInputStream {
 
-    Deserializer d;
+    private Deserializer d;
 
-    NestedObjectInputStream(InputStream out, Deserializer d) throws IOException {
+    NestedObjectInputStream(InputStream out) throws IOException {
         super(out);
-        this.d=d;
     }
     
     public Deserializer getDeserializerInstance() {
         return d;
+    }
+
+    public void setDeserializerInstance(Deserializer d) {
+        this.d = d;
     }
 }
 /*

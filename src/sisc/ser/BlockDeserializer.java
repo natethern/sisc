@@ -10,20 +10,18 @@ import sisc.interpreter.Context;
 
 public class BlockDeserializer extends DeserializerImpl implements LibraryDeserializer {
 
-    Map classPool;
+    private Map classPool;
     Expression[] alreadyReadObjects;
-    int[] offsets, sizes;
-    DataInputStream datin;
-    Object[] thisArray=new Object[] { this };
-    long base;
-    Library baseLib;
-    LinkedList deserQueue;
-    AppContext ctx;
+    private int[] offsets, sizes;
+    private long base;
+    private Library baseLib;
+    private LinkedList deserQueue;
+    private AppContext ctx;
     
     public BlockDeserializer(AppContext ctx, SeekableDataInputStream input, 
                              Map classes, int[] o, int[] l) throws IOException {
+        super(input);
         this.ctx=ctx;
-        this.datin=input;
         base=input.getFilePointer();
         classPool=classes;
         
@@ -137,6 +135,10 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
         return baseLib;
     }
 
+    public void setLibrary(Library lib) {
+        this.baseLib = lib;
+    }
+
     public SymbolicEnvironment readSymbolicEnvironment() throws IOException {
         Expression e=readExpression();
         if (e instanceof Symbol) 
@@ -150,73 +152,35 @@ public class BlockDeserializer extends DeserializerImpl implements LibraryDeseri
     }
         
     public int read(byte[] b) throws IOException {
-        return datin.read(b);
+        return ((DataInputStream)datin).read(b);
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
-        return datin.read(b, off, len);
+        return ((DataInputStream)datin).read(b, off, len);
     }
 
     public int read() throws IOException {
-        return datin.read();
+        return ((DataInputStream)datin).read();
     }
 
-    public boolean readBoolean() throws IOException {
-        return datin.readBoolean();
+    public String readLine() throws IOException {
+        return ((DataInputStream)datin).readLine();
     }
 
-    public byte readByte() throws IOException {
-        return (byte)readBer(datin);
+    public Object readObject() throws IOException, ClassNotFoundException {
+        throw new IOException(Util.liMessage(Util.SISCB, "cannotdeserialize"));
     }
 
-
-    public char readChar() throws IOException {
-        return datin.readChar();
+    public long skip(long n) throws IOException {
+        return ((DataInputStream)datin).skip(n);
     }
 
-    public double readDouble() throws IOException {
-        return Double.longBitsToDouble(readLong());
+    public int available() throws IOException {
+        return ((DataInputStream)datin).available();
     }
 
-    public float readFloat() throws IOException {
-        return Float.intBitsToFloat(readInt());
-    }
-
-    public int readInt() throws IOException {
-        return readBer(datin);
-    }
-
-    public long readLong() throws IOException {
-        return readBerLong(datin);
-    }
-
-    public short readShort() throws IOException {
-        return BerEncoding.readBerShort(datin);
-    }
-
-    public String readUTF() throws IOException {
-        return datin.readUTF();
-    }
-
-    public void readFully(byte[] b) throws IOException {
-        readFully(b, 0, b.length);
-    }
-
-    public void readFully(byte[] b, int offset, int len) throws IOException {
-        int rc=0;
-        while (len>0 && rc>-1) {
-            rc=read(b, offset, len);
-            if (rc>0) {
-                offset+=rc;
-                len-=rc;
-                
-            }
-        }
-        if (rc==-1) throw new EOFException();
-    }
-
-    public int skipBytes(int bc) throws IOException {
-        return datin.skipBytes(bc);
+    public void close() throws IOException {
+        ((DataInputStream)datin).close();
     }
 
 }

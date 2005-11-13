@@ -12,10 +12,8 @@ import sisc.util.InternedValue;
 
 public class JavaDeserializer extends DeserializerImpl {
 
-    protected ObjectInput is;
-
     private JavaDeserializer(ObjectInput i) throws IOException {
-        is=i;
+        super(i);
     }
 
     public static Deserializer create(ObjectInput i) throws IOException {
@@ -27,27 +25,42 @@ public class JavaDeserializer extends DeserializerImpl {
 
     protected Object readObjectIOExceptionOnly() throws IOException {
         try {
-            Object o=is.readObject();
-            return o;
+            return readObject();
         } catch (ClassNotFoundException cnf) {
             throw new IOException(cnf.getMessage());
         }
     }
 
+    public int read(byte[] b) throws IOException {
+        return ((ObjectInput)datin).read(b);
+    }
+
+    public int read(byte[] b, int off, int len) throws IOException {
+        return ((ObjectInput)datin).read(b, off, len);
+    }
+
+    public int read() throws IOException {
+        return ((ObjectInput)datin).read();
+    }
+
+    public String readLine() throws IOException {
+        return ((ObjectInput)datin).readLine();
+    }
+
     public Object readObject() throws IOException, ClassNotFoundException {
-        return is.readObject();
+        return ((ObjectInput)datin).readObject();
     }
 
     public long skip(long n) throws IOException {
-        return is.skip(n);
+        return ((ObjectInput)datin).skip(n);
     }
 
     public int available() throws IOException {
-        return is.available();
+        return ((ObjectInput)datin).available();
     }
 
     public void close() throws IOException {
-        is.close();
+        ((ObjectInput)datin).close();
     }
 
     public Expression readExpression() throws IOException {
@@ -73,70 +86,6 @@ public class JavaDeserializer extends DeserializerImpl {
         return null;
     }
 
-    public int read(byte[] b) throws IOException {
-        return is.read(b);
-    }
-
-    public int read(byte[] b, int off, int len) throws IOException {
-        return is.read(b, off, len);
-    }
-
-    public int read() throws IOException {
-        return is.read();
-    }
-
-    public boolean readBoolean() throws IOException {
-        return is.readBoolean();
-    }
-
-    public byte readByte() throws IOException {
-        return is.readByte();
-    }
-
-
-    public char readChar() throws IOException {
-        return is.readChar();
-    }
-
-    public double readDouble() throws IOException {
-        return Double.longBitsToDouble(readLong());
-    }
-
-    public float readFloat() throws IOException {
-        return Float.intBitsToFloat(readInt());
-    }
-
-    public int readInt() throws IOException {
-        return readBer(is);
-    }
-
-    public long readLong() throws IOException {
-        return readBerLong(is);
-    }
-
-    public short readShort() throws IOException {
-        return readBerShort(is);
-    }
-
-    public String readUTF() throws IOException {
-        return is.readUTF();
-    }
-
-    public void readFully(byte[] b) throws IOException {
-        is.readFully(b, 0, b.length);
-    }
-
-    public void readFully(byte[] b, int offset, int len) throws IOException {
-        is.readFully(b, offset, len);
-    }
-
-    public int skipBytes(int bc) throws IOException {
-        return is.skipBytes(bc);
-    }
-
-    public String readLine() {
-        return null;
-    }
 }
 
 /*

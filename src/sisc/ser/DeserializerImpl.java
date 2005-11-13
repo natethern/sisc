@@ -1,6 +1,7 @@
 package sisc.ser;
 
 import java.io.IOException;
+import java.io.DataInput;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -9,6 +10,12 @@ import sisc.data.Value;
 import sisc.util.Util;
 
 public abstract class DeserializerImpl extends BerEncoding implements Deserializer {
+
+    protected DataInput datin;
+
+    protected DeserializerImpl(DataInput in) {
+        datin = in;
+    }
 
     public BigInteger readBigInteger() throws IOException {
         byte[] buffer=new byte[readInt()];
@@ -31,23 +38,52 @@ public abstract class DeserializerImpl extends BerEncoding implements Deserializ
         return readShort() & 0xffff;
     }
 
-    public Object readObject() throws IOException, ClassNotFoundException {
-        throw new IOException(Util.liMessage(Util.SISCB, "cannotdeserialize"));
+    public boolean readBoolean() throws IOException {
+        return datin.readBoolean();
     }
 
-    public long skip(long n) throws IOException {
-        return 0;
+    public byte readByte() throws IOException {
+        return (byte)readBer(datin);
     }
 
-    public int available() throws IOException {
-        return 1;
+    public char readChar() throws IOException {
+        return datin.readChar();
     }
 
-    public void close() throws IOException {
+    public double readDouble() throws IOException {
+        return Double.longBitsToDouble(readLong());
     }
 
-    public String readLine() throws IOException {
-        return null; //not supported;
+    public float readFloat() throws IOException {
+        return Float.intBitsToFloat(readInt());
+    }
+
+    public int readInt() throws IOException {
+        return readBer(datin);
+    }
+
+    public long readLong() throws IOException {
+        return readBerLong(datin);
+    }
+
+    public short readShort() throws IOException {
+        return readBerShort(datin);
+    }
+
+    public String readUTF() throws IOException {
+        return datin.readUTF();
+    }
+
+    public void readFully(byte[] b) throws IOException {
+        datin.readFully(b);
+    }
+
+    public void readFully(byte[] b, int offset, int len) throws IOException {
+        datin.readFully(b, offset, len);
+    }
+
+    public int skipBytes(int bc) throws IOException {
+        return datin.skipBytes(bc);
     }
 
     public Value[] readValueArray() throws IOException {

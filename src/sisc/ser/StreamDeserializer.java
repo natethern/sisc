@@ -11,15 +11,19 @@ public class StreamDeserializer extends DeserializerImpl {
 
     private AppContext ctx;
     private Map classPool, alreadyReadObjects;
-    private ObjectInputStream objin;
     private LinkedList deserQueue;
 
-    public StreamDeserializer(AppContext ctx, InputStream input) throws IOException {
+    private StreamDeserializer(AppContext ctx, NestedObjectInputStream input) throws IOException {
+        super(input);
         this.ctx=ctx;
-        this.objin=new NestedObjectInputStream(input,this);
+        input.setDeserializerInstance(this);
         classPool=new HashMap();
         alreadyReadObjects=new HashMap();
         deserQueue=new LinkedList();
+    }
+
+    public StreamDeserializer(AppContext ctx, InputStream input) throws IOException {
+        this(ctx, new NestedObjectInputStream(input));
     }
 
     public final Expression readExpression() throws IOException {
@@ -136,77 +140,35 @@ public class StreamDeserializer extends DeserializerImpl {
     }
         
     public int read(byte[] b) throws IOException {
-        return objin.read(b);
+        return ((ObjectInput)datin).read(b);
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
-        return objin.read(b, off, len);
+        return ((ObjectInput)datin).read(b, off, len);
     }
 
     public int read() throws IOException {
-        return objin.read();
+        return ((ObjectInput)datin).read();
     }
 
-    public boolean readBoolean() throws IOException {
-        return objin.readBoolean();
-    }
-
-    public byte readByte() throws IOException {
-        return (byte)readBer(objin);
-    }
-
-
-    public char readChar() throws IOException {
-        return objin.readChar();
-    }
-
-    public double readDouble() throws IOException {
-        return Double.longBitsToDouble(readLong());
-    }
-
-    public float readFloat() throws IOException {
-        return Float.intBitsToFloat(readInt());
-    }
-
-    public int readInt() throws IOException {
-        return readBer(objin);
-    }
-
-    public long readLong() throws IOException {
-        return readBerLong(objin);
-    }
-
-    public short readShort() throws IOException {
-        return readBerShort(objin);
-    }
-
-    public String readUTF() throws IOException {
-        return objin.readUTF();
-    }
-
-    public void readFully(byte[] b) throws IOException {
-        readFully(b, 0, b.length);
-    }
-
-    public void readFully(byte[] b, int offset, int len) throws IOException {
-        int rc=0;
-        while (len>0 && rc>-1) {
-            rc=read(b, offset, len);
-            if (rc>0) {
-                offset+=rc;
-                len-=rc;
-                
-            }
-        }
-        if (rc==-1) throw new EOFException();
-    }
-
-    public int skipBytes(int bc) throws IOException {
-        return objin.skipBytes(bc);
+    public String readLine() throws IOException {
+        return ((ObjectInput)datin).readLine();
     }
 
     public Object readObject() throws IOException, ClassNotFoundException {
-        return objin.readObject();
+        return ((ObjectInput)datin).readObject();
+    }
+
+    public long skip(long n) throws IOException {
+        return ((ObjectInput)datin).skip(n);
+    }
+
+    public int available() throws IOException {
+        return ((ObjectInput)datin).available();
+    }
+
+    public void close() throws IOException {
+        ((ObjectInput)datin).close();
     }
 
 }

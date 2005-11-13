@@ -55,12 +55,11 @@ public class Library extends Util {
         return new Library(libname, new BlockDeserializer(ctx, di, classes, sharedObjectOffsets, sharedObjectSizes), names);
     }
         
-        /* All this and more at your */ 
     public Library(String name, BlockDeserializer lib, Map names) {
         this.name=name;
         this.lib=lib;
         this.names=names;
-        lib.baseLib=this;
+        lib.setLibrary(this);
     }
 
     public int getEntryPoint(Symbol name) {
