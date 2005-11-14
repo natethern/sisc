@@ -7,34 +7,22 @@ import sisc.data.*;
 import sisc.env.SymbolicEnvironment;
 import sisc.interpreter.AppContext;
 
-public class StreamDeserializer extends DeserializerImpl {
+public class StreamDeserializer extends SLL2Deserializer {
 
-    private AppContext ctx;
     private Map classPool, alreadyReadObjects;
-    private LinkedList deserQueue;
 
     private StreamDeserializer(AppContext ctx, NestedObjectInputStream input) throws IOException {
-        super(input);
-        this.ctx=ctx;
+        super(ctx, input);
         input.setDeserializerInstance(this);
         classPool=new HashMap();
         alreadyReadObjects=new HashMap();
-        deserQueue=new LinkedList();
     }
 
     public StreamDeserializer(AppContext ctx, InputStream input) throws IOException {
         this(ctx, new NestedObjectInputStream(input));
     }
 
-    public final Expression readExpression() throws IOException {
-        return readExpression(false, -1);
-    }
-
-    public final Expression readInitializedExpression() throws IOException {
-        return readExpression(true, -1);
-    }
-
-    private void recordReadObject(int definingOid, Expression e) {
+    protected void recordReadObject(int definingOid, Expression e) {
         if (definingOid!=-1) {
             Integer epIdx=new Integer(definingOid);
             if (alreadyReadObjects.get(epIdx)==null)
@@ -42,69 +30,20 @@ public class StreamDeserializer extends DeserializerImpl {
         }
     }
 
-    public Expression readExpression(boolean flush, int definingOid) throws IOException {
-        int type=readInt();
+    protected Expression skipReadObject(boolean flush, int definingOid)
+        throws IOException {
 
-        try {
-            //Read the stream object type, values above 15 of which represent
-            //shared objects
-            switch(type) {
-            case 2: //shared expressions
-                return readExpression(flush, readInt());
-            case 0: //ordinary expressions
-                Expression e;
-                Class clazz=readClass();
-                e=(Expression)clazz.newInstance();
-                if (e instanceof Singleton) {
-                    e.deserialize(this);
-                    e = ((Singleton)e).singletonValue();
-                    recordReadObject(definingOid, e);
-                } else {
-                    recordReadObject(definingOid, e);
-                    int start=deserQueue.size();
-                    deserQueue.addFirst(e);
-                    if (flush) deserLoop(start);
-                }
-                return e;
-            case 1: //null
-                return null;
-            case 4:
-                String libName=readUTF();
-                int epid=readInt();
-                e=ctx.getExpression(libName, epid);
-                recordReadObject(definingOid, e);
-                return e;
-            default: //expression references
-                return fetchShared(type-16);
-            }
-        } catch (InstantiationException ie) {
-            ie.printStackTrace();
-            throw new IOException(ie.getMessage());
-        } catch (IllegalAccessException iae) {
-            iae.printStackTrace();
-            throw new IOException(iae.getMessage());
-        } 
-    }
-
-    public Expression deser() throws IOException {
-        int start=deserQueue.size();
-        Expression e=readExpression();
-        deserLoop(start);
-        return e;
-    }
-    
-    void deserLoop(int start) throws IOException {
-        while (deserQueue.size()>start) {
-            Object o=deserQueue.removeFirst();
-            initializeExpression((Expression)o);
+        Integer epIdx=new Integer(definingOid);
+        Expression e = (Expression)alreadyReadObjects.get(epIdx);
+        if (e == null) {
+            return readExpression(flush, definingOid);
+        } else {
+            //we should never really get here
+            readExpression(flush, definingOid);
+            return e;
         }
     }
 
-    void initializeExpression(Expression e) throws IOException {
-        e.deserialize(this);
-        e.deserializeAnnotations(this);
-    }
-    
     protected Expression fetchShared(int oid) throws IOException {
         try {
             Expression e=(Expression)alreadyReadObjects.get(new Integer(oid));
@@ -117,13 +56,6 @@ public class StreamDeserializer extends DeserializerImpl {
         }
     }            
     
-    public SymbolicEnvironment readSymbolicEnvironment() throws IOException {
-        Expression e=readExpression();
-        if (e instanceof Symbol) 
-            e=ctx.getExpression((Symbol)e);
-        return (SymbolicEnvironment)e;
-    }
-
     public Class readClass() throws IOException {
         int cid=readInt();
         Integer i=new Integer(cid);
