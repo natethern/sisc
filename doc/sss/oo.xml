@@ -1633,7 +1633,7 @@
         Classes are created as follows:
         <blockquote>
           <para>
-            <indexterm><primary>make-method</primary></indexterm>
+            <indexterm><primary>make-class</primary></indexterm>
             &procedure;
             <methodsynopsis language="scheme">
               <type>class</type>
