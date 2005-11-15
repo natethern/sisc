@@ -6,6 +6,7 @@ import sisc.io.ValueWriter;
 import sisc.io.WriterOutputPort;
 import sisc.io.SharedValueWriter;
 import sisc.util.Defaults;
+import sisc.util.InternedValue;
 
 /**
  * Value is the base class for anything treated as a first-class value 
@@ -135,6 +136,10 @@ public abstract class Value extends Expression implements Immediate {
         w.append('>');
     }
 
+    public Object writeReplace() throws ObjectStreamException {
+        InternedValue iv = InternedValue.lookupByValue(this);
+        return (iv == null) ? (Object)this : (Object)iv;
+    }
 
 }
 
