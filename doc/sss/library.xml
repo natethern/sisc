@@ -333,6 +333,63 @@ r / 2<superscript>s</superscript>
         if they are instances of the same record type and all their
         fields are <function>equal?</function>.
       </para>
+      <para>
+        It is also possible to define
+        <emphasis>non-generative</emphasis> record types, using
+        <function>define-nongenerative-record-type</function> and
+        <function>define-nongenerative-struct</function>. Non-generative
+        record types are associated with a user-specified guid. If an
+        attempt is made to define a record type with a guid that is
+        already bound to an existing record type then the existing
+        record type is modified, instead of a new record type being
+        created. Non-generative record types are serialised specially
+        such that deserialising them also performs this check. By
+        contract, deserialisation of ordinary, generative record types
+        and their instances results in duplicate types being created,
+        which is usually not desirable.
+      </para>
+      <para>
+        <indexterm><primary>define-nongenerative-record-type</primary></indexterm>
+        &syntax;
+        <methodsynopsis language="scheme">
+          <void/>
+          <methodname>define-nongenerative-record-type</methodname>
+          <methodparam><parameter>name</parameter></methodparam>
+          <methodparam><parameter>guid</parameter></methodparam>
+          <methodparam><parameter>(constructor-name field ...)</parameter></methodparam>
+          <methodparam><parameter>(predicate ...)</parameter></methodparam>
+          <methodparam><parameter>(field-spec ...)</parameter></methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            This is the same as <function>define-record-type</function>,
+            except that the resulting record type is
+            <emphasis>non-generative</emphasis> with
+            <parameter>guid</parameter>, a symbol, as the unique
+            identifier.
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        <indexterm><primary>define-nongenerative-struct</primary></indexterm>
+        &syntax;
+        <methodsynopsis language="scheme">
+          <void/>
+          <methodname>define-nongenerative-struct</methodname>
+          <methodparam><parameter>name</parameter></methodparam>
+          <methodparam><parameter>guid</parameter></methodparam>
+          <methodparam><parameter>(field ...)</parameter></methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            This is the same as <function>define-struct</function>,
+            except that the resulting struct is
+            <emphasis>non-generative</emphasis> with
+            <parameter>guid</parameter>, a symbol, as the unique
+            identifier.
+          </para>
+        </blockquote>
+      </para>
     </sect2>
     <sect2 id="Hashtables">
       <title>Hash Tables</title>
