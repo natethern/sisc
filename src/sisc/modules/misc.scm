@@ -147,3 +147,26 @@
                                                   (eqv? x c)) l))
                                       remaining)))))))))
   (merge '() partial-orders))
+
+(define (type-safe-intern type-check guid value)
+  (call-with-values
+      (lambda () (intern guid value))
+    (lambda (new-guid new-value)
+      (cond
+        [(and (eq? new-guid guid) (eq? new-value value))
+         value]
+        [(eq? new-guid guid)
+         (if (type-check new-value)
+             new-value
+             (error (string-append
+                     "guid already in use for ~a, "
+                     "which is not of the correct type")
+                    new-value))]
+        [(eq? new-value value)
+         ;;this should never happen, since value is supposed to be
+         ;;fresh
+         (error "something bad happened")]
+        [else
+          ;;this should never happen, since value is supposed to be
+          ;;fresh
+          (error "something bad happened")]))))

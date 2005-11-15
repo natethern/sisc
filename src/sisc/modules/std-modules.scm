@@ -121,7 +121,8 @@
      define-values
      define-simple-syntax
      compose
-     total-order)
+     total-order
+     type-safe-intern)
   (include "misc.scm"))
 
 (module threading
