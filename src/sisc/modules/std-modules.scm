@@ -292,8 +292,10 @@
   (include "type-system.scm"))
 
 (module record
-    (define-record-type
-     define-struct
+    ((define-record-type define-record-type-helper)
+     (define-nongenerative-record-type define-record-type-helper)
+     (define-struct define-struct-helper)
+     (define-nongenerative-struct define-struct-helper)
      record?
      record-type
      record-constructor

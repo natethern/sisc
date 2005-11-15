@@ -2,9 +2,10 @@
 
 ; Definition of DEFINE-RECORD-TYPE
 
-(define-syntax define-record-type
+(define-syntax define-record-type-helper
   (syntax-rules ()
-    [(define-record-type "helper" type
+    [(define-record-type-helper type
+       guid
        (constructor constructor-tag ...)
        predicate
        ()
@@ -12,7 +13,7 @@
        ((accessor-field-tag accessor) ...)
        ((modifier-field-tag modifier) ...))
      (define-values (type constructor predicate accessor ... modifier ...)
-       (let ([type (make-record-type 'type '(field-tag ...))])
+       (let ([type (make-record-type 'type '(field-tag ...) guid)])
          (values type
                  (record-constructor type '(constructor-tag ...))
                  (record-predicate type)
@@ -20,50 +21,70 @@
                  ...
                  (record-modifier type 'modifier-field-tag)
                  ...)))]
-    [(define-record-type "helper" type
+    [(define-record-type-helper type
+       guid
        constructor
        predicate
        ((field-tag accessor modifier) . fields)
        field-tags
        accessors
        modifiers)
-     (define-record-type "helper" type
+     (define-record-type-helper type
+       guid
        constructor
        predicate
        fields
        (field-tag . field-tags)
        ((field-tag accessor) . accessors)
        ((field-tag modifier) . modifiers))]
-    [(define-record-type "helper" type
+    [(define-record-type-helper type
+       guid
        constructor
        predicate
        ((field-tag accessor) . fields)
        field-tags
        accessors
        modifiers)
-     (define-record-type "helper" type
+     (define-record-type-helper type
+       guid
        constructor
        predicate
        fields
        (field-tag . field-tags)
        ((field-tag accessor) . accessors)
-       modifiers)]
-    [(define-record-type type
-       constructor
-       predicate
-       field
-       ...)
-     (define-record-type "helper" type
-       constructor
-       predicate
-       (field ...)
-       ()
-       ()
-       ())]))
+       modifiers)]))
+
+(define-simple-syntax (define-record-type type
+                        constructor
+                        predicate
+                        field
+                        ...)
+  (define-record-type-helper type
+    #f
+    constructor
+    predicate
+    (field ...)
+    ()
+    ()
+    ()))
+
+(define-simple-syntax (define-nongenerative-record-type type guid
+                        constructor
+                        predicate
+                        field
+                        ...)
+  (define-record-type-helper type
+    'guid
+    constructor
+    predicate
+    (field ...)
+    ()
+    ()
+    ()))
 
 ; We define the following procedures:
 ; 
-; (make-record-type <type-name <field-names>)    -> <record-type>
+; (make-record-type <type-name <field-names> [<guid>])  -> <record-type>
 ; (record-constructor <record-type<field-names>) -> <constructor>
 ; (record-predicate <record-type>)               -> <predicate>
 ; (record-accessor <record-type <field-name>)    -> <accessor>
@@ -89,8 +110,12 @@
 
 (define :record-type (void))
 
-(define (make-record-type name field-tags)
-  (let ([res (make-record :record-type 2)])
+(define (make-record-type name field-tags . guid)
+  (define (maybe-intern value)
+    (if (and (not (null? guid)) (car guid))
+        (type-safe-intern record-type? (car guid) value)
+        value))
+  (let ([res (maybe-intern (make-record :record-type 2))])
     (record-set! res 0 name)
     (record-set! res 1 field-tags)
     res))
@@ -154,10 +179,24 @@
           (error "modifier applied to bad value" type tag thing)))))
 
 ;; define-struct ala MzScheme
-(define-syntax define-struct
+(define-syntax define-struct-helper
   (lambda (x)
     (syntax-case x ()
-      ((_ name (field ...))
+      [(_ "helper" name #f constructor-spec predicate field-spec ...)
+       (syntax
+        (define-record-type name
+          constructor-spec
+          predicate
+          field-spec
+          ...))]
+      [(_ "helper" name guid constructor-spec predicate field-spec ...)
+       (syntax
+        (define-nongenerative-record-type name guid
+          constructor-spec
+          predicate
+          field-spec
+          ...))]
+      [(_ name guid (field ...))
        (let* ((name-syntax (syntax name))
               (name-string (symbol->string (syntax-object->datum
                                             name-syntax))))
@@ -178,9 +217,16 @@
                                 "!"))
                              (syntax-object->datum (syntax (field ...))))))
            (syntax
-            (define-record-type name (make-name field ...)
+            (define-struct-helper "helper"
+              name guid (make-name field ...)
               name?
-              (field field-getter field-setter) ...))))))))
+              (field field-getter field-setter) ...))))])))
+
+(define-simple-syntax (define-struct name fields)
+  (define-struct-helper name #f fields))
+
+(define-simple-syntax (define-nongenerative-struct name guid fields)
+  (define-struct-helper name guid fields))
 
 (define <record> (make-type '|sisc.modules.record.Record|))
 
@@ -197,7 +243,8 @@
         [(record-type? y) #f]
         [else (next x y)]))
 
-(set! :record-type (make-record :record-type 2))
+(set! :record-type (type-safe-intern record? 'sisc.record.record-type
+                                     (make-record :record-type 2)))
 (record-type! :record-type :record-type)
 (record-set! :record-type 0 ':record-type)
 (record-set! :record-type 1 '(name field-tags))
