@@ -1641,6 +1641,7 @@
               <methodparam><parameter>symbol</parameter></methodparam>
               <methodparam><parameter>class-list</parameter></methodparam>
               <methodparam><parameter>slot-list</parameter></methodparam>
+              <methodparam choice="opt"><parameter>guid-symbol</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -1658,6 +1659,19 @@
               <para>
                 Slots are inherited by sub-classes. For details on
                 slot inheritance see <xref linkend="OOInheritance"/>.
+              </para>
+              <para>
+                If <parameter>guid-symbol</parameter> is specified
+                then the new class is
+                <emphasis>non-generative</emphasis>: if
+                <parameter>guid-symbol</parameter> is already bound to
+                a class then that class is modified, instead of a new
+                class being created. Non-generative classes are
+                serialised specially such that deserialising them also
+                performs this check. By contrast, deserialisation of
+                ordinary, generative classes and their instances
+                results in duplicate types being created, which is
+                usually not desirable.
               </para>
             </blockquote>
             <informalexample>
@@ -1722,6 +1736,27 @@
   (y :y :y!))
               </programlisting>
             </informalexample>
+          </para>
+          <para>
+            <indexterm><primary>define-nongenerative-class</primary></indexterm>
+            &syntax;
+            <methodsynopsis language="scheme">
+              <void/>
+              <methodname>define-nongenerative-class</methodname>
+              <methodparam><parameter>guid</parameter></methodparam>
+              <methodparam><parameter>name-and-supers</parameter></methodparam>
+              <methodparam rep="repeat"><parameter>slot-def</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                This is the same as <function>define-class</function>,
+                except that the resulting class is
+                <emphasis>non-generative</emphasis> with
+                <parameter>guid</parameter>, a symbol, as the unique
+                identifier. The significance of this is explained in
+                <function>make-class</function>.
+              </para>
+            </blockquote>
           </para>
         </blockquote>
       </para>
