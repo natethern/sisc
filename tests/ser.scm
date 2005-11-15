@@ -63,21 +63,47 @@
 (define k (call-with-serial-input-file "/tmp/rade/foo.ser" deserialize))
 (k 2) ;=> 12
 
+;; serialisation of interned values
 (define ser-file "/tmp/rade/foo.ser")
 (import record)
+(import oo)
+(import type-system)
+(import generic-procedures)
+(define-nongenerative-struct foo foo-guid (field1))
+(define-generics :field1 :field1!)
+(define-nongenerative-class (bar) bar-guid
+  (field1 :field1 :field1!))
+(define aa (make bar))
+(define a (make-foo aa))
+(:field1! aa a) ;;introduce a circularity, just for fun
+;;serial-io
 (import serial-io)
-(define-struct test-struct (f1 f2 f3))
-(define a (make-test-struct 1 2 3))
-(test-struct-f1 a) ;;(A)
 (call-with-serial-output-file ser-file
   (lambda (port) (serialize a port)))
 (define b (call-with-serial-input-file ser-file deserialize))
-(test-struct-f1 b) ;;(B) FAILS!
+(foo? b) ;=> #t
+(instance-of? (foo-field1 b) bar) ;=> #t
+;;Java serialization
+(import s2j)
+(define-java-classes
+  <java.io.file-output-stream>
+  <java.io.object-output-stream>
+  <java.io.file-input-stream>
+  <java.io.object-input-stream>)
+(define-generic-java-methods write-object read-object flush close)
+(define p (java-new <java.io.object-output-stream>
+                    (java-new <java.io.file-output-stream>
+                              (->jstring ser-file))))
+(write-object p (java-wrap a))
+(flush p)
+(close p)
+(define p (java-new <java.io.object-input-stream>
+                    (java-new <java.io.file-input-stream>
+                              (->jstring ser-file))))
+(define b (java-unwrap (read-object p)))
+(close p)
+(foo? b) ;=> #t
+(instance-of? (foo-field1 b) bar) ;=> #t
+;;the above also works across restarts, and in different order
+;;(i.e. deser b first, then define a), and for serialisation of aa
 
-(define l (let ((foo (list 1)))
-            (list foo (lambda () foo))))
-(eq? (car l) ((cadr l))) ;=> #t
-(call-with-serial-output-file ser-file
-  (lambda (port) (serialize (cadr l) port)))
-(define ll (call-with-serial-input-file ser-file deserialize))
-(eq? (car l) (ll)) ;=> #f
