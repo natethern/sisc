@@ -1,3 +1,13 @@
+Interned values are values which are associated, in a bijection, with
+an id, usually a globally unique symbol. Their main purpose is to
+avoid duplication of eq?-sensitive values on deserialisation. A
+typical example are user-defined types, such as record types and
+classes. Their duplication is usually undesirable. For example, it
+results in a deserialised record no longer inhabiting the same type as
+it did when it was being serialized. Non-generative types, which are
+built on top of interned values, solve this problem.
+
+
 1) sisc.util.InternedValue
 
 This class serves two purposes. Firstly, it contains static members
