@@ -1,5 +1,4 @@
 (require-library 'sisc/libs/srfi/srfi-1)
-(require-library 'sisc/libs/srfi/srfi-9)
 (require-library 'sisc/libs/srfi/srfi-19)
 
 (module srfi-18 
@@ -18,7 +17,7 @@
      terminated-thread-exception? uncaught-exception?
      uncaught-exception-reason)
   (import threading-native)
-  (import srfi-9)
+  (import record)
   (import* srfi-19
            current-time
            time-utc

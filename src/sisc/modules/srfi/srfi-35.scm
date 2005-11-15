@@ -1,4 +1,5 @@
-(define-record-type :condition-type
+(define-nongenerative-record-type :condition-type
+  sisc.srfi.srfi-35.condition-type-type
   (really-make-condition-type name supertype fields all-fields)
   condition-type?
   (name condition-type-name)
@@ -58,7 +59,8 @@
 
 ; The type-field-alist is of the form
 ; ((<type> (<field-name> . <value>) ...) ...)
-(define-record-type :condition
+(define-nongenerative-record-type :condition
+  sisc.srfi.srfi-35.condition-type
   (really-make-condition type-field-alist)
   condition?
   (type-field-alist condition-type-field-alist))

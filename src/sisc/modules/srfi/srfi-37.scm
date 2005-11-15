@@ -33,7 +33,8 @@
 ;;; NOTE: The scsh-utils and Chicken implementations use regular
 ;;; expressions. These might be easier to read and understand.
 
-(define-record-type option-type
+(define-nongenerative-record-type option-type
+  sisc.srfi.srfi-37.option-type
   (option names required-arg? optional-arg? processor)
   option?
   (names option-names)

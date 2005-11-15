@@ -1,4 +1,6 @@
-(define-struct promise (expr eager?))
+(define-nongenerative-struct promise
+  sisc.srfi.srfi-45.promise-type
+  (expr eager?))
 
 (define-simple-syntax (lazy exp)
   (box (box (make-promise (lambda () exp) #f))))

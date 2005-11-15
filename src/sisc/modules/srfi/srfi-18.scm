@@ -194,7 +194,8 @@
   (error (cons obj val)))
 
 ; Define some exceptions specific to this SRFI
-(define-record-type srfi18-exception
+(define-nongenerative-record-type srfi18-exception
+  sisc.srfi.srfi-18.exception-type
   (make-srfi18-exception type val)
   srfi18-exception?
   (type srfi18-exception-type)

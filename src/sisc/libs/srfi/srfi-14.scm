@@ -1,5 +1,4 @@
 (require-library 'sisc/libs/srfi/srfi-1)
-(require-library 'sisc/libs/srfi/srfi-9)
 (require-library 'sisc/libs/srfi/srfi-60)
 (require-library 'sisc/libs/srfi/optional-args)
 
@@ -8,7 +7,7 @@
    make-char-set-cursor char-set-cursor?
    char-set-cursor-cset char-set-cursor-mask
    char-set-cursor-mask!)
-  (import srfi-9)
+  (import record)
   (include "../../modules/srfi/srfi-14/representation.scm")  )
 
 (module srfi-14-charsets

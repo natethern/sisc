@@ -67,12 +67,6 @@
 ;;; See the end of the file for porting and performance-tuning notes.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define-record-type :char-set
-  (make-char-set s)
-  char-set?
-  (s char-set:s))
-
-
 (define (%string-copy s) (substring s 0 (string-length s)))
 
 ;;; Parse, type-check & default a final optional BASE-CS parameter from

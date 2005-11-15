@@ -1,5 +1,4 @@
 (require-library 'sisc/libs/srfi/srfi-1)
-(require-library 'sisc/libs/srfi/srfi-9)
 
 (module srfi-40
     (stream-null
@@ -21,6 +20,6 @@
      stream-for-each
      stream-filter)
   (import* srfi-1 any every)
-  (import srfi-9)
+  (import record)
   (include "../../modules/srfi/srfi-40.scm")
   (add-feature 'srfi-40))

@@ -11,7 +11,8 @@
 ;; STREAM-TYPE -- type of streams
 ;; STREAM? object -- #t if object is a stream, #f otherwise
 
-(define-record-type stream-type
+(define-nongenerative-record-type stream-type
+  sisc.srfi.srfi-40.stream-type
   (make-stream promise)
   stream?
   (promise stream-promise stream-promise-set!))

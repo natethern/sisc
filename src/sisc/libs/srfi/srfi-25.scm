@@ -1,5 +1,3 @@
-(require-library 'sisc/libs/srfi/srfi-9)
-
 (module srfi-25
     (array?
      make-array
@@ -11,7 +9,7 @@
      array-ref
      array-set!
      share-array)
-  (import srfi-9)
+  (import record)
   (include "../../modules/srfi/srfi-25/as-srfi-9-record.scm")
   ;;pick one of three alternative implementations
   (include "../../modules/srfi/srfi-25/ix-ctor.scm")

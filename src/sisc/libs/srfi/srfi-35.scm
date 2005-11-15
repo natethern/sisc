@@ -1,5 +1,4 @@
 (require-library 'sisc/libs/srfi/srfi-1)
-(require-library 'sisc/libs/srfi/srfi-9)
 (require-library 'sisc/libs/srfi/srfi-23)
 
 (module srfi-35
@@ -22,7 +21,7 @@
      &error
      error?)
   (import srfi-1)
-  (import srfi-9)
+  (import record)
   (import srfi-23)
   (include "../../modules/srfi/srfi-35.scm")
   (add-feature 'srfi-35))

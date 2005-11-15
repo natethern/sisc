@@ -204,7 +204,9 @@
 ;;; the time structure; creates the accessors, too.
 ;;; wf: changed to match srfi documentation. uses mzscheme structures & inspectors
 
-(define-struct time (type nanosecond second))
+(define-nongenerative-struct time
+  sisc.srfi.srfi-19.time-type
+  (type nanosecond second))
 
 ;; thanks, Martin Gasbichler ...
 
@@ -524,7 +526,9 @@
 
 ;; -- date structures
 
-(define-struct date (nanosecond second minute hour day month year zone-offset))
+(define-nongenerative-struct date
+  sisc.srfi.srfi-45.date-type
+  (nanosecond second minute hour day month year zone-offset))
 
 ;; redefine setters
 

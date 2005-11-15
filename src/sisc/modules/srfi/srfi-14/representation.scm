@@ -1,11 +1,13 @@
 ; Data representation for SRFI-14
 
-(define-record-type :char-set
+(define-nongenerative-record-type :char-set
+  sisc.srfi.srfi-14.char-set-type
   (make-char-set v)
   char-set?
   (v char-set:s char-set:s!))
 
-(define-record-type :char-set-cursor
+(define-nongenerative-record-type :char-set-cursor
+  sisc.srfi.srfi-14.char-set-cursor-type
   (make-char-set-cursor cset mask)
   char-set-cursor?
   (cset char-set-cursor-cset)
