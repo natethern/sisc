@@ -1,3 +1,12 @@
+2005-11-15  Matthias Radestock  <matthias@sorted.org>
+
+	* Added interned values and, on top of that, non-generative record
+	  types and classes. This fixes the long-outstanding record
+	  serialisation bug 806864.
+
+	* Made all core types and types in libraries (i.e. srfis)
+	  non-generative.
+
 2005-11-11  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed serialisation of annotations in Java serialisation of SISC
