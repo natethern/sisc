@@ -1,5 +1,7 @@
-(define-class (<string-input-port> <native-character-input-port>))
-(define-class (<string-output-port> <native-character-output-port>))
+(define-nongenerative-class (<string-input-port> <native-character-input-port>)
+  sisc.io.string-input-port-type)
+(define-nongenerative-class (<string-output-port> <native-character-output-port>)
+  sisc.io.string-output-port-type)
 
 (define (open-output-string)
   (make <string-output-port> (_open-output-string)))

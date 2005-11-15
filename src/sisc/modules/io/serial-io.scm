@@ -1,5 +1,7 @@
-(define-class (<serial-input-port> <filter-input-port>))
-(define-class (<serial-output-port> <filter-output-port>))
+(define-nongenerative-class (<serial-input-port> <filter-input-port>)
+  sisc.io.serial-input-port-type)
+(define-nongenerative-class (<serial-output-port> <filter-output-port>)
+  sisc.io.serial-output-port-type)
 
 (define (open-serial-input-port port)
   (make <serial-input-port>
