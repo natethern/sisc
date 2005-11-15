@@ -1,11 +1,11 @@
 package sisc.ser;
 
-import sisc.util.Util;
 import java.util.*;
 import java.io.*;
 import sisc.data.*;
 import sisc.env.SymbolicEnvironment;
 import sisc.interpreter.AppContext;
+import sisc.util.InternedValue;
 
 public abstract class SLL2Deserializer extends DeserializerImpl {
 
@@ -31,46 +31,57 @@ public abstract class SLL2Deserializer extends DeserializerImpl {
     protected abstract Expression skipReadObject(boolean flush, int definingOid)
         throws IOException;
 
+    private Expression deserializeDetails(boolean flush,
+                                          int definingOid,
+                                          Expression e) throws IOException {
+        if (e instanceof Singleton) {
+            e.deserialize(this);
+            e = ((Singleton)e).singletonValue();
+            recordReadObject(definingOid, e);
+        } else {
+            recordReadObject(definingOid, e);
+            int start=deserQueue.size();
+            deserQueue.addFirst(e);
+            if (flush) deserLoop(start);
+        }
+        return e;
+    }
+
     protected Expression readExpression(boolean flush, int definingOid) throws IOException {
         int type=readInt();
 
-        try {
-            switch(type) {
-            case 2: //shared expressions
-                definingOid=readInt();
-                return skipReadObject(flush, definingOid);
-            case 0: //ordinary expressions
-                Class clazz=readClass();
-                Expression e=(Expression)clazz.newInstance();
-                if (e instanceof Singleton) {
-                    e.deserialize(this);
-                    e = ((Singleton)e).singletonValue();
-                    recordReadObject(definingOid, e);
-                } else {
-                    recordReadObject(definingOid, e);
-                    int start=deserQueue.size();
-                    deserQueue.addFirst(e);
-                    if (flush) deserLoop(start);
-                }
-                return e;
-            case 1: //null
-                return null;
-            case 4:
-                String libName=readUTF();
-                int epid=readInt();
-                e=ctx.getExpression(libName, epid);
-                recordReadObject(definingOid, e);
-                return e;
-            default: //expression references
-                return fetchShared(type-16);
-            }
-        } catch (InstantiationException ie) {
-            ie.printStackTrace();
-            throw new IOException(ie.getMessage());
-        } catch (IllegalAccessException iae) {
-            iae.printStackTrace();
-            throw new IOException(iae.getMessage());
-        } 
+        switch(type) {
+          case 2: //shared expressions
+              definingOid=readInt();
+              return skipReadObject(flush, definingOid);
+          case 3: //interned value
+              Symbol name = (Symbol)readInitializedExpression();
+              Class clazz = readClass();
+              Expression e = InternedValue.deserResolve(name, clazz);
+              return deserializeDetails(flush, definingOid, e);
+          case 0: //ordinary expressions
+              clazz=readClass();
+              try {
+                  e = (Expression)clazz.newInstance();
+              } catch (InstantiationException ie) {
+                  ie.printStackTrace();
+                  throw new IOException(ie.getMessage());
+              } catch (IllegalAccessException iae) {
+                  iae.printStackTrace();
+                  throw new IOException(iae.getMessage());
+              }
+              return deserializeDetails(flush, definingOid, e);
+          case 1: //null
+              return null;
+          case 4:
+              String libName=readUTF();
+              int epid=readInt();
+              e=ctx.getExpression(libName, epid);
+              recordReadObject(definingOid, e);
+              return e;
+          default: //expression references
+              return fetchShared(type-16);
+        }
     }
 
     public Expression deser() throws IOException {

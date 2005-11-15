@@ -4,8 +4,10 @@ import java.io.*;
 import java.util.*;
 import sisc.data.Expression;
 import sisc.data.Singleton;
+import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
 import sisc.interpreter.AppContext;
+import sisc.util.InternedValue;
 
 public abstract class SLL2Serializer extends SerializerImpl {
 
@@ -48,11 +50,12 @@ public abstract class SLL2Serializer extends SerializerImpl {
     }
 
     /**
-     * Serializes expressions. We distinguish betweeen five types of
+     * Serializes expressions. We distinguish betweeen six types of
      * expressions:
      * Type 0: normal expression
      * Type 1: null
      * Type 2: first encounter of entry point / shared expression
+     * Type 3: interned value
      * Type 4: entry point into other library
      * Type 16+n: reference to entry point / shared expression n
      *
@@ -128,7 +131,17 @@ public abstract class SLL2Serializer extends SerializerImpl {
     }
     
     private boolean writeExpressionSerialization(Expression e, SerJobEnd end, boolean flush) throws IOException {
-        writeInt(0);
+        if (e instanceof Value) {
+            InternedValue iv = InternedValue.lookupByValue((Value)e);
+            if (iv == null) {
+                writeInt(0);
+            } else {
+                writeInt(3);
+                writeInitializedExpression(iv.getName());
+            }
+        } else {
+            writeInt(0);
+        }
         writeClass(e.getClass());
         if (e instanceof Singleton) {
             e.serialize(this);
