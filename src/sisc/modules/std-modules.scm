@@ -460,8 +460,6 @@
      ->list
      jnull
      display-java-stack-trace)
-  (import* record
-           define-record-type)
   (import* type-system
            make-type
            type<=
