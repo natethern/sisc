@@ -32,7 +32,10 @@ public class JavaDeserializer extends DeserializerImpl {
     }
 
     public Expression readExpression() throws IOException {
-        return (Expression)readObjectIOExceptionOnly();
+        Object o = readObjectIOExceptionOnly();
+        //circular interned values may not have been resolved yet ...
+        return (Expression)((o instanceof InternedValue) ?
+                            ((InternedValue)o).readResolve() : o);
     }
 
     public Expression readInitializedExpression() throws IOException {
