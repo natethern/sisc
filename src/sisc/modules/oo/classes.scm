@@ -1,4 +1,5 @@
-(define-record-type <class> (_make-class name direct-superclasses)
+(define-nongenerative-record-type <class> sisc.oo.class-type
+  (_make-class name direct-superclasses)
   class?
   (name                 class-name
                         set-class-name!)
@@ -43,8 +44,12 @@
                     (loop super supers)
                     (cpl-error current super))))))))
 
-(define (make-class-helper name direct-superclasses direct-slots)
-  (let* ([class (_make-class name direct-superclasses)]
+(define (make-class-helper name guid direct-superclasses direct-slots)
+  (define (maybe-intern value)
+    (if guid
+        (type-safe-intern class? guid value)
+        value))
+  (let* ([class (maybe-intern (_make-class name direct-superclasses))]
          [cpl   (compute-class-precedence-list class)]
          [idx   (apply + (map class-direct-slot-count (cdr cpl)))]
          [offs  0])
@@ -63,17 +68,19 @@
     (set-class-constructor! class (make-constructor))
     class))
 
-(define (make-class name direct-superclasses direct-slots)
+(define (make-class name direct-superclasses direct-slots . opt-guid)
   (make-class-helper name
+                     (if (null? opt-guid) #f (car opt-guid))
                      (if (null? direct-superclasses)
                          (list <object>)
                          direct-superclasses)
                      direct-slots))
 
-(define (make-class-with-slots name direct-superclasses slot-defs)
+(define (make-class-with-slots name guid direct-superclasses slot-defs)
   (let ([class (make-class name
                            direct-superclasses
-                           (map car slot-defs))])
+                           (map car slot-defs)
+                           guid)])
     (for-each
      (lambda (slot props)
        (if (not (null? props))
@@ -96,7 +103,21 @@
   (module (name)
     (define name)
     (set! name
+      (make-class-with-slots 'name 
+                             #f
+                             (list . superclasses)
+                             `((slot-name ,@(list . slot-props))
+                               ...)))))
+
+(define-simple-syntax (define-nongenerative-class (name . superclasses)
+                        guid
+                        (slot-name . slot-props)
+                        ...)
+  (module (name)
+    (define name)
+    (set! name
       (make-class-with-slots 'name
+                             'guid
                              (list . superclasses)
                              `((slot-name ,@(list . slot-props))
                                ...)))))

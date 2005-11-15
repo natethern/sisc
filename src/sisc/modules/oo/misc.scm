@@ -3,7 +3,7 @@
 (define-generic initialize)
 
 (define (initialize-classes)
-  (set! <object> (make-class-helper '<object> '() '()))
+  (set! <object> (make-class-helper '<object> 'sisc.oo.object-type '() '()))
   (add-method initialize (method ((<object> _)) (void))))
 
 (define (make class . args)

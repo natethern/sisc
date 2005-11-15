@@ -1,9 +1,5 @@
-(define-record-type <slot> (make-slot name
-                                      class
-                                      accessor
-                                      modifier
-                                      accessor-method
-                                      modifier-method)
+(define-nongenerative-record-type <slot> sisc.oo.slot-type
+  (make-slot name class accessor modifier accessor-method modifier-method)
   slot?
   (name                 slot-name)
   (class                slot-class)

@@ -505,10 +505,11 @@
      <object>
      make-class
      (define-class make-class-with-slots)
+     (define-nongenerative-class make-class-with-slots)
      make
      initialize)
   (import* record
-           define-record-type)
+           define-nongenerative-record-type)
   (import* record-native
            make-record
            record-ref
