@@ -73,6 +73,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("inexact?", INEXACTQ);
             define("integer->char", INTEGER2CHAR);
             define("_integer?", INTEGERQ);
+            define("intern", INTERN);
             define("length", LENGTH);
             define("list->vector", LIST2VECTOR);
             define("log", LOG);
@@ -482,6 +483,14 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case SIGUNHOOK:
             SignalHook.removeHandler(string(v1), proc(v2));
             return VOID;
+        case INTERN:
+            InternedValue iv = InternedValue.intern(symbol(v1), v2);
+            if (iv == null) {
+                throwPrimException(liMessage(SISCB, "internconflict",
+                                             symval(v1),
+                                             v2.synopsis()));
+            }
+            return new Values(new Value[] { iv.getName(), iv.getValue() });
         default:
             throwArgSizeException();
             return VOID;

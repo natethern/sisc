@@ -2,7 +2,7 @@ package sisc.modules;
 
 interface Primitives {
 
-    //next: 138
+    //next: 139
     int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -58,6 +58,7 @@ interface Primitives {
         INTEGER2CHAR = 52,
         INTEGERQ = 36,
         INTERACTIONENVIRONMENT = 1,
+        INTERN = 138,
         LCM = 91,
         LENGTH = 59,
         LIST = 120,
