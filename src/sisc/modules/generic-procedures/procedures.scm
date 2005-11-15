@@ -17,7 +17,9 @@
 (define (set-methods! proc methods)
   (set-procedure-property! proc 'methods methods))
 
-(define-struct method-list (methods arity cache))
+(define-nongenerative-struct method-list
+  sisc.generic-procedures.method-list-type
+  (methods arity cache))
 
 (define (make-method-list-from-methods methods)
   (make-method-list methods

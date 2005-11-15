@@ -1,10 +1,8 @@
 ;;a method is a procedure. It has an arity and a signature (a list of
 ;;parameter types) and flag indicating whether it can take rest
 ;;parameters
-(define-record-type <method> (_make-method procedure
-                                           arity
-                                           types
-                                           rest?)
+(define-nongenerative-record-type <method> sisc.generic-procedures.method-type
+  (_make-method procedure arity types rest?)
   method?
   (procedure    method-procedure        set-method-procedure!)
   (arity        method-arity            set-method-arity!)

@@ -343,8 +343,8 @@
      compare-methods
      method)
   (import* record
-           define-struct
-           define-record-type)
+           define-nongenerative-struct
+           define-nongenerative-record-type)
   (import* type-system
            type-of
            types=
