@@ -60,11 +60,10 @@ depends on: 1
 
 Java serialisation of interned values is accomplished by implementing
 a writeReplace() method (which is part of the standard Java object
-output API) on Value. This checks whether the symbol is associated
-with an interned value and if so returns an instance of InternedValue
-containing both the symbol and value. This is then serialised by the
-writeExternal() method, which too is part of the standard Java object
-output API.
+output API) on Value. This checks whether the value is interned and if
+so returns an instance of InternedValue containing the value and
+associated symbol. This is then serialised by the writeExternal()
+method, which too is part of the standard Java object output API.
 
 Java deserialisation of interned values is accomplished by
 implementing a readResolve() and readExternal() methods that mirror
