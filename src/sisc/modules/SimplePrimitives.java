@@ -48,6 +48,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("ceiling", CEILING);
             define("char->integer", CHAR2INTEGER);
             define("char?", CHARACTERQ);
+            define("char=?", CHAREQUAL);
             define("circular?", CIRCULARQ);
             define("compact-string-rep", COMPACTSTRINGREP);
             define("complex?", COMPLEXQ);
@@ -114,6 +115,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("string->uninterned-symbol", STRING2UNINTERNEDSYMBOL);
             define("string-fill!", STRINGFILL);
             define("string-length", STRINGLENGTH);
+            define("string=?", STRINGEQUAL);
             define("string-ref", STRINGREF);
             define("string-set!", STRINGSET);
             define("string?", STRINGQ);
@@ -291,7 +293,7 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             return new ImmutableString(((sisc.compiler.Syntax)v1).toString());
 
         case STRING2SYMBOL: return Symbol.intern(string(v1));
-        case CHAR2INTEGER: return Quantity.valueOf(chr(v1).c);
+        case CHAR2INTEGER: return Quantity.valueOf(character(v1));
         case LIST2VECTOR: return new SchemeVector(Util.pairToValues(pair(v1)));
         case VECTOR2LIST:
             Value[] vals=vec(v1).vals;
@@ -386,6 +388,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             return truth(v1.valueEqual(v2));
         case EXPTYPE:
             return Quantity.valueOf(sisc.compiler.Compiler.getExpType(env(v1), v2));
+        case CHAREQUAL:
+            return truth(character(v1) == character(v2));
         case SETCAR:
             truePair(v1).setCar(v2);
             return VOID;
@@ -444,6 +448,8 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case VECTORFILL:
             vec(v1).fill(v2);
             return VOID;
+        case STRINGEQUAL:
+            return truth(str(v1).valueEqual(str(v2)));
         case MAKEVECTOR:
             return new SchemeVector(num(v1).indexValue(),
                                     v2);
@@ -500,6 +506,9 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
     public final Value apply(Value v1, Value v2, Value v3) 
         throws ContinuationException {      
         switch(id) {
+        case CHAREQUAL:
+            return truth(character(v1) == character(v2) &&
+                         character(v2) == character(v3));
         case STRINGAPPEND:
             SchemeString s1 = str(v1);
             SchemeString s2 = str(v2);
@@ -531,6 +540,9 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
                                                  v1.synopsis()}));
             }
             return VOID;
+        case STRINGEQUAL:
+            return truth(str(v1).valueEqual(str(v2)) &&
+                         str(v2).valueEqual(str(v3)));
         case LIST: return list(v1, v2, v3);
         case ADD: return num(v1).add(num(v2)).add(num(v3));
         case MUL: return num(v1).mul(num(v2)).mul(num(v3));
@@ -616,6 +628,20 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
                 str(v[i]).appendTo(sbuf);
             }
             return new SchemeString(sbuf.toString());
+        case STRINGEQUAL:
+            SchemeString str = str(v[0]);
+            for (int i=1; i<vls; i++) {
+                SchemeString s = str(v[i]);
+                if (!str.valueEqual(s)) return FALSE;
+            }
+            return TRUE;
+        case CHAREQUAL:
+            char character = character(v[0]);
+            for (int i=1; i<vls; i++) {
+                char c = character(v[i]);
+                if (!(character == c)) return FALSE;
+            }
+            return TRUE;
         default:
             throwArgSizeException();
         }

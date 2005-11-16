@@ -1877,11 +1877,6 @@
              (char->integer |%%_LBJyH9PPS_c2|)
              (map char->integer |%%_LBnCJIOPS_args|)))))
 (#%program
-  ((eqv? . 1))
-  ()
-  (eqv?)
-  (#%define char=? eqv?))
-(#%program
   ((char=? . 1)
    (|%%_LBLnBwQPS_c2| . 2)
    (|%%_LBprD3QPS_c1| . 2)
@@ -2152,11 +2147,6 @@
                0
                (string-length |%%_LB__Pn_PS_str|)))
            (make-string (string-length |%%_LB__Pn_PS_str|))))))))
-(#%program
-  ((equal? . 1))
-  ()
-  (equal?)
-  (#%define string=? equal?))
 (#%program
   ((|%%_LB5vxs3QS_s2| . 1)
    (|%%_LBLyz_2QS_s1| . 1)

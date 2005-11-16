@@ -489,7 +489,6 @@
                                      (map char->integer args)))
 (define (char<? c1 c2 . args) (apply < (char->integer c1) (char->integer c2)
                                      (map char->integer args)))
-(define char=? eqv?)
 (define (char>=? c1 c2) (boolean-or (char>? c1 c2) (char=? c1 c2)))
 (define (char<=? c1 c2) (boolean-or (char<? c1 c2) (char=? c1 c2)))
 (define (char-ci>? c1 c2 . args)
@@ -534,7 +533,6 @@
 	  (let ([newstr (make-string (string-length str))])
 	    (string-map str newstr char-upcase 0 
 			(string-length str))))))
-(define string=? equal?)
 
 (define string<?
   (letrec ([s<? (lambda (s1 s2)

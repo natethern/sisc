@@ -1,3 +1,8 @@
+2005-11-16  Matthias Radestock  <matthias@sorted.org>
+
+	* Added type check of all args used by string=? and char=?. See
+	  bug 1346205.
+
 2005-11-15  Matthias Radestock  <matthias@sorted.org>
 
 	* Added interned values and, on top of that, non-generative record

@@ -268,6 +268,12 @@
                  (with/fc (lambda (m e) #t)
                    (lambda () (read-string "foo" 0 3 port)))))))
 
+(should-be 1346205 '(() ())
+           (map (lambda (f)
+                  (with/fc (lambda (m e) '())
+                    (lambda () (f 1 1))))
+                (list string=? char=?)))
+
 (should-be 1353781 #t
            (let ()
              (import* file-manipulation file-delete!)
@@ -303,4 +309,3 @@
                   (eq? (procedure-property proc1 'foo) 'bar)))
               (lambda ()
                 (file-delete! ser-file)))))
-     
