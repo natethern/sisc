@@ -48,6 +48,7 @@ public class SchemeString extends Value {
     }
 
     public boolean valueEqual(Value v) {
+        if (v == this) return true;
         if (!(v instanceof SchemeString)) return false;
         SchemeString o=(SchemeString)v;
 
