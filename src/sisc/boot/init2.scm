@@ -521,7 +521,7 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
                                                      #f)
                                                (error 'format "too many commas in directive ~s" format-strg)))
                                           (else
-                                           (error "~~w.dF directive ill-formed in ~s" format-strg)))))))
+                                           (error "~~w,dF directive ill-formed in ~s" format-strg)))))))
                                 ((#\? #\K)       ; indirection -- take next arg as format string
                                  (cond	     ;  and following arg as list of format args
                                   ((< (length arglist) 2)
