@@ -895,8 +895,8 @@ Context.exit()
         The mangling of field names allows fields to be identified
         more schemely. By convention field accessors should be named
         with a leading colon (<literal>:</literal>) followed by the
-        field name, and field with a leading colon
-        (<literal>:</literal> followed by the field name followed by
+        field name, and field modifiers with a leading colon
+        (<literal>:</literal>) followed by the field name followed by
         an exclamation mark (<literal>!</literal>),
         e.g. <literal>:foo-bar</literal> and
         <literal>:foo-bar!</literal> are the names of the accessor and
