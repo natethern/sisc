@@ -1,3 +1,7 @@
+2005-11-17  Scott G. Miller <sgmiller@gmail.com>
+ 
+ 	* Added support for SRFI 61.
+ 	
 2005-11-16  Matthias Radestock  <matthias@sorted.org>
 
 	* Added type check of all args used by string=? and char=?. See

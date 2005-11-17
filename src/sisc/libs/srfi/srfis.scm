@@ -40,4 +40,5 @@
     srfi-51
     srfi-54
     srfi-55
+    srfi-61
     srfi-62))
