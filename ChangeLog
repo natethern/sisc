@@ -1,3 +1,8 @@
+2005-11-18  Scott G. Miller <sgmiller@gmail.com>
+
+	* Use a more robust (if #t (...)) wrapper to prevent
+	  definitions in the else clauses of cond and case.
+	  
 2005-11-17  Scott G. Miller <sgmiller@gmail.com>
  
  	* Added support for SRFI 61.
