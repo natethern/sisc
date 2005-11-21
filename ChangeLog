@@ -1,3 +1,7 @@
+2005-11-21  Matthias Radestock  <matthias@sorted.org>
+
+	* Added support for SRFI 67.
+
 2005-11-18  Scott G. Miller <sgmiller@gmail.com>
 
 	* Use a more robust (if #t (...)) wrapper to prevent
