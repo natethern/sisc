@@ -70,25 +70,22 @@
           [else (error 'make-config-parameter "too many arguments.")]))
 
 (define-syntax parameterize
-  (lambda (expr)
-    (syntax-case expr ()
-      [(_ () . body)
-       (syntax (let () . body))]
-      [(_ ((param-name new-value) ...) . body)
-       (with-syntax ([(tmps ...) 
-                      (generate-temporaries (syntax (param-name ...)))])
-         (syntax 
-           (let ([old-values #f]
-                 [tmps new-value] ...)
-             (dynamic-wind 
-               (lambda () 
-                 (set! old-values (list (param-name) ...))
-                 (param-name tmps) ...)
-               (lambda () . body)
-               (lambda () 
-                     (for-each (lambda (p l) (p l))
-                               (list param-name ...)
-                               old-values))))))])))
+  (syntax-rules ()
+    [(_ ((param-name new-value) ...) . body)
+     (let ([old-values #f]
+           [tmps (list new-value ...)])
+       (dynamic-wind 
+        (lambda () 
+          (set! old-values (list (param-name) ...))
+          (for-each (lambda (p l) (p l))
+                    (list param-name ...)
+                    tmps))
+        (lambda () . body)
+        (lambda () 
+          (set! tmps (list (param-name) ...))
+          (for-each (lambda (p l) (p l))
+                    (list param-name ...)
+                    old-values))))]))
 
 ;; native parameters
 

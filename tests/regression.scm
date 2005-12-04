@@ -309,3 +309,18 @@
                   (eq? (procedure-property proc1 'foo) 'bar)))
               (lambda ()
                 (file-delete! ser-file)))))
+
+(should-be 1372516 '(1 . 3)
+           (let ()
+             (import* misc define-simple-syntax)
+             (define-simple-syntax (let/cc k . body)
+               (call/cc (lambda (k) . body)))
+             (let* ([p1 (make-parameter 1)]
+                    [k (let/cc out 
+                               (parameterize ([p1 2])
+                                             (p1 3) 
+                                             (let ([r (let/cc k (out k))])
+                                               (cons r (p1)))))])
+               (if (procedure? k) 
+                   (k (p1))
+                   k))))
