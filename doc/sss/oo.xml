@@ -1743,8 +1743,8 @@
             <methodsynopsis language="scheme">
               <void/>
               <methodname>define-nongenerative-class</methodname>
-              <methodparam><parameter>guid</parameter></methodparam>
               <methodparam><parameter>name-and-supers</parameter></methodparam>
+              <methodparam><parameter>guid</parameter></methodparam>
               <methodparam rep="repeat"><parameter>slot-def</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
