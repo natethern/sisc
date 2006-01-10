@@ -4,6 +4,10 @@
 	  a bug in |string-concatenate-reverse/shared|, and also replaces
 	  our stop-gap fix to a bug in |string-contains|.
 
+	* Fixed a bug in srfi-13 reference implementation that resulted in
+	  string comparison predicates returning numeric values instead of
+	  #t. See bug 1400758.
+
 2005-12-04  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in |parameterize| - escaping continuations now capture
