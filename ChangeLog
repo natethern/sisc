@@ -1,3 +1,9 @@
+2006-01-10  Matthias Radestock  <matthias@sorted.org>
+
+	* Updated srfi-13 to latest reference implementation, which fixes
+	  a bug in |string-concatenate-reverse/shared|, and also replaces
+	  our stop-gap fix to a bug in |string-contains|.
+
 2005-12-04  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in |parameterize| - escaping continuations now capture
