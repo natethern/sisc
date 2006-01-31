@@ -69,7 +69,7 @@ public class Networking extends IndexedProcedure {
         void close() throws IOException;
     }
 
-    abstract class SchemeSocket extends Value implements Closable {
+    abstract public static class SchemeSocket extends Value implements Closable {
         public abstract void close() throws IOException;
         
         SchemeInputPort getInputPort(Interpreter r)
@@ -101,7 +101,7 @@ public class Networking extends IndexedProcedure {
             throws IOException, ContinuationException;
     }
     
-    class SchemeServerSocket extends Value implements Closable {
+    public static class SchemeServerSocket extends Value implements Closable {
         protected ServerSocket s;
 
         public SchemeServerSocket(ServerSocket s) {
@@ -122,7 +122,7 @@ public class Networking extends IndexedProcedure {
         }
     }
 
-    class SchemeTCPSocket extends SchemeSocket {
+    public static class SchemeTCPSocket extends SchemeSocket {
         protected Socket s;
 
         public SchemeTCPSocket(Socket s) {
@@ -169,7 +169,7 @@ public class Networking extends IndexedProcedure {
         }
     }
     
-    class UDPInputStream extends InputStream {
+    public static class UDPInputStream extends InputStream {
         protected DatagramSocket ds;
         protected DatagramPacket p;
         byte[] buffer;
@@ -216,7 +216,7 @@ public class Networking extends IndexedProcedure {
         }
     }
 
-    class UDPOutputStream extends OutputStream {
+    public static class UDPOutputStream extends OutputStream {
         protected DatagramPacket p;
         protected DatagramSocket ds;
         protected InetAddress host;
@@ -244,7 +244,7 @@ public class Networking extends IndexedProcedure {
 
     static final int LISTEN = 1, SEND = 2;
 
-    class SchemeUDPSocket extends SchemeSocket {
+    public static class SchemeUDPSocket extends SchemeSocket {
         protected int mode;
         protected DatagramSocket s;
         protected int packet_size;
@@ -335,7 +335,7 @@ public class Networking extends IndexedProcedure {
         }        
     }
 
-    class SchemeMulticastUDPSocket extends SchemeUDPSocket {
+    public static class SchemeMulticastUDPSocket extends SchemeUDPSocket {
 
         public SchemeMulticastUDPSocket(MulticastSocket s) {
             super(s);
