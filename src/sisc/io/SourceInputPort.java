@@ -11,17 +11,6 @@ public class SourceInputPort extends ReaderInputPort {
     public String sourceFile;
 
     /**
-     * Creates a new input port from the given input stream.  The
-     * stream is interpreted with the default character encoding as
-     * obtained from {@link Util#getDefaultCharacterSet}.
-     * @param in an input stream
-     * @param file the name/URL to be associated with this stream
-     */
-    public SourceInputPort(InputStream in, String file) {
-        this(in, Util.getDefaultCharacterSet(), file);
-    }
-
-    /**
      * Creates a new input port from the given input stream.
      * @param in an input stream
      * @param charset the character encoding of the input stream

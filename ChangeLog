@@ -6,6 +6,11 @@
 	* Modifications to stack trace printing to omit initial
 	  info-less frames from the stack trace.
 	
+	* Require a Charset for the creation of SourceInputPorts.
+	
+	* Make the default Scheme port for DynamicEnvironment and 
+	  the REPL Listen socket a character port.
+	  
 2006-01-10  Matthias Radestock  <matthias@sorted.org>
 
 	* Updated srfi-13 to latest reference implementation, which fixes

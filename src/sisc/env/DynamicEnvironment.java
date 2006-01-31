@@ -84,8 +84,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
              // Is this BufferedInputStream necessary?
              // SourceInputPort creates a BufferedReader anyway
              //new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
-             new SourceInputPort(in, liMessage(SISCB, "console")),
-             new StreamOutputPort(out, true));
+             new SourceInputPort(in, Util.getDefaultCharacterSet(), liMessage(SISCB, "console")),
+             new WriterOutputPort(out, Util.getDefaultCharacterSet(), true));
     }
 
     public DynamicEnvironment(AppContext ctx, SchemeInputPort in, SchemeOutputPort out) {

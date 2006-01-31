@@ -765,14 +765,10 @@ public abstract class Util implements Version {
             } catch (SecurityException e) {
                 // ignore: defaultCharset remains unset
             } catch (UnsupportedEncodingException e) {
-                System.err.println("Bad encoding name: "
-                                   + defaultCharsetName);
                 System.err.println(Util.warn("unsupencoding",
                                              defaultCharsetName));
-            } catch (java.nio.charset.UnsupportedCharsetException e) {
-                // handled as above
-                System.err.println("Unsupported default encoding: "
-                                   + defaultCharsetName);
+            } catch (Exception e) {
+                // Any remaining exceptions handled as above
                 System.err.println(Util.warn("unsupencoding",
                                              defaultCharsetName));
             }
@@ -819,7 +815,6 @@ public abstract class Util implements Version {
             } catch (Exception e) {
                 // This is either IllegalCharsetNameException or
                 // UnsupportedCharsetException -- handle both in the same way
-                System.err.println("Unsupported encoding: " + charsetName);
                 System.err.println(Util.warn("unsupencoding", charsetName));
                 c = getDefaultCharacterSet();
             }

@@ -237,24 +237,7 @@ public class Interpreter extends Util {
      */
     public Value eval(String expr) throws IOException, SchemeException {
         return evalInput(new ReaderInputPort(new BufferedReader(new StringReader(expr))));
-    }
-
-    /**
-     * Parses and evaluates s-expression(s) from a stream
-     * 
-     * @param stream s-expression stream
-     * @param sourceId string identifying the stream source
-     * @return The value of the last evaluated s-expression
-     * @exception IOException Raised if the stream does not  
-     *     contain a parseable s-expression
-     * @exception SchemeException Raised if the evaluation of  
-     *      an expression results in an error
-     */
-    public Value eval(InputStream stream, String sourceId) throws IOException, SchemeException {
-        // Is this BufferedInputStream necessary?  SourceInputPort creates
-        // a BufferedReader
-        return evalInput(new SourceInputPort(new BufferedInputStream(stream), sourceId));
-    }
+    }   
 
     /**
      * Evaluates a Scheme value as code.  This is equivalent to

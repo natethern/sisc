@@ -300,8 +300,8 @@ public class REPL {
             DynamicEnvironment dynenv =
                     new DynamicEnvironment
                       (Context.lookup(app),               
-                       new SourceInputPort(client.getInputStream(), "console"),
-                       new StreamOutputPort(client.getOutputStream(), true));
+                       new SourceInputPort(client.getInputStream(), Util.getDefaultCharacterSet(), "console"),
+                       new WriterOutputPort(client.getOutputStream(), Util.getDefaultCharacterSet(), true));
             Interpreter r=Context.enter(dynenv);
             Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
             Context.exit();
