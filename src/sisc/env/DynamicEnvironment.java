@@ -21,7 +21,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public boolean printShared = Defaults.PRINT_SHARED;
     public boolean vectorLengthPrefixing = Defaults.VECTOR_LENGTH_PREFIXING;
     public boolean emitDebuggingSymbols = Defaults.EMIT_DEBUGGING_SYMBOLS;
-    public String characterSet = getDefaultCharacterSet();
+    public Charset characterSet = Util.getDefaultCharacterSet();
     public boolean hedgedInlining = Defaults.HEDGED_INLINING;
     public boolean permissiveParsing = Defaults.PERMISSIVE_PARSING;
     public boolean internalDebugging = Defaults.INTERNAL_DEBUGGING;
@@ -54,15 +54,37 @@ public class DynamicEnvironment extends Util implements Cloneable {
     //hang on to vars that are no longer in use.
     public java.util.Map parameters = new WeakHashMap(1);
 
+    static SchemeInputPort standardInputPort() {
+        try {
+            return new SourceInputPort(new InputStreamReader(System.in, Util.getDefaultCharacterSet().getName()), liMessage(SISCB, "console"));
+        } catch (UnsupportedEncodingException use) {
+            //shouldn't happen, should be taken care of in Util.getDefaultCharacterSet()
+            return null;
+        }
+    }
+    
+    static SchemeOutputPort standardOutputPort() {
+        try {
+            return new WriterOutputPort(new OutputStreamWriter(System.out, Util.getDefaultCharacterSet().getName()),
+                    true);
+        } catch (UnsupportedEncodingException use) {
+            //shouldn't happen, should be taken care of in Util.getDefaultCharacterSet()
+            return null;
+        }
+
+    }
     public DynamicEnvironment(AppContext ctx) {
-        this(ctx,
-             new SourceInputPort(new InputStreamReader(System.in), liMessage(SISCB, "console")), 
-             new WriterOutputPort(new PrintWriter(System.out), true));
+        this(ctx, standardInputPort(), standardOutputPort());
+        // Following worked before NG patch; now requires change above
+        // new WriterOutputPort(new PrintWriter(System.out), true));
     }
 
     public DynamicEnvironment(AppContext ctx, InputStream in, OutputStream out) {
         this(ctx,
-             new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
+             // Is this BufferedInputStream necessary?
+             // SourceInputPort creates a BufferedReader anyway
+             //new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
+             new SourceInputPort(in, liMessage(SISCB, "console")),
              new StreamOutputPort(out, true));
     }
 
@@ -82,8 +104,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
             ctx.getProperty("sisc.vectorLengthPrefixing", defaultVectorLengthPrefixing).equals("true");
         this.emitDebuggingSymbols =
             ctx.getProperty("sisc.emitDebuggingSymbols", defaultEmitDebuggingSymbols).equals("true");
-        this.characterSet =
-            ctx.getProperty("sisc.characterSet", getDefaultCharacterSet());
+        characterSet = Util.charsetFromString(ctx.getProperty("sisc.characterSet"));
         this.permissiveParsing = 
             ctx.getProperty("sisc.permissiveParsing", defaultPermissiveParsing).equals("true");
 
@@ -170,11 +191,11 @@ public class DynamicEnvironment extends Util implements Cloneable {
     }
 
     public Value getCharacterSet() {
-        return new SchemeString(characterSet);
+        return new SchemeString(characterSet.displayName());
     }
-    
+
     public void setCharacterSet(Value v) {
-        characterSet=string(v);
+        characterSet=Util.charsetFromString(string(v));
     }
     
     public Value getVectorLengthPrefixing() {
@@ -239,12 +260,6 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public void setInternalDebugging(Value v) {
         internalDebugging=truth(v);
-    }
-
-    protected static String getDefaultCharacterSet() {
-        // I wish there were a better way to do this
-        InputStreamReader r=new InputStreamReader(new ByteArrayInputStream(new byte[0]));
-        return r.getEncoding();
     }
 
 }

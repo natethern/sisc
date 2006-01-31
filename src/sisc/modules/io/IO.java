@@ -7,6 +7,7 @@ import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.data.*;
 import sisc.io.*;
+import sisc.util.Util;
 
 public class IO extends IndexedProcedure {
 
@@ -196,13 +197,11 @@ public class IO extends IndexedProcedure {
 
     public static SchemeInputPort openCharInFile(Interpreter f,
                                                  URL u,
-                                                 String encoding) 
+                                                 Charset encoding) 
         throws ContinuationException {    
         try {
-            return new SourceInputPort(new BufferedReader(new InputStreamReader(getURLInputStream(u), encoding)),
+            return new SourceInputPort(new BufferedReader(encoding.newInputStreamReader(getURLInputStream(u))),
                                        u.toString());
-        } catch (UnsupportedEncodingException us) {
-            throwIOException(f, liMessage(IOB, "unsupencoding", encoding), us);                
         } catch (IOException e) {
             throwIOException(f, liMessage(IOB, "erroropening", 
                                           u.toString()), e);
@@ -212,14 +211,12 @@ public class IO extends IndexedProcedure {
 
     public static SchemeOutputPort openCharOutFile(Interpreter f, 
                                                    URL url,
-                                                   String encoding,
+                                                   Charset encoding,
                                                    boolean aflush) 
         throws ContinuationException {
-        try {          
+        try {
             return new WriterOutputPort(getURLOutputStream(url),
                                         encoding, aflush);
-        } catch (UnsupportedEncodingException u) {
-            throwIOException(f, liMessage(IOB, "unsupencoding", encoding), u);
         } catch (IOException e) {
             e.printStackTrace();
             throwIOException(f, liMessage(IOB, "erroropening",
@@ -313,7 +310,7 @@ public class IO extends IndexedProcedure {
             case OPENSOURCEINPUTFILE:
                 URL url = url(f.vlr[0]);
                 try {
-                    return new SourceInputPort(new BufferedReader(new InputStreamReader(getURLInputStream(url), f.dynenv.characterSet)), 
+                    return new SourceInputPort(new BufferedReader(f.dynenv.characterSet.newInputStreamReader(getURLInputStream(url))), 
                                                url.toString());
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "erroropening", 
@@ -373,7 +370,12 @@ public class IO extends IndexedProcedure {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
                     conn.setDoOutput(false);
-                    p=new SourceInputPort(new BufferedInputStream(conn.getInputStream()), url.toString());
+                    // XXX possibly use conn.guessContentTypeFromStream(),
+                    // to get the stream's content-encoding
+                    p=new SourceInputPort(conn.getInputStream(),
+                                          Util.charsetFromString
+                                              (conn.getContentEncoding()),
+                                          url.toString());
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "erroropening",
                                                   url.toString()),
@@ -408,7 +410,10 @@ public class IO extends IndexedProcedure {
                     URLConnection conn = url.openConnection();
                     conn.setDoInput(true);
                     conn.setDoOutput(false);
-                    p=new SourceInputPort(new BufferedInputStream(conn.getInputStream()), url.toString());
+                    p=new SourceInputPort(conn.getInputStream(),
+                                          Util.charsetFromString
+                                            (conn.getContentEncoding()),
+                                          url.toString());
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "erroropening",
                                                   url.toString()),
@@ -504,13 +509,14 @@ public class IO extends IndexedProcedure {
                 return displayOrWrite(f, outport(f.vlr[1]), f.vlr[0], false);
             case OPENINPUTFILE:
                 URL url = url(f.vlr[0]);
-                return openCharInFile(f, url, string(f.vlr[1]));
+                return openCharInFile(f, url,
+                                      Util.charsetFromString(string(f.vlr[1])));
             case OPENOUTPUTFILE:
                 url = url(f.vlr[0]);
                 boolean aflush=false;
-                String encoding=f.dynenv.characterSet;
+                Charset encoding=f.dynenv.characterSet;
                 if (f.vlr[1] instanceof SchemeString)
-                    encoding=string(f.vlr[1]);
+                    encoding=Util.charsetFromString(string(f.vlr[1]));
                 else
                     aflush=truth(f.vlr[1]);
                 return openCharOutFile(f, url, encoding, aflush);
@@ -542,7 +548,8 @@ public class IO extends IndexedProcedure {
                 return VOID;
             case OPENOUTPUTFILE:
                 URL url = url(f.vlr[0]);
-                return openCharOutFile(f, url, string(f.vlr[1]), 
+                return openCharOutFile(f, url,
+                                       Util.charsetFromString(string(f.vlr[1])),
                                        truth(f.vlr[2]));
             default:
                 throwArgSizeException();

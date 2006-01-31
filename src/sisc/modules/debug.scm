@@ -228,6 +228,13 @@
                                  proc-name))))
                   stk))))))
 
+(define (stack-trace-entry-has-data? entry)
+  (define (known? x)
+    (and (pair? x) (not (eq? (cdr x) '?))))
+  (let ([data (cdr entry)])
+    (or (known? (assoc 'source-file data))
+        (known? (assoc 'proc-name data)))))
+
 (define (format-stack-trace-entry entry)
   (let ([expr (car entry)]
         [data (cdr entry)])
@@ -268,15 +275,18 @@
     (unless (null? entries)
       (let loop ([ls (cdr entries)]
                  [last (format-stack-trace-entry (car entries))]
-                 [count 1])
+                 [count 1]
+	         [any (stack-trace-entry-has-data? (car entries))])
         (if (null? ls) 
-            (print-single-entry last count)
+            ; Dont display a single line if it has no metadata
+            (if any (print-single-entry last count))
             (let ([current (format-stack-trace-entry (car ls))])
               (if (equal? last current)
-                  (loop (cdr ls) current (+ count 1))
+                  (loop (cdr ls) current (+ count 1) any)
                   (begin
-                    (print-single-entry last count)
-                    (loop (cdr ls) current 1)))))))))
+                    (if any (print-single-entry last count))
+                    (loop (cdr ls) current 1 
+                          (or any (stack-trace-entry-has-data? (car ls))))))))))))
 
 (print-exception-stack-trace-hook
  'debug

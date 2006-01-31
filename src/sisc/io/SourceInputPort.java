@@ -2,17 +2,39 @@ package sisc.io;
 
 import java.io.*;
 
+import sisc.io.Charset;
+import sisc.util.Util;
+
 public class SourceInputPort extends ReaderInputPort {
 
     public int line, column;
     public String sourceFile;
 
+    /**
+     * Creates a new input port from the given input stream.  The
+     * stream is interpreted with the default character encoding as
+     * obtained from {@link Util#getDefaultCharacterSet}.
+     * @param in an input stream
+     * @param file the name/URL to be associated with this stream
+     */
     public SourceInputPort(InputStream in, String file) {
-        this(new BufferedReader(new InputStreamReader(in)), file);
+        this(in, Util.getDefaultCharacterSet(), file);
     }
 
     /**
-     * @param reader
+     * Creates a new input port from the given input stream.
+     * @param in an input stream
+     * @param charset the character encoding of the input stream
+     * @param file the name/URL to be associated with this stream
+     */
+    public SourceInputPort(InputStream in, Charset charset, String file) {
+        this(new BufferedReader(charset.newInputStreamReader(in)), file);
+    }
+
+    /**
+     * Creates a new input port from a reader.
+     * @param reader the source of characters
+     * @param file the name/URL to be associated with this reader
      */
     public SourceInputPort(Reader reader, String file) {
         super(reader);

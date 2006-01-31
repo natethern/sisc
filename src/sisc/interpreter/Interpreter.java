@@ -251,6 +251,8 @@ public class Interpreter extends Util {
      *      an expression results in an error
      */
     public Value eval(InputStream stream, String sourceId) throws IOException, SchemeException {
+        // Is this BufferedInputStream necessary?  SourceInputPort creates
+        // a BufferedReader
         return evalInput(new SourceInputPort(new BufferedInputStream(stream), sourceId));
     }
 

@@ -6,6 +6,7 @@ import sisc.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
+import sisc.util.Util;
 
 /*
  *   <ttl>, <port> Integer
@@ -77,7 +78,7 @@ public class Networking extends IndexedProcedure {
             return getInputPort(r, r.dynenv.characterSet);
         }
         
-        abstract SchemeInputPort getInputPort(Interpreter r, String encoding)
+        abstract SchemeInputPort getInputPort(Interpreter r, Charset encoding)
             throws IOException, ContinuationException;
         abstract SchemeInputPort getBinaryInputPort(Interpreter r)
             throws IOException, ContinuationException;
@@ -90,13 +91,13 @@ public class Networking extends IndexedProcedure {
             return getOutputPort(r, r.dynenv.characterSet, autoflush); 
         }
         
-        SchemeOutputPort getOutputPort(Interpreter r, String encoding)
+        SchemeOutputPort getOutputPort(Interpreter r, Charset encoding)
             throws IOException, ContinuationException {
             return getOutputPort(r, encoding, false);
         }
  
         abstract SchemeOutputPort getOutputPort(Interpreter r, 
-                                                String encoding, 
+                                                Charset encoding, 
                                                 boolean autoflush)
             throws IOException, ContinuationException;
     }
@@ -147,13 +148,13 @@ public class Networking extends IndexedProcedure {
                     new BufferedInputStream(s.getInputStream()));
         }
  
-        public SchemeInputPort getInputPort(Interpreter r, String encoding)
+        public SchemeInputPort getInputPort(Interpreter r, Charset encoding)
                    throws IOException, ContinuationException {
             return new ReaderInputPort(s.getInputStream(), encoding);
         }
          
         public SchemeOutputPort getOutputPort(Interpreter r,
-                                              String encoding,
+                                              Charset encoding,
                                               boolean autoflush) 
             throws IOException, ContinuationException {
             return new WriterOutputPort(s.getOutputStream(), encoding,
@@ -315,7 +316,7 @@ public class Networking extends IndexedProcedure {
                 autoflush);
         }
         
-        public SchemeInputPort getInputPort(Interpreter r, String encoding)
+        public SchemeInputPort getInputPort(Interpreter r, Charset encoding)
             throws IOException, ContinuationException {
             if ((mode & LISTEN) == 0)
                 error(r, liMessage(SNETB, "inputonoutputudp"));
@@ -324,7 +325,7 @@ public class Networking extends IndexedProcedure {
         }
 
         public SchemeOutputPort getOutputPort(Interpreter r, 
-                                              String encoding,
+                                              Charset encoding,
                                               boolean autoflush)
             throws IOException, ContinuationException {
             if ((mode & SEND) == 0)
@@ -544,11 +545,11 @@ public class Networking extends IndexedProcedure {
                     return ssock.getBinaryOutputPort(f, truth(f.vlr[1]));
                 case OPEN_SOCKET_INPUT_PORT:
                     SchemeSocket ss=sock(f.vlr[0]);
-                    return ss.getInputPort(f, string(f.vlr[1]));
+                    return ss.getInputPort(f, Util.charsetFromString(string(f.vlr[1])));
                 case OPEN_SOCKET_OUTPUT_PORT:
                     ssock=sock(f.vlr[0]);
                     if (f.vlr[1] instanceof SchemeString)
-                       return ssock.getOutputPort(f, string(f.vlr[1]));
+                        return ssock.getOutputPort(f, Util.charsetFromString(string(f.vlr[1])));
                     else
                        return ssock.getBinaryOutputPort(f, truth(f.vlr[1]));
                 case SET_MULTICAST_TTL:
@@ -598,8 +599,10 @@ int dgramsize=num(f.vlr[2]).indexValue();
                     return s; 
                 case OPEN_SOCKET_OUTPUT_PORT:
                     SchemeSocket ssock=sock(f.vlr[0]);
-                     return ssock.getOutputPort(f, string(f.vlr[1]), 
-                                                truth(f.vlr[2]));                   
+                     return ssock.getOutputPort
+                             (f,
+                              Util.charsetFromString(string(f.vlr[1])), 
+                              truth(f.vlr[2]));
                 default:
                     throwArgSizeException();
                 }

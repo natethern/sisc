@@ -5,9 +5,8 @@ import java.io.*;
 public class ReaderInputPort extends PushbackInputPort {
     protected Reader r;
 
-    public ReaderInputPort(InputStream in, String encoding)
-        throws UnsupportedEncodingException {
-        this(new BufferedReader(new InputStreamReader(in, encoding)));
+    public ReaderInputPort(InputStream in, Charset encoding) {
+        this(new BufferedReader(encoding.newInputStreamReader(in)));
     }
     
     public ReaderInputPort(Reader in) {
