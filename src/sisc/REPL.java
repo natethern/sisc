@@ -299,10 +299,8 @@ public class REPL {
             Socket client = ssocket.accept();
             DynamicEnvironment dynenv =
                     new DynamicEnvironment
-                      (Context.lookup(app),
-                       // Is this BufferedInputStream necessary?
-                       // SourceInputPort creates a BufferedReader.
-                       new SourceInputPort(new BufferedInputStream(client.getInputStream()), "console"),
+                      (Context.lookup(app),               
+                       new SourceInputPort(client.getInputStream(), "console"),
                        new StreamOutputPort(client.getOutputStream(), true));
             Interpreter r=Context.enter(dynenv);
             Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
