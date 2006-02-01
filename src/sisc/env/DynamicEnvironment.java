@@ -75,15 +75,10 @@ public class DynamicEnvironment extends Util implements Cloneable {
     }
     public DynamicEnvironment(AppContext ctx) {
         this(ctx, standardInputPort(), standardOutputPort());
-        // Following worked before NG patch; now requires change above
-        // new WriterOutputPort(new PrintWriter(System.out), true));
     }
 
     public DynamicEnvironment(AppContext ctx, InputStream in, OutputStream out) {
         this(ctx,
-             // Is this BufferedInputStream necessary?
-             // SourceInputPort creates a BufferedReader anyway
-             //new SourceInputPort(new BufferedInputStream(in), liMessage(SISCB, "console")),
              new SourceInputPort(in, Util.getDefaultCharacterSet(), liMessage(SISCB, "console")),
              new WriterOutputPort(out, Util.getDefaultCharacterSet(), true));
     }
