@@ -17,30 +17,35 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public Value in, out;
     
-    public boolean caseSensitive = Defaults.CASE_SENSITIVE;
-    public boolean printShared = Defaults.PRINT_SHARED;
-    public boolean vectorLengthPrefixing = Defaults.VECTOR_LENGTH_PREFIXING;
+    public Charset characterSet         = Util.getDefaultCharacterSet();
+    public boolean caseSensitive        = Defaults.CASE_SENSITIVE;
+    public boolean printShared          = Defaults.PRINT_SHARED;
+    public boolean vectorLengthPrefixing= Defaults.VECTOR_LENGTH_PREFIXING;
     public boolean emitDebuggingSymbols = Defaults.EMIT_DEBUGGING_SYMBOLS;
-    public Charset characterSet = Util.getDefaultCharacterSet();
-    public boolean hedgedInlining = Defaults.HEDGED_INLINING;
-    public boolean permissiveParsing = Defaults.PERMISSIVE_PARSING;
-    public boolean internalDebugging = Defaults.INTERNAL_DEBUGGING;
+    public boolean permissiveParsing    = Defaults.PERMISSIVE_PARSING;
+    public boolean hedgedInlining       = Defaults.HEDGED_INLINING;
+    public boolean internalDebugging    = Defaults.INTERNAL_DEBUGGING;
     
+    private static String defaultCharacterSet =
+        Util.getDefaultCharacterSet().displayName();
+    private static String defaultCaseSensitive = 
+        new Boolean(Defaults.CASE_SENSITIVE).toString();
     private static String defaultPrintShared =
         new Boolean(Defaults.PRINT_SHARED).toString();
     private static String defaultVectorLengthPrefixing =
         new Boolean(Defaults.VECTOR_LENGTH_PREFIXING).toString();
     private static String defaultEmitDebuggingSymbols =
         new Boolean(Defaults.EMIT_DEBUGGING_SYMBOLS).toString();
-    private static String defaultStrictR5RS =
-        new Boolean(Defaults.STRICT_R5RS).toString();
+    private static String defaultPermissiveParsing =
+        new Boolean(Defaults.PERMISSIVE_PARSING).toString();
+    private static String defaultHedgedInlining =
+        new Boolean(Defaults.HEDGED_INLINING).toString();
+    private static String defaultInternalDebugging =
+        new Boolean(Defaults.INTERNAL_DEBUGGING).toString();
     private static String defaultEmitAnnotations =
         new Boolean(Defaults.EMIT_ANNOTATIONS).toString();
-    private static String defaultCaseSensitive = 
-        new Boolean(Defaults.CASE_SENSITIVE).toString();
-    private static String defaultHedgedInlining = new Boolean(Defaults.HEDGED_INLINING).toString();
-    private static String defaultPermissiveParsing = new Boolean(Defaults.PERMISSIVE_PARSING).toString();
-    private static String defaultInternalDebugging = new Boolean(Defaults.INTERNAL_DEBUGGING).toString();
+    private static String defaultStrictR5RS =
+        new Boolean(Defaults.STRICT_R5RS).toString();
     
     public Value wind = FALSE; //top of wind stack
 
@@ -68,21 +73,26 @@ public class DynamicEnvironment extends Util implements Cloneable {
         this.ctx = ctx;
         this.in = in;
         this.out = out;
+        this.characterSet =
+            Util.charsetFromString(ctx.getProperty("sisc.characterSet", defaultCharacterSet));
         this.caseSensitive =
             ctx.getProperty("sisc.caseSensitive", defaultCaseSensitive).equals("true");
-        this.parser.annotate =
-            ctx.getProperty("sisc.emitAnnotations", defaultEmitAnnotations).equals("true");
-        this.parser.lexer.strictR5RS =
-            ctx.getProperty("sisc.strictR5RS", defaultStrictR5RS).equals("true");
         this.printShared =
             ctx.getProperty("sisc.printShared", defaultPrintShared).equals("true");
         this.vectorLengthPrefixing = 
             ctx.getProperty("sisc.vectorLengthPrefixing", defaultVectorLengthPrefixing).equals("true");
         this.emitDebuggingSymbols =
             ctx.getProperty("sisc.emitDebuggingSymbols", defaultEmitDebuggingSymbols).equals("true");
-        characterSet = Util.charsetFromString(ctx.getProperty("sisc.characterSet"));
         this.permissiveParsing = 
             ctx.getProperty("sisc.permissiveParsing", defaultPermissiveParsing).equals("true");
+        this.permissiveParsing = 
+            ctx.getProperty("sisc.hedgedInlining", defaultHedgedInlining).equals("true");
+        this.internalDebugging = 
+            ctx.getProperty("sisc.internalDebugging", defaultInternalDebugging).equals("true");
+        this.parser.annotate =
+            ctx.getProperty("sisc.emitAnnotations", defaultEmitAnnotations).equals("true");
+        this.parser.lexer.strictR5RS =
+            ctx.getProperty("sisc.strictR5RS", defaultStrictR5RS).equals("true");
 
         classLoader = currentClassLoader();
         try {
@@ -158,14 +168,6 @@ public class DynamicEnvironment extends Util implements Cloneable {
         out = v;
     }
 
-    public Value getPrintShared() {
-        return truth(printShared);
-    }
-
-    public void setPrintShared(Value v) {
-        printShared = truth(v);
-    }
-
     public Value getCharacterSet() {
         return new SchemeString(characterSet.displayName());
     }
@@ -174,14 +176,6 @@ public class DynamicEnvironment extends Util implements Cloneable {
         characterSet=Util.charsetFromString(string(v));
     }
     
-    public Value getVectorLengthPrefixing() {
-        return truth(vectorLengthPrefixing);
-    }
-
-    public void setVectorLengthPrefixing(Value v) {
-        vectorLengthPrefixing = truth(v);
-    }
-
     public Value getCaseSensitive() {
         return truth(caseSensitive);
     }
@@ -190,12 +184,52 @@ public class DynamicEnvironment extends Util implements Cloneable {
         caseSensitive = truth(v);
     }
 
+    public Value getPrintShared() {
+        return truth(printShared);
+    }
+
+    public void setPrintShared(Value v) {
+        printShared = truth(v);
+    }
+
+    public Value getVectorLengthPrefixing() {
+        return truth(vectorLengthPrefixing);
+    }
+
+    public void setVectorLengthPrefixing(Value v) {
+        vectorLengthPrefixing = truth(v);
+    }
+
     public Value getEmitDebuggingSymbols() {
         return truth(emitDebuggingSymbols);
     }
 
     public void setEmitDebuggingSymbols(Value v) {
         emitDebuggingSymbols = truth(v);
+    }
+
+    public Value getPermissiveParsing() {
+        return truth(permissiveParsing);
+    }
+
+    public void setPermissiveParsing(Value v) {
+        permissiveParsing=truth(v);
+    }
+
+    public Value getHedgedInlining() {
+        return truth(hedgedInlining);
+    }
+    
+    public void setHedgedInlining(Value v) {
+        hedgedInlining=truth(v);
+    }
+
+    public Value getInternalDebugging() {
+        return truth(internalDebugging);
+    }
+
+    public void setInternalDebugging(Value v) {
+        internalDebugging=truth(v);
     }
 
     public Value getEmitAnnotations() {
@@ -212,30 +246,6 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public void setStrictR5RSCompliance(Value v) {
         parser.lexer.strictR5RS = truth(v);
-    }
-
-    public Value getHedgedInlining() {
-        return truth(hedgedInlining);
-    }
-    
-    public void setHedgedInlining(Value v) {
-        hedgedInlining=truth(v);
-    }
-
-    public Value getPermissiveParsing() {
-        return truth(permissiveParsing);
-    }
-
-    public void setPermissiveParsing(Value v) {
-        permissiveParsing=truth(v);
-    }
-
-    public Value getInternalDebugging() {
-        return truth(internalDebugging);
-    }
-
-    public void setInternalDebugging(Value v) {
-        internalDebugging=truth(v);
     }
 
 }

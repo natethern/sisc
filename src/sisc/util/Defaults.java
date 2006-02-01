@@ -5,19 +5,18 @@ import sisc.data.Value;
 public abstract class Defaults {
 
     public static int     SYNOPSIS_LENGTH             = 30;
-    public static boolean CASE_SENSITIVE              = false;
     public static boolean PERMIT_INTERRUPTS           = true;
     public static int     MIN_FLOAT_PRECISION         = 16;
     public static int     MAX_FLOAT_PRECISION         = 32;
-    public static boolean STRICT_R5RS                 = false;
+    public static boolean CASE_SENSITIVE              = false;
     public static boolean PRINT_SHARED                = true;
     public static boolean VECTOR_LENGTH_PREFIXING     = true;
-    public static boolean EMIT_ANNOTATIONS            = true;
     public static boolean EMIT_DEBUGGING_SYMBOLS      = true;
-    public static Value   INLINE_PRIMITIVES           = Util.FALSE;
-    public static boolean HEDGED_INLINING             = true;
     public static boolean PERMISSIVE_PARSING          = false;
+    public static boolean HEDGED_INLINING             = true;
     public static boolean INTERNAL_DEBUGGING          = false;
+    public static boolean EMIT_ANNOTATIONS            = true;
+    public static boolean STRICT_R5RS                 = false;
 }
  
 /*
