@@ -38,9 +38,7 @@ public class SchemePanel extends JScrollPane {
         try {
             iis=new PipedInputStream(interpin);
         } catch (IOException e) {}
-        dynenv = new DynamicEnvironment(r.getCtx(),
-                                        new SourceInputPort(new BufferedInputStream(iis), "console"),
-                                        new WriterOutputPort(new PrintWriter(new BufferedOutputStream(dos)), true));
+        dynenv = new DynamicEnvironment(r.getCtx(), iis, dos);
         disp.setEditable(false);
         currentEditablePos=sd.getLength()-1;
 
