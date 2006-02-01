@@ -298,10 +298,9 @@ public class REPL {
         for (;;) {
             Socket client = ssocket.accept();
             DynamicEnvironment dynenv =
-                    new DynamicEnvironment
-                      (Context.lookup(app),               
-                       new SourceInputPort(client.getInputStream(), Util.getDefaultCharacterSet(), "console"),
-                       new WriterOutputPort(client.getOutputStream(), Util.getDefaultCharacterSet(), true));
+                new DynamicEnvironment(Context.lookup(app),
+                                       client.getInputStream(),
+                                       client.getOutputStream());
             Interpreter r=Context.enter(dynenv);
             Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
             Context.exit();
