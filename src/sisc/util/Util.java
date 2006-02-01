@@ -727,71 +727,29 @@ public abstract class Util implements Version {
         return "<" + e.getClass().getName() + ">: "+ e.getMessage();
     }
 
-    /**
-     * The default character set.  Managed by {@link #getDefaultCharacterSet}
-     */
     private static Charset defaultCharset = null;
 
+    static {
+        try {
+            defaultCharset = Charset.forName("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // I think this is a "can't happen" error,
+            // since Java natively supports UTF-8
+            throw new ExceptionInInitializerError(e);
+        } catch (java.nio.charset.UnsupportedCharsetException e) {
+            // this one, too
+            throw new ExceptionInInitializerError(e);
+        }
+    }
+
     /**
-     * Return the default character set.  The default is the charset
-     * named in the System property <code>sisc.characterSet</code>, and
-     * if that is null it defaults (currently) to UTF-8, but could in
-     * principle change.  This overlaps with the mechanism which
-     * initialises and maintains field DynamicEnvironment:characterSet
-     * -- can they be rationalised or merged?  Is that necessary?
-     * (probably not, since the dynamic environment's management of
-     * this field is such that this method probably wouldn't be called
-     * as long as that field is valid, which we hope will always be
-     * the case).
+     * Return the default character set, which is UTF-8, but could in
+     * principle change.
      *
-     * <p>You can obtain
-     * the human-readable name of a Charset using the {@link
-     * java.nio.charset.Charset#displayName} method.
-     * 
      * @return a static Charset object
      */
     public static Charset getDefaultCharacterSet() {
-        if (defaultCharset == null) {
-            String defaultCharsetName = null;
-            try {
-                // Don't just use "UTF-8" as the default, here, since
-                // if sisc.characterSet is set to an illegal name, we
-                // wouldn't then fall back to UTF-8.  Also, if UTF-8
-                // produces an exception, we want to fail in a
-                // different way.
-                defaultCharsetName = System.getProperty("sisc.characterSet");
-                if (defaultCharsetName != null)
-                    defaultCharset = Charset.forName(defaultCharsetName);
-            } catch (SecurityException e) {
-                // ignore: defaultCharset remains unset
-            } catch (UnsupportedEncodingException e) {
-                System.err.println(Util.warn("unsupencoding",
-                                             defaultCharsetName));
-            } catch (Exception e) {
-                // Any remaining exceptions handled as above
-                System.err.println(Util.warn("unsupencoding",
-                                             defaultCharsetName));
-            }
-            
-            if (defaultCharset == null) { // still...
-                try {
-                    defaultCharset = Charset.forName("UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    // I think this is a "can't happen" error,
-                    // since Java natively supports UTF-8
-                    throw new ExceptionInInitializerError(e);
-                } catch (java.nio.charset.UnsupportedCharsetException e) {
-                    // this one, too
-                    throw new ExceptionInInitializerError(e);
-                }
-            }
-        }
-
         return defaultCharset;
-
-        // Another way to do something like this is:
-        // InputStreamReader r=new InputStreamReader(new ByteArrayInputStream(new byte[0]));
-        // return r.getEncoding();
     }
 
     /**

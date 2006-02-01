@@ -64,17 +64,11 @@ public class DynamicEnvironment extends Util implements Cloneable {
     }
 
     public DynamicEnvironment(AppContext ctx, InputStream in, OutputStream out) {
-        this(ctx,
-             new SourceInputPort(in, Util.getDefaultCharacterSet(), liMessage(SISCB, "console")),
-             new WriterOutputPort(out, Util.getDefaultCharacterSet(), true));
-    }
-
-    public DynamicEnvironment(AppContext ctx, SchemeInputPort in, SchemeOutputPort out) {
         this.ctx = ctx;
-        this.in = in;
-        this.out = out;
-        this.characterSet =
-            Util.charsetFromString(ctx.getProperty("sisc.characterSet", defaultCharacterSet));
+        this.characterSet = Util.charsetFromString(ctx.getProperty("sisc.characterSet", defaultCharacterSet));
+        this.in  = new SourceInputPort(in, this.characterSet, liMessage(SISCB, "console"));
+        this.out = new WriterOutputPort(out, this.characterSet, true);
+
         this.caseSensitive =
             ctx.getProperty("sisc.caseSensitive", defaultCaseSensitive).equals("true");
         this.printShared =
