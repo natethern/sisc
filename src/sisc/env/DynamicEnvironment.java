@@ -54,27 +54,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
     //hang on to vars that are no longer in use.
     public java.util.Map parameters = new WeakHashMap(1);
 
-    static SchemeInputPort standardInputPort() {
-        try {
-            return new SourceInputPort(new InputStreamReader(System.in, Util.getDefaultCharacterSet().getName()), liMessage(SISCB, "console"));
-        } catch (UnsupportedEncodingException use) {
-            //shouldn't happen, should be taken care of in Util.getDefaultCharacterSet()
-            return null;
-        }
-    }
-    
-    static SchemeOutputPort standardOutputPort() {
-        try {
-            return new WriterOutputPort(new OutputStreamWriter(System.out, Util.getDefaultCharacterSet().getName()),
-                    true);
-        } catch (UnsupportedEncodingException use) {
-            //shouldn't happen, should be taken care of in Util.getDefaultCharacterSet()
-            return null;
-        }
-
-    }
     public DynamicEnvironment(AppContext ctx) {
-        this(ctx, standardInputPort(), standardOutputPort());
+        this(ctx, System.in, System.out);
     }
 
     public DynamicEnvironment(AppContext ctx, InputStream in, OutputStream out) {
