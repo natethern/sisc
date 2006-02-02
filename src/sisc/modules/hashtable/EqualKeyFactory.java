@@ -1,6 +1,6 @@
 package sisc.modules.hashtable;
 
-public class EqualKeyFactory implements KeyFactory {
+public class EqualKeyFactory extends KeyFactory.Base {
 
     public HashtableKey create() { return new Key(); }
 

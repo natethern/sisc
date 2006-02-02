@@ -1,8 +1,22 @@
 package sisc.modules.hashtable;
 
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
+
 public interface KeyFactory {
 
     HashtableKey create();
+    void serialize(Serializer s);
+    void deserialize(Deserializer s);
+
+    abstract public static class Base implements KeyFactory {
+
+        public Base() {}
+
+        abstract public HashtableKey create();
+        public void serialize(Serializer s) {}
+        public void deserialize(Deserializer s) {}
+    }
 
 }
 

@@ -1,6 +1,6 @@
 package sisc.modules.hashtable;
 
-public class EqvKeyFactory implements KeyFactory {
+public class EqvKeyFactory extends KeyFactory.Base {
 
     public HashtableKey create() { return new Key(); }
 

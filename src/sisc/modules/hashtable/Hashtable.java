@@ -116,6 +116,7 @@ public class Hashtable extends Value {
 
     public void serialize(Serializer s) throws IOException {
         s.writeUTF(kf.getClass().getName());
+        kf.serialize(s);
         s.writeInt(ht.size());
         Iterator i = ht.entrySet().iterator();
         while(i.hasNext()) {
@@ -138,6 +139,7 @@ public class Hashtable extends Value {
         } catch (IllegalAccessException e) {
             throw new IOException(e.getMessage());
         }
+        kf.deserialize(s);
         int sz = s.readInt();
         for (int i=0; i<sz; i++) {
             Expression key = s.readInitializedExpression();
