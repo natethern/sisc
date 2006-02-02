@@ -7,7 +7,7 @@ import sisc.nativefun.*;
 import sisc.data.*;
 import sisc.exprs.AnnotatedExpr;
 
-public class Annotations extends IndexedProcedure {
+public class Annotations extends IndexedFixableProcedure {
     protected static final int ANNOTATION = 0,
         ANNOTATIONQ = 1,
         ANNOTATIONKEYS = 2,
@@ -44,75 +44,73 @@ public class Annotations extends IndexedProcedure {
     public Annotations() {
     }
  
-    public Value doApply(Interpreter f) throws ContinuationException {
-        switch (f.vlr.length) {
-        case 0:
-            switch (id) {
-            default:
-                throwArgSizeException();
-            }
-        case 1:
-            switch (id) {
-            case ANNOTATIONKEYS: {
-                Pair akl=EMPTYLIST;
-                for (Iterator i=f.vlr[0].getAnnotationKeys().iterator(); i.hasNext();) 
-                    akl=new Pair((Symbol)i.next(), akl);
-                return akl;
-            }
-            case ANNOTATIONSTRIPPED:
-                return annotated(f.vlr[0]).stripped;
-            case ANNOTATIONQ:
-                return truth(f.vlr[0] instanceof AnnotatedExpr);
-            case ANNOTATIONSRC:
-                Value rv;
-                if (f.vlr[0] instanceof AnnotatedExpr) 
-                    rv=annotated(f.vlr[0]).annotation;
-                else 
-                    rv=FALSE;
-                return rv;
-            case ANNOTATIONEXPR:
-                if (f.vlr[0] instanceof AnnotatedExpr) 
-                    return (Value)annotated(f.vlr[0]).expr;
-                else return f.vlr[0];
-            default:
-                throwArgSizeException();
-            }
-        case 2:
-            switch (id) {
-            case SETANNOTATIONSTRIPPED:
-                annotated(f.vlr[0]).stripped=f.vlr[1];
-                return VOID;
-            case ANNOTATION:
-                return f.vlr[0].getAnnotation(symbol(f.vlr[1]));
-            default:
-                throwArgSizeException();
-            }
-        case 3:
-            switch (id) {
-            case MAKEANNOTATION:
-                AnnotatedExpr ae=new AnnotatedExpr(f.vlr[0], f.vlr[1]);
-                ae.stripped=f.vlr[2];
-                return ae;
-            case ANNOTATION:
-                return f.vlr[0].getAnnotation(symbol(f.vlr[1]), f.vlr[2]);
-            case SETANNOTATION:
-                return f.vlr[0].setAnnotation(symbol(f.vlr[1]), f.vlr[2]);
-            default:
-                throwArgSizeException();
-            }
-        case 4:
-            switch(id) {
-            case SETANNOTATION:
-                return f.vlr[0].setAnnotation(symbol(f.vlr[1]),
-                                              f.vlr[2],
-                                              f.vlr[3]);
-            default:
-                throwArgSizeException();
-            }
+    public Value apply(Value v1) throws ContinuationException {
+        switch (id) {
+        case ANNOTATIONKEYS: {
+            Pair akl=EMPTYLIST;
+            for (Iterator i=v1.getAnnotationKeys().iterator(); i.hasNext();) 
+                akl=new Pair((Symbol)i.next(), akl);
+            return akl;
+        }
+        case ANNOTATIONSTRIPPED:
+            return annotated(v1).stripped;
+        case ANNOTATIONQ:
+            return truth(v1 instanceof AnnotatedExpr);
+        case ANNOTATIONSRC:
+            Value rv;
+            if (v1 instanceof AnnotatedExpr) 
+                rv=annotated(v1).annotation;
+            else 
+                rv=FALSE;
+            return rv;
+        case ANNOTATIONEXPR:
+            if (v1 instanceof AnnotatedExpr) 
+                return (Value)annotated(v1).expr;
+            else return v1;
+        default:
+            throwArgSizeException();
+        }        
+        return VOID;
+    }
+    
+    public Value apply(Value v1, Value v2) throws ContinuationException {
+        switch (id) {
+        case SETANNOTATIONSTRIPPED:
+            annotated(v1).stripped=v2;
+            return VOID;
+        case ANNOTATION:
+            return v1.getAnnotation(symbol(v2));
         default:
             throwArgSizeException();
         }
-
+        return VOID;
+    }
+    
+    public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+        switch (id) {
+        case MAKEANNOTATION:
+            AnnotatedExpr ae=new AnnotatedExpr(v1, v2);
+            ae.stripped=v3;
+            return ae;
+        case ANNOTATION:
+            return v1.getAnnotation(symbol(v2), v3);
+        case SETANNOTATION:
+            return v1.setAnnotation(symbol(v2), v3);
+        default:
+            throwArgSizeException();
+        }
+        return VOID;
+    }
+    
+    public Value apply(Value[] vlr) throws ContinuationException {
+        switch(id) {
+        case SETANNOTATION:
+            return vlr[0].setAnnotation(symbol(vlr[1]),
+                                          vlr[2],
+                                          vlr[3]);
+        default:
+            throwArgSizeException();
+        }
         return VOID;
     }
 }
