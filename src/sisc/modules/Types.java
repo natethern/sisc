@@ -10,7 +10,7 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
-public class Types extends IndexedProcedure {
+public class Types extends IndexedFixableProcedure {
 
     protected static final Symbol TYPESDB =
         Symbol.intern("sisc.modules.Messages");
@@ -97,35 +97,31 @@ public class Types extends IndexedProcedure {
         return null;
     }
 
-    public Value doApply(Interpreter f) throws ContinuationException {
-        switch(f.vlr.length) {
-        case 0:
+    public Value apply(Value v1) throws ContinuationException {
+        switch(id) {
+        case TYPEQ:
+            return truth(v1 instanceof SchemeType);
+        case MAKETYPE:
+            try {
+                Class cl = Class.forName(symval(v1), true, Context.currentInterpreter().dynenv.getClassLoader());
+                if (!Value.class.isAssignableFrom(cl))
+                    throw new RuntimeException(liMessage(TYPESDB, "notaschemetype", symval(v1)));
+                return new SchemeType(cl);
+            } catch(ClassNotFoundException e) {
+                throw new RuntimeException(liMessage(TYPESDB, "classnotfound", symval(v1)));
+            }
+        case TYPEOF:
+            return new SchemeType(v1.getClass());
+        default:
             throwArgSizeException();
-        case 1:
-            switch(id) {
-            case TYPEQ:
-                return truth(f.vlr[0] instanceof SchemeType);
-            case MAKETYPE:
-                try {
-                    Class cl = Class.forName(symval(f.vlr[0]), true, f.dynenv.getClassLoader());
-                    if (!Value.class.isAssignableFrom(cl))
-                        throw new RuntimeException(liMessage(TYPESDB, "notaschemetype", symval(f.vlr[0])));
-                    return new SchemeType(cl);
-                } catch(ClassNotFoundException e) {
-                    throw new RuntimeException(liMessage(TYPESDB, "classnotfound", symval(f.vlr[0])));
-                }
-            case TYPEOF:
-                return new SchemeType(f.vlr[0].getClass());
-            default:
-                throwArgSizeException();
-            }
-        case 2:
-            switch(id) {
-            case TYPECOMP:
-                return truth(stype(f.vlr[1]).getClassObject().isAssignableFrom(stype(f.vlr[0]).getClassObject()));
-            default:
-                throwArgSizeException();
-            }
+        }
+        return VOID;
+    }
+    
+    public Value apply(Value v1, Value v2) throws ContinuationException {
+        switch(id) {
+        case TYPECOMP:
+            return truth(stype(v2).getClassObject().isAssignableFrom(stype(v1).getClassObject()));
         default:
             throwArgSizeException();
         }
