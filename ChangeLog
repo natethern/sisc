@@ -1,3 +1,8 @@
+2005-02-03  Scott G. Miller <sgmiller@gmail.com>
+
+	* Provided types for all native Scheme values (e.g. <box>,
+	  <thread>, etc).  See feature request 1423513.
+	  
 2005-01-31  Scott G. Miller <sgmiller@gmail.com>
 
 	* Fixed bug where UTF-8 was not in fact the default character

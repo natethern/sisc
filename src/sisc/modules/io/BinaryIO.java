@@ -126,9 +126,9 @@ public class BinaryIO extends IndexedProcedure {
                 try {
                     sop.flush();
                 } catch (IOException e) {
-                    error(f, liMessage(BINARYB, "errorflushing", 
-                                       sop.toString(),
-                                       e.getMessage()));
+                    throwPrimException(liMessage(BINARYB, "errorflushing", 
+                                           sop.toString(),
+                                           e.getMessage()));
                 }
                 Buffer rv=new Buffer(bos.toByteArray());
                 bos.reset();

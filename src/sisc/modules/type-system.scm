@@ -54,6 +54,7 @@
   (value        |Value|)
   (eof          |EOFObject|)
   (symbol       |Symbol|)
+  (box          |Box|)
   (list         |Pair|)
   (procedure    |Procedure|)
   (number       |Quantity|)

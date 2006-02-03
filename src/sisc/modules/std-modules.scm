@@ -105,6 +105,7 @@
 (native-module networking-native "sisc.modules.io.Networking$Index")
 (native-module debugging-native  "sisc.modules.Debugging$Index")
 (native-module threading-native  "sisc.modules.Threads$Index")
+(native-module threading-complex-native  "sisc.modules.Threads$ComplexThreads$Index")
 (native-module types-native      "sisc.modules.Types$Index")
 (native-module s2j-reflection    "sisc.modules.s2j.Reflection$Index")
 (native-module s2j-conversion    "sisc.modules.s2j.Conversion$Index")
@@ -125,7 +126,7 @@
      type-safe-intern)
   (include "misc.scm"))
 
-(module threading
+(module threading-pretypes
   (thread?
    thread/new
    thread/start
@@ -163,10 +164,96 @@
    synchronized-unsafe
    parallel)
   (import threading-native)
+  (import threading-complex-native)
   (include "thread.scm"))
+
+(module procedure-properties
+  (procedure-property
+   set-procedure-property!
+   procedure-property!)
+  (import threading-pretypes)
+  (include "procedure-properties.scm"))
+
+(module type-system
+    (make-type
+     type-of
+     native-type-of
+     type<=
+     type=
+     instance-of?
+     types<=
+     types=
+     instances-of?
+     compare-types
+     <value>
+     <eof>
+     <box>
+     <symbol>
+     <list>
+     <procedure>
+     <number>
+     <boolean>
+     <char>
+     <string>
+     <vector>
+     type-of-hook
+     type<=-hook
+     compare-types-hook)
+  (import* types-native
+           (native-type-of type-of)
+           (native-type<= type<=)
+           make-type)
+  (import procedure-properties)
+  (import misc)
+  (include "type-system.scm"))
+
+(module threading
+  (thread?
+   <thread>
+   thread/new
+   thread/start
+   thread/spawn
+   thread/yield
+   thread/interrupt
+   thread/join
+   thread/result
+   thread/current
+   thread/notify
+   thread/notify-all
+   thread/wait
+   thread/name
+   thread/name!
+   thread/priority
+   thread/daemon?
+   thread/daemon!
+   thread/priority!
+   thread/state
+   thread/interrupted?
+   thread/holds-lock?
+   thread/_active-thread-count
+   mutex?
+   <mutex>
+   mutex-of
+   mutex/new
+   mutex/lock!
+   mutex/unlock!
+   condvar?
+   <condvar>
+   condvar/new
+   condvar/notify
+   condvar/notify-all
+   mutex/synchronize
+   mutex/synchronize-unsafe
+   synchronized
+   synchronized-unsafe
+   parallel)
+  (import type-system)
+  (import threading-pretypes)
+  (include "thread-types.scm"))
 
 (module buffers
   (make-buffer
+   <buffer>
    buffer
    buffer?
    buffer-ref
@@ -176,6 +263,7 @@
    open-input-buffer
    open-output-buffer
    get-output-buffer)
+  (import type-system)
   (import binary-io-native)
   (include "io/buffer.scm"))
 
@@ -251,45 +339,6 @@
   (import hashtable-native)
   (import threading)
   (include "hashtable/hashtable.scm"))
-
-(module procedure-properties
-  (procedure-property
-   set-procedure-property!
-   procedure-property!)
-  (import threading)
-  (include "procedure-properties.scm"))
-
-(module type-system
-    (make-type
-     type-of
-     native-type-of
-     type<=
-     type=
-     instance-of?
-     types<=
-     types=
-     instances-of?
-     compare-types
-     <value>
-     <eof>
-     <symbol>
-     <list>
-     <procedure>
-     <number>
-     <boolean>
-     <char>
-     <string>
-     <vector>
-     type-of-hook
-     type<=-hook
-     compare-types-hook)
-  (import* types-native
-           (native-type-of type-of)
-           (native-type<= type<=)
-           make-type)
-  (import procedure-properties)
-  (import misc)
-  (include "type-system.scm"))
 
 (module record
     ((define-record-type define-record-type-helper)
@@ -745,6 +794,9 @@
    leave-multicast-group
    set-multicast-ttl!
    set-so-timeout!
+   <tcp-listen-socket>
+   <tcp-socket>
+   <udp-socket>
    socket?
    server-socket?)
   (import* networking-native
@@ -768,6 +820,7 @@
            set-so-timeout!
            socket?
            server-socket?)
+  (import type-system)
   (import generic-io)
   (import oo)
   (include "io/networking.scm"))
