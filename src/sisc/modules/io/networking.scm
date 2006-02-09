@@ -1,3 +1,10 @@
+; Networking types
+
+(define <tcp-listen-socket> (make-type '|sisc.io.Networking$SchemeServerSocket|))
+(define <tcp-socket> (make-type '|sisc.io.Networking$SchemeTCPSocket|))
+(define <udp-socket> (make-type '|sisc.io.Networking$SchemeUDPSocket|))
+
+; Socket constructors
 (define open-socket-input-port
   (make-wrapped-constructor <native-character-input-port>
                             _open-socket-input-port))

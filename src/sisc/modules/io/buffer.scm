@@ -1,3 +1,6 @@
+; buffer type
+(define <buffer> (make-type '|sisc.modules.io.Buffer|))
+
 ; Derived buffer code
 
 (define (buffer . args)
