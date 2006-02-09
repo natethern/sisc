@@ -1,11 +1,69 @@
 package sisc.modules.hashtable;
 
 import sisc.data.*;
+import java.util.Map;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.WeakReference;
 
 public class WeakHashtable extends Hashtable {
 
-    public WeakHashtable(KeyFactory kf) {
-        super(kf);
+    private ReferenceQueue garbage = new ReferenceQueue();
+
+    public WeakHashtable() {
+        super();
+    }
+
+    public WeakHashtable(Procedure equalsProc, Procedure hashProc) {
+        super(equalsProc, hashProc);
+    }
+
+    private class Key extends WeakReference implements HashtableKey {
+
+        private int hash;
+
+        public Key(Value key) {
+            super(key, garbage);
+            //we need to memoize the hash code so that it remains
+            //available even after the key has become garbage
+            hash = callHashCode(key);
+        }
+
+        public Value getValue() {
+            return (Value)get();
+        }
+
+        public boolean equals(Object o) {
+            //This first test is important: we need it in order to be
+            //able to remove keys that have become garbage.
+            if (o == this) return true;
+
+            if (!(o instanceof Key)) return false;
+
+            Value myVal = getValue();
+            Value otherVal = ((Key)o).getValue();
+            //A garbage key can never be equal to another garbage key
+            return (myVal != null) && (otherVal != null) &&
+                callEquals(myVal, otherVal);
+        }
+
+        public int hashCode() {
+            return hash;
+        }
+
+    }
+
+    protected HashtableKey makeKey(Value k) {
+        return new Key(k);
+    }
+
+    protected Map getMap() {
+        Map ht = super.getMap();
+        Object r;
+        while ((r = garbage.poll()) != null) {
+            ht.remove(r);
+        }
+
+        return ht;
     }
 
     public boolean valueEqual(Value v) {

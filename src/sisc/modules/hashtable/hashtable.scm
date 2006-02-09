@@ -1,27 +1,40 @@
+(define *HASH-PROCS* `((,eq?    . ,hash-by-eq)
+                       (,eqv?   . ,hash-by-eqv)
+                       (,equal? . ,hash-by-equal)))
 
+;;(make-hashtable [eq-proc [hash-proc]] [safe? [weak?]])
 (define (make-hashtable . rest)
   (define (process-opt-args)
-    (let ([eq-proc eqv?]
-          [safe? #t])
+    (let ([eq-proc equal?]
+          [hash-proc hash-by-equal]
+          [safe? #t]
+          [weak? #f])
       (if (not (null? rest))
           (begin
-            (set! eq-proc (car rest))
-            (set! rest (cdr rest))
+            (if (procedure? (car rest))
+                (begin (set! eq-proc (car rest))
+                       (set! hash-proc
+                         (cond [(assq eq-proc *HASH-PROCS*) => cdr]
+                               [else hash-by-equal]))
+                       (set! rest (cdr rest))))
             (if (not (null? rest))
                 (begin
-                  (set! safe? (car rest))
-                  (set! rest (cdr rest))
+                  (if (procedure? (car rest))
+                      (begin (set! hash-proc (car test))
+                             (set! rest (cdr rest))))
                   (if (not (null? rest))
-                      (error "expected zero, one or two args"))))))
-      (values eq-proc safe?)))
-  (call-with-values process-opt-args
-    (lambda (eq-proc safe?)
-      (cond
-        [(eq? eq-proc eq?) (make-eq-hashtable safe?)]
-        [(eq? eq-proc eqv?) (make-eqv-hashtable safe?)]
-        [(eq? eq-proc equal?) (make-equal-hashtable safe?)]
-        [else (error 'make-hashtable
-                     "expected eq?, eqv? or equal?")]))))
+                      (begin
+                        (set! safe? (car rest))
+                        (set! rest (cdr rest))
+                        (if (not (null? rest))
+                            (begin
+                              (set! weak? (car rest))
+                              (set! rest (cdr rest))
+                              (if (not (null? rest))
+                                  (error 'make-hashtable
+                                         "expected 0-4 args"))))))))))
+      (values eq-proc hash-proc safe? weak?)))
+  (call-with-values process-opt-args hashtable/make))
 
 (define (alist->hashtable alist . rest)
   (hashtable/add-alist! (apply make-hashtable rest) alist))
@@ -49,3 +62,6 @@
   (for-each (lambda (x) (proc (car x) (cdr x))) (hashtable->alist ht)))
 (define (hashtable/map proc ht)
   (map (lambda (x) (proc (car x) (cdr x))) (hashtable->alist ht)))
+
+
+(define <hashtable> (make-type '|sisc.modules.hashtable.HashtableBase|))

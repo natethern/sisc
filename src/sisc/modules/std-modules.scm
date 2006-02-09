@@ -325,6 +325,10 @@
 (module hashtable
     (make-hashtable
      hashtable?
+     hashtable/thread-safe?
+     hashtable/weak?
+     hashtable/equivalence-function
+     hashtable/hash-function
      hashtable/put!
      hashtable/get
      hashtable/get!
@@ -335,9 +339,16 @@
      alist->hashtable
      hashtable/keys
      hashtable/for-each
-     hashtable/map)
+     hashtable/map
+     hash-by-eq
+     hash-by-eqv
+     hash-by-equal
+     hash-by-string=
+     hash-by-string-ci=
+     <hashtable>)
   (import hashtable-native)
   (import threading)
+  (import* type-system make-type)
   (include "hashtable/hashtable.scm"))
 
 (module record

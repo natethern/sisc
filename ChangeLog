@@ -1,3 +1,19 @@
+2006-02-08  Matthias Radestock  <matthias@sorted.org>
+
+	* Added support for hash tables with arbitrary equivalence and
+	  hash functions.
+
+	* Added support for hash tables with weak keys.
+
+	* Added various functions to reflect on hash tables.
+
+	* Added various hash functions.
+
+	* Fixed hash table serialisation to support complex keys with
+	  circular structures.
+
+	* Changed default hash table equivalence from eqv? to equal?.
+
 2005-02-03  Scott G. Miller <sgmiller@gmail.com>
 
 	* Provided types for all native Scheme values (e.g. <box>,

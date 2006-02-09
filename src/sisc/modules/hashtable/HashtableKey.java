@@ -1,22 +1,12 @@
 package sisc.modules.hashtable;
 
-import sisc.data.*;
+import sisc.data.Value;
 
-public abstract class HashtableKey {
+public interface HashtableKey {
 
-    protected Value key;
-    
-    public Value getValue() {
-        return key;
-    }
-    
-    public void setValue(Value v) {
-        key = v;
-    }
-    
-    public abstract boolean equals(Object o);
-    
-    public abstract int hashCode();
+    Value getValue();
+    boolean equals(Object o);
+    int hashCode();
 }
 
 /*

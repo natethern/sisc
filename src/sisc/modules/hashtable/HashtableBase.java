@@ -1,21 +1,32 @@
 package sisc.modules.hashtable;
 
-public class EqvKeyFactory implements KeyFactory {
+import java.io.IOException;
+import sisc.io.ValueWriter;
+import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
+import sisc.util.ExpressionVisitor;
+import sisc.data.Value;
+import sisc.data.Pair;
+import sisc.data.Procedure;
 
-    public HashtableKey create() { return new Key(); }
+public abstract class HashtableBase extends Value {
 
-    public static class Key extends HashtableKey {
-        
-        public boolean equals(Object o) {
-            return (o instanceof Key)  && key.eqv(((Key)o).key);
-        }
-        
-        public int hashCode() {
-            return key.hashCode();
-        }
-
-    }
-    
+    public abstract Procedure getEqualsProc();
+    public abstract Procedure getHashProc();
+    public abstract Value get(Value k);
+    public abstract Value put(Value k, Value v);
+    public abstract Value remove(Value k);
+    public abstract int size();
+    public abstract void clear();
+    public abstract void addAList(Pair p);
+    public abstract Pair toAList();
+    public abstract Pair keys();
+    public abstract boolean valueEqual(Value v);
+    public abstract int valueHashCode();
+    public abstract void serialize(Serializer s) throws IOException;
+    public abstract void deserialize(Deserializer s) throws IOException;
+    public abstract boolean visit(ExpressionVisitor v);
+    public abstract void display(ValueWriter w) throws IOException;
 }
 
 /*

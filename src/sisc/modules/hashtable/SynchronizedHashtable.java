@@ -4,22 +4,37 @@ import sisc.data.*;
 import java.io.IOException;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
+import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 import sisc.modules.Threads.Mutex;
 
-public class SynchronizedHashtable extends Hashtable {
+public class SynchronizedHashtable extends HashtableBase {
+
+    private HashtableBase delegate;
 
     public SynchronizedHashtable() {}
 
-    public SynchronizedHashtable(KeyFactory kf) {
-        super(kf);
+    public SynchronizedHashtable(HashtableBase delegate) {
+        this.delegate = delegate;
+    }
+
+    public HashtableBase getDelegate() {
+        return delegate;
+    }
+
+    public Procedure getEqualsProc() {
+        return delegate.getEqualsProc();
+    }
+
+    public Procedure getHashProc() {
+        return delegate.getHashProc();
     }
 
     public Value get(Value k) {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            return super.get(k);
+            return delegate.get(k);
         } finally {
             m.unlock();
         }
@@ -29,7 +44,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            return super.put(k, v);
+            return delegate.put(k, v);
         } finally {
             m.unlock();
         }
@@ -39,7 +54,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            return super.remove(k);
+            return delegate.remove(k);
         } finally {
             m.unlock();
         }
@@ -49,7 +64,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            return super.size();
+            return delegate.size();
         } finally {
             m.unlock();
         }
@@ -59,7 +74,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            super.clear();
+            delegate.clear();
         } finally {
             m.unlock();
         }
@@ -69,10 +84,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            for (; p != EMPTYLIST; p = pair(p.cdr())) {
-                Pair entry = pair(p.car());
-                super.put(entry.car(), entry.cdr());
-            }
+            delegate.addAList(p);
         } finally {
             m.unlock();
         }
@@ -82,7 +94,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            return super.toAList();
+            return delegate.toAList();
         } finally {
             m.unlock();
         }
@@ -92,7 +104,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            return super.keys();
+            return delegate.keys();
         } finally {
             m.unlock();
         }
@@ -102,7 +114,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            return super.valueEqual(v);
+            return delegate.valueEqual(v);
         } finally {
             m.unlock();
         }
@@ -112,7 +124,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            return super.valueHashCode();
+            return delegate.valueHashCode();
         } finally {
             m.unlock();
         }
@@ -122,7 +134,17 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            super.serialize(s);
+            s.writeExpression(delegate);
+        } finally {
+            m.unlock();
+        }
+    }
+
+    public void deserialize(Deserializer s) throws IOException {
+        Mutex m = Mutex.of(this);
+        m.acquire();
+        try {
+            delegate = (HashtableBase)s.readExpression();
         } finally {
             m.unlock();
         }
@@ -132,7 +154,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            return super.visit(v);
+            return delegate.visit(v);
         } finally {
             m.unlock();
         }
@@ -142,7 +164,7 @@ public class SynchronizedHashtable extends Hashtable {
         Mutex m = Mutex.of(this);
         m.acquire();
         try {
-            super.display(w);
+            delegate.display(w);
         } finally {
             m.unlock();
         }

@@ -4,15 +4,14 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 
-public class Primitives extends IndexedProcedure {
+public class Primitives extends IndexedFixableProcedure {
 
     public static final Symbol SHASHB =
         Symbol.intern("sisc.modules.hashtable.Messages");
 
     protected static final int
-        HT_MAKE_EQ = 1,
-        HT_MAKE_EQV = 2,
-        HT_MAKE_EQUAL = 3,
+        //NEXT = 19,
+        HT_MAKE = 0,
         HTQ = 4,
         HT_PUT = 5,
         HT_GET = 6,
@@ -23,9 +22,14 @@ public class Primitives extends IndexedProcedure {
         HT_ADD_ALIST = 11,
         HT_KEYS = 12,
         HT_THREAD_SAFEQ = 13,
-        WHT_MAKE_EQ = 14,
-        WHT_MAKE_EQV = 15,
-        WHT_MAKE_EQUAL = 16;
+        HT_WEAKQ = 14,
+        HT_HASH_BY_EQ = 1,
+        HT_HASH_BY_EQV = 2,
+        HT_HASH_BY_EQUAL = 3,
+        HT_HASH_BY_STRING_EQ = 17,
+        HT_HASH_BY_STRING_CI_EQ = 18,
+        HT_EQUALSFN = 15,
+        HT_HASHFN = 16;
 
     public static class Index extends IndexedLibraryAdapter {
 
@@ -34,12 +38,7 @@ public class Primitives extends IndexedProcedure {
         }
 
         public Index() {
-            define("make-eq-hashtable", HT_MAKE_EQ);
-            define("make-eqv-hashtable", HT_MAKE_EQV);
-            define("make-equal-hashtable", HT_MAKE_EQUAL);
-            define("make-eq-weak-hashtable", WHT_MAKE_EQ);
-            define("make-eqv-weak-hashtable", WHT_MAKE_EQV);
-            define("make-equal-weak-hashtable", WHT_MAKE_EQUAL);
+            define("hashtable/make", HT_MAKE);
             define("hashtable?", HTQ);
             define("hashtable/put!", HT_PUT);
             define("hashtable/get", HT_GET);
@@ -50,6 +49,14 @@ public class Primitives extends IndexedProcedure {
             define("hashtable/add-alist!", HT_ADD_ALIST);
             define("hashtable/keys", HT_KEYS);
             define("hashtable/thread-safe?", HT_THREAD_SAFEQ);
+            define("hashtable/weak?", HT_WEAKQ);
+            define("hashtable/equivalence-function", HT_EQUALSFN);
+            define("hashtable/hash-function", HT_HASHFN);
+            define("hash-by-eq", HT_HASH_BY_EQ);
+            define("hash-by-eqv", HT_HASH_BY_EQV);
+            define("hash-by-equal", HT_HASH_BY_EQUAL);
+            define("hash-by-string=", HT_HASH_BY_STRING_EQ);
+            define("hash-by-string-ci=", HT_HASH_BY_STRING_CI_EQ);
         }
     }
     
@@ -59,49 +66,30 @@ public class Primitives extends IndexedProcedure {
     
     public Primitives() {}
 
-    private static KeyFactory eqKeyFactory = new EqKeyFactory();
-    private static KeyFactory eqvKeyFactory = new EqvKeyFactory();
-    private static KeyFactory equalKeyFactory = new EqualKeyFactory();
-
-    public static final Hashtable shash(Value o) {
+    public static final HashtableBase shash(Value o) {
         try {
-            return (Hashtable)o;
+            return (HashtableBase)o;
         } catch (ClassCastException e) { typeError(SHASHB, "hashtable", o); }
         return null;
     }
 
-    public Value doApply(Interpreter f) throws ContinuationException {
-        switch(f.vlr.length) {
-        case 0:
-            switch(id) {
-            case WHT_MAKE_EQ:
-                return new WeakHashtable(eqKeyFactory);
-            case WHT_MAKE_EQV:
-                return new WeakHashtable(eqvKeyFactory);
-            case WHT_MAKE_EQUAL:
-                return new WeakHashtable(equalKeyFactory);
-            default:
-                throwArgSizeException();
-            }
-        case 1:
-            switch (id) {
-            case HT_MAKE_EQ:
-                return (truth(f.vlr[0]) ?
-                        new SynchronizedHashtable(eqKeyFactory) :
-                        new Hashtable(eqKeyFactory));
-            case HT_MAKE_EQV:
-                return (truth(f.vlr[0]) ?
-                        new SynchronizedHashtable(eqvKeyFactory) :
-                        new Hashtable(eqvKeyFactory));
-            case HT_MAKE_EQUAL:
-                return (truth(f.vlr[0]) ?
-                        new SynchronizedHashtable(equalKeyFactory) :
-                        new Hashtable(equalKeyFactory));
-            case HTQ:
-                return truth(f.vlr[0] instanceof Hashtable);
-            default:
-                Hashtable h = shash(f.vlr[0]);
-                switch(id) {
+    public Value apply(Value v1) throws ContinuationException {
+        switch (id) {
+          case HTQ:
+              return truth(v1 instanceof HashtableBase);
+          case HT_HASH_BY_EQ:
+              return Quantity.valueOf(System.identityHashCode(v1));
+          case HT_HASH_BY_EQV:
+              return Quantity.valueOf(v1.hashCode());
+          case HT_HASH_BY_EQUAL:
+              return Quantity.valueOf(v1.valueHashCode());
+          case HT_HASH_BY_STRING_EQ:
+              return Quantity.valueOf(string(v1).hashCode());
+          case HT_HASH_BY_STRING_CI_EQ:
+              return Quantity.valueOf(string(v1).toLowerCase().hashCode());
+          default:
+              HashtableBase h = shash(v1);
+              switch(id) {
                 case HT_CLEAR:
                     h.clear();
                     return VOID;
@@ -113,54 +101,91 @@ public class Primitives extends IndexedProcedure {
                     return Quantity.valueOf(h.size());
                 case HT_THREAD_SAFEQ:
                     return truth(h instanceof SynchronizedHashtable);
+                case HT_WEAKQ:
+                    return truth((h instanceof WeakHashtable) ||
+                                 ((h instanceof SynchronizedHashtable) &&
+                                  ((SynchronizedHashtable)h).getDelegate()
+                                  instanceof WeakHashtable));
+                case HT_EQUALSFN:
+                    return h.getEqualsProc();
+                case HT_HASHFN:
+                    return h.getHashProc();
                 default:
                     throwArgSizeException();
-                }
-            }
-        default:
-            Value def = FALSE;
-            Value res = null;
-            Hashtable h = shash(f.vlr[0]);
-            switch(id) {
-            case HT_PUT:
-                switch (f.vlr.length) {
-                case 3: break;
-                case 4: def = f.vlr[3]; break;
-                default:
-                    throwArgSizeException();
-                }
-                res = h.put(f.vlr[1], f.vlr[2]);
-                break;
-            case HT_GET:
-                switch (f.vlr.length) {
-                case 2: break;
-                case 3: def = f.vlr[2]; break;
-                default:
-                    throwArgSizeException();
-                }
-                res = h.get(f.vlr[1]);
-                break;
-            case HT_REMOVE:
-                switch (f.vlr.length) {
-                case 2: break;
-                case 3: def = f.vlr[2];
-                default:
-                    throwArgSizeException();
-                }
-                res = h.remove(f.vlr[1]);
-                break;
-            case HT_ADD_ALIST:
-                switch (f.vlr.length) {
-                case 2: h.addAList(pair(f.vlr[1])); return h;
-                default:
-                    throwArgSizeException();
-                }
-            default:
-                throwArgSizeException();
-            }
-            return (res == null) ? def : res;
+                    return VOID; //dummy
+              }
         }
     }
+
+    public Value apply(Value v1, Value v2) throws ContinuationException {
+        return apply(new Value[] {v1, v2});
+    }
+
+    public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+        return apply(new Value[] {v1, v2, v3}); 
+    }
+
+    public Value apply(Value[] v) throws ContinuationException {
+        if (id == HT_MAKE) {
+            if (v.length == 4) {
+                Procedure equalsProc = proc(v[0]);
+                Procedure hashProc = proc(v[1]);
+                HashtableBase res =
+                    truth(v[3]) ?
+                    new WeakHashtable(equalsProc, hashProc) :
+                    new Hashtable(equalsProc, hashProc);
+                if (truth(v[2])) {
+                    res = new SynchronizedHashtable(res);
+                }
+                return res;
+            } else {
+                throwArgSizeException();
+            }
+        }
+
+        Value def = FALSE;
+        Value res = null;
+        HashtableBase h = shash(v[0]);
+        switch(id) {
+          case HT_PUT:
+              switch (v.length) {
+                case 3: break;
+                case 4: def = v[3]; break;
+                default:
+                    throwArgSizeException();
+              }
+              res = h.put(v[1], v[2]);
+              break;
+          case HT_GET:
+              switch (v.length) {
+                case 2: break;
+                case 3: def = v[2]; break;
+                default:
+                    throwArgSizeException();
+              }
+              res = h.get(v[1]);
+              break;
+          case HT_REMOVE:
+              switch (v.length) {
+                case 2: break;
+                case 3: def = v[2];
+                default:
+                    throwArgSizeException();
+              }
+              res = h.remove(v[1]);
+              break;
+          case HT_ADD_ALIST:
+              switch (v.length) {
+                case 2: h.addAList(pair(v[1])); return h;
+                default:
+                    throwArgSizeException();
+              }
+          default:
+              throwArgSizeException();
+        }
+        return (res == null) ? def : res;
+    }
+
 }
 
 /*

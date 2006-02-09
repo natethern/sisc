@@ -10,49 +10,156 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 import sisc.util.Util;
+import sisc.nativefun.FixableProcedure;
+import sisc.interpreter.Interpreter;
+import sisc.interpreter.Context;
+import sisc.interpreter.ContinuationException;
+import sisc.interpreter.SchemeException;
 
-public class Hashtable extends Value {
+public class Hashtable extends HashtableBase {
 
-    protected HashMap ht;
-    private KeyFactory kf;
+    private HashMap ht;
+    private Pair alist;//tmp store during deserialisation;
+
+    private Procedure equalsProc;
+    private Procedure hashProc;
 
     public Hashtable() {
         this.ht = new HashMap(0);
     }
 
-    public Hashtable(KeyFactory kf) {
+    public Hashtable(Procedure equalsProc, Procedure hashProc) {
         this();
-        this.kf = kf;
+        this.equalsProc = equalsProc;
+        this.hashProc = hashProc;
+    }
+
+    public Procedure getEqualsProc() {
+        return equalsProc;
+    }
+
+    public Procedure getHashProc() {
+        return hashProc;
+    }
+
+    public boolean callEquals(Value v1, Value v2) {
+        Value rv = Util.VOID;
+        if (equalsProc instanceof FixableProcedure) {
+            try {
+                rv = ((FixableProcedure)equalsProc).apply(v1, v2);
+            } catch (ContinuationException ce) {
+                //TODO: handle this error better?
+                Procedure.throwPrimException(ce.getMessage());
+            }
+        } else {
+            Interpreter r = Context.enter();
+            try {
+                rv = r.eval(equalsProc, new Value[] { v1, v2 });
+            } catch (SchemeException e) {
+                Procedure.throwNestedPrimException
+                    (Util.liMessage(Primitives.SHASHB,
+                                    "equalsexception",
+                                    equalsProc.toString()),
+                     e);
+            } finally {
+                Context.exit();
+            }
+        }
+
+        if (rv instanceof SchemeBoolean) {
+            return Util.truth((SchemeBoolean)rv);
+        } else {
+            Procedure.throwPrimException
+                (Util.liMessage(Primitives.SHASHB, "equalsreturn",
+                                equalsProc.toString(),
+                                rv.synopsis()));
+            return false; //dummy
+        }
+    }
+
+    public int callHashCode(Value v) {
+        Value rv = Util.VOID;
+
+        if (hashProc instanceof FixableProcedure) {
+            try {
+                rv = ((FixableProcedure)hashProc).apply(v);
+            } catch (ContinuationException ce) {
+                //TODO: handle this error better?
+                Procedure.throwPrimException(ce.getMessage());
+            }
+        } else {
+            Interpreter r = Context.enter();
+            try {
+                rv = r.eval(hashProc, new Value[] { v });
+            } catch (SchemeException e) {
+                Procedure.throwNestedPrimException
+                    (Util.liMessage(Primitives.SHASHB,
+                                    "hashexception",
+                                    hashProc.toString()),
+                     e);
+            } finally {
+                Context.exit();
+            }
+        }
+
+        if (rv instanceof Quantity) {
+            return ((Quantity)rv).intValue();
+        } else {
+            Procedure.throwPrimException
+                (Util.liMessage(Primitives.SHASHB, "hashreturn",
+                                hashProc.toString(),
+                                rv.synopsis()));
+            return 0; //dummy
+        }
+    }
+
+
+    private class Key implements HashtableKey {
+
+        private Value key;
+
+        public Key(Value key) {
+            this.key = key;
+        }
+
+        public Value getValue() {
+            return key;
+        }
+
+        public boolean equals(Object o) {
+            return (o instanceof Key) && callEquals(key, ((Key)o).key);
+        }
+
+        public int hashCode() {
+            return callHashCode(key);
+        }
+
     }
 
     protected HashtableKey makeKey(Value k) {
-        HashtableKey key = kf.create();
-        key.setValue(k);
-        return key;
+        return new Key(k);
     }
 
-    protected Value getKey(Object o) {
+    protected Map getMap() {
+        if (alist != null) {
+            addAList(ht, alist);
+            alist = null;
+        }
+        return ht;
+    }
+
+    private void addAList(Map m, Pair p) {
+        for (; p != EMPTYLIST; p = pair(p.cdr())) {
+            Pair entry = pair(p.car());
+            m.put(makeKey(entry.car()), entry.cdr());
+        }
+    }
+
+    //NB: getKey is allowed to return null, indicating that the key is
+    //no longer valid. This is never the case in this class, but
+    //sub-classes, notably WeakHashtable, exploit this feature.
+    private Value getKey(Object o) {
         return ((HashtableKey)o).getValue();
-    }
-
-    public Value get(Value k) {
-        return (Value)ht.get(makeKey(k));
-    }
-
-    public Value put(Value k, Value v) {
-        return (Value)ht.put(makeKey(k), v);
-    }
-
-    public Value remove(Value k) {
-        return (Value)ht.remove(makeKey(k));
-    }
-
-    public int size() {
-        return ht.size();
-    }
-
-    public void clear() {
-        ht.clear();
     }
 
     private Value getMapKey(Map.Entry e) {
@@ -63,28 +170,53 @@ public class Hashtable extends Value {
         return (Value)e.getValue();
     }
 
+    public Value get(Value k) {
+        return (Value)getMap().get(makeKey(k));
+    }
+
+    public Value put(Value k, Value v) {
+        return (Value)getMap().put(makeKey(k), v);
+    }
+
+    public Value remove(Value k) {
+        return (Value)getMap().remove(makeKey(k));
+    }
+
+    public int size() {
+        return getMap().size();
+    }
+
+    public void clear() {
+        getMap().clear();
+    }
+
     public void addAList(Pair p) {
-        for (; p != EMPTYLIST; p = pair(p.cdr())) {
-            Pair entry = pair(p.car());
-            put(entry.car(), entry.cdr());
-        }
+        Map m = getMap();
+        addAList(m, p);
     }
 
     public Pair toAList() {
-        Iterator i = ht.entrySet().iterator();
+        Iterator i = getMap().entrySet().iterator();
         Pair res = EMPTYLIST;
         while(i.hasNext()) {
             Map.Entry e = (Map.Entry)i.next();
-            res = new Pair(new Pair(getMapKey(e), getMapValue(e)), res);
+            Value key = getMapKey(e);
+            Value val = getMapValue(e);
+            if (key != null) {
+                res = new Pair(new Pair(key, val), res);
+            }
         }
         return res;
     }
 
     public Pair keys() {
-        Iterator i = ht.keySet().iterator();
+        Iterator i = getMap().keySet().iterator();
         Pair res = EMPTYLIST;
         while(i.hasNext()) {
-            res = new Pair(getKey(i.next()), res);
+            Value key = getKey(i.next());
+            if (key != null) {
+                res = new Pair(key, res);
+            }
         }
         return res;
     }
@@ -93,81 +225,78 @@ public class Hashtable extends Value {
         if (v==this) return true;
         if (!(v instanceof Hashtable)) return false;
         Hashtable o = (Hashtable)v;
-        int sz = o.size();
-        if (size() != sz) return false;
-        for (Iterator i = ht.entrySet().iterator(); i.hasNext();) {
+        if (size() != o.size()) return false;
+        if (!equalsProc.valueEqual(o.equalsProc) ||
+            !hashProc.valueEqual(o.hashProc)) return false;
+        for (Iterator i = getMap().entrySet().iterator(); i.hasNext();) {
             Map.Entry e = (Map.Entry)i.next();
-            if (!getMapValue(e).valueEqual(o.get(getMapKey(e))))
-                return false;
+            Value key = getMapKey(e);
+            Value val = getMapValue(e);
+            if (key == null || !val.valueEqual(o.get(key))) return false;
         }
         return true;
     }
 
     public int valueHashCode() {
-        int res = 0;
-        for (Iterator i = ht.entrySet().iterator(); i.hasNext();) {
+        int res = equalsProc.valueHashCode() ^ hashProc.valueHashCode();
+        for (Iterator i = getMap().entrySet().iterator(); i.hasNext();) {
             Map.Entry e = (Map.Entry)i.next();
-            res +=
-                getMapKey(e).valueHashCode() ^
-                getMapValue(e).valueHashCode();
+            Value key = getMapKey(e);
+            Value val = getMapValue(e);
+            if (key != null) {
+                res += key.valueHashCode() ^ val.valueHashCode();
+            }
         }
         return res;
     }
 
     public void serialize(Serializer s) throws IOException {
-        s.writeUTF(kf.getClass().getName());
-        s.writeInt(ht.size());
-        Iterator i = ht.entrySet().iterator();
-        while(i.hasNext()) {
-            Map.Entry e = (Map.Entry)i.next();
-            s.writeInitializedExpression(getMapKey(e));
-            s.writeExpression(getMapValue(e));
-        }
+        s.writeExpression(equalsProc);
+        s.writeExpression(hashProc);
+        s.writeExpression(toAList());
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        try {
-            kf = (KeyFactory)Class.forName(s.readUTF(),
-                                           true,
-                                           currentClassLoader())
-                .newInstance();
-        } catch (ClassNotFoundException e) {
-            throw new IOException(e.getMessage());
-        } catch (InstantiationException e) {
-            throw new IOException(e.getMessage());
-        } catch (IllegalAccessException e) {
-            throw new IOException(e.getMessage());
-        }
-        int sz = s.readInt();
-        for (int i=0; i<sz; i++) {
-            Expression key = s.readInitializedExpression();
-            Expression val = s.readExpression();
-            put((Value)key, (Value)val);
-        }
+        equalsProc = (Procedure)s.readExpression();
+        hashProc   = (Procedure)s.readExpression();
+        alist      = (Pair)s.readExpression();
     }
 
     public boolean visit(ExpressionVisitor v) {
-        Iterator i = ht.entrySet().iterator();
+        if (!v.visit(equalsProc) || !v.visit(hashProc)) return false;
+        Iterator i = getMap().entrySet().iterator();
         while(i.hasNext()) {
             Map.Entry e = (Map.Entry)i.next();
-            if (!v.visit(getMapKey(e))) return false;
-            if (!v.visit(getMapValue(e))) return false;
+            Value key = getMapKey(e);
+            Value val = getMapValue(e);
+            if (key != null) {
+                if (!v.visit(key)) return false;
+                if (!v.visit(val)) return false;
+            }
         }
         return true;
     }
 
     public void display(ValueWriter w) throws IOException {
-        w.append("#<").append(Util.liMessage(Primitives.SHASHB, "hashtable"));
-        Iterator i = ht.entrySet().iterator();
+        w.append("#<")
+            .append(Util.liMessage(Primitives.SHASHB, "hashtable"))
+            .append(' ')
+            .append(equalsProc)
+            .append(' ')
+            .append(hashProc)
+            .append(" (");
+        Iterator i = getMap().entrySet().iterator();
         while(i.hasNext()) {
             Map.Entry e = (Map.Entry)i.next();
-            w.append(" (")
-                .append(getMapKey(e))
-                .append(" . ")
-                .append(getMapValue(e))
-                .append(")");
+            Value key = getMapKey(e);
+            Value val = getMapValue(e);
+            if (key != null) {
+                w.append('(')
+                    .append(key).append(" . ").append(val)
+                    .append(')');
+            }
         }
-        w.append('>');
+        w.append(")>");
     }
 
 }
