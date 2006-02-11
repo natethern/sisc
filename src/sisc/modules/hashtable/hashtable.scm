@@ -1,6 +1,8 @@
-(define *HASH-PROCS* `((,eq?    . ,hash-by-eq)
-                       (,eqv?   . ,hash-by-eqv)
-                       (,equal? . ,hash-by-equal)))
+(define *HASH-PROCS* `((,eq?         . ,hash-by-eq)
+                       (,eqv?        . ,hash-by-eqv)
+                       (,equal?      . ,hash-by-equal)
+                       (,string=?    . ,hash-by-string=)
+                       (,string-ci=? . ,hash-by-string-ci=)))
 
 ;;(make-hashtable [eq-proc [hash-proc]] [safe? [weak?]])
 (define (make-hashtable . rest)
