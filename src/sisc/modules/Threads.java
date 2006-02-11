@@ -446,7 +446,7 @@ public class Threads extends IndexedFixableProcedure {
         public static class Index extends IndexedLibraryAdapter {
 
             public Value construct(int id) {
-                return new Threads(id);
+                return new ComplexThreads(id);
             }
 
             public Index() {
