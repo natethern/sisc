@@ -168,7 +168,7 @@ public class Primitives extends IndexedFixableProcedure {
           case HT_REMOVE:
               switch (v.length) {
                 case 2: break;
-                case 3: def = v[2];
+                case 3: def = v[2]; break;
                 default:
                     throwArgSizeException();
               }
