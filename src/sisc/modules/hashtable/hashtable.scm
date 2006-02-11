@@ -22,7 +22,7 @@
             (if (not (null? rest))
                 (begin
                   (if (procedure? (car rest))
-                      (begin (set! hash-proc (car test))
+                      (begin (set! hash-proc (car rest))
                              (set! rest (cdr rest))))
                   (if (not (null? rest))
                       (begin
