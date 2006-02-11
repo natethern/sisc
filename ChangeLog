@@ -1,3 +1,7 @@
+2006-02-11  Matthias Radestock  <matthias@sorted.org>
+
+	* Added support for SRFI 69.
+
 2006-02-08  Matthias Radestock  <matthias@sorted.org>
 
 	* Added support for hash tables with arbitrary equivalence and
