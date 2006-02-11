@@ -407,7 +407,7 @@ r / 2<superscript>s</superscript>
         time based on the number of elements.
       </para>
       <sect3>
-        <title>Creation</title>
+        <title>Creation and Introspection</title>
         <para>
           Hash tables are a distinct data type. They can be created
           empty or filled with the contents of an association list. The
@@ -423,23 +423,44 @@ r / 2<superscript>s</superscript>
               <type>hashtable</type>
               <methodname>make-hashtable</methodname>
               <methodparam choice="opt">
-                <parameter>eq?/eqv?/equal?</parameter>
+                <parameter>equivalence-predicate</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>hash-function</parameter>
               </methodparam>
               <methodparam choice="opt">
                 <parameter>thread-safe?</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>weak?</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
                 Creates a hash table. The first optional argument
                 supplies the equivalence test procedure that the
-                hashtable should use. It must be one of
-                <function>eq?</function>, <function>eqv?</function>,
-                or <function>equal?</function>. The default is
-                <function>eqv?</function>.
+                hashtable should use for comparison of keys. This must
+                be a function accepting two arguments and returning a
+                boolean. It defaults to
+                <function>equal?</function>.
               </para>
               <para>
-                The second optional argument determines whether
+                The second optional argument supplies the hash
+                function, which must accept one argument and return a
+                numeric value. For the equivalence predicates
+                <function>eq?</function>, <function>eqv?</function>,
+                <function>equal?</function>,
+                <function>string=?</function>,
+                <function>string-ci=?</function> it defaults to
+                <function>hash-by-eq</function>,
+                <function>hash-by-eqv</function>,
+                <function>hash-by-equal</function>,
+                <function>hash-by-string=</function>,
+                <function>hash-by-string-ci=?</function> respectively,
+                and <function>hash-by-equal</function> otherwise.
+              </para>
+              <para>
+                The third optional argument determines whether
                 operations on the hash table should be made
                 thread-safe. The default is &num;t. Thread
                 synchronization (see <xref linkend="Threads"/>) is
@@ -452,10 +473,69 @@ r / 2<superscript>s</superscript>
                 synchronization has unpredicatable results.
               </para>
               <para>
-                  The keys of hash tables using
-                  <function>equal?</function> must not be mutated.
+                The third optional argument determines whether the
+                keys in the hash table are held with weak references,
+                allowing them to be garbage collected, and
+                automatically removed from the hashtable when they are
+                not referenced from elsewhere. The default is &num;t.
               </para>
               <para>
+                For reasons of disambiguation, the hash function
+                argument can only be supplied if the preceeding
+                equivalence predicate was also supplied, and the
+                weakness argument can only be supplied if the
+                preceeding thread-safety argument was also supplied.
+              </para>
+              <para>
+                The equivalence and hash function must produce
+                stable results for the keys in a hash table.
+              </para>
+              <para>
+                The effects of invoking an escaping continuation
+                inside the equivalence predicate or hash function, or
+                invoking a continuation captured inside the
+                equivalence predicate or hash function after that
+                function has returned, are unspecified.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>alist-&gt;hashtable</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>hashtable</type>
+              <methodname>alist-&gt;hashtable</methodname>
+              <methodparam><parameter>alist</parameter></methodparam>
+              <methodparam choice="opt">
+                <parameter>equivalence-predicate</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>hash-function</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>thread-safe?</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>weak?</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a hashtable and initializes it with the keys
+                and values found in
+                <parameter>alist</parameter>. <parameter>alist</parameter>
+                must be a list of pairs, with the
+                <function>car</function> of each pair representing a
+                key and the <function>cdr</function> representing its
+                associated value. The optional arguments are the same
+                as for <function>make-hashtable</function>.
+              </para>
+              <para>
+                If there are multiple pairs which contain the same key
+                (with respect to chosen equivalence test) then the
+                resulting hash table will associate the key with the
+                value of the last such pair.
               </para>
             </blockquote>
           </para>
@@ -476,6 +556,71 @@ r / 2<superscript>s</superscript>
             </blockquote>
           </para>
           <para>
+            <indexterm><primary>hashtable/equivalence-function</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>procedure</type>
+              <methodname>hashtable/equivalence-function</methodname>
+              <methodparam><parameter>hashtable</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the equivalence predicate of
+                <parameter>hashtable</parameter>.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>hashtable/hash-function</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>procedure</type>
+              <methodname>hashtable/hash-function</methodname>
+              <methodparam><parameter>hashtable</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the hash function of
+                <parameter>hashtable</parameter>.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>hashtable/thread-safe?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>hashtable/thread-safe?</methodname>
+              <methodparam><parameter>hashtable</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns &num;t if <parameter>hashtable</parameter> is
+                thread safe, &num;f otherwise.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>hashtable/weak?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>hashtable/weka?</methodname>
+              <methodparam><parameter>hashtable</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns &num;t if the keys in
+                <parameter>hashtable</parameter> are held by weak
+                references, &num;f otherwise.
+              </para>
+            </blockquote>
+          </para>
+          <para>
             <indexterm><primary>hashtable/size</primary>
             </indexterm>
             &procedure;
@@ -488,40 +633,6 @@ r / 2<superscript>s</superscript>
               <para>
                 Returns the number of key/value pairs stored in
                 <parameter>hashtable</parameter>.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>alist-&gt;hashtable</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>hashtable</type>
-              <methodname>alist-&gt;hashtable</methodname>
-              <methodparam><parameter>alist</parameter></methodparam>
-              <methodparam choice="opt">
-                <parameter>eq?/eqv?/equal?</parameter>
-              </methodparam>
-              <methodparam choice="opt">
-                <parameter>thread-safe?</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Creates a hashtable and initializes it with the keys
-                and values found in
-                <parameter>alist</parameter>. <parameter>alist</parameter>
-                must be a list of pairs, with the
-                <function>car</function> of each pair representing a
-                key and the <function>cdr</function> representing its
-                associated value. The optional arguments are the same
-                as for <function>make-hashtable</function>.
-              </para>
-              <para>
-                If there are multiple pairs which contain the same key
-                (with respect to chosen equivalence test) then the
-                resulting hash table will associate the key with the
-                value of the last such pair.
               </para>
             </blockquote>
           </para>
@@ -548,7 +659,68 @@ r / 2<superscript>s</superscript>
         </blockquote>
       </sect3>
       <sect3>
-        <title>Access</title>
+        <title>Hash Functions</title>
+        <para>
+          Several hash functions that return results consistent with
+          common equivalence predicates are predefined.
+        </para>
+        <blockquote>
+          <para>
+            <indexterm><primary>hash-by-eq</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>number</type>
+              <methodname>hash-by-eq</methodname>
+              <methodparam><parameter>value</parameter></methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>hash-by-eqv</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>number</type>
+              <methodname>hash-by-eqv</methodname>
+              <methodparam><parameter>value</parameter></methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>hash-by-equal</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>number</type>
+              <methodname>hash-by-equal</methodname>
+              <methodparam><parameter>value</parameter></methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>hash-by-string=</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>number</type>
+              <methodname>hash-by-string=</methodname>
+              <methodparam><parameter>string</parameter></methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            <indexterm><primary>hash-by-string-ci=</primary></indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>number</type>
+              <methodname>hash-by-string-ci=</methodname>
+              <methodparam><parameter>string</parameter></methodparam>
+            </methodsynopsis>
+          </para>
+          <para>
+            These procedures return a hash code of their argument that
+            is consistent with <function>eq?</function>,
+            <function>eqv?</function>, <function>equal?</function>,
+            <function>string=?</function>,
+            <function>string-ci=?</function>, respectively.
+          </para>
+        </blockquote>
+      </sect3>
+      <sect3>
+        <title>Access and Modification</title>
         <para>
           All hash table access operations follow a similar
           pattern. They return the value that was associated with the
