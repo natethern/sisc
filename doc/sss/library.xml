@@ -415,7 +415,7 @@ r / 2<superscript>s</superscript>
           also supported.
         </para>
         <blockquote>
-          <para>
+          <para id="make-hashtable">
             <indexterm><primary>make-hashtable</primary>
             </indexterm>
             &procedure;
@@ -473,7 +473,7 @@ r / 2<superscript>s</superscript>
                 synchronization has unpredicatable results.
               </para>
               <para>
-                The third optional argument determines whether the
+                The fourth optional argument determines whether the
                 keys in the hash table are held with weak references,
                 allowing them to be garbage collected, and
                 automatically removed from the hashtable when they are
@@ -609,7 +609,7 @@ r / 2<superscript>s</superscript>
             &procedure;
             <methodsynopsis language="scheme">
               <type>&num;t/&num;f</type>
-              <methodname>hashtable/weka?</methodname>
+              <methodname>hashtable/weak?</methodname>
               <methodparam><parameter>hashtable</parameter></methodparam>
             </methodsynopsis>
             <blockquote>
@@ -811,6 +811,10 @@ r / 2<superscript>s</superscript>
                 results in more efficient execution but may cause
                 deadlocks if <parameter>thunk</parameter> is unsafe.
                 See also <xref linkend="func-mutex-synchronize-unsafe"/>.
+              </para>
+              <para>
+                When <parameter>hashtable</parameter> is
+                thread-safe this operation is atomic.
               </para>
             </blockquote>
           </para>
@@ -1616,6 +1620,131 @@ com/foo/bar/baz/baz3.scm
           one can use the <function>require-extension</function>
           mechanism (see <xref linkend="SRFI55"/>).
         </para>
+      </sect3>
+      <sect3>
+        <title>SRFI Extensions</title>
+        <para>
+          Some SRFIs have built-in extension points that Scheme
+          implementations can use to augment a SRFI's
+          functionality. It is also the case that some SRFIs would
+          benefit from slightly extended APIs.
+        </para>
+        <para>
+          This section documents the SRFI extensions implemented by
+          &SISC;.
+        </para>
+        <sect4>
+          <title>SRFI 69 (Basic hash tables)</title>
+          <para>
+            The <function>make-hash-table</function> function takes
+            two additional optional arguments:
+            <parameter>thread-safe?</parameter> and
+            <parameter>weak?</parameter>. See <xref
+              linkend="make-hashtable"/> for details.
+          </para>
+          <para>
+            The basic hash table API is extended in a separate
+            module:
+            <blockquote>
+              <para>
+                &requires; 
+                <emphasis role="bold">
+                  (import <emphasis>srfi-69-ext</emphasis>)
+                </emphasis>
+              </para>
+              <para>
+                <indexterm><primary>hash-table-thread-safe?</primary>
+                </indexterm>
+                &procedure;
+                <methodsynopsis language="scheme">
+                  <type>&num;t/&num;f</type>
+                  <methodname>hash-table-thread-safe?</methodname>
+                  <methodparam><parameter>hashtable</parameter></methodparam>
+                </methodsynopsis>
+                <blockquote>
+                  <para>
+                    Returns &num;t if <parameter>hashtable</parameter> is
+                    thread safe, &num;f otherwise.
+                  </para>
+                </blockquote>
+              </para>
+              <para>
+                <indexterm><primary>hash-table-weak?</primary>
+                </indexterm>
+                &procedure;
+                <methodsynopsis language="scheme">
+                  <type>&num;t/&num;f</type>
+                  <methodname>hash-table-weak?</methodname>
+                  <methodparam><parameter>hashtable</parameter></methodparam>
+                </methodsynopsis>
+                <blockquote>
+                  <para>
+                    Returns &num;t if the keys in
+                    <parameter>hashtable</parameter> are held by weak
+                    references, &num;f otherwise.
+                  </para>
+                </blockquote>
+              </para>
+              <para>    
+                <indexterm><primary>hash-table-ref!</primary>
+                </indexterm>
+                &procedure;
+                <methodsynopsis language="scheme">
+                  <type>value</type>
+                  <methodname>hash-table-ref!</methodname>
+                  <methodparam><parameter>hashtable</parameter></methodparam>
+                  <methodparam><parameter>key</parameter></methodparam>
+                  <methodparam><parameter>thunk</parameter></methodparam>
+                </methodsynopsis>
+                <blockquote>
+                  <para>
+                    Returns the value associated with
+                    <parameter>key</parameter> in
+                    <parameter>hashtable</parameter>. If
+                    <parameter>key</parameter> has no association then
+                    <parameter>thunk</parameter> is called and the
+                    result is associated with
+                    <parameter>key</parameter> in
+                    <parameter>hashtable</parameter> and also
+                    returned.
+                  </para>
+                  <para>
+                    When <parameter>hashtable</parameter> is
+                    thread-safe this operation is atomic.
+                  </para>
+                </blockquote>
+              </para>
+              <para>    
+                <indexterm><primary>hash-table-ref!/default</primary>
+                </indexterm>
+                &procedure;
+                <methodsynopsis language="scheme">
+                  <type>value</type>
+                  <methodname>hash-table-ref!</methodname>
+                  <methodparam><parameter>hashtable</parameter></methodparam>
+                  <methodparam><parameter>key</parameter></methodparam>
+                  <methodparam><parameter>default</parameter></methodparam>
+                </methodsynopsis>
+                <blockquote>
+                  <para>
+                    Returns the value associated with
+                    <parameter>key</parameter> in
+                    <parameter>hashtable</parameter>. If
+                    <parameter>key</parameter> has no association then
+                    <parameter>default</parameter> is associated with
+                    <parameter>key</parameter> in
+                    <parameter>hashtable</parameter> and also
+                    returned.
+                  </para>
+                  <para>
+                    When <parameter>hashtable</parameter> is
+                    thread-safe this operation is atomic.
+                  </para>
+                </blockquote>
+              </para>
+            </blockquote>
+          </para>
+        </sect4>
       </sect3>
     </sect2>
     <sect2>
