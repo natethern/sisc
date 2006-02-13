@@ -1934,6 +1934,17 @@ com/foo/bar/baz/baz3.scm
               <parameter>target-file</parameter>, suitable for
               loading.
             </para>
+            <para>
+              As a side effect, the micro-expressions are also
+              evaluated, i.e. in effect
+              <function>compile-file</function> compiles <emphasis>and
+                evaluates</emphasis> the
+              <parameter>source-file</parameter>. The latter is
+              necessary because the compilation of an expression may
+              depend on the results of evaluating a previous
+              expression, e.g. as is typically the case for libraries
+              that depend on other libraries.
+            </para>
           </blockquote>
         </para>
       </blockquote>
