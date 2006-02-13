@@ -11,7 +11,7 @@ import sisc.data.*;
 /**
  * Scheme functions for manipulating files and directories.
  */
-public class FileManipulation extends IndexedProcedure {
+public class FileManipulation extends IndexedFixableProcedure {
 
     protected static final int DIRECTORYQ = 1,
         FILEQ = 2,
@@ -68,64 +68,61 @@ public class FileManipulation extends IndexedProcedure {
         return new File(path);
     }
 
-    public Value doApply(Interpreter f) throws ContinuationException {
-        switch (f.vlr.length) {
-        case 1:
-            switch(id) {
-            case DIRECTORYQ:
-                return truth(fileHandle(f.vlr[0]).isDirectory());
-            case FILEQ:
-                return truth(fileHandle(f.vlr[0]).isFile());
-            case HIDDENQ:
-                return truth(fileHandle(f.vlr[0]).isHidden());
-            case READABLE:
-                return truth(fileHandle(f.vlr[0]).canRead());
-            case WRITEABLE:
-                return truth(fileHandle(f.vlr[0]).canWrite());
-            case DIRLIST:
-                Pair p=EMPTYLIST;
-                String[] contents=fileHandle(f.vlr[0]).list();
-                if (contents == null)
-                    throwPrimException(liMessage(IO.IOB, "nosuchdirectory",
-                                                 string(f.vlr[0])));
-                for (int i=contents.length-1; i>=0; i--) 
-                    p=new Pair(new SchemeString(contents[i]), p);
-                return p;
-            case LENGTH:
-                return Quantity.valueOf(fileHandle(f.vlr[0]).length());
-            case LASTMODIFIED:
-                return Quantity.valueOf(fileHandle(f.vlr[0]).lastModified());
-            case SETREADONLY:
-                return truth(fileHandle(f.vlr[0]).setReadOnly());
-            case DELETE:
-                return truth(fileHandle(f.vlr[0]).delete());
-            case GETPARENTURL:
-                try {
-                    return new SchemeString(fileHandle(f.vlr[0])
-                                            .getParentFile().toURL().toString());
-                } catch (MalformedURLException m) {
-                    m.printStackTrace();
-                }
-                break;
-            case MAKEDIRECTORY:
-                return truth(fileHandle(f.vlr[0]).mkdir());
-            case MAKEDIRECTORIES:
-                return truth(fileHandle(f.vlr[0]).mkdirs());
-            default:
-                throwArgSizeException();
+    public Value apply(Value v1) throws ContinuationException {
+        switch(id) {
+        case DIRECTORYQ:
+            return truth(fileHandle(v1).isDirectory());
+        case FILEQ:
+            return truth(fileHandle(v1).isFile());
+        case HIDDENQ:
+            return truth(fileHandle(v1).isHidden());
+        case READABLE:
+            return truth(fileHandle(v1).canRead());
+        case WRITEABLE:
+            return truth(fileHandle(v1).canWrite());
+        case DIRLIST:
+            Pair p=EMPTYLIST;
+            String[] contents=fileHandle(v1).list();
+            if (contents == null)
+                throwPrimException(liMessage(IO.IOB, "nosuchdirectory",
+                                             string(v1)));
+            for (int i=contents.length-1; i>=0; i--) 
+                p=new Pair(new SchemeString(contents[i]), p);
+            return p;
+        case LENGTH:
+            return Quantity.valueOf(fileHandle(v1).length());
+        case LASTMODIFIED:
+            return Quantity.valueOf(fileHandle(v1).lastModified());
+        case SETREADONLY:
+            return truth(fileHandle(v1).setReadOnly());
+        case DELETE:
+            return truth(fileHandle(v1).delete());
+        case GETPARENTURL:
+            try {
+                return new SchemeString(fileHandle(v1)
+                                        .getParentFile().toURL().toString());
+            } catch (MalformedURLException m) {
+                m.printStackTrace();
             }
-        case 2:
-            switch(id) {
-            case SETLASTMODIFIED:
-                return truth(fileHandle(f.vlr[0]).setLastModified(num(f.vlr[1]).longValue()));
-            case RENAME:
-                return truth(fileHandle(f.vlr[0]).renameTo(fileHandle(f.vlr[1])));
-            default:
-                throwArgSizeException();
-            }
+            break;
+        case MAKEDIRECTORY:
+            return truth(fileHandle(v1).mkdir());
+        case MAKEDIRECTORIES:
+            return truth(fileHandle(v1).mkdirs());
         default:
             throwArgSizeException();
-
+        }
+        return VOID;
+    }
+    
+    public Value apply(Value v1, Value v2) throws ContinuationException {
+        switch(id) {
+        case SETLASTMODIFIED:
+            return truth(fileHandle(v1).setLastModified(num(v2).longValue()));
+        case RENAME:
+            return truth(fileHandle(v1).renameTo(fileHandle(v2)));
+        default:
+            throwArgSizeException();
         }
         return VOID;
     }

@@ -4,7 +4,7 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 
-public class Primitives extends IndexedProcedure {
+public class Primitives extends IndexedFixableProcedure {
 
     public static final Symbol SRECORDB =
         Symbol.intern("sisc.modules.record.Messages");
@@ -46,39 +46,39 @@ public class Primitives extends IndexedProcedure {
         return null;
     }
 
-    public Value doApply(Interpreter f) throws ContinuationException {
-        switch(f.vlr.length) {
-        case 0:
+    public Value apply(Value v1) throws ContinuationException {
+        switch (id) {
+        case RECORDQ:
+            return truth(v1 instanceof Record);
+        case RECORD_TYPE:
+            return record(v1).getType();
+        default:
             throwArgSizeException();
-        case 1:
-            switch (id) {
-            case RECORDQ:
-                return truth(f.vlr[0] instanceof Record);
-            case RECORD_TYPE:
-                return record(f.vlr[0]).getType();
-            default:
-                throwArgSizeException();
-            }
-        case 2:
-            switch (id) {
-            case RECORD_MAKE:
-                return new Record(f.vlr[0], num(f.vlr[1]).indexValue());
-            case RECORD_SET_TYPE:
-                record(f.vlr[0]).setType(f.vlr[1]);
-                return VOID;
-            case RECORD_REF:
-                return record(f.vlr[0]).getSlot(num(f.vlr[1]).indexValue());
-            default:
-                throwArgSizeException();
-            }
-        case 3:
-            switch (id) {
-            case RECORD_SET:
-                record(f.vlr[0]).setSlot(num(f.vlr[1]).indexValue(), f.vlr[2]);
-                return VOID;
-            default:
-                throwArgSizeException();
-            }
+        }
+        return VOID;
+    }
+    
+    
+    public Value apply(Value v1, Value v2) throws ContinuationException {
+        switch (id) {
+        case RECORD_MAKE:
+            return new Record(v1, num(v2).indexValue());
+        case RECORD_SET_TYPE:
+            record(v1).setType(v2);
+            return VOID;
+        case RECORD_REF:
+            return record(v1).getSlot(num(v2).indexValue());
+        default:
+            throwArgSizeException();
+        }
+        return VOID;
+    }
+    
+    public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+        switch (id) {
+        case RECORD_SET:
+            record(v1).setSlot(num(v2).indexValue(), v3);
+            return VOID;
         default:
             throwArgSizeException();
         }
