@@ -9,59 +9,53 @@ import sisc.nativefun.IndexedLibraryAdapter;
 public class Reflection extends Util {
 
     protected static final int
-    //NEXT = 47
+    //NEXT = 41
         JAVA_WRAP = 1,
         JAVA_UNWRAP = 2,
-        JAVA_CLASS = 3,
-        JAVA_SYNC = 4,
 
-        JAVA_CONSTRUCTORS = 5,
-        JAVA_METHODS = 6,
-        JAVA_FIELDS = 7,
-        JAVA_CLASSES = 8,
+        JAVA_CONSTRUCTORS = 3,
+        JAVA_METHODS = 4,
+        JAVA_FIELDS = 5,
+        JAVA_CLASSES = 6,
 
-        JAVA_INTERFACES = 9,
-        JAVA_SUPERCLASS = 10,
-        JAVA_COMPONENT_TYPE = 11,
-        JAVA_INSTANCEQ = 12,
-        JAVA_ASSIGNABLEQ = 13,
+        JAVA_INTERFACES = 7,
+        JAVA_SUPERCLASS = 8,
+        JAVA_COMPONENT_TYPE = 9,
+        JAVA_INSTANCEQ = 10,
+        JAVA_ASSIGNABLEQ = 11,
 
-        JAVA_NAME = 14,
-        JAVA_MODIFIERS = 15,
-        JAVA_DECLARING_CLASS = 16,
-        JAVA_EXCEPTION_TYPES = 17,
-        JAVA_PARAMETER_TYPES = 18,
-        JAVA_RETURN_TYPE = 19,
-        JAVA_FIELD_TYPE = 20,
+        JAVA_NAME = 12,
+        JAVA_MODIFIERS = 13,
+        JAVA_DECLARING_CLASS = 14,
+        JAVA_EXCEPTION_TYPES = 15,
+        JAVA_PARAMETER_TYPES = 16,
+        JAVA_RETURN_TYPE = 17,
+        JAVA_FIELD_TYPE = 18,
 
-        JAVA_OBJECTQ = 21,
-        JAVA_CLASSQ = 22,
-        JAVA_FIELDQ = 23,
-        JAVA_METHODQ = 24,
-        JAVA_CONSTRUCTORQ = 25,
-        JAVA_INTERFACEQ = 26,
-        JAVA_PRIMITIVEQ = 46,
-        JAVA_ARRAYQ = 27,
-        JAVA_ARRAY_CLASSQ = 28,
-        JAVA_NULLQ = 29,
+        JAVA_OBJECTQ = 19,
+        JAVA_CLASSQ = 20,
+        JAVA_FIELDQ = 21,
+        JAVA_METHODQ = 22,
+        JAVA_CONSTRUCTORQ = 23,
+        JAVA_INTERFACEQ = 24,
+        JAVA_PRIMITIVEQ = 25,
+        JAVA_ARRAYQ = 26,
+        JAVA_ARRAY_CLASSQ = 27,
+        JAVA_NULLQ = 28,
 
-        JAVA_CLASS_OF = 30,
-        JAVA_ARRAY_CLASS = 31,
-        JAVA_ARRAY_NEW = 32,
-        JAVA_INV_HANDLER = 33,
-        JAVA_PROXY_CLASS = 34,
-        JAVA_NULL = 35,
-        JAVA_MANGLE_FIELD_NAME = 36,
-        JAVA_MANGLE_METHOD_NAME = 37,
-        JAVA_MANGLE_CLASS_NAME = 38,
+        JAVA_CLASS_OF = 29,
+        JAVA_ARRAY_CLASS = 30,
+        JAVA_ARRAY_NEW = 31,
+        JAVA_NULL = 32,
+        JAVA_MANGLE_FIELD_NAME = 33,
+        JAVA_MANGLE_METHOD_NAME = 34,
+        JAVA_MANGLE_CLASS_NAME = 35,
 
-        JAVA_INVOKE_CONSTRUCTOR = 39,
-        JAVA_INVOKE_METHOD = 40,
-        JAVA_FIELD_REF = 41,
-        JAVA_FIELD_SET = 42,
-        JAVA_ARRAY_REF = 43,
-        JAVA_ARRAY_SET = 44,
-        JAVA_ARRAY_LENGTH = 45;
+        JAVA_FIELD_REF = 36,
+        JAVA_FIELD_SET = 37,
+        JAVA_ARRAY_REF = 38,
+        JAVA_ARRAY_SET = 39,
+        JAVA_ARRAY_LENGTH = 40;
 
     public static class Index extends IndexedLibraryAdapter {
 
@@ -72,8 +66,6 @@ public class Reflection extends Util {
         public Index() {
             define("java/wrap", JAVA_WRAP);
             define("java/unwrap", JAVA_UNWRAP);
-            define("java/class", JAVA_CLASS);
-            define("java/synchronized", JAVA_SYNC);
 
             define("java/constructors", JAVA_CONSTRUCTORS);
             define("java/methods", JAVA_METHODS);
@@ -108,15 +100,11 @@ public class Reflection extends Util {
             define("java/class-of", JAVA_CLASS_OF);
             define("java/array-class", JAVA_ARRAY_CLASS);
             define("java/array-new", JAVA_ARRAY_NEW);
-            define("java/invocation-handler", JAVA_INV_HANDLER);
-            define("java/proxy-class", JAVA_PROXY_CLASS);
             define("java/null", JAVA_NULL);
             define("java/mangle-field-name", JAVA_MANGLE_FIELD_NAME);
             define("java/mangle-method-name", JAVA_MANGLE_METHOD_NAME);
             define("java/mangle-class-name", JAVA_MANGLE_CLASS_NAME);
 
-            define("java/invoke-constructor", JAVA_INVOKE_CONSTRUCTOR);
-            define("java/invoke-method", JAVA_INVOKE_METHOD);
             define("java/field-ref", JAVA_FIELD_REF);
             define("java/field-set!", JAVA_FIELD_SET);
             define("java/array-ref", JAVA_ARRAY_REF);
@@ -125,7 +113,7 @@ public class Reflection extends Util {
         }
     }
 
-    private static String typeString(Object o) {
+    static String typeString(Object o) {
         return (o == null) ? "null" : Util.nameType(o.getClass());
     }
 
@@ -133,7 +121,7 @@ public class Reflection extends Util {
         return (o == null) ? "null" : Util.nameType(o);
     }
 
-    private static String typesString(Class[] args) {
+    static String typesString(Class[] args) {
         StringBuffer res = new StringBuffer();
         for (int i=0; i<args.length; i++) {
             res.append(typeString(args[i]));
@@ -142,58 +130,6 @@ public class Reflection extends Util {
         return res.toString();
     }
             
-    private static String typesString(Object[] args) {
-        StringBuffer res = new StringBuffer();
-        for (int i=0; i<args.length; i++) {
-            res.append(typeString(args[i]));
-            if (i<args.length-1) res.append(", ");
-        }
-        return res.toString();
-    }
-            
-    private static Object invokeConstructor(Constructor c, Object[] args)
-        throws InvocationTargetException {
-
-        try {
-            return c.newInstance(args);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(liMessage(Util.S2JB, "constructorabstract",
-                                                 c.toString(),
-                                                 Util.nameType(c.getDeclaringClass())));
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(liMessage(Util.S2JB, "illegalconstructoraccess", 
-                                                 c.toString(), 
-                                                 Util.nameType(c.getDeclaringClass())));
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(liMessage(Util.S2JB, "illegalconstructorargument",
-                                                 c.toString(), 
-                                                 Util.nameType(c.getDeclaringClass()),
-                                                 typesString(args)));
-        }
-    }
-
-    private static Object invokeMethod(Method m, Object o, Object[] args)
-        throws InvocationTargetException {
-
-        try {
-            return m.invoke(o, args);
-        } catch (NullPointerException e) {
-            throw new RuntimeException(liMessage(Util.S2JB, "illegalmethodnull", 
-                                                 m.toString(),
-                                                 Util.nameType(m.getDeclaringClass())));
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(liMessage(Util.S2JB, "illegalmethodaccess", 
-                                                 m.toString(), 
-                                                 Util.nameType(m.getDeclaringClass())));
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(liMessage(Util.S2JB, "illegalmethodargument", 
-                                                 m.toString(), 
-                                                 Util.nameType(m.getDeclaringClass()),
-                                                 typeString(o),
-                                                 typesString(args)));
-        }
-    }
-
     private static Object getField(Field f, Object o) {
         try {
             return f.get(o);
@@ -263,256 +199,210 @@ public class Reflection extends Util {
     
     public Reflection() {}
     
-    public Value doApply(Interpreter f) throws ContinuationException {
-        SIZESWITCH: switch(f.vlr.length) {
-        case 0:
-            switch(id) {
-            case JAVA_NULL:
-                return makeJObj(null, Object.class);
-            default: break SIZESWITCH;
-            }
-        case 1:
-            switch(id) {
-            case JAVA_WRAP:
-                return makeJObj(f.vlr[0], Value.class);
-            case JAVA_UNWRAP:
-                return (Value)jobj(f.vlr[0]);
-            case JAVA_CLASS:
-                String cname = symval(f.vlr[0]);
-                Class c = resolveType(cname, f.dynenv.getClassLoader());
-                if (c == null)
-                    throw new RuntimeException(liMessage(S2JB, "classnotfound", cname));
-                else return makeJObj(c, Class.class);
-            case JAVA_CONSTRUCTORS:
-                try {
-                    return objectsToList(jclass(f.vlr[0]).getDeclaredConstructors());
-                } catch (SecurityException e) { return FALSE; }
-            case JAVA_METHODS:
-                try {
-                    return objectsToList(jclass(f.vlr[0]).getDeclaredMethods());
-                } catch (SecurityException e) { return FALSE; }
-            case JAVA_FIELDS:
-                try {
-                    return objectsToList(jclass(f.vlr[0]).getDeclaredFields());
-                } catch (SecurityException e) { return FALSE; }
-            case JAVA_CLASSES:
-                try {
-                    return objectsToList(jclass(f.vlr[0]).getDeclaredClasses());
-                } catch (SecurityException e) { return FALSE; }
-            case JAVA_INTERFACES:
-                return objectsToList(jclass(f.vlr[0]).getInterfaces());
-            case JAVA_SUPERCLASS:
-                return makeJObj(jclass(f.vlr[0]).getSuperclass(), Class.class);
-            case JAVA_COMPONENT_TYPE:
-                return makeJObj(jclass(f.vlr[0]).getComponentType(), Class.class);
-            case JAVA_NAME:
-                switch (jtype(f.vlr[0])) {
-                case JavaObject.JCLASS:
-                    return Symbol.intern(Util.nameType(jclass(f.vlr[0])));
-                default:
-                    return Symbol.intern(((Member)jobj(f.vlr[0])).getName());
-                }
-            case JAVA_MODIFIERS:
-                int mods = 0;
-                switch (jtype(f.vlr[0])) {
-                case JavaObject.JCLASS:
-                    mods = jclass(f.vlr[0]).getModifiers();
-                    break;
-                default:
-                    mods = ((Member)jobj(f.vlr[0])).getModifiers();
-                    break;
-                }
-                String smods = Modifier.toString(mods);
-                Pair p = EMPTYLIST;
-                if (smods.length() == 0) return p;
-                for(int idx = smods.length(), nidx=0; nidx>=0; idx = nidx) {
-                    nidx = smods.lastIndexOf(' ', idx-1);
-                    p = new Pair(Symbol.intern(smods.substring(nidx+1, idx)), p);
-                }
-                return p;
-            case JAVA_DECLARING_CLASS:
-                switch (jtype(f.vlr[0])) {
-                case JavaObject.JCLASS:
-                    return makeJObj(jclass(f.vlr[0]).getDeclaringClass(), Class.class);
-                default:
-                    return makeJObj(((Member)jobj(f.vlr[0])).getDeclaringClass(), Class.class);
-                }
-            case JAVA_EXCEPTION_TYPES:
-                switch (jtype(f.vlr[0])) {
-                case JavaObject.JCONSTR:
-                    return objectsToList(jconstr(f.vlr[0]).getExceptionTypes());
-                case JavaObject.JMETHOD:
-                default:
-                    return objectsToList(jmethod(f.vlr[0]).getExceptionTypes());
-                }
-            case JAVA_PARAMETER_TYPES:
-                switch (jtype(f.vlr[0])) {
-                case JavaObject.JCONSTR:
-                    return objectsToList(jconstr(f.vlr[0]).getParameterTypes());
-                case JavaObject.JMETHOD:
-                default:
-                    return objectsToList(jmethod(f.vlr[0]).getParameterTypes());
-                }
-            case JAVA_RETURN_TYPE:
-                switch (jtype(f.vlr[0])) {
-                case JavaObject.JCONSTR:
-                    return makeJObj(jclass(f.vlr[0]).getDeclaringClass(), Class.class);
-                case JavaObject.JMETHOD:
-                default:
-                    return makeJObj(jmethod(f.vlr[0]).getReturnType(), Class.class);
-                }
-            case JAVA_FIELD_TYPE:
-                return makeJObj(jfield(f.vlr[0]).getType(), Class.class);
-            case JAVA_OBJECTQ:
-                return truth(f.vlr[0] instanceof JavaObject);
-            case JAVA_CLASSQ:
-                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCLASS);
-            case JAVA_FIELDQ:
-                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JFIELD);
-            case JAVA_METHODQ:
-                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JMETHOD);
-            case JAVA_CONSTRUCTORQ:
-                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCONSTR);
-            case JAVA_ARRAYQ:
-                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JARRAY);
-            case JAVA_NULLQ:
-                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JNULL);
-            case JAVA_INTERFACEQ:
-                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCLASS && jclass(f.vlr[0]).isInterface());
-            case JAVA_PRIMITIVEQ:
-                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCLASS && jclass(f.vlr[0]).isPrimitive());
-            case JAVA_ARRAY_CLASSQ:
-                return truth(f.vlr[0] instanceof JavaObject && jtype(f.vlr[0]) == JavaObject.JCLASS && jclass(f.vlr[0]).isArray());
-            case JAVA_CLASS_OF:
-                return makeJObj(sjobj(f.vlr[0]).classOf(), Class.class);
-            case JAVA_INV_HANDLER:
-                return makeJObj(new SchemeInvocation(f.dynenv.copy(), proc(f.vlr[0])), SchemeInvocation.class);
-            case JAVA_NULL:
-                return makeJObj(null, jclass(f.vlr[0]));
-            case JAVA_MANGLE_FIELD_NAME:
-                return Symbol.intern(mangleFieldName(symval(f.vlr[0])));
-            case JAVA_MANGLE_METHOD_NAME:
-                return Symbol.intern(mangleMethodName(symval(f.vlr[0])));
-            case JAVA_MANGLE_CLASS_NAME:
-                return Symbol.intern(mangleClassName(symval(f.vlr[0])));
-            case JAVA_ARRAY_LENGTH:
-                Object ar = jobj(f.vlr[0]);
-                try {
-                    return Quantity.valueOf(Array.getLength(ar));
-                } catch (IllegalArgumentException e) {
-                    throw new RuntimeException(liMessage(Util.S2JB, "notarray", typeString(ar)));
-                }
-            default: break SIZESWITCH;
-            }
-        case 2:
-            switch(id) {
-            case JAVA_SYNC:
-                synchronized(jobj(f.vlr[0])) {
-                    Interpreter i=Context.enter(f);
-                    try {
-                        return i.eval(proc(f.vlr[1]), ZV);
-                    } catch (SchemeException se) {
-                        throwNestedPrimException(se);
-                    } finally {
-                        Context.exit();
-                    }
-                }
-                return VOID;
-            case JAVA_INSTANCEQ:
-                return truth(((f.vlr[1] instanceof JavaPrimitive) ?
-                              fixClass(jclass(f.vlr[0])) :
-                              jclass(f.vlr[0])).isInstance(jobj(f.vlr[1])));
-            case JAVA_ASSIGNABLEQ:
-                Class c1 = jclass(f.vlr[1]);
-                Class c1Fixed = fixClass(c1);
-                return truth(((c1 != c1Fixed) ?
-                              fixClass(jclass(f.vlr[0])) :
-                              jclass(f.vlr[0])).isAssignableFrom(c1Fixed));
-            case JAVA_ARRAY_CLASS:
-                try {
-                    return makeJObj(makeArrayClass(jclass(f.vlr[0]), num(f.vlr[1]).indexValue()), Class.class);
-                } catch (NullPointerException e) {
-                    throw new RuntimeException(liMessage(S2JB, "arraytypenull"));
-                } catch (IllegalArgumentException e) {
-                    throw new RuntimeException(liMessage(S2JB, "arraytypevoid"));
-                } catch (NegativeArraySizeException e) {
-                    throw new RuntimeException(liMessage(S2JB, "arraynegative", f.vlr[1].toString()));
-                }
-            case JAVA_ARRAY_NEW:
-                Value dims = f.vlr[1];
-                Value[] dimensions;
-                if (dims instanceof Pair) {
-                    dimensions = pairToValues(pair(dims));
-                } else if (dims instanceof SchemeVector) {
-                    dimensions = vec(dims).vals;
-                } else {
-                    dimensions = new Value[]{dims};
-                }
-                int[] intDims = new int[dimensions.length];
-                for (int i=0; i< dimensions.length; i++) {
-                    intDims[i] = num(dimensions[i]).indexValue();
-                }
-                Class componentType = jclass(f.vlr[0]);
-                try {
-                    return makeJObj(Array.newInstance(componentType, intDims),
-                                    makeArrayClass(componentType, intDims.length));
-                } catch (NullPointerException e) {
-                    throw new RuntimeException(liMessage(S2JB, "arraytypenull"));
-                } catch (IllegalArgumentException e) {
-                    throw new RuntimeException(liMessage(S2JB, "arraytypevoid"));
-                } catch (NegativeArraySizeException e) {
-                    throw new RuntimeException(liMessage(S2JB, "arraynegative", dims.toString()));
-                }
-            case JAVA_INVOKE_CONSTRUCTOR:
-                Constructor jc = jconstr(f.vlr[0]);
-                try {
-                    return Util.makeJObj(invokeConstructor(jc, pairToObjects(pair(f.vlr[1]))),
-                                         jc.getDeclaringClass());
-                } catch (InvocationTargetException e) {
-                    error(f, Util.makeJObj(e.getTargetException(), Throwable.class));
-                }
-            case JAVA_FIELD_REF:
-                Field jf = jfield(f.vlr[0]);
-                return Util.makeJObj(getField(jf, jobj(f.vlr[1])), jf.getType());
-            case JAVA_ARRAY_REF:
-                Object ar = jobj(f.vlr[0]);
-                return Util.makeJObj(getArray(ar, num(f.vlr[1]).indexValue()), ar.getClass().getComponentType());
-            default: break SIZESWITCH;
-            }
-        case 3:
-            switch(id) {
-            case JAVA_INVOKE_METHOD:
-                Method jm = jmethod(f.vlr[0]);
-                try {
-                    return Util.makeJObj(invokeMethod(jm, jobj(f.vlr[1]), pairToObjects(pair(f.vlr[2]))),
-                                         jm.getReturnType());
-                } catch (InvocationTargetException e) {
-                    error(f, Util.makeJObj(e.getTargetException(), Throwable.class));
-                }
-            case JAVA_FIELD_SET:
-                setField(jfield(f.vlr[0]), jobj(f.vlr[1]), jobj(f.vlr[2]));
-                return VOID;
-            case JAVA_ARRAY_SET:
-                setArray(jobj(f.vlr[0]), num(f.vlr[1]).indexValue(), jobj(f.vlr[2]));
-                return VOID;
-            default: break SIZESWITCH;
-            }
-        }
+    public Value apply() throws ContinuationException {
         switch(id) {
-        case JAVA_PROXY_CLASS:
-            Class[] interfaces = new Class[f.vlr.length];
-            for (int i=0; i<f.vlr.length; i++) {
-                interfaces[i] = jclass(f.vlr[i]);
-            }
+        case JAVA_NULL:
+            return makeJObj(null, Object.class);
+        default: throwArgSizeException();
+        }
+        return VOID;
+    }
+    
+    public Value apply(Value v1) throws ContinuationException {
+        switch(id) {
+        case JAVA_WRAP:
+            return makeJObj(v1, Value.class);
+        case JAVA_UNWRAP:
+            return (Value)jobj(v1);
+        case JAVA_CONSTRUCTORS:
             try {
-                return makeJObj(Proxy.getProxyClass(f.dynenv.getClassLoader(), interfaces), Class.class);
-            } catch (IllegalArgumentException e) {
-                throw new RuntimeException(liMessage(Util.S2JB, "proxyinterfaceillegal", typesString(interfaces)));
-            } catch (NullPointerException e) {
-                throw new RuntimeException(liMessage(Util.S2JB, "proxyinterfacenull", typesString(interfaces)));
+                return objectsToList(jclass(v1).getDeclaredConstructors());
+            } catch (SecurityException e) { return FALSE; }
+        case JAVA_METHODS:
+            try {
+                return objectsToList(jclass(v1).getDeclaredMethods());
+            } catch (SecurityException e) { return FALSE; }
+        case JAVA_FIELDS:
+            try {
+                return objectsToList(jclass(v1).getDeclaredFields());
+            } catch (SecurityException e) { return FALSE; }
+        case JAVA_CLASSES:
+            try {
+                return objectsToList(jclass(v1).getDeclaredClasses());
+            } catch (SecurityException e) { return FALSE; }
+        case JAVA_INTERFACES:
+            return objectsToList(jclass(v1).getInterfaces());
+        case JAVA_SUPERCLASS:
+            return makeJObj(jclass(v1).getSuperclass(), Class.class);
+        case JAVA_COMPONENT_TYPE:
+            return makeJObj(jclass(v1).getComponentType(), Class.class);
+        case JAVA_NAME:
+            switch (jtype(v1)) {
+            case JavaObject.JCLASS:
+                return Symbol.intern(Util.nameType(jclass(v1)));
+            default:
+                return Symbol.intern(((Member)jobj(v1)).getName());
             }
-        default:
-            throwArgSizeException();
+        case JAVA_MODIFIERS:
+            int mods = 0;
+            switch (jtype(v1)) {
+            case JavaObject.JCLASS:
+                mods = jclass(v1).getModifiers();
+                break;
+            default:
+                mods = ((Member)jobj(v1)).getModifiers();
+                break;
+            }
+            String smods = Modifier.toString(mods);
+            Pair p = EMPTYLIST;
+            if (smods.length() == 0) return p;
+            for(int idx = smods.length(), nidx=0; nidx>=0; idx = nidx) {
+                nidx = smods.lastIndexOf(' ', idx-1);
+                p = new Pair(Symbol.intern(smods.substring(nidx+1, idx)), p);
+            }
+            return p;
+        case JAVA_DECLARING_CLASS:
+            switch (jtype(v1)) {
+            case JavaObject.JCLASS:
+                return makeJObj(jclass(v1).getDeclaringClass(), Class.class);
+            default:
+                return makeJObj(((Member)jobj(v1)).getDeclaringClass(), Class.class);
+            }
+        case JAVA_EXCEPTION_TYPES:
+            switch (jtype(v1)) {
+            case JavaObject.JCONSTR:
+                return objectsToList(jconstr(v1).getExceptionTypes());
+            case JavaObject.JMETHOD:
+            default:
+                return objectsToList(jmethod(v1).getExceptionTypes());
+            }
+        case JAVA_PARAMETER_TYPES:
+            switch (jtype(v1)) {
+            case JavaObject.JCONSTR:
+                return objectsToList(jconstr(v1).getParameterTypes());
+            case JavaObject.JMETHOD:
+            default:
+                return objectsToList(jmethod(v1).getParameterTypes());
+            }
+        case JAVA_RETURN_TYPE:
+            switch (jtype(v1)) {
+            case JavaObject.JCONSTR:
+                return makeJObj(jclass(v1).getDeclaringClass(), Class.class);
+            case JavaObject.JMETHOD:
+            default:
+                return makeJObj(jmethod(v1).getReturnType(), Class.class);
+            }
+        case JAVA_FIELD_TYPE:
+            return makeJObj(jfield(v1).getType(), Class.class);
+        case JAVA_OBJECTQ:
+            return truth(v1 instanceof JavaObject);
+        case JAVA_CLASSQ:
+            return truth(v1 instanceof JavaObject && jtype(v1) == JavaObject.JCLASS);
+        case JAVA_FIELDQ:
+            return truth(v1 instanceof JavaObject && jtype(v1) == JavaObject.JFIELD);
+        case JAVA_METHODQ:
+            return truth(v1 instanceof JavaObject && jtype(v1) == JavaObject.JMETHOD);
+        case JAVA_CONSTRUCTORQ:
+            return truth(v1 instanceof JavaObject && jtype(v1) == JavaObject.JCONSTR);
+        case JAVA_ARRAYQ:
+            return truth(v1 instanceof JavaObject && jtype(v1) == JavaObject.JARRAY);
+        case JAVA_NULLQ:
+            return truth(v1 instanceof JavaObject && jtype(v1) == JavaObject.JNULL);
+        case JAVA_INTERFACEQ:
+            return truth(v1 instanceof JavaObject && jtype(v1) == JavaObject.JCLASS && jclass(v1).isInterface());
+        case JAVA_PRIMITIVEQ:
+            return truth(v1 instanceof JavaObject && jtype(v1) == JavaObject.JCLASS && jclass(v1).isPrimitive());
+        case JAVA_ARRAY_CLASSQ:
+            return truth(v1 instanceof JavaObject && jtype(v1) == JavaObject.JCLASS && jclass(v1).isArray());
+        case JAVA_CLASS_OF:
+            return makeJObj(sjobj(v1).classOf(), Class.class);
+        case JAVA_NULL:
+            return makeJObj(null, jclass(v1));
+        case JAVA_MANGLE_FIELD_NAME:
+            return Symbol.intern(mangleFieldName(symval(v1)));
+        case JAVA_MANGLE_METHOD_NAME:
+            return Symbol.intern(mangleMethodName(symval(v1)));
+        case JAVA_MANGLE_CLASS_NAME:
+            return Symbol.intern(mangleClassName(symval(v1)));
+        case JAVA_ARRAY_LENGTH:
+            Object ar = jobj(v1);
+            try {
+                return Quantity.valueOf(Array.getLength(ar));
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException(liMessage(Util.S2JB, "notarray", typeString(ar)));
+            }
+        default: throwArgSizeException();
+        }
+        return VOID;
+    }
+    
+    public Value apply(Value v1, Value v2) throws ContinuationException {
+        switch(id) {
+        case JAVA_INSTANCEQ:
+            return truth(((v2 instanceof JavaPrimitive) ?
+                          fixClass(jclass(v1)) :
+                          jclass(v1)).isInstance(jobj(v2)));
+        case JAVA_ASSIGNABLEQ:
+            Class c1 = jclass(v2);
+            Class c1Fixed = fixClass(c1);
+            return truth(((c1 != c1Fixed) ?
+                          fixClass(jclass(v1)) :
+                          jclass(v1)).isAssignableFrom(c1Fixed));
+        case JAVA_ARRAY_CLASS:
+            try {
+                return makeJObj(makeArrayClass(jclass(v1), num(v2).indexValue()), Class.class);
+            } catch (NullPointerException e) {
+                throw new RuntimeException(liMessage(S2JB, "arraytypenull"));
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException(liMessage(S2JB, "arraytypevoid"));
+            } catch (NegativeArraySizeException e) {
+                throw new RuntimeException(liMessage(S2JB, "arraynegative", v2.toString()));
+            }
+        case JAVA_ARRAY_NEW:
+            Value dims = v2;
+            Value[] dimensions;
+            if (dims instanceof Pair) {
+                dimensions = pairToValues(pair(dims));
+            } else if (dims instanceof SchemeVector) {
+                dimensions = vec(dims).vals;
+            } else {
+                dimensions = new Value[]{dims};
+            }
+            int[] intDims = new int[dimensions.length];
+            for (int i=0; i< dimensions.length; i++) {
+                intDims[i] = num(dimensions[i]).indexValue();
+            }
+            Class componentType = jclass(v1);
+            try {
+                return makeJObj(Array.newInstance(componentType, intDims),
+                                makeArrayClass(componentType, intDims.length));
+            } catch (NullPointerException e) {
+                throw new RuntimeException(liMessage(S2JB, "arraytypenull"));
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException(liMessage(S2JB, "arraytypevoid"));
+            } catch (NegativeArraySizeException e) {
+                throw new RuntimeException(liMessage(S2JB, "arraynegative", dims.toString()));
+            }
+        case JAVA_FIELD_REF:
+            Field jf = jfield(v1);
+            return Util.makeJObj(getField(jf, jobj(v2)), jf.getType());
+        case JAVA_ARRAY_REF:
+            Object ar = jobj(v1);
+            return Util.makeJObj(getArray(ar, num(v2).indexValue()), ar.getClass().getComponentType());
+        default: throwArgSizeException();
+        }
+        return VOID;
+    }
+
+    public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+        switch(id) {
+        case JAVA_FIELD_SET:
+            setField(jfield(v1), jobj(v2), jobj(v3));
+            return VOID;
+        case JAVA_ARRAY_SET:
+            setArray(jobj(v1), num(v2).indexValue(), jobj(v3));
+            return VOID;
+        default: throwArgSizeException();
         }
         return VOID;
     }

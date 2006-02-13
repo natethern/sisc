@@ -60,117 +60,112 @@ public class Conversion extends Util {
     
     public Conversion() {} 
    
-    public Value doApply(Interpreter f) throws ContinuationException {
-        switch(f.vlr.length) {
-        case 0:
-            throwArgSizeException();
-        case 1:
-            switch(id) {
-            case CONV_JBOOLEAN:
-                return makeJObj((truth(f.vlr[0]) ? Boolean.TRUE : Boolean.FALSE), Boolean.TYPE);
-            case CONV_JCHAR:
-                return makeJObj(new Character(character(f.vlr[0])), Character.TYPE);
-            case CONV_JBYTE:
-                return makeJObj(new Byte((byte)num(f.vlr[0]).intValue()), Byte.TYPE);
-            case CONV_JSHORT:
-                return makeJObj(new Short((short)num(f.vlr[0]).intValue()), Short.TYPE);
-            case CONV_JINT:
-                return makeJObj(new Integer(num(f.vlr[0]).intValue()), Integer.TYPE);
-            case CONV_JLONG:
-                return makeJObj(new Long(num(f.vlr[0]).longValue()), Long.TYPE);
-            case CONV_JFLOAT:
-                return makeJObj(new Float((float)num(f.vlr[0]).doubleValue()), Float.TYPE);
-            case CONV_JDOUBLE:
-                return makeJObj(new Double(num(f.vlr[0]).doubleValue()), Double.TYPE);
-            case CONV_JSTRING:
-                Value v = f.vlr[0];
-                if (v instanceof Symbol)
-                    return makeJObj(symval(v));
-                else if (v instanceof SchemeString)
-                    return makeJObj(string(v));
-                else
-                    typeError(S2JB, "stringorsymbol", v);
-            case CONV_BOOLEAN:
-                return truth(((Boolean)jobj(f.vlr[0])).booleanValue());
-            case CONV_CHARACTER:
-                return new SchemeCharacter(((Character)jobj(f.vlr[0])).charValue());
-            case CONV_NUMBER:
-                Object o = jobj(f.vlr[0]);
-                if (o instanceof Byte ||
-                    o instanceof Short ||
-                    o instanceof Integer ||
-                    o instanceof Long)
-                    return Quantity.valueOf(((Number)o).longValue());
-                else if (o instanceof Float ||
-                         o instanceof Double)
-                    return Quantity.valueOf(((Number)o).doubleValue());
-                else if (o instanceof java.math.BigInteger)
-                    return Quantity.valueOf((java.math.BigInteger)o);
-                else if (o instanceof java.math.BigDecimal)
-                    return Quantity.valueOf((java.math.BigDecimal)o);
-                else
-                    typeError(S2JB, "jnumber", f.vlr[0]);
-            case CONV_STRING:
-                o = jobj(f.vlr[0]);
-                if (o instanceof String)
-                    return new SchemeString((String)o);
-                else
-                    return new SchemeString(o.toString());
-            case CONV_SYMBOL:
-                o = jobj(f.vlr[0]);
-                if (o instanceof String)
-                    return Symbol.intern((String)o);
-                else
-                    return Symbol.intern(o.toString());
-            case CONV_VECTOR:
-                o = jobj(f.vlr[0]);
-                if (o.getClass().isArray()) {
-                    Class componentType = o.getClass().getComponentType();
-                    Value[] vals = new Value[Array.getLength(o)];
-                    for (int i=0; i < vals.length; i++) {
-                        vals[i] = makeJObj(Array.get(o, i), componentType);
-                    }
-                    return new SchemeVector(vals);
-                } else
-                    typeError(S2JB, "jarray", f.vlr[0]);
-            case CONV_LIST:
-                o = jobj(f.vlr[0]);
-                if (o.getClass().isArray()) {
-                    Class componentType = o.getClass().getComponentType();
-                    Pair p = EMPTYLIST;
-                    for (int i=Array.getLength(o)-1; i>=0; i--) {
-                        p = new Pair(makeJObj(Array.get(o, i), componentType), p);
-                    }
-                    return p;
-                } else
-                    typeError(S2JB, "jarray", f.vlr[0]);
-            default:
-                throwArgSizeException();
-            }
-        case 2:
-            switch(id) {
-            case CONV_JARRAY:
-                Value o = f.vlr[0];
-                Value[] vals = null;
-                if (o instanceof Pair)
-                    vals = pairToValues(pair(o));
-                else if (o instanceof SchemeVector)
-                    vals = vec(o).vals;
-                else {
-                    typeError(S2JB, "listorvector", o);
+    public Value apply(Value v1) throws ContinuationException {
+        switch(id) {
+        case CONV_JBOOLEAN:
+            return makeJObj((truth(v1) ? Boolean.TRUE : Boolean.FALSE), Boolean.TYPE);
+        case CONV_JCHAR:
+            return makeJObj(new Character(character(v1)), Character.TYPE);
+        case CONV_JBYTE:
+            return makeJObj(new Byte((byte)num(v1).intValue()), Byte.TYPE);
+        case CONV_JSHORT:
+            return makeJObj(new Short((short)num(v1).intValue()), Short.TYPE);
+        case CONV_JINT:
+            return makeJObj(new Integer(num(v1).intValue()), Integer.TYPE);
+        case CONV_JLONG:
+            return makeJObj(new Long(num(v1).longValue()), Long.TYPE);
+        case CONV_JFLOAT:
+            return makeJObj(new Float((float)num(v1).doubleValue()), Float.TYPE);
+        case CONV_JDOUBLE:
+            return makeJObj(new Double(num(v1).doubleValue()), Double.TYPE);
+        case CONV_JSTRING:
+            Value v = v1;
+            if (v instanceof Symbol)
+                return makeJObj(symval(v));
+            else if (v instanceof SchemeString)
+                return makeJObj(string(v));
+            else
+                typeError(S2JB, "stringorsymbol", v);
+        case CONV_BOOLEAN:
+            return truth(((Boolean)jobj(v1)).booleanValue());
+        case CONV_CHARACTER:
+            return new SchemeCharacter(((Character)jobj(v1)).charValue());
+        case CONV_NUMBER:
+            Object o = jobj(v1);
+            if (o instanceof Byte ||
+                o instanceof Short ||
+                o instanceof Integer ||
+                o instanceof Long)
+                return Quantity.valueOf(((Number)o).longValue());
+            else if (o instanceof Float ||
+                     o instanceof Double)
+                return Quantity.valueOf(((Number)o).doubleValue());
+            else if (o instanceof java.math.BigInteger)
+                return Quantity.valueOf((java.math.BigInteger)o);
+            else if (o instanceof java.math.BigDecimal)
+                return Quantity.valueOf((java.math.BigDecimal)o);
+            else
+                typeError(S2JB, "jnumber", v1);
+        case CONV_STRING:
+            o = jobj(v1);
+            if (o instanceof String)
+                return new SchemeString((String)o);
+            else
+                return new SchemeString(o.toString());
+        case CONV_SYMBOL:
+            o = jobj(v1);
+            if (o instanceof String)
+                return Symbol.intern((String)o);
+            else
+                return Symbol.intern(o.toString());
+        case CONV_VECTOR:
+            o = jobj(v1);
+            if (o.getClass().isArray()) {
+                Class componentType = o.getClass().getComponentType();
+                Value[] vals = new Value[Array.getLength(o)];
+                for (int i=0; i < vals.length; i++) {
+                    vals[i] = makeJObj(Array.get(o, i), componentType);
                 }
-                Object res = Array.newInstance(jclass(f.vlr[1]), vals.length);
-                for (int i=0; i< vals.length; i++) {
-                    Array.set(res, i, jobj(vals[i]));
+                return new SchemeVector(vals);
+            } else
+                typeError(S2JB, "jarray", v1);
+        case CONV_LIST:
+            o = jobj(v1);
+            if (o.getClass().isArray()) {
+                Class componentType = o.getClass().getComponentType();
+                Pair p = EMPTYLIST;
+                for (int i=Array.getLength(o)-1; i>=0; i--) {
+                    p = new Pair(makeJObj(Array.get(o, i), componentType), p);
                 }
-                return makeJObj(res);
-            default:
-                throwArgSizeException();
-            }
+                return p;
+            } else
+                typeError(S2JB, "jarray", v1);
         default:
             throwArgSizeException();
         }
-
+        return VOID;
+    }
+    
+    public Value apply(Value v1, Value v2) throws ContinuationException {
+        switch(id) {
+        case CONV_JARRAY:
+            Value o = v1;
+            Value[] vals = null;
+            if (o instanceof Pair)
+                vals = pairToValues(pair(o));
+            else if (o instanceof SchemeVector)
+                vals = vec(o).vals;
+            else {
+                typeError(S2JB, "listorvector", o);
+            }
+            Object res = Array.newInstance(jclass(v2), vals.length);
+            for (int i=0; i< vals.length; i++) {
+                Array.set(res, i, jobj(vals[i]));
+            }
+            return makeJObj(res);
+        default:
+            throwArgSizeException();
+        }
         return VOID;
     }
 

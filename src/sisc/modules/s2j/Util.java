@@ -9,7 +9,7 @@ import sisc.data.*;
 import java.util.HashMap;
 import java.util.Vector;
 
-public abstract class Util extends IndexedProcedure {
+public abstract class Util extends IndexedFixableProcedure {
 
     protected static final Symbol S2JB =
         Symbol.intern("sisc.modules.s2j.Messages");
