@@ -79,7 +79,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
             ctx.getProperty("sisc.emitDebuggingSymbols", defaultEmitDebuggingSymbols).equals("true");
         this.permissiveParsing = 
             ctx.getProperty("sisc.permissiveParsing", defaultPermissiveParsing).equals("true");
-        this.permissiveParsing = 
+        this.hedgedInlining = 
             ctx.getProperty("sisc.hedgedInlining", defaultHedgedInlining).equals("true");
         this.internalDebugging = 
             ctx.getProperty("sisc.internalDebugging", defaultInternalDebugging).equals("true");
