@@ -8,13 +8,22 @@ import java.math.BigInteger;
 import sisc.data.Expression;
 import sisc.data.Value;
 import sisc.util.Util;
+import sisc.interpreter.AppContext;
 
 public abstract class DeserializerImpl extends BerEncoding implements Deserializer {
 
+    protected AppContext ctx;
     protected ObjectInput datin;
 
-    protected DeserializerImpl(ObjectInput in) {
+    protected DeserializerImpl(AppContext ctx, ObjectInput in) {
+        this.ctx = ctx;
         datin = in;
+    }
+
+    public Expression resolveLibraryBinding(LibraryBinding lb)
+        throws IOException {
+
+        return ctx.resolveBinding(lb);
     }
 
     public BigInteger readBigInteger() throws IOException {

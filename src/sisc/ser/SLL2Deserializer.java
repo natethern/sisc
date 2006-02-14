@@ -9,12 +9,10 @@ import sisc.util.InternedValue;
 
 public abstract class SLL2Deserializer extends DeserializerImpl {
 
-    protected AppContext ctx;
     private LinkedList deserQueue;
 
     protected SLL2Deserializer(AppContext ctx, ObjectInput input) throws IOException {
-        super(input);
-        this.ctx=ctx;
+        super(ctx, input);
         deserQueue=new LinkedList();
     }
 
@@ -76,7 +74,7 @@ public abstract class SLL2Deserializer extends DeserializerImpl {
           case 4:
               String libName=readUTF();
               int epid=readInt();
-              e = ctx.resolveBinding(new LibraryBinding(libName, epid));
+              e = resolveLibraryBinding(new LibraryBinding(libName, epid));
               recordReadObject(definingOid, e);
               return e;
           default: //expression references

@@ -9,17 +9,21 @@ import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.DelegatingSymEnv;
 import sisc.util.InternedValue;
+import sisc.interpreter.Context;
+import sisc.interpreter.AppContext;
 
 public class JavaDeserializer extends DeserializerImpl {
 
-    private JavaDeserializer(ObjectInput i) throws IOException {
-        super(i);
+    private JavaDeserializer(AppContext ctx, ObjectInput i)
+        throws IOException {
+
+        super(ctx, i);
     }
 
     public static Deserializer create(ObjectInput i) throws IOException {
         return (i instanceof NestedObjectInputStream) ?
             ((NestedObjectInputStream)i).getDeserializerInstance() :
-            new JavaDeserializer(i);
+            new JavaDeserializer(Context.currentAppContext(), i);
     }
 
 
@@ -32,10 +36,17 @@ public class JavaDeserializer extends DeserializerImpl {
     }
 
     public Expression readExpression() throws IOException {
-        Object o = readObjectIOExceptionOnly();
-        //circular interned values may not have been resolved yet ...
-        return (Expression)((o instanceof InternedValue) ?
-                            ((InternedValue)o).readResolve() : o);
+        boolean isLibraryReference = readBoolean();
+        if (isLibraryReference) {
+            String libName=readUTF();
+            int epid=readInt();
+            return resolveLibraryBinding(new LibraryBinding(libName, epid));
+        } else {
+            Object o = readObjectIOExceptionOnly();
+            //circular interned values may not have been resolved yet ...
+            return (Expression)((o instanceof InternedValue) ?
+                                ((InternedValue)o).readResolve() : o);
+        }
     }
 
     public Expression readInitializedExpression() throws IOException {

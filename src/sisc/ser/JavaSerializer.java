@@ -4,21 +4,42 @@ import java.io.*;
 import java.math.*;
 import sisc.env.SymbolicEnvironment;
 import sisc.data.Expression;
+import sisc.data.Singleton;
+import sisc.interpreter.Context;
+import sisc.interpreter.AppContext;
 
 public class JavaSerializer extends SerializerImpl {
     
-    private JavaSerializer(ObjectOutput o) throws IOException {
-        super(o);
+    private JavaSerializer(AppContext ctx, ObjectOutput o)
+        throws IOException {
+
+        super(ctx, o);
+        if (ctx == null) {
+            System.err.println("AppContext is null!!!");
+        }
     }
 
     public static Serializer create(ObjectOutput o) throws IOException {
         return (o instanceof NestedObjectOutputStream) ?
             ((NestedObjectOutputStream)o).getSerializerInstance() :
-            new JavaSerializer(o);
+            new JavaSerializer(Context.currentAppContext(), o);
     }
 
     public void writeExpression(Expression e) throws IOException {
-        writeObject(e);
+        if (e == null || e instanceof Singleton) {
+            writeBoolean(false);
+            writeObject(e);
+        } else {
+            LibraryBinding lb = lookupLibraryBinding(e);
+            if (lb == null) {
+                writeBoolean(false);
+                writeObject(e);
+            } else {
+                writeBoolean(true);
+                writeUTF(lb.name);
+                writeInt(lb.epid);
+            }
+        }
     }
 
     public void writeInitializedExpression(Expression e) throws IOException {

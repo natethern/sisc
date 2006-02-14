@@ -21,12 +21,10 @@ public abstract class SLL2Serializer extends SerializerImpl {
         }
     }
 
-    protected AppContext ctx;       
     private LinkedList serQueue;
     
     protected SLL2Serializer(AppContext ctx, ObjectOutput out) throws IOException {
-        super(out);
-        this.ctx=ctx;
+        super(ctx, out);
         serQueue=new LinkedList();
     }
 
@@ -86,7 +84,7 @@ public abstract class SLL2Serializer extends SerializerImpl {
         if (e instanceof Singleton) {
             contiguous = writeExpressionSerialization(e, job, flush);
         } else {
-            LibraryBinding lb = ctx.lookupBinding(e);
+            LibraryBinding lb = lookupLibraryBinding(e);
             contiguous = (lb==null) ?
                 writeExpressionSerialization(e, job, flush) :
                 writeLibraryReference(lb, job, flush);

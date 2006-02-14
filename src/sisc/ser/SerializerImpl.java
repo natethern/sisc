@@ -8,13 +8,22 @@ import java.math.BigInteger;
 import sisc.data.Expression;
 import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
+import sisc.interpreter.AppContext;
 
 public abstract class SerializerImpl extends BerEncoding implements Serializer {
 
+    protected AppContext ctx;
     protected ObjectOutput datout;
 
-    protected SerializerImpl(ObjectOutput out) {
+    protected SerializerImpl(AppContext ctx, ObjectOutput out) {
+        this.ctx = ctx;
         datout = out;
+    }
+
+    public LibraryBinding lookupLibraryBinding(Expression e)
+        throws IOException {
+
+        return ctx.lookupBinding(e);
     }
 
     public void writeBigDecimal(BigDecimal d) throws IOException {
