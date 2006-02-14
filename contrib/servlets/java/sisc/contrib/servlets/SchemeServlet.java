@@ -33,7 +33,7 @@ public class SchemeServlet extends SchemeServletBase {
                         HttpServletResponse response)
         throws ServletException {
 
-        Interpreter r = Context.enter(appName);
+        Interpreter r = Context.enter();
         try {
             r.eval(fn, new Value[] {
                 sisc.modules.s2j.Util.makeJObj(request, HttpServletRequest.class),

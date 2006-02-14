@@ -1,18 +1,17 @@
 SchemeAppServlet has the following init parameters
-* app-name
-* heap-file
 * init-expr
 * destroy-expr (optional)
 SchemeAppServlet is responsible for initialising a scheme
-application. When it's init() method is called it establishes an
-application context of the given name and loads the specified heap
-into it. The heap-file is loaded from a location relative to the
-servlet context root.
+application.
 
-Typically there would be *one* SchemeAppServlet per web app and it
-would be loaded when the web app starts up. There is nothing stopping
-you though from having several Scheme applications within a single web
-app.
+The heap for a Scheme application gets loaded from the url specified
+in the sisc.heap system property. If no such property is specified an
+attempt is made to locate a resource "sisc.shp". Hence one typically
+supplies the heap by placing sisc.shp on the class path, e.g. in a jar
+inside the WEB-INF/lib directory of a web app.
+
+There should be exactly *one* SchemeAppServlet per web app and it
+should normally be configured to be loaded on startup.
 
 The servlet responds to a GET request by returning a form. It responds
 to POST requests containing an "expressions" param by evaluating the
@@ -22,32 +21,29 @@ Content-Type of the POST is "application/x-scheme", then the servlet
 will try to read the incoming data stream as an s-expression, evaluate
 it within the scheme app and stream back the result.
 
-init-expr is evaluated after init() has loaded the heap. The
-evaluation must yield a function. init() then calls that function with
-the servlet object as a parameter. Ditto for destroy-expr, which gets
-evaluated and the resulting function called when the servlet's
-destroy() method is called.
+init-expr is evaluated during servlet initialisation. The evaluation
+must yield a function. This function then gets called with the servlet
+object as a parameter. Ditto for destroy-expr, which gets evaluated
+and the resulting function called when the servlet is destroyed.
 
 The current directory which is active during the evaluation of
 init-expr and destroy-expr is the servlet context root, which means
 relative file names in load etc are resolved relative to it.
 
 The SchemeAppServlet checks for servlet context init parameters called
-"<app-name>-repl-port" and "<app-name>-repl-host". If the former is
-present the servlet creates a thread listening for connections on that
-port. New connections spawn a thread with a Read-Eval-Print-Loop
-running in the servlet's Scheme application, i.e. connecting to the
-port via, say, telnet will present you with a SISC prompt just as if
-you were running SISC from the command line except that all
-expressions are evaluated within the context of the servlet's Scheme
-application.
+"repl-port" and "repl-host". If the former is present the servlet
+creates a thread listening for connections on that port. New
+connections spawn a thread with a Read-Eval-Print-Loop running in the
+servlet's Scheme application, i.e. connecting to the port via, say,
+telnet will present you with a SISC prompt just as if you were running
+SISC from the command line except that all expressions are evaluated
+within the context of the servlet's Scheme application.
 
 Specifying repl-host forces the the listening port to be bound to a
 specific IP address.
 
 
 SchemeServlet has the following init parameters:
-* app-name
 * init-expr
 * destroy-expr (optional)
 

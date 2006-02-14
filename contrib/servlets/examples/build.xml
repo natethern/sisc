@@ -36,11 +36,13 @@
            file="../sisc-servlets.jar"/>
      <copy todir="${dist.home}/${deploy.name}/WEB-INF/lib"
            file="${sisc.home}/sisc-lib.jar"/>
-     <copy todir="${dist.home}/${deploy.name}/WEB-INF"
-           file="${sisc.home}/sisc.shp"/>
      <copy todir="${dist.home}/${deploy.name}/scheme">
        <fileset dir="../scheme" includes="*.scm"/>
      </copy>
+     <jar jarfile="${dist.home}/${deploy.name}/WEB-INF/lib/sisc-heap.jar"
+        basedir="${sisc.home}"
+        includes="sisc.shp"/>
+
      <jar jarfile="${dist.home}/${deploy.name}.war"
         basedir="${dist.home}/${deploy.name}"/>
   </target>

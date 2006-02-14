@@ -14,8 +14,6 @@ import sisc.util.Util;
 
 public class SchemeServletBase extends HttpServlet {
 
-    protected String appName;
-
     protected static Hashtable htmlEscapes = new Hashtable();
 
     static {
@@ -28,11 +26,7 @@ public class SchemeServletBase extends HttpServlet {
 
     public void init()
         throws ServletException {
-        appName = getInitParameter("app-name");
         String scName = getServletContext().getServletContextName();
-        if (scName != null && !scName.equals("")) {
-            appName = scName + " - " + appName;
-        }
     }
 
     protected static String searchReplace(String in, Hashtable pairs) {
@@ -54,7 +48,7 @@ public class SchemeServletBase extends HttpServlet {
         throws ServletException {
 
         if (expr == null) return;
-        Interpreter r = Context.enter(appName);
+        Interpreter r = Context.enter();
         try {
             Procedure currDir = (Procedure)r.lookup(Symbol.get("current-directory"), Util.TOPLEVEL);
             r.eval(currDir, new Value[] {new SchemeString(getServletContext().getRealPath("/"))});

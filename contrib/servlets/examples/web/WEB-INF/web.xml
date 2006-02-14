@@ -8,11 +8,11 @@
   <distributable/>
 
   <context-param>
-    <param-name>app-repl-port</param-name>
+    <param-name>repl-port</param-name>
     <param-value>7077</param-value>
   </context-param>
   <context-param>
-    <param-name>app-repl-host</param-name>
+    <param-name>repl-host</param-name>
     <param-value>localhost</param-value>
   </context-param>
 
@@ -20,10 +20,6 @@
     <servlet-name>SchemeApp</servlet-name>
     <description>initializes Scheme App</description>
     <servlet-class>sisc.contrib.servlets.SchemeAppServlet</servlet-class>
-    <init-param>
-      <param-name>app-name</param-name>
-      <param-value>app</param-value>
-    </init-param>
     <init-param>
       <param-name>heap-file</param-name>
       <param-value>WEB-INF/sisc.shp</param-value>
@@ -48,10 +44,6 @@
     <description>Calculator</description>
     <servlet-class>sisc.contrib.servlets.SchemeServlet</servlet-class>
     <init-param>
-      <param-name>app-name</param-name>
-      <param-value>app</param-value>
-    </init-param>
-    <init-param>
       <param-name>init-expr</param-name>
       <param-value>(load "scheme/calculator.scm") calculator</param-value>
     </init-param>
@@ -65,6 +57,7 @@
     <servlet-name>SchemeApp</servlet-name>
     <url-pattern>/admin/schemeapp</url-pattern>
   </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>Calculator</servlet-name>
     <url-pattern>/calculator/*</url-pattern>

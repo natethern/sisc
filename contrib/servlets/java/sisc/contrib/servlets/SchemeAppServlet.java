@@ -17,29 +17,14 @@ public class SchemeAppServlet extends SchemeServletBase {
 
     public void init() throws ServletException {
         super.init();
-        String heapFile	= getInitParameter("heap-file");
-        AppContext ctx = new AppContext();
-        Context.register(appName, ctx);
-        Interpreter r = Context.enter(appName);
-        String realFile = getServletContext().getRealPath(heapFile);
-        try {
-            ctx.loadEnv(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream(realFile, "r", 1, 8192)));
-        } catch (IOException e) {
-            throw new ServletException("unable to load heap file " + realFile, e);
-        } catch (ClassNotFoundException e) {
-            throw new ServletException("unable to load heap file " + realFile, e);
-        } finally {
-            Context.exit();
-        }
         String initExpr = getInitParameter("init-expr");
         evalExpr(initExpr);
 
         ServletContext sctx = getServletContext();
-        String unqualifiedAppName = getInitParameter("app-name");
-        String port = sctx.getInitParameter(unqualifiedAppName+"-repl-port");
+        String port = sctx.getInitParameter("repl-port");
         if (port == null) return;
         InetAddress bindAddr = null;
-        String host = sctx.getInitParameter(unqualifiedAppName+"-repl-host");
+        String host = sctx.getInitParameter("repl-host");
         if (host != null) {
             try {
                 bindAddr = InetAddress.getByName(host);
@@ -51,7 +36,7 @@ public class SchemeAppServlet extends SchemeServletBase {
             ServerSocket ssocket = new ServerSocket(Integer.parseInt(port),
                                                     50,
                                                     bindAddr);
-            socketListener = new SocketListener(appName, ssocket);
+            socketListener = new SocketListener(ssocket);
             socketListener.start();
             log("repl listening on " + (host == null ? "*" : host) + ":" + port);
         } catch (IOException e) {
@@ -76,7 +61,7 @@ public class SchemeAppServlet extends SchemeServletBase {
     }
 
     private String createResponse(String requestText, String responseText) {
-        return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"><html><head><title>"+ appName + " Administration</title></head><body><h1>"+ appName + " Administration</h1><form method=\"POST\"><p><textarea name=\"request\" rows=\"10\" cols=\"80\">" + searchReplace(requestText, htmlEscapes) + "</textarea></p><p><input type=\"SUBMIT\" value=\"Evaluate\"></input></p><p><textarea name=\"response\" rows=\"10\" cols=\"80\">" + searchReplace(responseText, htmlEscapes) +"</textarea></p></form></body></html>";
+        return "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"><html><head><title>Scheme Application Administration</title></head><body><h1>Scheme Application Administration</h1><form method=\"POST\"><p><textarea name=\"request\" rows=\"10\" cols=\"80\">" + searchReplace(requestText, htmlEscapes) + "</textarea></p><p><input type=\"SUBMIT\" value=\"Evaluate\"></input></p><p><textarea name=\"response\" rows=\"10\" cols=\"80\">" + searchReplace(responseText, htmlEscapes) +"</textarea></p></form></body></html>";
     }
         
     public void doGet(HttpServletRequest request,
@@ -106,7 +91,7 @@ public class SchemeAppServlet extends SchemeServletBase {
         throws IOException, ServletException {
 
         String req = request.getParameter("request");
-        Interpreter r = Context.enter(appName);
+        Interpreter r = Context.enter();
         String resp;
         try {
             resp = r.eval(req).toString();
@@ -129,7 +114,7 @@ public class SchemeAppServlet extends SchemeServletBase {
         sisc.reader.Parser p = new sisc.reader.Parser(new sisc.reader.Lexer());
         InputPort inp = new ReaderInputPort(new BufferedReader(new InputStreamReader(request.getInputStream())));
 
-        Interpreter r = Context.enter(appName);
+        Interpreter r = Context.enter();
         try {
             Value v = r.eval(p.nextExpression(inp));
             response.setContentType("application/x-scheme");
@@ -151,16 +136,14 @@ public class SchemeAppServlet extends SchemeServletBase {
 class SocketListener extends Thread {
 
     public ServerSocket ssocket;
-    public String appName;
 
-    SocketListener(String appName, ServerSocket ssocket) {
-        this.appName = appName;
+    SocketListener(ServerSocket ssocket) {
         this.ssocket = ssocket;
     }
 
     public void run() {
         try {
-            REPL.listen(appName, ssocket);
+            REPL.listen(Context.currentAppContext(), ssocket);
             ssocket.close();
         } catch (IOException e) {}
     }
