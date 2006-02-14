@@ -17,9 +17,7 @@ public class SISCApplet extends JApplet {
         try {
             URL u=new URL(getDocumentBase(),"sisc.shp");
             URLConnection conn=u.openConnection();
-            AppContext ctx = new AppContext();
-            Context.register("main", ctx);
-            Interpreter r = Context.enter("main");
+            Interpreter r = Context.enter(new AppContext());
             SeekableInputStream in=new MemoryRandomAccessInputStream(new GZIPInputStream(conn.getInputStream()));
             if (!REPL.loadHeap(r, in)) return;
             Context.exit();
