@@ -3,6 +3,7 @@ package sisc.interpreter;
 import java.util.*;
 import sisc.env.DynamicEnvironment;
 import sisc.util.Util;
+import sisc.REPL;
 
 public class Context extends Util {
 
@@ -12,6 +13,8 @@ public class Context extends Util {
     //Thread -> Context
     private static Map threads =
         Collections.synchronizedMap(new WeakHashMap());
+
+    private static volatile AppContext defaultAppContext;
 
     /*********** application table maintenance ***********/
 
@@ -49,8 +52,32 @@ public class Context extends Util {
         return tctx.currentInterpreter();
     }
 
+    public synchronized static void setDefaultAppContext(AppContext ctx) {
+        defaultAppContext = ctx;
+    }
+
+    public synchronized static AppContext defaultAppContext() {
+        if (defaultAppContext == null) {
+            defaultAppContext = new AppContext();
+            try {
+                Interpreter r = Context.enter(defaultAppContext);
+                REPL.loadDefaultHeap(r);
+            } finally {
+                Context.exit();
+            }
+        }
+
+        return defaultAppContext;
+    }
+
+    public static AppContext currentAppContext() {
+        Interpreter r = currentInterpreter();
+        return (r == null ? defaultAppContext() : r.getCtx());
+    }
+
     public static Interpreter enter() {
-        return enter(currentInterpreter());
+        Interpreter r = currentInterpreter();
+        return (r == null ? enter(defaultAppContext()) : r);
     }
 
     /**
