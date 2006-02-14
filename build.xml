@@ -116,7 +116,7 @@
     <touch file="${quantitydir}/.Quantity-${quantity-type}"/>
   </target>
 
-  <target name="compile">
+  <target name="compile" depends="prepare">
     <antcall target="quantity"/>
     <mkdir dir="${classdir}"/>
     <javac srcdir="${srcdir}"
@@ -347,7 +347,7 @@
     </java>
   </target>
 
-  <target name="bootstrap">
+  <target name="bootstrap" depends="prepare">
     <antcall target="full-heap"/>
     <java classname="sisc.REPL"
           classpath="${classdir}"
@@ -373,7 +373,8 @@
   </target>
 
   <target name="heap-jar"
-          description="Package the built heap into a JAR, accessible by sisc.boot.HeapAnchor">
+    depends="prepare"
+    description="Package the built heap into a JAR, accessible by sisc.boot.HeapAnchor">
     <antcall target="heap"/>
     <jar jarfile="${basedir}/${heapjar}">
       <fileset dir="${classdir}" includes="sisc/boot/HeapAnchor.class"/>
