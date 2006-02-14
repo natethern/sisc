@@ -13,7 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sisc.data.Pair;
 import sisc.data.Procedure;
+import sisc.env.DynamicEnvironment;
 import sisc.interpreter.Context;
 import sisc.interpreter.Interpreter;
 import sisc.interpreter.SchemeException;
@@ -62,7 +64,23 @@ public class SignalHook implements InvocationHandler {
     
     static Map handlers=new HashMap();
     
-    public static void addHandler(String signame, Procedure proc) {
+    static class SignalHandler {
+        Procedure proc;
+        DynamicEnvironment env;
+        
+        public SignalHandler(Procedure proc, DynamicEnvironment env) {
+            this.proc=proc;
+            this.env=env;
+        }
+        
+        public boolean equals(Object o) {
+            if (!(o instanceof SignalHandler)) return false;
+            SignalHandler ot=(SignalHandler)o;
+            return ot.proc.equals(proc) && ot.env.equals(env);
+        }
+    }
+    
+    public static void addHandler(String signame, Procedure proc, DynamicEnvironment env) {
         if (csignalHandler==null) return;
         Object signal=null;
         try {
@@ -74,7 +92,7 @@ public class SignalHook implements InvocationHandler {
         if (l==null) {
             l=new ArrayList();
             handlers.put(signal, l);
-            addHandler(signame, proc);
+            addHandler(signame, proc, env);
             try {
                 handle.invoke(null, new Object[] {signal,sigHook});
             } catch (InvocationTargetException it) {
@@ -87,10 +105,10 @@ public class SignalHook implements InvocationHandler {
                 e.printStackTrace();
             }
         }
-        l.add(proc);
+        l.add(new SignalHandler(proc, env));
     }
     
-    public static void removeHandler(String signame, Procedure proc) {
+    public static void removeHandler(String signame, Procedure proc, DynamicEnvironment env) {
         if (csignalHandler==null) return;
         Object signal=null;
         try {
@@ -98,10 +116,11 @@ public class SignalHook implements InvocationHandler {
         } catch (Exception ie) {
             return;
         }
-
+        
+        SignalHandler handler=new SignalHandler(proc, env);
         List l=(List)handlers.get(signal);
         if (l!=null) {
-            l.remove(proc);
+            l.remove(handler);
             if (l.isEmpty()) {
                 try {
                     handle.invoke(null, new Object[] {signal,SIG_DFL});
@@ -117,22 +136,21 @@ public class SignalHook implements InvocationHandler {
             Object signal=a[0];
             List l=(List)handlers.get(signal);
             if (l!=null) {
-                Interpreter r=Context.enter("main");
                 for (int i=0; i<l.size(); i++) {
-                    Procedure proc=(Procedure)l.get(i);
+                    SignalHandler handler=(SignalHandler)l.get(i);
+                    Interpreter r=Context.enter(handler.env);                    
                     try {
-                        r.eval(proc, Util.ZV);
+                        r.eval(handler.proc, Util.ZV);
                     } catch (SchemeException e) {
                         e.printStackTrace();
                     }
+                    Context.exit();
                 }
-                Context.exit();
             }        
         } catch (Throwable t) {
             t.printStackTrace();
         }
-            return null;
-
+        return null;
     }
 }
 

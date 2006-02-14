@@ -484,10 +484,10 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
         case GRT:
             return truth(num(v1).comp(num(v2),1));
         case SIGHOOK:
-            SignalHook.addHandler(string(v1), proc(v2));
+            SignalHook.addHandler(string(v1), proc(v2), Context.currentInterpreter().dynenv);
             return VOID;
         case SIGUNHOOK:
-            SignalHook.removeHandler(string(v1), proc(v2));
+            SignalHook.removeHandler(string(v1), proc(v2), Context.currentInterpreter().dynenv);
             return VOID;
         case INTERN:
             InternedValue iv = InternedValue.intern(symbol(v1), v2);

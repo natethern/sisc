@@ -1,3 +1,9 @@
+2006-02-14  Scott G. Miller <sgmiller@gmail.com>
+
+	* Modify the signal hooking mechanisms to make their callbacks 
+	  in the same dynamic environment in which they were registered,
+	  and drop the "main" AppContext assumption. 
+	  
 2006-02-13  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed handling of dependencies in |compile-file|. See bug
