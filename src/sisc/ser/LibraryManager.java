@@ -74,7 +74,7 @@ public class LibraryManager extends Util {
      * Returns the reference to a binding in the active libraries, or null
      * if the provided expression isn't an entry point in any library.
      */
-    public LibraryBinding getBindingReference(Expression e) throws IOException {
+    public LibraryBinding lookupBinding(Expression e) throws IOException {
         for (Iterator i=loadedLibraries.entrySet().iterator(); i.hasNext();) {
             Map.Entry entry=(Map.Entry)i.next();
             String name=(String)entry.getKey();
@@ -109,12 +109,11 @@ public class LibraryManager extends Util {
     }
 
     /** 
-     * Returns an expression from an external library named by
-     * the given name and entry point.
+     * Returns an expression from an external library
      */
-    public Expression getExpression(String libName, int epid) throws IOException {
-        LoadableLibrary ll=(LoadableLibrary)loadedLibraries.get(libName);
-        return ll.getLibrary().getExpression(epid);
+    public Expression resolveBinding(LibraryBinding lb) throws IOException {
+        LoadableLibrary ll=(LoadableLibrary)loadedLibraries.get(lb.name);
+        return ll.getLibrary().getExpression(lb.epid);
     }
 }
 

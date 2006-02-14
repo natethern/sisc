@@ -86,7 +86,7 @@ public abstract class SLL2Serializer extends SerializerImpl {
         if (e instanceof Singleton) {
             contiguous = writeExpressionSerialization(e, job, flush);
         } else {
-            LibraryBinding lb=ctx.reverseLookup(e);
+            LibraryBinding lb = ctx.lookupBinding(e);
             contiguous = (lb==null) ?
                 writeExpressionSerialization(e, job, flush) :
                 writeLibraryReference(lb, job, flush);

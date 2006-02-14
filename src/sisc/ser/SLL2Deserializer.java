@@ -76,7 +76,7 @@ public abstract class SLL2Deserializer extends DeserializerImpl {
           case 4:
               String libName=readUTF();
               int epid=readInt();
-              e=ctx.getExpression(libName, epid);
+              e = ctx.resolveBinding(new LibraryBinding(libName, epid));
               recordReadObject(definingOid, e);
               return e;
           default: //expression references
