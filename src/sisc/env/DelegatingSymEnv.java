@@ -5,6 +5,7 @@ import sisc.data.*;
 import java.io.IOException;
 import sisc.io.ValueWriter;
 import sisc.util.ExpressionVisitor;
+import sisc.interpreter.Context;
 
 public class DelegatingSymEnv extends Value
     implements SymbolicEnvironment, NamedValue {
@@ -13,7 +14,7 @@ public class DelegatingSymEnv extends Value
 
     protected SymbolicEnvironment getEnv() {
         if (delegee == null) {
-            delegee = (SymbolicEnvironment)sisc.interpreter.Context.currentInterpreter().getCtx().getExpression((Symbol)getName());
+            delegee = (SymbolicEnvironment)Context.currentAppContext().getExpression((Symbol)getName());
         }
         return delegee;
     }

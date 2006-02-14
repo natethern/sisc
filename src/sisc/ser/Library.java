@@ -6,6 +6,7 @@ import java.net.URL;
 import sisc.data.*;
 import sisc.interpreter.AppContext;
 import sisc.util.Util;
+import sisc.interpreter.Context;
 
 public class Library extends Util {
     static final String LIBRARY_VERSION="SLL4";
@@ -81,7 +82,7 @@ public class Library extends Util {
         try {
             return getLocalExpression(name);
         } catch (FileNotFoundException fnf) {
-            return sisc.interpreter.Context.currentInterpreter().getCtx().getExpression(name);
+            return Context.currentAppContext().getExpression(name);
         }
     }
 
