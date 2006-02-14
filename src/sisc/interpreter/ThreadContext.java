@@ -33,7 +33,8 @@ public class ThreadContext extends Util {
     /*********** interpreter stack maintenance ***********/
 
     public Interpreter currentInterpreter() {
-        return (Interpreter)interpreters.peek();
+        return (interpreters.empty() ?
+                null : (Interpreter)interpreters.peek());
     }
 
     protected void pushInterpreter(Interpreter r) {
