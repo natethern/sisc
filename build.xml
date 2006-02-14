@@ -116,7 +116,8 @@
     <touch file="${quantitydir}/.Quantity-${quantity-type}"/>
   </target>
 
-  <target name="compile" depends="quantity">
+  <target name="compile">
+    <antcall target="quantity"/>
     <mkdir dir="${classdir}"/>
     <javac srcdir="${srcdir}"
            destdir="${classdir}"
@@ -265,7 +266,8 @@
     </condition>
   </target>
 
-  <target name="sisc-lib" depends="heap,build-sisclib" if="buildSisclib">
+  <target name="sisc-lib" depends="build-sisclib" if="buildSisclib">
+    <antcall target="heap"/>
     <antcall target="srfi-scc"/>
     <copy file="${libsrcdir}/slib.scm" tofile="${tmpdir}/sisc/libs/slib.scm"/>
     <jar jarfile="${basedir}/${libjar}">
@@ -345,7 +347,8 @@
     </java>
   </target>
 
-  <target name="bootstrap" depends="full-heap">
+  <target name="bootstrap">
+    <antcall target="full-heap"/>
     <java classname="sisc.REPL"
           classpath="${classdir}"
           dir="${bootdir}"
@@ -364,12 +367,14 @@
     </java>
   </target>
     
-  <target name="heap" depends="full-heap,lite-heap">
+  <target name="heap">
+    <antcall target="full-heap"/>
+    <antcall target="lite-heap"/>
   </target>
 
   <target name="heap-jar"
-          description="Package the built heap into a JAR, accessible by sisc.boot.HeapAnchor"
-          depends="heap">
+          description="Package the built heap into a JAR, accessible by sisc.boot.HeapAnchor">
+    <antcall target="heap"/>
     <jar jarfile="${basedir}/${heapjar}">
       <fileset dir="${classdir}" includes="sisc/boot/HeapAnchor.class"/>
       <zipfileset dir="${basedir}"
@@ -422,11 +427,13 @@
   <target name="docs" depends="javadocs,manual"
           description="Generate Documentation" unless="lite"/>
 
-  <target name="all" depends="sisc-lib,docs"
-          description="Build SISC, its heap, docs, and the standard library">
+  <target name="all"
+    description="Build SISC, its heap, docs, and the standard library">
+    <antcall target="sisc-lib"/>
+    <antcall target="docs"/>
   </target>
 
-  <target name="lite-dist" depends="all,heap" if="lite">
+  <target name="lite-dist" depends="all" if="lite">
 <!--    <java jar="jarg.jar" fork="true">
       <arg line="-nobco sisc.jar"/>
     </java>
@@ -554,13 +561,14 @@
          includes="sisc/**"/>
   </target>
 
-  <target name="junitcheck" depends="heap" unless="junit.present">
+  <target name="junitcheck" depends="prepare" unless="junit.present">
     <echo>
       The tests cannot be run because JUnit is not present on this system.
     </echo>
   </target>
 
   <target name="check" depends="junitcheck" if="junit.present">
+    <antcall target="heap"/>
     <junit fork="yes">
       <jvmarg value="-Xmx256M"/>
       <sysproperty key="HEAP" value="${heap}"/>
