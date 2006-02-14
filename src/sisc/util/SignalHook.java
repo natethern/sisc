@@ -21,10 +21,8 @@ import sisc.interpreter.Interpreter;
 import sisc.interpreter.SchemeException;
 
 /**
- * @author scgmille
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * Traps signals using the unsupported Sun classes for
+ * signal handling, to provide Scheme callbacks on those signals.
  */
 public class SignalHook implements InvocationHandler {
 
