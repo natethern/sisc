@@ -148,8 +148,6 @@ public class GenerateHeap {
         AppContext ctx = new AppContext(symenv);
         lb.setAppContext(ctx);
         
-        Context.register("main", ctx);
-        
         Interpreter r = Context.enter(ctx);
         new sisc.modules.SimplePrimitives.Index().bindAll(r, ctx.toplevel_env);
         new sisc.modules.ComplexPrimitives.Index().bindAll(r, ctx.toplevel_env);

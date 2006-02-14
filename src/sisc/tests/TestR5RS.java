@@ -67,8 +67,7 @@ public class TestR5RS
         throws ClassNotFoundException
     {
         AppContext ctx = new AppContext();
-        Context.register("main", ctx);
-        interpreter = Context.enter("main");
+        interpreter = Context.enter(ctx);
 
         REPL.loadHeap(
          interpreter,

@@ -574,8 +574,7 @@ public class Compiler extends CompilerConstants {
     }
 
     public static void main(String[] args) throws Exception {
-        Context.register("main", new AppContext());
-        Interpreter r=Context.enter("main");
+        Interpreter r=Context.enter();
         Parser p=new Parser(new Lexer());
         InputPort in=new StreamInputPort(System.in);
         SymbolicEnvironment env=new MemorySymEnv();

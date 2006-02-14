@@ -13,16 +13,14 @@ import sisc.util.Util;
 public class REPL {
 
     public SchemeThread primordialThread;
-    public String appName;
 
-    public REPL(String appName, DynamicEnvironment dynenv, Procedure repl) {
-        this(appName, new SchemeThread(dynenv, repl));
+    public REPL(DynamicEnvironment dynenv, Procedure repl) {
+        this(new SchemeThread(dynenv, repl));
         primordialThread.env = dynenv;
     }
 
-    public REPL(String appName, SchemeThread primordialThread) {
+    public REPL(SchemeThread primordialThread) {
         this.primordialThread = primordialThread;
-        this.appName = appName;
         primordialThread.thread.setDaemon(true);
     }
     
@@ -72,7 +70,31 @@ public class REPL {
             b.append("\n  ").append(simpleErrorToString(parent));
         return b.toString();
     }
-        
+
+    public static void loadDefaultHeap(Interpreter r) {
+        String heapName = null;
+        try {
+            heapName = System.getProperty("sisc.heap");
+        } catch(SecurityException e) {}
+        try {
+            URL url = heapName == null ?
+                Util.currentClassLoader().getResource("sisc.shp") :
+                new URL(heapName);
+            if (url == null)
+                throw new RuntimeException(Util.liMessage(Util.SISCB,
+                                                          "errorloadingheap"));
+            if (!REPL.loadHeap(r, new MemoryRandomAccessInputStream(url.openConnection().getInputStream())))
+                throw new RuntimeException(Util.liMessage(Util.SISCB,
+                                                          "errorloadingheap"));
+        } catch(IOException e) {
+            throw new RuntimeException(Util.liMessage(Util.SISCB,
+                                                      "errorloadingheap"));
+        } catch(ClassNotFoundException e) {
+            throw new RuntimeException(Util.liMessage(Util.SISCB,
+                                                      "errorloadingheap"));
+        }
+    }
+
     /**
      * Given an existing interpreter, loads a heap into the
      * interpreter and initializes it.  Returns true on success,
@@ -146,11 +168,9 @@ public class REPL {
 
     public void go() {
         try {
-            Interpreter r=Context.enter(appName);
+            Interpreter r=Context.enter(primordialThread.env);
             r.eval((Procedure)r.eval(Symbol.get("display")),
-                   new Value[] {new SchemeString("SISC ("+Util.VERSION+") - " + 
-                                                 appName + "\n"),
-                                primordialThread.env.out});
+                   new Value[] {new SchemeString("SISC ("+Util.VERSION+")\n")});
         } catch (SchemeException se) {
         } finally {
             Context.exit();
@@ -199,7 +219,6 @@ public class REPL {
         }
 
         AppContext ctx = new AppContext(props);
-        Context.register("main", ctx);
         Interpreter r = Context.enter(ctx);
         if (!loadHeap(r, heap)) 
             return;
@@ -269,10 +288,10 @@ public class REPL {
                                      InetAddress.getByName(listen.substring(0, cidx)));
                 System.out.println("Listening on " + ssocket.getInetAddress().toString() + ":" + ssocket.getLocalPort());
                 System.out.flush();
-                listen("main", ssocket);
+                listen(ctx, ssocket);
             } else {
                 Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
-                REPL repl = new REPL("main",dynenv,p);
+                REPL repl = new REPL(dynenv, p);
                 repl.go();
                 repl.primordialThread.thread.join();
                 switch (repl.primordialThread.state) {
@@ -293,19 +312,19 @@ public class REPL {
         System.exit(returnCode);
     }
 
-    public static void listen(String app, ServerSocket ssocket)
+    public static void listen(AppContext ctx, ServerSocket ssocket)
         throws IOException {
         for (;;) {
             Socket client = ssocket.accept();
             DynamicEnvironment dynenv =
-                new DynamicEnvironment(Context.lookup(app),
+                new DynamicEnvironment(ctx,
                                        client.getInputStream(),
                                        client.getOutputStream());
             Interpreter r=Context.enter(dynenv);
             Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
             Context.exit();
             SchemeThread t = new SchemeSocketThread(dynenv, p, client);
-            REPL repl = new REPL(app, t);
+            REPL repl = new REPL(t);
             repl.go();
         }
     }
