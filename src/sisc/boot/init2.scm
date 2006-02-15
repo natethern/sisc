@@ -253,8 +253,8 @@
   (newline))
 
 (define print-exception-stack-trace-hook
-  (make-hook (lambda (e)
-               (display "printing of stack trace not supported\n"))))
+  (make-hook (lambda args
+               (display "{warning: printing of stack trace not supported}\n"))))
 
 (define (print-exception-stack-trace e . base)
   (apply invoke-hook print-exception-stack-trace-hook e base))
