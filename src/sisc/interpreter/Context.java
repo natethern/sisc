@@ -18,14 +18,23 @@ public class Context extends Util {
 
     /*********** application table maintenance ***********/
 
+    /**
+     * @deprecated
+     */
     public static void register(String appName, AppContext ctx) {
         apps.put(appName,ctx);
     }
     
+    /**
+     * @deprecated
+     */
     public static void unregister(String appName) {
         apps.remove(appName);
     }
     
+    /**
+     * @deprecated
+     */
     public static AppContext lookup(String appName) {
         return (AppContext)apps.get(appName);
     }
@@ -97,6 +106,10 @@ public class Context extends Util {
         return enter(r.dynenv);
     }
 
+    /**
+     *
+     * @deprecated use {@link #enter(AppContext)} instead
+     */
     public static Interpreter enter(String appName) {
         return enter(lookup(appName));
     }
@@ -124,6 +137,13 @@ public class Context extends Util {
     }
 
     /**
+     * @deprecated use {@link #execute(AppContext, SchemeCaller)} instead
+     */
+    public static Object execute(String appName, SchemeCaller caller) {
+        return execute(lookup(appName), caller);
+    }
+
+    /**
      * Obtains a reference to an Interpreter context 
      * and calls caller.execute(Interpreter) with that
      * reference.  Once execute returns, the Interpreter
@@ -135,10 +155,6 @@ public class Context extends Util {
      * method.  New threads should obtain a different Interpreter via
      * this or enter() calls.
      */
-    public static Object execute(String appName, SchemeCaller caller) {
-        return execute(lookup(appName), caller);
-    }
-
     public static Object execute(AppContext ctx, SchemeCaller caller) {
         return execute(new DynamicEnvironment(ctx), caller);
     }
