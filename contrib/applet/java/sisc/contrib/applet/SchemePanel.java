@@ -12,7 +12,7 @@ import sisc.*;
 import sisc.data.*;
 import sisc.io.*;
 
-import sisc.interpreter.Interpreter;
+import sisc.interpreter.AppContext;
 import sisc.env.DynamicEnvironment;
 
 public class SchemePanel extends JScrollPane {
@@ -29,7 +29,7 @@ public class SchemePanel extends JScrollPane {
 
     public DynamicEnvironment dynenv;
     
-    public SchemePanel(Interpreter r, SchemeDocument sd, JTextPane disp) {
+    public SchemePanel(AppContext ctx, SchemeDocument sd, JTextPane disp) {
         super(disp, VERTICAL_SCROLLBAR_ALWAYS, HORIZONTAL_SCROLLBAR_AS_NEEDED);
         dos=new DocumentOutputStream(sd, sd.siscText, disp);
         this.sd=sd;
@@ -38,13 +38,14 @@ public class SchemePanel extends JScrollPane {
         try {
             iis=new PipedInputStream(interpin);
         } catch (IOException e) {}
-        dynenv = new DynamicEnvironment(r.getCtx(), iis, dos);
+        
+        dynenv = new DynamicEnvironment(ctx, iis, dos);
         disp.setEditable(false);
         currentEditablePos=sd.getLength()-1;
 
 
         Procedure p=(Procedure)
-            r.getCtx().toplevel_env.lookup(Symbol.get("sisc-cli"));
+            ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
         repl=new REPL(dynenv, p);
         repl.go();
     }

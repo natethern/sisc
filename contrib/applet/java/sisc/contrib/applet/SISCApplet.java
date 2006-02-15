@@ -20,7 +20,7 @@ public class SISCApplet extends JApplet {
             Interpreter r = Context.enter(ctx);            
             REPL.loadDefaultHeap(r);
             Context.exit();
-            SISCFrame sf=new SISCFrame(r);
+            SISCFrame sf=new SISCFrame(ctx);
             //	sf.pack();
             //	sf.show();
             getContentPane().add(sf);
