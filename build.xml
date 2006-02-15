@@ -430,6 +430,7 @@
 
   <target name="all"
     description="Build SISC, its heap, docs, and the standard library">
+    <antcall target="heap-jar"/>
     <antcall target="sisc-lib"/>
     <antcall target="docs"/>
   </target>
