@@ -146,6 +146,7 @@ public class GenerateHeap {
         // check without error
         symenv.define(Util.SISC_SPECIFIC, toplevel);
         AppContext ctx = new AppContext(symenv);
+        Context.setDefaultAppContext(ctx);
         lb.setAppContext(ctx);
         
         Interpreter r = Context.enter(ctx);

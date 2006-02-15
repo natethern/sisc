@@ -218,6 +218,7 @@ public class REPL {
         }
 
         AppContext ctx = new AppContext(props);
+        Context.setDefaultAppContext(ctx);
         Interpreter r = Context.enter(ctx);
         if (!loadHeap(r, heap)) 
             return;
