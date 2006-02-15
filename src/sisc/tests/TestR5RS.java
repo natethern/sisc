@@ -66,13 +66,7 @@ public class TestR5RS
     protected void setUp()
         throws ClassNotFoundException
     {
-        AppContext ctx = new AppContext();
-        interpreter = Context.enter(ctx);
-
-        REPL.loadHeap(
-         interpreter,
-         REPL.findHeap(
-             null));
+        interpreter = Context.enter();
     }
 
     protected void tearDown()

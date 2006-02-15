@@ -7,7 +7,6 @@ import sisc.exprs.fp.*;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.*;
 import sisc.nativefun.FixableProcedure;
-import sisc.interpreter.AppContext;
 import sisc.interpreter.Context;
 import sisc.interpreter.ContinuationException;
 import sisc.interpreter.Interpreter;
