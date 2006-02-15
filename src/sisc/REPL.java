@@ -26,7 +26,14 @@ public class REPL {
     
     public static SeekableInputStream findHeap(String heapLocation) {
         try {
-            if (heapLocation==null) heapLocation = "sisc.shp";
+            if (heapLocation==null) {
+                try {
+                    heapLocation = System.getProperty("sisc.heap");
+                } catch (SecurityException se) {}
+                if (heapLocation == null) {
+                    heapLocation = "sisc.shp";
+                }
+            }
             return new BufferedRandomAccessInputStream(heapLocation, "r", 
                     1, 8192);
         } catch (IOException e) {
@@ -72,23 +79,15 @@ public class REPL {
     }
 
     public static void loadDefaultHeap(Interpreter r) {
-        String heapName = null;
-        try {
-            heapName = System.getProperty("sisc.heap");
-        } catch(SecurityException e) {}
-        try {
-            URL url = heapName == null ?
-                Util.currentClassLoader().getResource("sisc.shp") :
-                new URL(heapName);
-            if (url == null)
-                throw new RuntimeException(Util.liMessage(Util.SISCB,
-                                                          "errorloadingheap"));
-            if (!REPL.loadHeap(r, new MemoryRandomAccessInputStream(url.openConnection().getInputStream())))
-                throw new RuntimeException(Util.liMessage(Util.SISCB,
-                                                          "errorloadingheap"));
-        } catch(IOException e) {
+        SeekableInputStream heap = findHeap(null);
+        if (heap == null) {
             throw new RuntimeException(Util.liMessage(Util.SISCB,
                                                       "errorloadingheap"));
+        }
+        try {
+            if (!REPL.loadHeap(r, heap))
+                throw new RuntimeException(Util.liMessage(Util.SISCB,
+                                                          "errorloadingheap"));
         } catch(ClassNotFoundException e) {
             throw new RuntimeException(Util.liMessage(Util.SISCB,
                                                       "errorloadingheap"));
