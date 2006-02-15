@@ -8,43 +8,49 @@ import java.util.Properties;
 import sisc.env.SymbolicEnvironment;
 import sisc.util.Util;
 
+/**
+ * The AppContext is the root of all data in an instance
+ * of SISC.  This encapsulates mainly the procedures and data
+ * which are defined in the global environment.  It is also
+ * <i>the</i> token used by most Java to Scheme operations.
+ * <p>
+ * Typically, an AppContext is created using the default constructor,
+ * then initialized with a heap using utility methods in {@link sisc.REPL}.
+ * 
+ **/
 public class AppContext extends Util {
 
     public SymbolicEnvironment symenv;
     public SymbolicEnvironment toplevel_env;
 
-    /*
-    protected void finalize() {
-        SymbolicEnvironment ct=lookupContextEnv(Symbol.get("*prof*"));
-        SymbolicEnvironment cc=lookupContextEnv(Symbol.get("*profc*"));
-        for (Iterator i=ct.keys(); i.hasNext();) {
-            Symbol key=(Symbol)i.next();
-            System.err.println("P"+justify(ct.lookup(key).toString(),
-                                           10,' ')+" "+
-                               justify(cc.lookup(key).toString(),
-                                       10,' ')+" "+
-                               key);
-        }
-    }
-
-
-    static {
-        System.runFinalizersOnExit(true);
-    }
-    */
-    
     private LibraryManager libraries;
     private Properties props;
 
+    /**
+     * Create a new, AppContext with default values,
+     * the recommended constructor for normal usage.
+     * 
+     */
     public AppContext() {
         this(new Properties());
     }
 
+    /**
+     * Create a new AppContext, providing a set of properties explicitly.
+     * 
+     * @param props Properties which govern the
+     * underlying Scheme environment.
+     */
     public AppContext(Properties props) {
         this.props = props;
         libraries=new LibraryManager(this);
     }
 
+    /**
+     * Create a new AppContext, providing a custom global environment.
+     * 
+     * @param symenv the global environment
+     */
     public AppContext(SymbolicEnvironment symenv) {
         this();
         this.symenv = symenv;

@@ -10,13 +10,19 @@ import sisc.ser.Serializer;
 import sisc.util.Util;
 
 /**
- * The SISC engine.
- * 
+ * <b>The SISC engine.</b>
+ * <p>
  * Interpreter is the SISC engine.  It contains the engine registers,
  * and the main loop responsible for repeatedly executing the
  * <tt>nxp</tt> register and maintaining the stack. Interpreter also
  * localizes all thread-specific information.  One Interpreter
  * instance must exist per executing Scheme thread.
+ * </p>
+ * <p>
+ * Additionally, it is the interface from Java code for evaluating
+ * Scheme code or calling Scheme procedures.
+ * </p>
+ * @see Context
  */
 public class Interpreter extends Util {
 

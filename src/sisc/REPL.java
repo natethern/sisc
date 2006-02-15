@@ -10,10 +10,21 @@ import sisc.interpreter.*;
 import sisc.env.DynamicEnvironment;
 import sisc.util.Util;
 
+/**
+ * Entry point for the SISC Read Eval Print Loop.  Responsible for
+ * command line parsing and invoking the REPL Scheme code
+ */
 public class REPL {
 
     public SchemeThread primordialThread;
 
+    /**
+     * Construct a new REPL which will invoke the given 
+     * Scheme procedure as the REPL in the provided dynamic environment.
+     *
+     * @param dynenv The dynamic environment for the REPL
+     * @param repl The procedural entry-point of the REPL
+     */
     public REPL(DynamicEnvironment dynenv, Procedure repl) {
         this(new SchemeThread(dynenv, repl));
         primordialThread.env = dynenv;
@@ -78,14 +89,23 @@ public class REPL {
         return b.toString();
     }
 
-    public static void loadDefaultHeap(Interpreter r) {
+    /**
+     * Attempts to find and load the default SISC heap into the
+     * provided Interpreter.
+     *
+     * @param interp The interpreter whose AppContext will host
+     * the contents of the heap
+     * 
+     * @see #findHeap(String)
+     */
+    public static void loadDefaultHeap(Interpreter interp) {
         SeekableInputStream heap = findHeap(null);
         if (heap == null) {
             throw new RuntimeException(Util.liMessage(Util.SISCB,
                                                       "errorloadingheap"));
         }
         try {
-            if (!REPL.loadHeap(r, heap))
+            if (!REPL.loadHeap(interp, heap))
                 throw new RuntimeException(Util.liMessage(Util.SISCB,
                                                           "errorloadingheap"));
         } catch(ClassNotFoundException e) {
@@ -95,7 +115,8 @@ public class REPL {
     }
 
     /**
-     * Given an existing interpreter, loads a heap into the
+     * Given an existing interpreter and a SeekableInputStream which
+     * is attached to a SISC heap file, loads the heap into the
      * interpreter and initializes it.  Returns true on success,
      * false otherwise.
      */       
@@ -135,18 +156,21 @@ public class REPL {
     }
 
     /**
-     * Loads zero or more Scheme source files (actually, any
-     * file which |load| can handle) into the provided interpreter.
-     * Returns true on success, false if any source file produced
+     * Loads zero or more Scheme source files or compiled libraries
+     * into the provided interpreter.
+     * 
+     * @param r The Interpreter which will execute code in the loaded files
+     * @param files An array of Strings naming files to load.
+     * @return true on success, false if any source file produced
      * an error.
      */
     public static boolean loadSourceFiles(Interpreter r, String[] files) {
         boolean returnStatus=true;
         Symbol loadSymb = Symbol.get("load");
+        Procedure load=(Procedure)r.lookup(loadSymb, Util.TOPLEVEL);
         for (int i=0; i<files.length; i++) {
             try {
-                r.eval((Procedure)r.lookup(loadSymb, Util.TOPLEVEL),
-                       new Value[] {new SchemeString(files[i])});
+                r.eval(load, new Value[] {new SchemeString(files[i])});
             } catch (SchemeException se) {
                 Value vm=se.m;
         try {

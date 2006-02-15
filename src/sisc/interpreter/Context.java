@@ -5,7 +5,35 @@ import sisc.env.DynamicEnvironment;
 import sisc.util.Util;
 import sisc.REPL;
 
-public class Context extends Util {
+/**
+ * Context is a utility class which facilitates Java to Scheme
+ * calls in SISC.
+ * 
+ * Typically, this involves obtaining an Interpreter for a given
+ * initialized {@link sisc.interpreter.AppContext}, using the Interpreter for one or more 
+ * evaluations, then exiting the context, as follows:
+ * <pre>
+ *   AppContext ctx = ...
+ *   Interpreter r=Context.enter(ctx);
+ *   r.eval(someProcedure, new Value[] { ... some arguments ... });
+ *   Context.exit();
+ * </pre>
+ * Alternately, one can use the SchemeCaller supported visitor pattern
+ * to allow Context to handle the management of the Interpreter Context,
+ * as follows:
+ * <pre>
+ *   Object returnValue=Context.execute(ctx, mySchemeCaller);
+ * </pre>
+ * The provided SchemeCaller instance's execute method is invoked with
+ * an Interpreter which is automatically obtained and then returned when
+ * the call completes.  The return value of the ScheemCaller's execute
+ * method is returned from the Context method.
+ *
+ * @see SchemeCaller
+ * @see AppContext
+ * @see Interpreter
+ */
+public abstract class Context extends Util {
 
     //"appname" -> AppContext
     private static Map apps =
@@ -56,18 +84,36 @@ public class Context extends Util {
 
     /*********** main interface ***********/
 
+    /**
+     * Fetches the current Interpreter, if this is an internal call (that is,
+     * Scheme->Java.
+     */
     public static Interpreter currentInterpreter() {
         ThreadContext tctx = lookupThreadContext();
         return tctx.currentInterpreter();
     }
 
+    /**
+     * Sets the <i>default AppContext</i>, which is used sparingly whenever
+     * a call originates from uncontrolled Java source that involves 
+     * the Scheme environment.  For example, Java serialization initiated
+     * by a web application server.
+     * 
+     * @param ctx the AppContext to make the default.
+     */
     public synchronized static void setDefaultAppContext(AppContext ctx) {
         defaultAppContext = ctx;
     }
 
-    public synchronized static AppContext defaultAppContext() {
+    /**
+     * Returns the currently set default AppContext, or creates
+     * a new AppContext with default values if non was already set,
+     * and attempts to initialize it with the default heap.
+     * 
+     */
+    public synchronized static AppContext getDefaultAppContext() {
         if (defaultAppContext == null) {
-            defaultAppContext = new AppContext();
+            setDefaultAppContext(new AppContext());
             try {
                 Interpreter r = Context.enter(defaultAppContext);
                 REPL.loadDefaultHeap(r);
@@ -79,14 +125,25 @@ public class Context extends Util {
         return defaultAppContext;
     }
 
+    /**
+     * Returns the AppContext of any current interpreter in an internal call.
+     */
     public static AppContext currentAppContext() {
         Interpreter r = currentInterpreter();
-        return (r == null ? defaultAppContext() : r.getCtx());
+        return (r == null ? getDefaultAppContext() : r.getCtx());
     }
 
+    /**
+     * Returns an Interpreter for the current application context,
+     * preserving the existing interpreter in an internal call, or
+     * getting a new one for the default AppContext in an 
+     * external call.
+     *
+     * @see Interpreter
+     */
     public static Interpreter enter() {
         Interpreter r = currentInterpreter();
-        return (r == null ? enter(defaultAppContext()) : r);
+        return (r == null ? enter(getDefaultAppContext()) : r);
     }
 
     /**
@@ -114,10 +171,17 @@ public class Context extends Util {
         return enter(lookup(appName));
     }
     
+    /**
+     * Returns an Interpreter for the given AppContext, creating
+     * a new DynamicEnvironment for the Interpreter. 
+     */
     public static Interpreter enter(AppContext ctx) {
         return enter(new DynamicEnvironment(ctx));
     }
     
+    /**
+     * Returns an Interpreter for the given DynamicEnvironment.
+     */
     public static Interpreter enter(DynamicEnvironment dynenv) {
         ThreadContext tctx = lookupThreadContext();
         Interpreter res = createInterpreter(tctx, dynenv);
@@ -126,6 +190,10 @@ public class Context extends Util {
         return res;
     }
 
+    /**
+     * Exits the current context, releasing the current
+     * Interpreter.
+     */
     public static void exit() {
         ThreadContext tctx = lookupThreadContext();
         Interpreter r = tctx.popInterpreter();
