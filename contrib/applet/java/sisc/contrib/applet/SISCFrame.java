@@ -78,7 +78,9 @@ public class SISCFrame extends JPanel implements ActionListener, KeyListener {
             } catch (EOFException eof) {
                 //eof.printStackTrace();
                 return;
-            } catch (IOException ie) {}
+            } catch (Exception ie) {
+                System.err.println(ie);
+            }
             if (autoClear.isSelected())
                 input.setText("");
             sp.eval(s);
