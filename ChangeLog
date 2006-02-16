@@ -1,3 +1,15 @@
+2006-02-16  Matthias Radestock  <matthias@sorted.org>
+
+	* Introduced notion of a default application context which is used
+	  in situations where no other application context is available,
+	  e.g. during sessions deserialisation in a J2EE container.
+
+	* Deprecated named application contexts.
+
+	* Changed Java serialisation to serialise library bindings by
+	  name. This fixes bug 1375026, where Java serialisation of
+	  continuations would end up serialising large chunks of the heap.
+
 2006-02-14  Scott G. Miller <sgmiller@gmail.com>
 
 	* Modify the signal hooking mechanisms to make their callbacks 
