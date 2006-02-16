@@ -126,7 +126,9 @@ public abstract class Context extends Util {
     }
 
     /**
-     * Returns the AppContext of any current interpreter in an internal call.
+     * Returns the AppContext of any current interpreter in an
+     * internal call, or the default AppContext if no current
+     * interpreter is present.
      */
     public static AppContext currentAppContext() {
         Interpreter r = currentInterpreter();
@@ -134,33 +136,62 @@ public abstract class Context extends Util {
     }
 
     /**
-     * Returns an Interpreter for the current application context,
-     * preserving the existing interpreter in an internal call, or
-     * getting a new one for the default AppContext in an 
-     * external call.
+     * Returns an Interpreter that shares the AppContext and
+     * DynamicEnvironment with the current Interpreter. If there is no
+     * current Interpreter present, an Interpreter bound to the
+     * default AppContext is returned instead.
+     *
+     * This method provides the usual mechanism for obtaining an
+     * Interpreter for calling from Java to Scheme.
      *
      * @see Interpreter
      */
     public static Interpreter enter() {
         Interpreter r = currentInterpreter();
-        return (r == null ? enter(getDefaultAppContext()) : r);
+        if (r == null) {
+            return enter(getDefaultAppContext());
+        } else {
+            return enter(r);
+        }
     }
 
     /**
-       Returns a new Interpreter instance with the same
-       AppContext and DynamicEnvironment of the argument
-       instance.  
+     * Returns a new Interpreter instance with the same AppContext and
+     * DynamicEnvironment of the argument instance.
+     * 
+     * The ThreadContext's hostThread will be set to a SchemeThread
+     * wrapping the current thread.
+     *
+     * @param interp The Interpreter from which to derive the new
+     * Interpreter
+     *
+     * @see Interpreter
+     */
+    public static Interpreter enter(Interpreter interp) {
+        return enter(interp.dynenv);
+    }
 
-       The ThreadContext's hostThread will be set to a SchemeThread
-       wrapping the current thread.
-       
-       Necessary when re-using the same Interpreter instance
-       in a different thread.
-       
-       @see Interpreter
-    */
-    public static Interpreter enter(Interpreter r) {
-        return enter(r.dynenv);
+    /**
+     * Returns an Interpreter bound to the given AppContext with a new
+     * DynamicEnvironment.
+     *
+     * @param ctx The AppContext
+     */
+    public static Interpreter enter(AppContext ctx) {
+        return enter(new DynamicEnvironment(ctx));
+    }
+    
+    /**
+     * Returns an Interpreter bound to the given DynamicEnvironment.
+     *
+     * @param dynenv The DynamicEnvironment
+     */
+    public static Interpreter enter(DynamicEnvironment dynenv) {
+        ThreadContext tctx = lookupThreadContext();
+        Interpreter res = createInterpreter(tctx, dynenv);
+        tctx.setHostThread(res, Thread.currentThread());
+        tctx.pushInterpreter(res);
+        return res;
     }
 
     /**
@@ -172,27 +203,7 @@ public abstract class Context extends Util {
     }
     
     /**
-     * Returns an Interpreter for the given AppContext, creating
-     * a new DynamicEnvironment for the Interpreter. 
-     */
-    public static Interpreter enter(AppContext ctx) {
-        return enter(new DynamicEnvironment(ctx));
-    }
-    
-    /**
-     * Returns an Interpreter for the given DynamicEnvironment.
-     */
-    public static Interpreter enter(DynamicEnvironment dynenv) {
-        ThreadContext tctx = lookupThreadContext();
-        Interpreter res = createInterpreter(tctx, dynenv);
-        tctx.setHostThread(res, Thread.currentThread());
-        tctx.pushInterpreter(res);
-        return res;
-    }
-
-    /**
-     * Exits the current context, releasing the current
-     * Interpreter.
+     * Exits the current context, releasing the current Interpreter.
      */
     public static void exit() {
         ThreadContext tctx = lookupThreadContext();
@@ -200,35 +211,65 @@ public abstract class Context extends Util {
         returnInterpreter(r);
     }
 
-    public static Object execute(SchemeCaller caller) {
-        return execute(currentInterpreter().dynenv, caller);
-    }
-
     /**
-     * @deprecated use {@link #execute(AppContext, SchemeCaller)} instead
+     * When a current Interpreter is present this method calls {@link
+     * #execute(Interpreter, SchemeCaller)} with it. Otherwise it
+     * calls {@link #execute(AppContext, SchemeCaller)} with the
+     * default AppContext.
+     *
+     * This method provides the usual mechanism for managed calls from
+     * Java to Scheme.
+     *
+     * @param caller The SchemeCaller to invoke
      */
-    public static Object execute(String appName, SchemeCaller caller) {
-        return execute(lookup(appName), caller);
+    public static Object execute(SchemeCaller caller) {
+        Interpreter r = currentInterpreter();
+        if (r == null) {
+            return execute(getDefaultAppContext(), caller);
+        } else {
+            return execute(r, caller);
+        }
     }
 
     /**
-     * Obtains a reference to an Interpreter context 
-     * and calls caller.execute(Interpreter) with that
-     * reference.  Once execute returns, the Interpreter
-     * is freed, and the return value of caller.execute()
-     * is returned from this method.
-     * 
-     * NB: It is critical that the Interpreter reference provided
-     * during the call is used only in the thread which calls this
-     * method.  New threads should obtain a different Interpreter via
-     * this or enter() calls.
+     * Calls {@link #execute(DynamicEnvironment, SchemeCaller)} with
+     * the DynamicEnvironment of the given Interpreter.
+     *
+     * @param interp The Interpreter
+     * @param caller The SchemeCaller to invoke
+     */
+    public static Object execute(Interpreter interp, SchemeCaller caller) {
+        return execute(interp.dynenv, caller);
+    }
+
+    /**
+     * Creates a new DynamicEnvironment for the given AppContext and
+     * calls {@link #execute(DynamicEnvironment, SchemeCaller)}.
+     *
+     * @param ctx The AppContext
+     * @param caller The SchemeCaller to invoke.
      */
     public static Object execute(AppContext ctx, SchemeCaller caller) {
         return execute(new DynamicEnvironment(ctx), caller);
     }
     
-    public static Object execute(DynamicEnvironment env, SchemeCaller caller) {
-        Interpreter r=Context.enter(env);
+    /**
+     * Obtains an Interpreter bound to the given DynamicEnvironment
+     * and invokes caller.execute(Interpreter) with that Interper.
+     * Once execute returns, the Interpreter is freed, and the return
+     * value of caller.execute() is returned from this method.
+     * 
+     * NB: It is critical that the Interpreter reference provided
+     * during the call is used only in the thread which calls this
+     * method.  New threads should obtain a different Interpreter via
+     * this or enter() calls.
+     *
+     * @param dynenv The DynamicEnvironment.
+     * @param caller The SchemeCaller to invoke.
+     */
+    public static Object execute(DynamicEnvironment dynenv, 
+                                 SchemeCaller caller) {
+        Interpreter r=Context.enter(dynenv);
         //Hold this reference.  Necessary because ThreadContext references
         //hostThread only weakly, which is in turn necessary so that
         //when threads terminate their associated SISC resources are
@@ -245,6 +286,13 @@ public abstract class Context extends Util {
         }
     }
     
+    /**
+     * @deprecated use {@link #execute(AppContext, SchemeCaller)} instead
+     */
+    public static Object execute(String appName, SchemeCaller caller) {
+        return execute(lookup(appName), caller);
+    }
+
     /*********** resource maintenance ***********/
 
     /**
