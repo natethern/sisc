@@ -830,20 +830,35 @@
                 </para>
               </blockquote>
             </para>
-
             <para>
-              <indexterm><primary>readModule</primary>
+              <indexterm><primary>readExpressionArray</primary>
               </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
-                <type>Module</type>
-                <methodname>readModule</methodname>
+                <type>sisc.data.Expression[]</type>
+                <methodname>readExpressionArray</methodname>
                 <void/>
                 <exceptionname>java.io.IOException</exceptionname>
               </methodsynopsis>          
               <blockquote>
                 <para>
-                  Reads a &SISC; Native Module from the stream.
+                  Reads an array of <classname>Expression</classname>s from the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>readValueArray</primary>
+              </indexterm>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>sisc.data.Value[]</type>
+                <methodname>readValueArray</methodname>
+                <void/>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Reads an array of <classname>Value</classname>s from the stream.
                 </para>
               </blockquote>
             </para>
@@ -971,21 +986,40 @@
             </para>
 
             <para>
-              <indexterm><primary>writeModule</primary>
+              <indexterm><primary>writeExpressionArray</primary>
               </indexterm>
               <methodsynopsis language="java">
                 <modifier>public</modifier>
                 <type>void</type>
-                <methodname>writeModule</methodname>
+                <methodname>writeExpressionArray</methodname>
                 <methodparam>
-                  <type>Module</type>
-                  <parameter>m</parameter>
+                  <type>sisc.data.Expression[]</type>
+                  <parameter>ary</parameter>
                 </methodparam>
                 <exceptionname>java.io.IOException</exceptionname>
               </methodsynopsis>          
               <blockquote>
                 <para>
-                  Writes a &SISC; Native Module to the stream.
+                  Writes an array of <classname>Expression</classname>s to the stream.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>writeValueArray</primary>
+              </indexterm>
+              <methodsynopsis language="java">
+                <modifier>public</modifier>
+                <type>void</type>
+                <methodname>writeValueArray</methodname>
+                <methodparam>
+                  <type>sisc.data.Value[]</type>
+                  <parameter>ary</parameter>
+                </methodparam>
+                <exceptionname>java.io.IOException</exceptionname>
+              </methodsynopsis>          
+              <blockquote>
+                <para>
+                  Writes an array of <classname>Value</classname>s to the stream.
                 </para>
               </blockquote>
             </para>
