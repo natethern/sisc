@@ -35,6 +35,17 @@ public class REPL {
         primordialThread.thread.setDaemon(true);
     }
     
+    /**
+     * Locate a heap.
+     *
+     * If the heap cannot be located at the supplied location then an
+     * attempt is made to find it as a resource <tt>"sisc.shp"</tt>.
+     *
+     * @param heapLocation The file path/name for the heap file. When
+     * this is <tt>null</tt> it defaults to the value of the
+     * <tt>sisc.heap</tt> system property and, if that is not present,
+     * <tt>"sisc.shp"</tt>
+     */
     public static SeekableInputStream findHeap(String heapLocation) {
         try {
             if (heapLocation==null) {
