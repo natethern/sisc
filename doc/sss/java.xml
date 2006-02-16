@@ -640,8 +640,8 @@ Context.exit()
             </blockquote>
             <informalexample>
               <programlisting>
-(define-java-method get-url |getURL|)
-(define-java-method empty-list?)
+(define-generic-java-method get-url |getURL|)
+(define-generic-java-method empty-list?)
               </programlisting>
             </informalexample>
           </para>
