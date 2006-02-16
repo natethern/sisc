@@ -151,7 +151,8 @@ else { ...make internal call... }
                   This is the same as calling
                   <literal>(</literal><parameter>proc</parameter>
                   <parameter>arg</parameter> ...<literal>) </literal> in
-                  Scheme.
+                  Scheme.  This is the most efficient type of call, as
+                  it requires no parsing or compilation.
                 </para>
               </blockquote>
             </listitem>
@@ -172,17 +173,15 @@ Context.exit()
         <title>External Calls</title>
         <para>
           The main challenge when making external calls is in which
-          application and dynamic environment to make the call.
-          <classname>sisc.interpreter.Context</classname> maintains an application
-          registry. To register an application call
-          <programlisting>
-Context.register("appname", appContext)
-          </programlisting>
-          The application registry can be used to obtain new
+          application and dynamic environment to make the call.  The
+          Java code is thus responsible for managing a single instance
+          of <classname>sisc.interpreter.AppContext</classname>.
+          The <classname>AppContext</classname> instance
+          acts as a token that can be used to obtain new
           interpreters that are associated with specific applications
           and have a fresh dynamic environment:
           <programlisting>
-Interpreter r = Context.enter("appname");
+Interpreter r = Context.enter(appContext);
           </programlisting>
         </para>
         <para>
@@ -197,20 +196,30 @@ Interpreter r = Context.enter("appname");
         </para>
         <para>
           After creation, <classname>AppContext</classname>s are
-          typically modified by loading a heap image into them. Heap
-          images are randomly accessable, and as such must be accessed
-          in their entirety, rather than as a stream.  If not loaded
-          from disk, this entails first transfering the image over a
+          typically augmented by loading a heap image into them. Heap
+          images are randomly accessable, and are therefor more
+          efficient if accessed in their entirety rather than as a stream.  
+          If not loaded from disk, this entails first transfering the image over a
           stream into memory, then operating on the entire heap in
           memory.  A typical initialization sequence, loading the heap
           image from disk, would be:
           <programlisting>
 AppContext ctx = new AppContext();
-Context.register("myapp", ctx);
-Interpreter r = Context.enter("myapp");
-ctx.loadEnv(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream("sisc.shp","r")));
+Interpreter r = Context.enter(ctx);
+REPL.loadHeap(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream("sisc.shp","r")));
 Context.exit();
           </programlisting> 
+          <note>
+            <title>Finding a Heap</title>
+            <para>
+              The <classname>REPL</classname> class contains additional helpers for
+              finding and loading heap images.  In particular, 
+              <methodname>loadDefaultHeap</methodname> can both locate a heap in
+              several common locations, or on the classpath, and load it into a
+              provided interpreter.  For other mechanisms, consult the &SISC; 
+              Javadocs.
+            </para>
+           </note>
         </para>
         <para>
           Sometimes one may want to use a different mechanism for
@@ -231,7 +240,7 @@ Interpreter r = Context.enter(appContext, dynamicEnv);
 Context.exit()
           </programlisting>
           in order to release the resources associated with the call
-          context.  It is prefered that the managed external call 
+          context.  It is preferred, however, that the managed external call 
           approach be used instead, as described in the next section
         </para>
       </sect3>

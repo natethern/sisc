@@ -212,7 +212,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
               <entry>
                 File containing pre-compiled code and data for a
                 complete Scheme top-level environment. This parameter
-                is mandatory.
+                is mandatory if the heap cannot be located automatically.
               </entry>
             </row>
             <row>
@@ -675,15 +675,38 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
             representation. The code gets executed when loaded.
           </para>
         </listitem>
-        <listitem>
-          <para>
-            <literal>shp</literal> - (Pronounced sheep) &SISC; heap
-            file.  This file contains all the compiled code loaded
-            when &SISC; starts up.
-          </para>
-        </listitem>
       </itemizedlist>
+      <para>
+        In addition to code loaded, &SISC; requires a <emphasis>heap</emphasis>,
+        which contains the default set of libraries and functions for the
+        initial environment.  &SISC; will look for a heap file called <literal>sisc.shp</literal>
+        in the current directory, the directory referenced by the <literal>SISC_HOME</literal> 
+        environment variable, and as a resource paired with the <classname>HeapAnchor</classname>
+        class in the <literal>sisc.boot</literal> package of the classpath.  
+        The standard &SISC; distribution contains <literal>sisc.shp</literal> in the 
+        same directory as the supporting <literal>.jar</literal> files.  
+      </para>
+      <para>
+        It isn't uncommon to want the heap to reside on the classpath, where it
+        can be more easily resolved in applets or in web applications.  This file,
+        usually called <literal>sisc-heap.jar</literal> can be added to the classpath
+        in any usual fashion, and the heap loading routines will discover it if
+        not found elsewhere.  To create a jar file containing the heap, create the 
+        following file structure in the
+        jar:
+      </para>
+      <programlisting>
+sisc/
+sisc/boot/
+sisc/boot/HeapAnchor.class
+sisc/boot/sisc.shp
+      </programlisting>
+      <para>
+        The <literal>HeapAnchor.class</literal> class file is distributed in the
+        <literal>sisc-opt.jar</literal> file of the full binary distribution.  
+      </para>
     </sect2>
+    
     <sect2 id="SchemeScripts">
       <title>Scheme Shell Scripts</title>
       <para>
