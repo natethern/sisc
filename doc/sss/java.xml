@@ -288,8 +288,8 @@ Context.exit()
               <type>Object</type>
               <methodname>execute</methodname>
               <methodparam choice="opt">
-                <type>String</type>
-                <parameter>appName</parameter>
+                <type>sisc.interpreter.AppContext</type>
+                <parameter>ctx</parameter>
               </methodparam>
               <methodparam>
                 <type>sisc.interpreter.SchemeCaller</type>
@@ -298,7 +298,7 @@ Context.exit()
             </methodsynopsis>
             <blockquote>
               <para>
-                Creates an Interpreter context for the named application
+                Creates an Interpreter context for the application context
                 if provided, the current application otherwise, and calls
                 <methodname>execute</methodname> in the caller with the
                 Interpreter.  When the caller returns, the Interpreter
