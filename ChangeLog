@@ -1,3 +1,7 @@
+2006-02-17  Scott G. Miller <sgmiller@gmail.com>
+
+	* Fix numerous undefined variable references.
+	
 2006-02-17  Matthias Radestock  <matthias@sorted.org>
 
 	* Added missing export for |string-concatenate-reverse/shared| in

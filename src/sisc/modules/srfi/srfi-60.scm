@@ -21,24 +21,24 @@
           (logand (lognot mask) n1)))
 ;@
 (define (bit-field n start end)
-  (logand (lognot (ash -1 (- end start)))
+  (logand (lognot (arithmetic-shift -1 (- end start)))
           (arithmetic-shift n (- start))))
 ;@
 (define (copy-bit-field to from start end)
-  (bitwise-if (arithmetic-shift (lognot (ash -1 (- end start))) start)
+  (bitwise-if (arithmetic-shift (lognot (arithmetic-shift -1 (- end start))) start)
               (arithmetic-shift from start)
               to))
 ;@
 (define (rotate-bit-field n count start end)
   (let ((width (- end start)))
     (let ((count (modulo count width))
-	  (mask (lognot (ash -1 width))))
+	  (mask (lognot (arithmetic-shift -1 width))))
       (let ((zn (logand mask (arithmetic-shift n (- start)))))
 	(logior (arithmetic-shift
 		 (logior (logand mask (arithmetic-shift zn count))
 			 (arithmetic-shift zn (- count width)))
 		 start)
-		(logand (lognot (ash mask start)) n))))))
+		(logand (lognot (arithmetic-shift mask start)) n))))))
 
 ;@
 (define integer-length
@@ -62,10 +62,10 @@
 ;@
 (define (reverse-bit-field n start end)
   (define width (- end start))
-  (let ((mask (lognot (ash -1 width))))
+  (let ((mask (lognot (arithmetic-shift -1 width))))
     (define zn (logand mask (arithmetic-shift n (- start))))
     (logior (arithmetic-shift (bit-reverse width zn) start)
-            (logand (lognot (ash mask start)) n))))
+            (logand (lognot (arithmetic-shift mask start)) n))))
 ;@
 (define (integer->list k . len)
   (if (null? len)
@@ -88,5 +88,7 @@
   (if (>= n 0)
       (ashl i n)
       (ashr i (abs n))))
+
+
 
 

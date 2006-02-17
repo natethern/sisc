@@ -36,4 +36,5 @@
       ; (error "code-point outside of representable character range: " c)
       #f))
 
-
+(define %latin1->char integer->char)
+(define %char->latin1 char->integer)

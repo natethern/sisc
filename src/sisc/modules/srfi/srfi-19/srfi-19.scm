@@ -143,43 +143,9 @@
           (error caller "TIME-ERROR type ~a" type))
       (error caller "TIME-ERROR unsupported error type ~a" type)))
 
-
-;; A table of leap seconds
-;; See ftp://maia.usno.navy.mil/ser7/tai-utc.dat
-;; and update as necessary.
-;; this procedures reads the file in the abover
-;; format and creates the leap second table
-;; it also calls the almost standard, but not R5 procedures read-line 
-;; & open-input-string
-;; ie (set! tm:leap-second-table (tm:read-tai-utc-date "tai-utc.dat"))
-
-(define (tm:read-tai-utc-data filename)
-  (define (convert-jd jd)
-    (* (- (inexact->exact jd) tm:tai-epoch-in-jd) tm:sid))
-  (define (convert-sec sec)
-    (inexact->exact sec))
-  (let ( (port (open-input-file filename))
-         (table '()) )
-    (let loop ((line (read-line port)))
-      (if (not (eq? line eof))
-          (begin
-            (let* ( (data (read (open-input-string (string-append "(" line ")")))) 
-                    (year (car data))
-                    (jd   (cadddr (cdr data)))
-                    (secs (cadddr (cdddr data))) )
-              (if (>= year 1972)
-                  (set! table (cons (cons (convert-jd jd) (convert-sec secs)) table)))
-              (loop (read-line port))))))
-    table))
-
 ;; each entry is ( utc seconds since epoch . # seconds to add for tai )
 ;; note they go higher to lower, and end in 1972.
 (define tm:leap-second-table)
-
-(define (read-leap-second-table filename)
-  (set! tm:leap-second-table (tm:read-tai-utc-data filename))
-  (values))
-
 
 (define (tm:leap-second-delta utc-seconds)
   (letrec ( (lsd (lambda (table) 

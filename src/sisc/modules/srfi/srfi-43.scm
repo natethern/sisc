@@ -420,7 +420,7 @@
     (lambda (kons knil len vectors)
       (loop kons knil len vectors 0))))
 
-;;; (%VECTOR-MAP1! <f> <target> <length> <vector>)
+;;; (%VECTOR-MAP! <f> <target> <length> <vector>) -> target
 ;;;     (F <index> <elt>) -> elt'
 (define %vector-map1!
   (letrec ((loop (lambda (f target vec i)
@@ -431,8 +431,10 @@
                                       (f j (vector-ref vec j)))
                          (loop f target vec j))))))
     (lambda (f target vec len)
-      (loop f target vec (- len 1)))))
+      (loop f target vec len))))
 
+;;; (%VECTOR-MAP2+! <f> <target> <vectors> <len>) -> target
+;;;     (F <index> <elt> ...) -> elt'
 (define %vector-map2+!
   (letrec ((loop (lambda (f target vectors i)
                    (if (zero? i)
@@ -442,7 +444,7 @@
                            (apply f j (vectors-ref vectors j)))
                          (loop f target vectors j))))))
     (lambda (f target vectors len)
-      (loop f target vectors (- len 1)))))
+      (loop f target vectors len))))
 
 
 
@@ -545,21 +547,6 @@
                 (else
                  (unfold2+! f vec i initial-seeds)))
           vec)))))
-
-;++ Flush VECTOR-TABULATE: it's superseded by VECTOR-UNFOLD.
-
-;;; (VECTOR-TABULATE <f> <length>) -> vector
-;;;     (F <index>)
-;;;   Create a vector whose length is LENGTH.  Initialize it with the
-;;;   results of (f INDEX) for every INDEX in the resulting vector.
-;;;   The order of applications of F is unspecified.
-;++(define (vector-tabulate f len)
-;++  (check-type procedure? f vector-tabulate)
-;++  (check-type nonneg-int? len vector-tabulate)
-;++  (let ((new-vector (make-vector len)))
-;++    (do ((i 0 (+ i 1)))
-;++        ((= i len) new-vector)
-;++      (vector-set! new-vector i (f i)))))
 
 ;;; (VECTOR-COPY <vector> [<start> <end> <fill>]) -> vector
 ;;;   Create a newly allocated vector containing the elements from the
@@ -742,7 +729,7 @@
                                   (test (vector-ref vector-a i)
                                         (vector-ref vector-b i)
                                         i)))))
-                 (test (lambda (elt-a)
+                 (test (lambda (elt-a elt-b i)
                          (and (or (eq? elt-a elt-b) ;+++
                                   (elt=? elt-a elt-b))
                               (loop (+ i 1))))))
@@ -821,7 +808,8 @@
                                  (apply kons i knil
                                         (vectors-ref vectors i))
                                  vectors
-                                 (+ i 1))))))
+                                 (+ i 1)
+                                 (- i 1))))))
     (lambda (kons knil vec . vectors)
       (let ((kons (check-type procedure? kons vector-fold-right))
             (vec  (check-type vector?    vec  vector-fold-right)))
@@ -848,7 +836,9 @@
         (let ((len (%smallest-length vectors
                                      (vector-length vec)
                                      vector-map)))
-          (%vector-map2+! f (make-vector len) vectors len)))))
+          (%vector-map2+! f (make-vector len) (cons vec vectors)
+                          len)))))
+
 
 ;;; (VECTOR-MAP! <f> <vector> ...) -> unspecified
 ;;;     (F <elt> ...) -> element' ; N vectors -> N args
@@ -1023,7 +1013,7 @@
                           (start end)
       (let loop ((start start) (end end) (j #f))
         (let ((i (quotient (+ start end) 2)))
-          (if (and j (= i j))
+          (if (or (= start end) (and j (= i j)))
               #f
               (let ((comparison
                      (check-type integer?
@@ -1143,18 +1133,18 @@
          (tstart (check-index target tstart vector-copy!)))
     (let-vector-start+end vector-copy! source maybe-sstart+send
                           (sstart send)
-      (let ((source-length (vector-length source))
-            (lose (lambda (argument)
-                    (error "Vector range out of bounds"
-                           argument
-                           `(while calling ,vector-copy!)
-                           `(target was ,target)
-                           `(target-length was ,(vector-length target))
-                           `(tstart was ,tstart)
-                           `(source was ,source)
-                           `(source-length was ,source-length)
-                           `(sstart was ,sstart)
-                           `(send   was ,send)))))
+      (let* ((source-length (vector-length source))
+             (lose (lambda (argument)
+                     (error "vector range out of bounds"
+                            argument
+                            `(while calling ,vector-copy!)
+                            `(target was ,target)
+                            `(target-length was ,(vector-length target))
+                            `(tstart was ,tstart)
+                            `(source was ,source)
+                            `(source-length was ,source-length)
+                            `(sstart was ,sstart)
+                            `(send   was ,send)))))
         (cond ((< sstart 0)
                (lose '(sstart < 0)))
               ((< send 0)
@@ -1175,18 +1165,18 @@
          (tstart (check-index target tstart vector-reverse-copy!)))
     (let-vector-start+end vector-reverse-copy source maybe-sstart+send
                           (sstart send)
-      (let ((source-length (vector-length source))
-            (lose (lambda (argument)
-                    (error "Vector range out of bounds"
-                           thing
-                           `(while calling ,vector-reverse-copy!)
-                           `(target was ,target)
-                           `(target-length was ,(vector-length target))
-                           `(tstart was ,tstart)
-                           `(source was ,source)
-                           `(source-length was ,source-length)
-                           `(sstart was ,sstart)
-                           `(send   was ,send)))))
+      (let* ((source-length (vector-length source))
+             (lose (lambda (argument)
+                     (error "vector range out of bounds"
+                            argument
+                            `(while calling ,vector-reverse-copy!)
+                            `(target was ,target)
+                            `(target-length was ,(vector-length target))
+                            `(tstart was ,tstart)
+                            `(source was ,source)
+                            `(source-length was ,source-length)
+                            `(sstart was ,sstart)
+                            `(send   was ,send)))))
         (cond ((< sstart 0)
                (lose '(sstart < 0)))
               ((< send 0)
@@ -1201,9 +1191,8 @@
                     (= sstart tstart))
                (%vector-reverse! target tstart send))
               ((and (eq? target source)
-                    (or (between? sstart tstart send)
-                        (between? sstart (+ tstart (- send sstart))
-                                  send)))
+                    (between? tstart sstart
+                              (+ tstart (- send sstart))))
                (error "Vector range for self-copying overlaps"
                       vector-reverse-copy!
                       `(vector was ,target)
@@ -1326,7 +1315,7 @@
     (let ((start (check-type nonneg-int? start reverse-list->vector))
           (end   (check-type nonneg-int? end   reverse-list->vector)))
       ((lambda (f)
-         (vector-unfold-right f (- end start) lst))
+         (vector-unfold-right f (- end start) (list-tail lst start)))
        (lambda (index l)
          (cond ((null? l)
                 (error "List too short"
