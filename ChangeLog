@@ -1,3 +1,8 @@
+2006-02-17  Matthias Radestock  <matthias@sorted.org>
+
+	* Added missing export for |string-concatenate-reverse/shared| in
+	  srfi-13 module.
+
 2006-02-16  Matthias Radestock  <matthias@sorted.org>
 
 	* Introduced notion of a default application context which is used
