@@ -17,6 +17,7 @@
      terminated-thread-exception? uncaught-exception?
      uncaught-exception-reason)
   (import threading-native)
+  (import threading-complex-native)
   (import record)
   (import* srfi-19
            current-time
