@@ -181,18 +181,6 @@
           base-case
           (helper (car args) (cdr args))))))
 
-(define (_make-right-pairwise-nary proc base-case)
-  (letrec ([helpera
-            (lambda (acc argls)
-              (if (null? argls)
-                  acc
-                  (helper (proc (car argls) acc)
-                          (cdr argls))))])
-    (lambda args
-      (if (null? args)
-          base-case
-          (helper (car args) (cdr args))))))
-
 ;;;;;;;;;;;;;;; Conversion functions
 
 (define list->string
