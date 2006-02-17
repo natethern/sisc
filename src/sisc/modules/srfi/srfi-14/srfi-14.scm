@@ -134,7 +134,7 @@
 
 (define (char-set-map proc cs)
   (check-arg procedure? proc char-set-map)
-  (let ((s (%char-set:s/check cs char-set-for-map)))
+  (let ((s (%char-set:s/check cs char-set-map)))
     (char-set-fold (lambda (c cs)
                      (char-set-adjoin! cs c)
                      cs)
@@ -272,7 +272,7 @@
           (char-set-intersection first (apply char-set-union rest))))
 
 (define (char-set-complement! cs)
-  (char-set:s! cs (lognot (%char-set:s/check cs char-set-compliment!))))
+  (char-set:s! cs (lognot (%char-set:s/check cs char-set-complement!))))
 (define (char-set-union!  . args)
   (char-set:s! cs (apply logior (map (lambda (a)
                                       (%char-set:s/check a char-set-union!)) args))))
