@@ -31,7 +31,8 @@
    string-contains string-contains-ci
    string-copy! substring/shared
    string-reverse string-reverse! reverse-list->string
-   string-concatenate string-concatenate/shared string-concatenate-reverse
+   string-concatenate string-concatenate/shared
+   string-concatenate-reverse string-concatenate-reverse/shared
    string-append/shared
    xsubstring string-xcopy!
    string-null?
