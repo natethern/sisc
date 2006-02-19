@@ -31,7 +31,7 @@ public class JavaDeserializer extends DeserializerImpl {
         try {
             return readObject();
         } catch (ClassNotFoundException cnf) {
-            throw new IOException(cnf.getMessage());
+            throw new IOException(cnf.toString());
         }
     }
 

@@ -68,7 +68,7 @@ public class Types extends IndexedFixableProcedure {
                 classObject = Class.forName(s.readUTF(), true,
                                             currentClassLoader());
             } catch(ClassNotFoundException e) {
-                throw new IOException(e.getMessage());
+                throw new IOException(e.toString());
             }
         }
 
