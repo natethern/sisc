@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.io.IOException;
 
 import sisc.data.Value;
 import sisc.interpreter.Context;
@@ -58,10 +59,12 @@ public class Operation extends IndexedProcedure {
             switch(id) {
             case JAVA_CLASS:
                 String cname = symval(f.vlr[0]);
-                Class c = Util.resolveType(cname, f.dynenv.getClassLoader());
-                if (c == null)
+                try {
+                    Class c = Util.resolveType(cname, f.dynenv.getClassLoader());
+                    return Util.makeJObj(c, Class.class);
+                } catch(IOException e) {
                     throwPrimException(liMessage(Util.S2JB, "classnotfound", cname));
-                else return Util.makeJObj(c, Class.class);
+                }
             case JAVA_INV_HANDLER:
                 return Util.makeJObj(new SchemeInvocation(f.dynenv.copy(), proc(f.vlr[0])), SchemeInvocation.class);
             default: break SIZESWITCH;

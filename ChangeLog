@@ -1,6 +1,11 @@
+2006-02-19  Matthias Radestock  <matthias@sorted.org>
+
+	* Improved reporting of ClassNotFoundExceptions during
+	  deserialisation.
+
 2006-02-17  Scott G. Miller <sgmiller@gmail.com>
 
-	* Fix numerous undefined variable references.
+	* Fix numerous undefined variable references in various SRFIs.
 	
 2006-02-17  Matthias Radestock  <matthias@sorted.org>
 

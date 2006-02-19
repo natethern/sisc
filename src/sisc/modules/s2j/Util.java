@@ -6,6 +6,7 @@ import sisc.nativefun.*;
 import sisc.interpreter.*;
 import sisc.data.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -218,7 +219,9 @@ public abstract class Util extends IndexedFixableProcedure {
      * @param cl classloader to use
      * @return a <code>Class</code> value
      */
-    public static Class resolveType(String name, ClassLoader cl) {
+    public static Class resolveType(String name, ClassLoader cl)
+        throws IOException {
+
         int idx = name.indexOf('[');
         if (idx != -1) {
             Class c = resolveType(name.substring(0, idx), cl);
@@ -230,7 +233,7 @@ public abstract class Util extends IndexedFixableProcedure {
         try {
             return Class.forName(name, true, cl);
         } catch (ClassNotFoundException e) {
-            return null;
+            throw new IOException(e.toString());
         }
     }
 
@@ -240,7 +243,7 @@ public abstract class Util extends IndexedFixableProcedure {
      * This just calls <code>resolveType(name,
      * getClassLoader())</code>.
      */
-    public static Class resolveType(String name) {
+    public static Class resolveType(String name) throws IOException {
         return resolveType(name, currentClassLoader());
     }
 
