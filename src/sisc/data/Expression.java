@@ -147,9 +147,7 @@ public abstract class Expression extends Util
      * @exception IOException 
      * @param s the Serializer
      */
-    public void serialize(Serializer s) throws IOException {
-        throw new NotSerializableException(toString());
-    }
+    public void serialize(Serializer s) throws IOException {}
 
     /**
      * All Expressions must implement a default (no-argument) constructor.  
@@ -161,8 +159,7 @@ public abstract class Expression extends Util
      * @exception IOException 
      * @param s the Deserializer
      */
-    public void deserialize(Deserializer s) throws IOException
-        {}
+    public void deserialize(Deserializer s) throws IOException {}
 
     public void writeExternal(ObjectOutput out) throws IOException {
         Serializer s = JavaSerializer.create(out);
