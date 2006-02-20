@@ -1,3 +1,8 @@
+2006-02-20  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed a number of bugs in srfi-43 by merging in changes from the
+	  most recent reference implementation.
+
 2006-02-19  Matthias Radestock  <matthias@sorted.org>
 
 	* Improved reporting of ClassNotFoundExceptions during
@@ -5,7 +10,8 @@
 
 2006-02-17  Scott G. Miller <sgmiller@gmail.com>
 
-	* Fix numerous undefined variable references in various SRFIs.
+	* Fix numerous undefined variable references in various SRFIs,
+	  fixing bugs 1433481, 1433487, 1433495, 1433501 and 1433526.
 	
 2006-02-17  Matthias Radestock  <matthias@sorted.org>
 
