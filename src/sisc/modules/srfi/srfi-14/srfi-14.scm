@@ -273,9 +273,10 @@
 
 (define (char-set-complement! cs)
   (char-set:s! cs (lognot (%char-set:s/check cs char-set-complement!))))
-(define (char-set-union!  . args)
+(define (char-set-union!  cs . args)
   (char-set:s! cs (apply logior (map (lambda (a)
-                                      (%char-set:s/check a char-set-union!)) args))))
+                                      (%char-set:s/check a char-set-union!))
+                                     (cons cs args)))))
 (define (char-set-intersection! cs . args)
   (char-set:s! cs (apply logand (map (lambda (a)
                                       (%char-set:s/check a char-set-intersection!)) 
