@@ -281,7 +281,7 @@
                                       (%char-set:s/check a char-set-intersection!)) 
                                      (cons cs args)))))
 (define (char-set-difference! first . rest)
-  (char-set:s! cs (logand (%char-set:s/check first char-set-difference!)
+  (char-set:s! first (logand (%char-set:s/check first char-set-difference!)
                          (lognot (apply logior (map (lambda (a)
                                                       (%char-set:s/check a char-set-difference!))
                                                     rest))))))
