@@ -26,8 +26,9 @@
      array->vector
      share-array/prefix
      share-array/origin
+     share-array/index!
      array-append
      transpose
      share-nths)
-  (import srfi-25)
+  (import srfi-25-int)
   (include "../../modules/srfi/srfi-25/arlib.scm"))
