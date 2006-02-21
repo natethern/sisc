@@ -4,6 +4,8 @@
 	  a SchemeException, allowing more flexible Java side 
 	  error handling.
 	  
+	* Modified sisc.sh to support older shells. See bug 1431789.
+	
 2006-02-20  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a number of bugs in srfi-43 by merging in changes from the

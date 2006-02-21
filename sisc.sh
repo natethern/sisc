@@ -65,7 +65,7 @@ else
 
         
     D=":"
-    case $(uname) in 
+    case `uname -s` in 
       CYGWIN* )
         D=";" ;;
     esac
