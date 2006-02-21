@@ -19,7 +19,7 @@ public interface SchemeCaller {
      *  be returned out of the call to Context.execute()
      * @see sisc.interpreter.Context#execute(AppContext, SchemeCaller)
      */
-    public Object execute(Interpreter r);
+    public Object execute(Interpreter r) throws SchemeException;
 }
 
 /*

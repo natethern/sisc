@@ -1,3 +1,9 @@
+2006-02-21  Scott G. Miller <sgmiller@gmail.com>
+
+	* Modified SchemeCaller and Context.execute() to throw
+	  a SchemeException, allowing more flexible Java side 
+	  error handling.
+	  
 2006-02-20  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a number of bugs in srfi-43 by merging in changes from the

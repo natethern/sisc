@@ -222,7 +222,7 @@ public abstract class Context extends Util {
      *
      * @param caller The SchemeCaller to invoke
      */
-    public static Object execute(SchemeCaller caller) {
+    public static Object execute(SchemeCaller caller) throws SchemeException {
         Interpreter r = currentInterpreter();
         if (r == null) {
             return execute(getDefaultAppContext(), caller);
@@ -238,7 +238,7 @@ public abstract class Context extends Util {
      * @param interp The Interpreter
      * @param caller The SchemeCaller to invoke
      */
-    public static Object execute(Interpreter interp, SchemeCaller caller) {
+    public static Object execute(Interpreter interp, SchemeCaller caller) throws SchemeException {
         return execute(interp.dynenv, caller);
     }
 
@@ -249,7 +249,7 @@ public abstract class Context extends Util {
      * @param ctx The AppContext
      * @param caller The SchemeCaller to invoke.
      */
-    public static Object execute(AppContext ctx, SchemeCaller caller) {
+    public static Object execute(AppContext ctx, SchemeCaller caller) throws SchemeException {
         return execute(new DynamicEnvironment(ctx), caller);
     }
     
@@ -268,7 +268,7 @@ public abstract class Context extends Util {
      * @param caller The SchemeCaller to invoke.
      */
     public static Object execute(DynamicEnvironment dynenv, 
-                                 SchemeCaller caller) {
+                                 SchemeCaller caller) throws SchemeException {
         Interpreter r=Context.enter(dynenv);
         //Hold this reference.  Necessary because ThreadContext references
         //hostThread only weakly, which is in turn necessary so that
@@ -290,7 +290,14 @@ public abstract class Context extends Util {
      * @deprecated use {@link #execute(AppContext, SchemeCaller)} instead
      */
     public static Object execute(String appName, SchemeCaller caller) {
-        return execute(lookup(appName), caller);
+        //Since this is deprecated, we'll catch the exception to preserve
+        //backwards compatibility through one release.    
+        try {
+            return execute(lookup(appName), caller);
+        } catch (SchemeException se) {
+            warn("SchemeException caught from execute:" + se.getMessage());
+            return null;
+        }
     }
 
     /*********** resource maintenance ***********/
