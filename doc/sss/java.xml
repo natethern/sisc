@@ -10,23 +10,85 @@
   </para>
   <sect1 id="JavaToScheme">
     <title>Java-to-Scheme Interface</title>
-    <para>
-      Multiple Scheme applications can run within a single &SISC;
-      runtime. Each application has its own top level environment and
-      evaluator. An application is represented by instances of the
-      <classname>sisc.interpreter.AppContext</classname> class.
-      
-      A Scheme application can execute in multiple threads. Each thread must
-      have its own dynamic environment, containing entities such as the current
-      input and output ports. Dynamic environments are represented by
-      instances of the
-      <classname>sisc.env.DynamicEnvironment</classname> class.       
-      A thread can be associated with multiple interpreters. The reason for
-      there being multiple interpreters is that internal calls need to be
-      executed by an interpreter different from the one that initiated the
-      internal call so that the state of the latter can be preserved.
-      
-    </para>
+    <sect2>
+      <title>Contexts and Environments</title>
+          
+      <para>
+        Multiple Scheme applications can run within a single &SISC;
+        runtime. Each application has its own top level environment and
+        evaluator. An application is represented by instances of the
+        <classname>sisc.interpreter.AppContext</classname> class.  Most
+        API interactions use the <classname>AppContext</classname> 
+        to indicate which application is being accessed.  However,
+        existing Java applications may not be aware of Scheme code,
+        and thus there are provisions in &SISC; for consulting a
+        <emphasis>default</emphasis> <classname>AppContext</classname>
+        when being called by such unaware code. 
+      </para>
+      <para>
+        The default <classname>AppContext</classname> is created
+        implicitly when requested by &SISC; when performing an operation
+        which requires it, and initialized with the default
+        heap.  It can be explicitly set and retrieved using
+        the following methods in the <classname>sisc.interpreter.Context</classname>
+        class:
+      </para>
+      <para>
+        <methodsynopsis language="java">
+          <modifier>public</modifier>
+           <void/>
+           <methodname>setDefaultAppContext</methodname>
+           <methodparam>
+             <type>sisc.interpreter.AppContext</type>
+             <parameter>ctx</parameter>
+           </methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Set the default <classname>AppContext</classname>
+            to the instance provided.
+          </para>
+        </blockquote>
+      </para>             
+      <para>
+        <methodsynopsis language="java">
+          <modifier>public</modifier>
+          <type>sisc.interpreter.AppContext</type>
+          <methodname>getDefaultAppContext</methodname>        
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Retrieves the current default <classname>AppContext</classname>,
+            possibly creating and initializing one using the default
+            heap if no default was set.
+          </para>
+        </blockquote>
+      </para>             
+      <para>
+        <methodsynopsis language="java">
+          <modifier>public</modifier>
+          <type>sisc.interpreter.AppContext</type>
+          <methodname>currentAppContext</methodname>        
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Retrieves the current <classname>AppContext</classname> on 
+            an internal call, or the default during an external call.
+          </para>
+        </blockquote>
+      </para>             
+      <para>      
+        A Scheme application can execute in multiple threads. Each thread must
+        have its own dynamic environment, containing entities such as the current
+        input and output ports. Dynamic environments are represented by
+        instances of the
+        <classname>sisc.env.DynamicEnvironment</classname> class.       
+        A thread can be associated with multiple interpreters. The reason for
+        there being multiple interpreters is that internal calls need to be
+        executed by an interpreter different from the one that initiated the
+        internal call so that the state of the latter can be preserved.
+      </para>        
+    </sect2>
     <sect2>
       <title>Calling Scheme From Java</title>
       <para>
