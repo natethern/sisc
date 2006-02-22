@@ -324,3 +324,14 @@
                (if (procedure? k) 
                    (k (p1))
                    k))))
+
+;This uses a complex nesting of error handling because we
+;want to detect the error at application but not at compilation time.
+(should-be 1434848 'passed
+           (call/cc (lambda (esc)
+                      (with/fc (lambda (m e) 'passed)
+                               (lambda ()
+                                 ((with/fc (lambda (m e) (esc 'failed))
+                                           (lambda ()
+                                             (eval '(lambda () (+ ((lambda () #f) 3))))))))))))
+                    
