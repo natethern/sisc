@@ -102,7 +102,7 @@ public class SignalHook implements InvocationHandler {
             if (l==null) {
                 l=new ArrayList();
                 handlers.put(signal, l);
-                addHandler(signame, proc, env);
+                l.add(new SignalHandler(proc, env));
                 try {
                     handle.invoke(null, new Object[] {signal,sigHook});
                 } catch (InvocationTargetException it) {
