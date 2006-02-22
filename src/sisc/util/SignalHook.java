@@ -18,6 +18,7 @@ import sisc.data.Procedure;
 import sisc.env.DynamicEnvironment;
 import sisc.interpreter.Context;
 import sisc.interpreter.Interpreter;
+import sisc.interpreter.SchemeCaller;
 import sisc.interpreter.SchemeException;
 
 /**
@@ -62,7 +63,7 @@ public class SignalHook implements InvocationHandler {
 
     private static Map handlers=new HashMap();
 
-    public static class SignalHandler {
+    public static class SignalHandler implements SchemeCaller {
         private Procedure proc;
         private DynamicEnvironment env;
         
@@ -74,7 +75,11 @@ public class SignalHook implements InvocationHandler {
         public boolean equals(Object o) {
             if (!(o instanceof SignalHandler)) return false;
             SignalHandler ot=(SignalHandler)o;
-            return ot.proc.equals(proc) && ot.env.equals(env);
+            return ot.proc.equals(proc);
+        }
+
+        public Object execute(Interpreter r) throws SchemeException {
+            return r.eval(proc, Util.ZV);
         }
     }
 
@@ -137,13 +142,15 @@ public class SignalHook implements InvocationHandler {
             if (l!=null) {
                 for (int i=0; i<l.size(); i++) {
                     SignalHandler handler=(SignalHandler)l.get(i);
-                    Interpreter r=Context.enter(handler.env);
                     try {
-                        r.eval(handler.proc, Util.ZV);
+                        if (Context.currentInterpreter() == null) {
+                            Context.execute(handler.env.copy(), handler);
+                        } else {
+                            Context.execute(handler);
+                        }
                     } catch (SchemeException e) {
                         e.printStackTrace();
                     }
-                    Context.exit();
                 }
             }        
         } catch (Throwable t) {
