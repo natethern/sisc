@@ -45,7 +45,7 @@
            (values rv (merge-states state (apply merge-states values-state*))))
          (let-values ([(l lstate) (opt:lambda ?lambda formals body state)])
            (values `(,l ,@values*)
-                   values-state*))))
+                   (apply merge-states values-state*)))))
     ((,?lambda/letrec #t ,formals ,meta ,body)
      ; An already analyzed expression, skip it.  This can occur when
      ; psyntax pre-expands some forms in complicated syntax-case expressions.

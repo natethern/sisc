@@ -3,6 +3,9 @@
 	* Modified SignalHook to have callbacks happen in 
 	  an appropriate, thread safe DynamicEnvironment. 
 	  
+	* Fixed a bug in the invalid-syntax branch of let
+      optimization where states weren't merged. See bug 1434848.
+      
 2006-02-22  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug 1435707 - Java->Scheme calls via S2J proxies now
