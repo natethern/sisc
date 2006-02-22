@@ -1,3 +1,8 @@
+2006-02-22  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed bug 1435707 - Java->Scheme calls via S2J proxies now
+	  happen in a sensible dynamic environment.
+
 2006-02-21  Scott G. Miller <sgmiller@gmail.com>
 
 	* Modified SchemeCaller and Context.execute() to throw
