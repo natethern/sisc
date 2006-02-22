@@ -24,6 +24,7 @@
      array-map
      array-map!
      array->vector
+     array->list
      share-array/prefix
      share-array/origin
      share-array/index!
