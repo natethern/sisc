@@ -114,9 +114,10 @@ public class SignalHook implements InvocationHandler {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-            synchronized(l) {
-                l.add(new SignalHandler(proc, env));
+            } else {
+                synchronized(l) {
+                    l.add(new SignalHandler(proc, env));
+                }
             }
         }
     }
