@@ -97,24 +97,28 @@ public class SignalHook implements InvocationHandler {
         Object signal = makeSignal(signame);
         if (signal == null) return;
 
-        List l=(List)handlers.get(signal);
-        if (l==null) {
-            l=new ArrayList();
-            handlers.put(signal, l);
-            addHandler(signame, proc, env);
-            try {
-                handle.invoke(null, new Object[] {signal,sigHook});
-            } catch (InvocationTargetException it) {
-                if (!(it.getTargetException() instanceof IllegalArgumentException)) {
-                    it.getTargetException().printStackTrace();
+        synchronized(handlers) {
+            List l=(List)handlers.get(signal);
+            if (l==null) {
+                l=new ArrayList();
+                handlers.put(signal, l);
+                addHandler(signame, proc, env);
+                try {
+                    handle.invoke(null, new Object[] {signal,sigHook});
+                } catch (InvocationTargetException it) {
+                    if (!(it.getTargetException() instanceof IllegalArgumentException)) {
+                        it.getTargetException().printStackTrace();
+                    }
+                    // The underlying VM doesn't support overriding this
+                    // signal, so we ignore it.
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                // The underlying VM doesn't support overriding this
-                // signal, so we ignore it.
-            } catch (Exception e) {
-                e.printStackTrace();
+            }
+            synchronized(l) {
+                l.add(new SignalHandler(proc, env));
             }
         }
-        l.add(new SignalHandler(proc, env));
     }
     
     public static void removeHandler(String signame, Procedure proc, DynamicEnvironment env) {
@@ -122,14 +126,19 @@ public class SignalHook implements InvocationHandler {
         if (signal == null) return;
         
         SignalHandler handler=new SignalHandler(proc, env);
-        List l=(List)handlers.get(signal);
+        List l;
+        synchronized(handlers) {
+            l=(List)handlers.get(signal);
+        }
         if (l!=null) {
-            l.remove(handler);
-            if (l.isEmpty()) {
-                try {
-                    handle.invoke(null, new Object[] {signal,SIG_DFL});
-                } catch (Exception iae) {}
-                handlers.remove(signal);
+            synchronized(l) {
+                l.remove(handler);
+                if (l.isEmpty()) {
+                    try {
+                        handle.invoke(null, new Object[] {signal,SIG_DFL});
+                    } catch (Exception iae) {}
+                    handlers.remove(signal);
+                }
             }
         }
     }
@@ -138,18 +147,23 @@ public class SignalHook implements InvocationHandler {
         try {
             if (a==null || a.length!=1) return null;
             Object signal=a[0];
-            List l=(List)handlers.get(signal);
+            List l;
+            synchronized(handlers) {
+                l=(List)handlers.get(signal);
+            }
             if (l!=null) {
-                for (int i=0; i<l.size(); i++) {
-                    SignalHandler handler=(SignalHandler)l.get(i);
-                    try {
-                        if (Context.currentInterpreter() == null) {
-                            Context.execute(handler.env.copy(), handler);
-                        } else {
-                            Context.execute(handler);
+                synchronized(l) {
+                    for (int i=0; i<l.size(); i++) {
+                        SignalHandler handler=(SignalHandler)l.get(i);
+                        try {
+                            if (Context.currentInterpreter() == null) {
+                                Context.execute(handler.env.copy(), handler);
+                            } else {
+                                Context.execute(handler);
+                            }
+                        } catch (SchemeException e) {
+                            e.printStackTrace();
                         }
-                    } catch (SchemeException e) {
-                        e.printStackTrace();
                     }
                 }
             }        
