@@ -9,20 +9,6 @@ public class SchemeInvocation implements InvocationHandler {
     protected DynamicEnvironment dynenv;
     protected Procedure proc;
 
-    static Method hashCodeMeth;
-    static Method equalsMeth;
-    static Method toStringMeth;
-
-    static {
-        try {
-            hashCodeMeth = Object.class.getMethod("hashCode", new Class[]{});
-            equalsMeth = Object.class.getMethod("equals", new Class[]{java.lang.Object.class});
-            toStringMeth = Object.class.getMethod("toString", new Class[]{});
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(sisc.util.Util.liMessage(Util.S2JB, "reqmethodnotfound"));
-        }
-    }
-
     public SchemeInvocation(DynamicEnvironment dynenv, Procedure proc) {
         this.dynenv = dynenv;
         this.proc = proc;
