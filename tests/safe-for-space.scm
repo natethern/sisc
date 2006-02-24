@@ -44,3 +44,7 @@
 
 ; SISC Leaks on examples 2-4 in versions 1.8.5 and earlier.  
 ; In 1.9.0-alpha and up, we leak only on 4.
+
+;; an example using call/cc - this works fine in SISC
+
+(let loop ([x 0]) (call/cc loop))
