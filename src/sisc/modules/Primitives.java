@@ -2,7 +2,7 @@ package sisc.modules;
 
 interface Primitives {
 
-    //next: 141
+    //next: 142
     int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -90,6 +90,7 @@ interface Primitives {
         PAIRQ = 17,
         PARAMETERQ = 40,
         PERMITINTERRUPTS = 8,
+        PORTQ = 141,
         PROCEDUREQ = 35,
         PUTPROP = 110,
         QUOTIENT = 90,
