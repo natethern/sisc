@@ -113,6 +113,9 @@
   (lambda args
     (make type (apply proc args))))
 
+(define (port? v)
+  (instance-of? v <port>))
+
 (define (input-port? v)
   (instance-of? v <input-port>))
 

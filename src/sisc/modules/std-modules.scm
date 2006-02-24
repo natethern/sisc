@@ -633,6 +633,7 @@
    open-binary-output-file
    close-input-port
    close-output-port
+   port?
    input-port?
    output-port?
    character-input-port?
@@ -747,6 +748,7 @@
    open-output-file
    close-input-port
    close-output-port
+   port?
    input-port?
    output-port?))
    

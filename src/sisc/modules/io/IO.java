@@ -15,7 +15,7 @@ public class IO extends IndexedProcedure {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
-        //NEXT = 27,
+        //NEXT = 28,
 
         ABSPATHQ            = 0,
         CHARREADY           = 3,
@@ -37,6 +37,7 @@ public class IO extends IndexedProcedure {
         OPENSOURCEINPUTFILE = 20,
         OUTPORTQ            = 22,
         PEEKCHAR            = 23,
+        PORTQ               = 27,
         READ                = 21,
         READCHAR            = 18,
         READSTRING          = 25,
@@ -72,6 +73,7 @@ public class IO extends IndexedProcedure {
             define("open-source-input-file", OPENSOURCEINPUTFILE);
             define("output-port?"       , OUTPORTQ);
             define("peek-char"          , PEEKCHAR);
+            define("port?"              , PORTQ);
             define("read"               , READ);
             define("read-char"          , READCHAR);
             define("read-code"          , READCODE);
@@ -279,6 +281,7 @@ public class IO extends IndexedProcedure {
             }
         case 1:
             switch (id) {
+            case PORTQ: return truth(f.vlr[0] instanceof Port);
             case INPORTQ: return truth(f.vlr[0] instanceof InputPort);
             case OUTPORTQ: return truth(f.vlr[0] instanceof OutputPort);
             case CHARREADY:

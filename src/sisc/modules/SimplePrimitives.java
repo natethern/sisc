@@ -97,7 +97,6 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
             define("pair?", PAIRQ);
             define("parameter?", PARAMETERQ);
             define("permit-interrupts", PERMITINTERRUPTS);
-            define("port?", PORTQ);
             define("procedure?", PROCEDUREQ);
             define("quotient", QUOTIENT);
             define("real-part", REALPART);
@@ -257,8 +256,6 @@ public class SimplePrimitives extends IndexedFixableProcedure implements Primiti
                          ((ImmutablePair)v1).isImmutable());
         case IMMUTABLEVECTORQ:
             return truth(v1 instanceof ImmutableVector);
-        case PORTQ:
-            return truth(v1 instanceof Port);
         case ADD: 
         case MUL: return num(v1);
         case SUB: return num(v1).negate();
