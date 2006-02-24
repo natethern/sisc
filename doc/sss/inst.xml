@@ -466,7 +466,9 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                 <row>
                   <entry>
                     <indexterm><primary>case-sensitive</primary></indexterm>
-                    <envar>caseSensitive</envar></entry>
+                    <envar>caseSensitive</envar>
+                  </entry>
+                  <entry><function>case-sensitive</function></entry>
                   <entry>false</entry>
                   <entry>
                     Determines whether symbols read via the Scheme
@@ -478,6 +480,7 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                     <indexterm><primary>character-set</primary></indexterm>
                     <envar>characterSet</envar>
                   </entry>
+                  <entry><function>character-set</function></entry>
                   <entry>"UTF8"</entry>
                   <entry>
                     Defines the default character set used by character
