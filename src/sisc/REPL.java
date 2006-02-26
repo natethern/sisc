@@ -355,9 +355,7 @@ public class REPL {
                 new DynamicEnvironment(ctx,
                                        client.getInputStream(),
                                        client.getOutputStream());
-            Interpreter r=Context.enter(dynenv);
-            Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
-            Context.exit();
+            Procedure p = (Procedure)ctx.lookupContextEnv(Util.TOPLEVEL).lookup(Symbol.get("sisc-cli"));
             SchemeThread t = new SchemeSocketThread(dynenv, p, client);
             REPL repl = new REPL(t);
             repl.go();
