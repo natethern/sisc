@@ -384,7 +384,7 @@ public class IO extends IndexedProcedure {
                                                   url.toString()),
                                      e);
                 }
-                Interpreter r = Context.enter(f);
+                Interpreter r = Context.enter(f.dynenv);
                 try {
                     v=null;
                     do {
@@ -422,7 +422,7 @@ public class IO extends IndexedProcedure {
                                                   url.toString()),
                                      e);
                 }
-                r = Context.enter(f);
+                r = Context.enter(f.dynenv);
                 try {
                     v=null;
                     do {

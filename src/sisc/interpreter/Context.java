@@ -153,24 +153,8 @@ public abstract class Context extends Util {
         if (r == null) {
             return enter(getDefaultAppContext());
         } else {
-            return enter(r);
+            return enter(r.dynenv);
         }
-    }
-
-    /**
-     * Returns a new Interpreter instance with the same AppContext and
-     * DynamicEnvironment of the argument instance.
-     * 
-     * The ThreadContext's hostThread will be set to a SchemeThread
-     * wrapping the current thread.
-     *
-     * @param interp The Interpreter from which to derive the new
-     * Interpreter
-     * @return The newly created Interpreter
-     * @see Interpreter
-     */
-    public static Interpreter enter(Interpreter interp) {
-        return enter(interp.dynenv);
     }
 
     /**
@@ -232,20 +216,8 @@ public abstract class Context extends Util {
         if (r == null) {
             return execute(getDefaultAppContext(), caller);
         } else {
-            return execute(r, caller);
+            return execute(r.dynenv, caller);
         }
-    }
-
-    /**
-     * Calls {@link #execute(DynamicEnvironment, SchemeCaller)} with
-     * the DynamicEnvironment of the given Interpreter.
-     *
-     * @param interp The Interpreter
-     * @param caller The SchemeCaller to invoke
-     * @return the result of invoking the SchemeCaller
-     */
-    public static Object execute(Interpreter interp, SchemeCaller caller) throws SchemeException {
-        return execute(interp.dynenv, caller);
     }
 
     /**

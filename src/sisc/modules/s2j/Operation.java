@@ -73,7 +73,7 @@ public class Operation extends IndexedProcedure {
             switch(id) {
             case JAVA_SYNC:
                 synchronized(Util.jobj(f.vlr[0])) {
-                    Interpreter i=Context.enter(f);
+                    Interpreter i=Context.enter(f.dynenv);
                     try {
                         return i.eval(proc(f.vlr[1]), ZV);
                     } catch (SchemeException se) {
