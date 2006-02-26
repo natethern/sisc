@@ -460,7 +460,7 @@ public class Threads extends IndexedFixableProcedure {
             case 1:
                 switch(id) {
                 case THREADNEW:
-                    return new SchemeThread(f,proc(f.vlr[0]));
+                    return new SchemeThread(f.dynenv, proc(f.vlr[0]));
                 case THREADRESULT:
                     return sthread(f.vlr[0]).getResult(f);
                 default:

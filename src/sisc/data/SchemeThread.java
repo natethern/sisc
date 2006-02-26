@@ -18,10 +18,6 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
     public int state;
     public Value rv;
 
-    public SchemeThread(Interpreter r, Procedure thunk) {
-        this(r.dynenv, thunk);
-    }
-
     public SchemeThread(DynamicEnvironment dynenv, Procedure thunk) {
         this.env = dynenv.copy();
         this.env.wind = FALSE;

@@ -5,6 +5,7 @@ import java.util.*;
 
 import sisc.data.SchemeThread;
 import sisc.util.Util;
+import sisc.env.DynamicEnvironment;
 
 public class ThreadContext extends Util {
 
@@ -52,10 +53,10 @@ public class ThreadContext extends Util {
         else return st.thread;
     }
     
-    public void setHostThread(Interpreter r, Thread thread) {
+    public void setHostThread(DynamicEnvironment dynenv, Thread thread) {
         if (nativeThread() != thread) {
             //Wrap the thread in a SchemeThread with no thunk.
-            SchemeThread st=new SchemeThread(r, null);
+            SchemeThread st=new SchemeThread(dynenv, null);
             st.thread=thread;
             hostThread = new WeakReference(st);
         }
