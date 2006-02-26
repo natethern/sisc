@@ -44,9 +44,7 @@ public class SchemePanel extends JScrollPane {
         currentEditablePos=sd.getLength()-1;
 
 
-        Procedure p=(Procedure)
-            ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
-        repl=new REPL(dynenv, p);
+        repl=new REPL(dynenv, REPL.getCliProc(ctx));
         repl.go();
     }
 
