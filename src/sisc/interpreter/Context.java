@@ -57,14 +57,14 @@ public abstract class Context extends Util {
     public static void register(String appName, AppContext ctx) {
         apps.put(appName,ctx);
     }
-    
+
     /**
      * @deprecated
      */
     public static void unregister(String appName) {
         apps.remove(appName);
     }
-    
+
     /**
      * @deprecated
      */
@@ -86,7 +86,9 @@ public abstract class Context extends Util {
 
     /**
      * Fetches the current Interpreter, if this is an internal call (that is,
-     * Scheme->Java.
+     * a call from Java to Scheme in the contex of a Scheme->Java call).
+     *
+     * @return the current Interpreter
      */
     public static Interpreter currentInterpreter() {
         ThreadContext tctx = lookupThreadContext();
@@ -164,7 +166,7 @@ public abstract class Context extends Util {
      *
      * @param interp The Interpreter from which to derive the new
      * Interpreter
-     *
+     * @return The newly created Interpreter
      * @see Interpreter
      */
     public static Interpreter enter(Interpreter interp) {
@@ -176,15 +178,17 @@ public abstract class Context extends Util {
      * DynamicEnvironment.
      *
      * @param ctx The AppContext
+     * @return The newly created Interpreter
      */
     public static Interpreter enter(AppContext ctx) {
         return enter(new DynamicEnvironment(ctx));
     }
-    
+
     /**
      * Returns an Interpreter bound to the given DynamicEnvironment.
      *
      * @param dynenv The DynamicEnvironment
+     * @return The newly created Interpreter
      */
     public static Interpreter enter(DynamicEnvironment dynenv) {
         ThreadContext tctx = lookupThreadContext();
@@ -201,7 +205,7 @@ public abstract class Context extends Util {
     public static Interpreter enter(String appName) {
         return enter(lookup(appName));
     }
-    
+
     /**
      * Exits the current context, releasing the current Interpreter.
      */
@@ -221,6 +225,7 @@ public abstract class Context extends Util {
      * Java to Scheme.
      *
      * @param caller The SchemeCaller to invoke
+     * @return the result of invoking the SchemeCaller
      */
     public static Object execute(SchemeCaller caller) throws SchemeException {
         Interpreter r = currentInterpreter();
@@ -237,6 +242,7 @@ public abstract class Context extends Util {
      *
      * @param interp The Interpreter
      * @param caller The SchemeCaller to invoke
+     * @return the result of invoking the SchemeCaller
      */
     public static Object execute(Interpreter interp, SchemeCaller caller) throws SchemeException {
         return execute(interp.dynenv, caller);
@@ -248,11 +254,12 @@ public abstract class Context extends Util {
      *
      * @param ctx The AppContext
      * @param caller The SchemeCaller to invoke.
+     * @return the result of invoking the SchemeCaller
      */
     public static Object execute(AppContext ctx, SchemeCaller caller) throws SchemeException {
         return execute(new DynamicEnvironment(ctx), caller);
     }
-    
+
     /**
      * Obtains an Interpreter bound to the given DynamicEnvironment
      * and invokes caller.execute(Interpreter) with that Interper.
@@ -266,16 +273,17 @@ public abstract class Context extends Util {
      *
      * @param dynenv The DynamicEnvironment.
      * @param caller The SchemeCaller to invoke.
+     * @return the result of invoking the SchemeCaller
      */
     public static Object execute(DynamicEnvironment dynenv, 
                                  SchemeCaller caller) throws SchemeException {
         Interpreter r=Context.enter(dynenv);
-        //Hold this reference.  Necessary because ThreadContext references
-        //hostThread only weakly, which is in turn necessary so that
-        //when threads terminate their associated SISC resources are
-        //garbage collected.  In this case, however, we want to guarantee that during 
-        //the lifetime of the call, the SchemeThread wrapper object
-        //remains available        
+        //Hold this reference.  Necessary because ThreadContext
+        //references hostThread only weakly, which is in turn
+        //necessary so that when threads terminate their associated
+        //SISC resources are garbage collected.  In this case,
+        //however, we want to guarantee that during the lifetime of
+        //the call, the SchemeThread wrapper object remains available
         Object t=r.tctx.hostThread.get();
 
         try {
@@ -285,13 +293,13 @@ public abstract class Context extends Util {
                 Context.exit();
         }
     }
-    
+
     /**
      * @deprecated use {@link #execute(AppContext, SchemeCaller)} instead
      */
     public static Object execute(String appName, SchemeCaller caller) {
         //Since this is deprecated, we'll catch the exception to preserve
-        //backwards compatibility through one release.    
+        //backwards compatibility through one release.
         try {
             return execute(lookup(appName), caller);
         } catch (SchemeException se) {
