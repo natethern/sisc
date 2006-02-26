@@ -201,15 +201,6 @@ public class REPL {
     }
 
     public void go() {
-        try {
-            Interpreter r=Context.enter(primordialThread.env);
-            r.eval((Procedure)r.eval(Symbol.get("display")),
-                   new Value[] {new SchemeString("SISC ("+Util.VERSION+")\n")});
-        } catch (SchemeException se) {
-        } finally {
-            Context.exit();
-        }
-
         if (primordialThread.thunk == null) {
             System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
             return;
@@ -218,9 +209,8 @@ public class REPL {
         primordialThread.start();
     }
 
-    private static Procedure getCliProc(AppContext ctx) {
-        return (Procedure)ctx.lookupContextEnv(Util.TOPLEVEL).
-            lookup(Symbol.get("sisc-cli"));
+    public static Procedure getCliProc(AppContext ctx) {
+        return (Procedure)ctx.toplevel_env.lookup(Symbol.get("sisc-cli"));
     }
 
     public static void main(String[] argv) throws Exception {

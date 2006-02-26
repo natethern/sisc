@@ -164,12 +164,15 @@
             (repl-start))))))
 
 (define (sisc-cli)
-  (with/fc (lambda (m e)
-             (display (format "Uncaught error: ~a~%Please report this error to sisc-devel@lists.sourceforge.net~%" m))
-             (if (pair? (_exit-handler))
-                 (_exit-handler (cdr (_exit-handler))))
-             (sisc-cli))
-           repl))
+  (display (format "SISC (~a)\n"
+                   (getprop 'version (get-symbolic-environment '*sisc*))))
+  (let loop ()
+    (with/fc (lambda (m e)
+               (display (format "Uncaught error: ~a~%Please report this error to sisc-devel@lists.sourceforge.net~%" m))
+               (if (pair? (_exit-handler))
+                   (_exit-handler (cdr (_exit-handler))))
+               (loop))
+      repl)))
 
 (define (exit . return-value)
   (if (not (pair? (_exit-handler)))
