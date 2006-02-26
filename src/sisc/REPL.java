@@ -218,6 +218,11 @@ public class REPL {
         primordialThread.start();
     }
 
+    private static Procedure getCliProc(AppContext ctx) {
+        return (Procedure)ctx.lookupContextEnv(Util.TOPLEVEL).
+            lookup(Symbol.get("sisc-cli"));
+    }
+
     public static void main(String[] argv) throws Exception {
         Map args=parseOpts(argv);
 
@@ -325,8 +330,7 @@ public class REPL {
                 System.out.flush();
                 listen(ctx, ssocket);
             } else {
-                Procedure p=(Procedure)r.lookup(Symbol.get("sisc-cli"), Util.TOPLEVEL);
-                REPL repl = new REPL(dynenv, p);
+                REPL repl = new REPL(dynenv, getCliProc(ctx));
                 repl.go();
                 repl.primordialThread.thread.join();
                 switch (repl.primordialThread.state) {
@@ -355,8 +359,9 @@ public class REPL {
                 new DynamicEnvironment(ctx,
                                        client.getInputStream(),
                                        client.getOutputStream());
-            Procedure p = (Procedure)ctx.lookupContextEnv(Util.TOPLEVEL).lookup(Symbol.get("sisc-cli"));
-            SchemeThread t = new SchemeSocketThread(dynenv, p, client);
+            SchemeThread t = new SchemeSocketThread(dynenv,
+                                                    getCliProc(ctx),
+                                                    client);
             REPL repl = new REPL(t);
             repl.go();
         }
