@@ -38,9 +38,14 @@ public abstract class Context extends Util {
     //"appname" -> AppContext
     private static Map apps =
         Collections.synchronizedMap(new HashMap());
+
     //Thread -> Context
-    private static Map threads =
-        Collections.synchronizedMap(new WeakHashMap());
+    private static ThreadLocal currentThreadContext =
+        new ThreadLocal() {
+            protected Object initialValue() {
+                return new ThreadContext();
+            }
+        };
 
     private static volatile AppContext defaultAppContext;
 
@@ -70,12 +75,7 @@ public abstract class Context extends Util {
     /*********** thread context lookup ***********/
 
     public static ThreadContext lookupThreadContext(Thread thread) {
-        ThreadContext tctx = (ThreadContext)threads.get(thread);
-        if (tctx == null) {
-            tctx = new ThreadContext();
-            threads.put(thread, tctx);
-        }
-        return tctx;
+        return (ThreadContext)currentThreadContext.get();
     }
 
     public static ThreadContext lookupThreadContext() {
