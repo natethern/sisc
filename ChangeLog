@@ -1,3 +1,9 @@
+2006-02-27  Scott G. Miller <sgmiller@gmail.com>
+
+	* Added the buffer-io module, which provides functionality
+	  similar to string-io, but for binary buffers.  See bug 
+	  1439657.
+	  
 2006-02-22  Scott G. Miller <sgmiller@gmail.com>
 
 	* Modified SignalHook to have callbacks happen in 

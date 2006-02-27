@@ -1084,6 +1084,168 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           </para>
         </blockquote>
       </para>
+      <sect3>
+        <title>Buffer I/O</title>
+        <para>
+          &requires; 
+          <emphasis role="bold">
+            (import <emphasis>buffer-io</emphasis>)
+          </emphasis>
+        </para>        
+        <para>
+          A module is also provided for input and output to and from
+          binary buffers using buffer ports, similar to character I/O to 
+          and from strings using string ports.
+        </para>
+        <para>
+          <blockquote>
+            <para id="func-open-input-buffer">
+              <indexterm><primary>open-input-buffer</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>buffer-input-port</type>
+                <methodname>open-input-buffer</methodname>
+                <methodparam>
+                  <parameter>buffer</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Creates a buffer input port whose bytes are read
+                  from the provided buffer.  Bytes will be returned
+                  from any read operation on the port until the end of
+                  the buffer is reached.  Read calls after reaching the
+                  end of the buffer will return &num;!eof.
+                </para>
+              </blockquote>
+            </para>
+            <para id="func-open-output-buffer">
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>buffer-output-port</type>
+                <methodname>open-output-buffer</methodname> <void/>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Creates a buffer output port, which behaves as an
+                  ordinary output port, except that writes are used to
+                  create a buffer as output.  The results of all the
+                  write operations are retrieved using
+                  <function>get-output-buffer</function>.
+                </para>
+              </blockquote>
+            </para>
+            <para id="func-get-output-buffer">
+              <indexterm><primary>get-output-buffer</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>buffer</type> <methodname>get-output-buffer</methodname>
+                <methodparam>
+                  <parameter>buffer-output-port</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Returns the buffer that was created by zero or more
+                  writes to a buffer output port.  If no writes were
+                  performed on the buffer output port, an empty buffer
+                  is returned.  After this call, the provided
+                  buffer output port is reset to its initial, empty
+                  state.
+                </para>
+              </blockquote>
+            </para>
+            <para id="func-call-with-input-buffer">
+              <indexterm><primary>call-with-input-buffer</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>call-with-input-buffer</methodname>
+                <methodparam>
+                  <parameter>buffer</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>procedure</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para> Calls <parameter>procedure</parameter> with a new
+                  buffer input port created from
+                  <parameter>buffer</parameter>.  The result of the thunk
+                  is returned.
+                </para>
+              </blockquote>
+            </para>
+            <para id="func-call-with-output-buffer">
+              <indexterm><primary>call-with-output-buffer</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>buffer</type>
+                <methodname>call-with-output-buffer</methodname>
+                <methodparam>
+                  <parameter>procedure</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para> Calls <parameter>procedure</parameter> with a new
+                  buffer output port.  The contents of the
+                  buffer-output-port are returned when the procedure
+                  returns.
+                </para>
+              </blockquote>
+            </para>
+            <para id="func-with-input-from-buffer">
+              <indexterm><primary>with-input-from-buffer</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>value</type>
+                <methodname>with-input-from-buffer</methodname>
+                <methodparam>
+                  <parameter>buffer</parameter>
+                </methodparam>
+                <methodparam>
+                  <parameter>thunk</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>   
+                  Evaluates <parameter>thunk</parameter> with a
+                  buffer-input-port created from
+                  <parameter>buffer</parameter> as the
+                  <literal>current-input-port</literal> for the duration
+                  of the evaluation.
+                </para>
+              </blockquote>
+            </para>
+            <para id="func-with-output-to-buffer">
+              <indexterm><primary>with-output-to-buffer</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>buffer</type>
+                <methodname>with-output-to-buffer</methodname>
+                <methodparam>
+                  <parameter>thunk</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>   
+                  Evaluates <parameter>thunk</parameter> with a
+                  buffer-output-port created as the
+                  <literal>current-output-port</literal> for the duration
+                  of the evaluation.  When the thunk returns, the
+                  contents of the buffer-output-port are returned.
+                </para>
+              </blockquote>
+            </para>
+          </blockquote>
+        </para>
+      </sect3>
     </sect2>
     <sect2 id="SerialIO">
       <title>Serialization</title>

@@ -96,7 +96,7 @@ public class BinaryIO extends IndexedProcedure {
     
     public BinaryIO() {}
 
-    final Buffer buffer(Value v) throws ContinuationException {
+    static final Buffer buffer(Value v) throws ContinuationException {
         try {
             return (Buffer)v;
         } catch (ClassCastException e) { typeError(BINARYB, "buffer", v); }

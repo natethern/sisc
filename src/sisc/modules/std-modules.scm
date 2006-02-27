@@ -113,6 +113,7 @@
 (native-module hashtable-native  "sisc.modules.hashtable.Primitives$Index")
 (native-module record-native     "sisc.modules.record.Primitives$Index")
 (native-module binary-io-native  "sisc.modules.io.BinaryIO$Index")
+(native-module buffer-io-native  "sisc.modules.io.BufferIO$Index")
 (native-module string-io-native  "sisc.modules.io.StringIO$Index")
 (native-module serial-io-native  "sisc.modules.io.SerialIO$Index")
 (native-module file-manipulation-native "sisc.modules.io.FileManipulation$Index")
@@ -260,13 +261,21 @@
    buffer-ref
    buffer-set!
    buffer-length
-   buffer-copy!
-   open-input-buffer
-   open-output-buffer
-   get-output-buffer)
+   buffer-copy!)   
   (import type-system)
   (import binary-io-native)
   (include "io/buffer.scm"))
+
+(module buffer-io
+  (open-input-buffer
+   open-output-buffer
+   get-output-buffer
+   call-with-input-buffer
+   call-with-output-buffer
+   with-input-from-buffer
+   with-output-to-buffer)
+  (import buffer-io-native)
+  (include "io/buffer-io.scm"))
 
 (module file-manipulation
   (directory-list
