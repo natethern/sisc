@@ -157,11 +157,11 @@ public class SignalHook implements InvocationHandler {
                     for (int i=0; i<l.size(); i++) {
                         SignalHandler handler=(SignalHandler)l.get(i);
                         try {
-                            if (Context.currentInterpreter() == null) {
-                                Context.execute(handler.env.copy(), handler);
-                            } else {
-                                Context.execute(handler);
-                            }
+                            Interpreter r = Context.currentInterpreter(handler.env.ctx);
+                            Context.execute((r == null ?
+                                             handler.env.copy() :
+                                             r.dynenv),
+                                            handler);
                         } catch (SchemeException e) {
                             e.printStackTrace();
                         }

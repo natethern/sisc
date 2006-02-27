@@ -16,10 +16,8 @@ public class SchemeInvocation implements InvocationHandler {
 
     public Object invoke(Object proxy, Method m, Object[] args)
         throws Throwable {
-        Interpreter r = Context.currentInterpreter();
-        r = (r == null) ?
-            Context.enter(dynenv.copy()) :
-            Context.enter(r.dynenv);
+        Interpreter r = Context.currentInterpreter(dynenv.ctx);
+        r = Context.enter((r == null) ? dynenv.copy() : r.dynenv);
         Pair p = Util.EMPTYLIST;
         if (args != null) { //for some reason args can be null
             Class[] pTypes = m.getParameterTypes();
