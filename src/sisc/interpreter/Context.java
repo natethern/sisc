@@ -88,11 +88,26 @@ public abstract class Context extends Util {
      * Fetches the current Interpreter, if this is an internal call (that is,
      * a call from Java to Scheme in the contex of a Scheme->Java call).
      *
-     * @return the current Interpreter
+     * @return the current Interpreter, or null if this is not an
+     * internal call.
      */
     public static Interpreter currentInterpreter() {
         ThreadContext tctx = lookupThreadContext();
         return tctx.currentInterpreter();
+    }
+
+    /**
+     * Fetches the nearest enclosing Interpreter that operates on a
+     * given AppContext, if this is an internal call (that is, a call
+     * from Java to Scheme in the contex of a Scheme->Java call).
+     *
+     * @param ctx the AppContext
+     * @return the nearest enclosing Interpreter operating on the
+     * given ctx, or null if no such Interpreter exists.
+     */
+    public static Interpreter currentInterpreter(AppContext ctx) {
+        ThreadContext tctx = lookupThreadContext();
+        return tctx.currentInterpreter(ctx);
     }
 
     /**
@@ -150,22 +165,26 @@ public abstract class Context extends Util {
      */
     public static Interpreter enter() {
         Interpreter r = currentInterpreter();
-        if (r == null) {
-            return enter(getDefaultAppContext());
-        } else {
-            return enter(r.dynenv);
-        }
+        return enter(r == null ?
+                     new DynamicEnvironment(getDefaultAppContext()) :
+                     r.dynenv);
     }
 
     /**
-     * Returns an Interpreter bound to the given AppContext with a new
-     * DynamicEnvironment.
+     * Returns an Interpreter bound to the given AppContext with same
+     * DynamicEnvironment as the nearest enclosing Interpreter in the
+     * same thread that is bound to the same AppContext. If no such
+     * Interpreter exists then a new DynamicEnvironment is created,
+     * bound to the AppContext.
      *
      * @param ctx The AppContext
      * @return The newly created Interpreter
      */
     public static Interpreter enter(AppContext ctx) {
-        return enter(new DynamicEnvironment(ctx));
+        Interpreter r = currentInterpreter(ctx);
+        return enter(r == null ?
+                     new DynamicEnvironment(ctx) :
+                     r.dynenv);
     }
 
     /**
@@ -213,23 +232,29 @@ public abstract class Context extends Util {
      */
     public static Object execute(SchemeCaller caller) throws SchemeException {
         Interpreter r = currentInterpreter();
-        if (r == null) {
-            return execute(getDefaultAppContext(), caller);
-        } else {
-            return execute(r.dynenv, caller);
-        }
+        return execute((r == null ?
+                        new DynamicEnvironment(getDefaultAppContext()) :
+                        r.dynenv),
+                       caller);
     }
 
     /**
-     * Creates a new DynamicEnvironment for the given AppContext and
-     * calls {@link #execute(DynamicEnvironment, SchemeCaller)}.
+     * Calls caller with an Interpreter bound to the given AppContext
+     * with same DynamicEnvironment as the nearest enclosing
+     * Interpreter in the same thread that is bound to the same
+     * AppContext. If no such Interpreter exists then a new
+     * DynamicEnvironment is returned, bound to the AppContext.
      *
      * @param ctx The AppContext
      * @param caller The SchemeCaller to invoke.
      * @return the result of invoking the SchemeCaller
      */
     public static Object execute(AppContext ctx, SchemeCaller caller) throws SchemeException {
-        return execute(new DynamicEnvironment(ctx), caller);
+        Interpreter r = currentInterpreter(ctx);
+        return execute((r == null ?
+                        new DynamicEnvironment(ctx) :
+                        r.dynenv),
+                       caller);
     }
 
     /**
