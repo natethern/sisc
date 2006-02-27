@@ -38,6 +38,14 @@ public class ThreadContext extends Util {
                 null : (Interpreter)interpreters.peek());
     }
 
+    public Interpreter currentInterpreter(AppContext ctx) {
+        for (Iterator it = interpreters.iterator(); it.hasNext();) {
+            Interpreter r = (Interpreter)it.next();
+            if (r.dynenv.ctx == ctx) return r;
+        }
+        return null;
+    }
+
     protected void pushInterpreter(Interpreter r) {
         interpreters.push(r);
     }
