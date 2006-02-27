@@ -28,7 +28,7 @@ public class StreamOutputPort
     }
 
     protected void writeHelper(String s) throws IOException {
-        out.write(s.getBytes("UTF-8"));
+        out.write(s.getBytes(getDefaultCharacterSet().getName()));
     }
 
     protected void writeHelper(byte[] b, int offset, int length)
