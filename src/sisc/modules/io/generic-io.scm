@@ -277,30 +277,21 @@
   i)
 
 (define-method (open-character-output-port (<native-output-port> o))
-  (open-character-output-port o (character-set) #f))
-
-(define-method (open-character-output-port (<native-output-port> o) (<string> charset))
-  (open-character-output-port o charset #f))
+  (open-character-output-port o #f))
 
 (define-method (open-character-output-port (<native-output-port> o) (<boolean> aflush))
-  (open-character-output-port o (character-set) aflush))
-
-(define-method (open-character-output-port (<native-output-port> o) (<string> charset) (<boolean> aflush))
   (make <native-character-output-port>
     (java-unwrap
      (java-new <sisc.io.writer-output-port>
               (get-output-stream (java-wrap (:out o)))
               (for-name (java-null <sisc.io.charset>)
-                        (->jstring charset))
+                        (->jstring (character-set)))
               (->jboolean aflush)))))
 
 (define-method (open-character-input-port (<native-input-port> i))
-  (open-character-input-port i (character-set)))
-  
-(define-method (open-character-input-port (<native-input-port> i) (<string> charset))
   (make <native-character-input-port>
     (java-unwrap
      (java-new <sisc.io.reader-input-port>
                (get-input-stream (java-wrap (:in i)))
                (for-name (java-null <sisc.io.charset>)
-                         (->jstring charset))))))
+                         (->jstring (character-set)))))))
