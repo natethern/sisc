@@ -219,10 +219,10 @@ public abstract class Context extends Util {
     }
 
     /**
-     * When a current Interpreter is present this method calls {@link
-     * #execute(Interpreter, SchemeCaller)} with it. Otherwise it
-     * calls {@link #execute(AppContext, SchemeCaller)} with the
-     * default AppContext.
+     * Calls caller with an Interpreter that shares the AppContext and
+     * DynamicEnvironment with the current Interpreter. If there is no
+     * current Interpreter present, an Interpreter bound to the
+     * default AppContext is created instead.
      *
      * This method provides the usual mechanism for managed calls from
      * Java to Scheme.
