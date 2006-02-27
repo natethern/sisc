@@ -266,17 +266,6 @@
   (import binary-io-native)
   (include "io/buffer.scm"))
 
-(module buffer-io
-  (open-input-buffer
-   open-output-buffer
-   get-output-buffer
-   call-with-input-buffer
-   call-with-output-buffer
-   with-input-from-buffer
-   with-output-to-buffer)
-  (import buffer-io-native)
-  (include "io/buffer-io.scm"))
-
 (module file-manipulation
   (directory-list
    file-hidden? 
@@ -717,6 +706,24 @@
            binary-input-port?
            binary-output-port?)
   (include "io/binary-io.scm"))
+
+(module buffer-io
+  (open-input-buffer
+   open-output-buffer
+   get-output-buffer
+   call-with-input-buffer
+   call-with-output-buffer
+   with-input-from-buffer
+   with-output-to-buffer
+   <buffer-input-port>
+   <buffer-output-port>
+   buffer-input-port?
+   buffer-output-port?)
+  (import oo)
+  (import generic-io)
+  (import buffer-io-native)
+  (import* type-system instance-of?)
+  (include "io/buffer-io.scm"))
 
 (module string-io
   (with-input-from-string
