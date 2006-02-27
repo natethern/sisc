@@ -30,9 +30,9 @@ public class BufferIO extends IndexedProcedure {
         }
         
        public Index() {
-           define("get-output-buffer", GETOUTPUTBUFFER);
-           define("open-input-buffer", OPENINPUTBUFFER);
-           define("open-output-buffer", OPENOUTPUTBUFFER);
+           define("_get-output-buffer", GETOUTPUTBUFFER);
+           define("_open-input-buffer", OPENINPUTBUFFER);
+           define("_open-output-buffer", OPENOUTPUTBUFFER);
         }   
     }
     

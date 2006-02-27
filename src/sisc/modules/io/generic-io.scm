@@ -13,9 +13,9 @@
   (make-type '|sisc.modules.io.Buffer|))
 
 (define-java-classes
-  <sisc.io.writer-output-port> <sisc.io.reader-input-port>)
+  <sisc.io.writer-output-port> <sisc.io.reader-input-port> <sisc.io.charset>)
 
-(define-generic-java-methods get-input-stream get-output-stream)
+(define-generic-java-methods get-input-stream get-output-stream for-name)
 
 (define-syntax inport
   (syntax-rules ()
@@ -277,10 +277,30 @@
   i)
 
 (define-method (open-character-output-port (<native-output-port> o))
+  (open-character-output-port o (character-set) #f))
+
+(define-method (open-character-output-port (<native-output-port> o) (<string> charset))
+  (open-character-output-port o charset #f))
+
+(define-method (open-character-output-port (<native-output-port> o) (<boolean> aflush))
+  (open-character-output-port o (character-set) aflush))
+
+(define-method (open-character-output-port (<native-output-port> o) (<string> charset) (<boolean> aflush))
   (make <native-character-output-port>
-    (java-new <sisc.io.writer-output-port> (get-output-stream (:out o)))))
+    (java-unwrap
+     (java-new <sisc.io.writer-output-port>
+              (get-output-stream (java-wrap (:out o)))
+              (for-name (java-null <sisc.io.charset>)
+                        (->jstring charset))
+              (->jboolean aflush)))))
 
 (define-method (open-character-input-port (<native-input-port> i))
+  (open-character-input-port i (character-set)))
+  
+(define-method (open-character-input-port (<native-input-port> i) (<string> charset))
   (make <native-character-input-port>
-    (java-new <sisc.io.reader-input-port> (get-input-stream (:in i)))))
-
+    (java-unwrap
+     (java-new <sisc.io.reader-input-port>
+               (get-input-stream (java-wrap (:in i)))
+               (for-name (java-null <sisc.io.charset>)
+                         (->jstring charset))))))
