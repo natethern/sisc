@@ -2396,9 +2396,6 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         port types are the natural supertypes for
         newly created port types.
       </para>
-    </sect2>
-    <sect2>
-      <title>Input Generics</title>
       <para>
         All ports must define the <function>gio/close</function>
         method.
@@ -2406,7 +2403,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         <blockquote>
           <para>
-            <indexterm><primary>gio/char-ready?</primary>
+            <indexterm><primary>gio/close</primary>
             </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
@@ -2485,7 +2482,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             &procedure;
             <methodsynopsis language="scheme">
               <type>integer</type>
-              <methodname>gio/char-ready?</methodname>
+              <methodname>gio/read-block</methodname>
               <methodparam>
                 <parameter>buffer</parameter>
               </methodparam>
