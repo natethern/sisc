@@ -13,7 +13,7 @@ import sisc.util.Util;
 import sisc.util.Defaults;
 
 public class DynamicEnvironment extends Util implements Cloneable {
-    public AppContext ctx;
+    public final AppContext ctx;
 
     public Value in, out;
     
