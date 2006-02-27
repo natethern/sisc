@@ -15,11 +15,9 @@ public class StreamOutputPort
     public OutputStream out;
     public Charset charSet;
     
-    public StreamOutputPort(OutputStream out, boolean aflush) {
+    public StreamOutputPort(OutputStream out, Charset charset, boolean aflush) {
         super(aflush);
-        Interpreter r=Context.currentInterpreter();
-        if (r==null) charSet=Util.getDefaultCharacterSet();
-        else charSet=r.dynenv.characterSet;
+        this.charSet=charset;
         this.out=out;
     }
 

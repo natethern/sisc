@@ -13,9 +13,9 @@ public class SerializerPort
 
     public StreamSerializer serializer;
     
-    public SerializerPort(AppContext ctx, OutputStream out, boolean aflush)
+    public SerializerPort(AppContext ctx, OutputStream out, Charset charset, boolean aflush)
         throws IOException {
-        super(out, aflush);
+        super(out, charset, aflush);
         serializer=new StreamSerializer(ctx, out);
     }
 

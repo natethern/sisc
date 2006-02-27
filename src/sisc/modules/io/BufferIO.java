@@ -14,7 +14,7 @@ import sisc.io.StreamInputPort;
 import sisc.io.BinaryOutputPort;
 import sisc.io.BinaryInputPort;
 
-public class BufferIO extends IndexedFixableProcedure {
+public class BufferIO extends IndexedProcedure {
 
     protected static Symbol BINARYB =
         Symbol.intern("sisc.modules.io.Messages");
@@ -43,40 +43,43 @@ public class BufferIO extends IndexedFixableProcedure {
     
     public BufferIO() {}
 
-    public Value apply() throws ContinuationException {
-        switch (id) {
-        case OPENOUTPUTBUFFER:
-            return new StreamOutputPort(new ByteArrayOutputStream(), false);
+    public Value doApply(Interpreter f) throws ContinuationException {
+        switch(f.vlr.length) {
+        case 0:
+            switch (id) {
+            case OPENOUTPUTBUFFER:
+                return new StreamOutputPort(new ByteArrayOutputStream(), f.dynenv.characterSet, false);
+            default:
+                throwArgSizeException();
+            }
+        case 1:
+            switch (id) {
+            case GETOUTPUTBUFFER:
+                StreamOutputPort sop=(StreamOutputPort)f.vlr[0];
+                ByteArrayOutputStream bos=(ByteArrayOutputStream)sop.out;
+                try {
+                    sop.flush();
+                } catch (IOException e) {
+                    throwPrimException(liMessage(BINARYB, "errorflushing", 
+                            sop.toString(),
+                            e.getMessage()));
+                }
+                Buffer rv=new Buffer(bos.toByteArray());
+                bos.reset();
+                return rv;
+            case OPENINPUTBUFFER:
+                return new StreamInputPort(new ByteArrayInputStream(BinaryIO.buffer(f.vlr[0]).buf));
+            case OPENOUTPUTBUFFER:
+                return new StreamOutputPort(new ByteArrayOutputStream(num(f.vlr[0]).indexValue()), f.dynenv.characterSet, false);
+            default:
+                throwArgSizeException();
+            }
         default:
             throwArgSizeException();
         }
-        return VOID;
+        return VOID;        
     }
 
-    public Value apply(Value v1) throws ContinuationException {
-        switch (id) {
-        case GETOUTPUTBUFFER:
-            StreamOutputPort sop=(StreamOutputPort)v1;
-            ByteArrayOutputStream bos=(ByteArrayOutputStream)sop.out;
-            try {
-                sop.flush();
-            } catch (IOException e) {
-                throwPrimException(liMessage(BINARYB, "errorflushing", 
-                        sop.toString(),
-                        e.getMessage()));
-            }
-            Buffer rv=new Buffer(bos.toByteArray());
-            bos.reset();
-            return rv;
-        case OPENINPUTBUFFER:
-            return new StreamInputPort(new ByteArrayInputStream(BinaryIO.buffer(v1).buf));
-        case OPENOUTPUTBUFFER:
-            return new StreamOutputPort(new ByteArrayOutputStream(num(v1).indexValue()), false);
-        default:
-            throwArgSizeException();
-        }
-        return VOID;
-    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public
