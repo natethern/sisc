@@ -166,7 +166,6 @@ public class Networking extends IndexedProcedure {
             throws IOException, ContinuationException {
             return new StreamOutputPort(
               new BufferedOutputStream(s.getOutputStream()),
-              r.dynenv.characterSet,
               autoflush);
         }
     }
@@ -314,7 +313,6 @@ public class Networking extends IndexedProcedure {
                 error(r, liMessage(SNETB, "outputoninputudp"));
             return new StreamOutputPort(
                 new UDPOutputStream(s, remoteHost, dport),
-                r.dynenv.characterSet,
                 autoflush);
         }
         

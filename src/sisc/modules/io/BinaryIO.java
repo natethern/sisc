@@ -82,7 +82,7 @@ public class BinaryIO extends IndexedProcedure {
         throws ContinuationException {
         try {          
             return new StreamOutputPort(new BufferedOutputStream(IO.getURLOutputStream(url)),
-                                        f.dynenv.characterSet, aflush);
+                                        aflush);
         } catch (IOException e) {
             IO.throwIOException(f, liMessage(IO.IOB, "erroropening",
                                              url.toString()), e);
@@ -108,7 +108,7 @@ public class BinaryIO extends IndexedProcedure {
         case 0:
             switch (id) {
             case OPENOUTPUTBUFFER:
-                return new StreamOutputPort(new ByteArrayOutputStream(), f.dynenv.characterSet, false);
+                return new StreamOutputPort(new ByteArrayOutputStream(), false);
             default:
                 throwArgSizeException();
             }
@@ -140,7 +140,7 @@ public class BinaryIO extends IndexedProcedure {
             case OPENINPUTBUFFER:
                 return new StreamInputPort(new ByteArrayInputStream(buffer(f.vlr[0]).buf));
             case OPENOUTPUTBUFFER:
-                return new StreamOutputPort(new ByteArrayOutputStream(num(f.vlr[0]).indexValue()), f.dynenv.characterSet, false);
+                return new StreamOutputPort(new ByteArrayOutputStream(num(f.vlr[0]).indexValue()), false);
             case BINARYINPUTPORTQ:
                 return truth(f.vlr[0] instanceof BinaryInputPort);
             case BINARYOUTPUTPORTQ:

@@ -48,7 +48,7 @@ public class BufferIO extends IndexedProcedure {
         case 0:
             switch (id) {
             case OPENOUTPUTBUFFER:
-                return new StreamOutputPort(new ByteArrayOutputStream(), f.dynenv.characterSet, false);
+                return new StreamOutputPort(new ByteArrayOutputStream(), false);
             default:
                 throwArgSizeException();
             }
@@ -70,7 +70,7 @@ public class BufferIO extends IndexedProcedure {
             case OPENINPUTBUFFER:
                 return new StreamInputPort(new ByteArrayInputStream(BinaryIO.buffer(f.vlr[0]).buf));
             case OPENOUTPUTBUFFER:
-                return new StreamOutputPort(new ByteArrayOutputStream(num(f.vlr[0]).indexValue()), f.dynenv.characterSet, false);
+                return new StreamOutputPort(new ByteArrayOutputStream(num(f.vlr[0]).indexValue()), false);
             default:
                 throwArgSizeException();
             }

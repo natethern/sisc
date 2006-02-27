@@ -15,7 +15,7 @@ public class SerializerPort
     
     public SerializerPort(AppContext ctx, OutputStream out, boolean aflush)
         throws IOException {
-        super(out, Charset.forName("UTF8"), aflush);
+        super(out, aflush);
         serializer=new StreamSerializer(ctx, out);
     }
 

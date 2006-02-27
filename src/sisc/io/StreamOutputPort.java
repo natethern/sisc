@@ -15,9 +15,8 @@ public class StreamOutputPort
     public OutputStream out;
     public Charset charSet;
     
-    public StreamOutputPort(OutputStream out, Charset charset, boolean aflush) {
+    public StreamOutputPort(OutputStream out, boolean aflush) {
         super(aflush);
-        this.charSet=charset;
         this.out=out;
     }
 
