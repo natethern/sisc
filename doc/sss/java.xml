@@ -54,7 +54,8 @@
         <methodsynopsis language="java">
           <modifier>public</modifier>
           <type>sisc.interpreter.AppContext</type>
-          <methodname>getDefaultAppContext</methodname>        
+          <methodname>getDefaultAppContext</methodname>    
+          <void/>    
         </methodsynopsis>
         <blockquote>
           <para>
@@ -69,6 +70,7 @@
           <modifier>public</modifier>
           <type>sisc.interpreter.AppContext</type>
           <methodname>currentAppContext</methodname>        
+          <void/>    
         </methodsynopsis>
         <blockquote>
           <para>
