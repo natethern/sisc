@@ -91,7 +91,6 @@
 
 (define current-input-port      (make-native-parameter "inputPort"))
 (define current-output-port     (make-native-parameter "outputPort"))
-(define current-class-path      (make-native-parameter "classPath"))
 (define case-sensitive          (make-native-parameter "caseSensitive"))
 (define print-shared            (make-native-parameter "printShared"))
 (define vector-length-prefixing (make-native-parameter "vectorLengthPrefixing"))
@@ -848,22 +847,12 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
      thunk
      (lambda () (current-url previous-url)))))
 
-(set! current-class-path
-  (let ([original-ccp current-class-path])
-    (lambda rest
-      (if (null? rest)
-          (original-ccp)
-          (let ([c-url (current-url)])
-            (original-ccp (map (lambda (url)
-                                 (normalize-url c-url url))
-                               (car rest))))))))
-
-(define (with-class-path classpath thunk)
-  (let ([previous-classpath (current-class-path)])
-    (dynamic-wind
-     (lambda () (current-class-path classpath))
-     thunk
-     (lambda () (current-class-path previous-classpath)))))
+(set! class-path-extension-append!
+  (let ([original-cpea class-path-extension-append!])
+    (lambda (urls)
+      (let ([c-url (current-url)])
+        (original-cpea (map (lambda (url) (normalize-url c-url url))
+                            urls))))))
 
 ;; needed in a few places; cut-down version from SRFI-1
 (define (iota count)

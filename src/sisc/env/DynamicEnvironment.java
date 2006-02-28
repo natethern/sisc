@@ -53,7 +53,18 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public Parser parser = new Parser(new Lexer());
 
     private ClassLoader classLoader;
-    private URLClassLoader urlClassLoader;
+    private ExtensibleURLClassLoader urlClassLoader;
+
+    private static class ExtensibleURLClassLoader extends URLClassLoader {
+
+        public ExtensibleURLClassLoader(URL[] urls, ClassLoader parent) {
+            super(urls, parent);
+        }
+
+        public void addURL(URL url) {
+            super.addURL(url);
+        }
+    }
 
     //user-defined thread variables; this map is weak so that we don't
     //hang on to vars that are no longer in use.
@@ -90,7 +101,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
         classLoader = currentClassLoader();
         try {
-            urlClassLoader = new URLClassLoader(new URL[]{}, classLoader);
+            urlClassLoader = new ExtensibleURLClassLoader(new URL[]{}, classLoader);
         } catch (AccessControlException e) {}
     }
 
@@ -107,7 +118,10 @@ public class DynamicEnvironment extends Util implements Cloneable {
         res.parser = new Parser(new Lexer());
         res.parser.annotate = parser.annotate;
         res.parser.lexer.strictR5RS = parser.lexer.strictR5RS;
-        res.setClassPath(getClassPath());
+        try {
+            res.urlClassLoader =
+                new ExtensibleURLClassLoader(getClassPath(), classLoader);
+        } catch (AccessControlException e) {}
         WeakHashMap newParams=new WeakHashMap();
         newParams.putAll(res.parameters);
         res.parameters = newParams;
@@ -126,24 +140,15 @@ public class DynamicEnvironment extends Util implements Cloneable {
         return (urlClassLoader == null) ? classLoader : urlClassLoader;
     }
 
-    public Value getClassPath() {
-        URL[] urls = (urlClassLoader == null) ? new URL[] {} : urlClassLoader.getURLs();
-        Pair p = EMPTYLIST;
-        for (int i=urls.length-1; i>=0; i--) {
-            p = new Pair(new SchemeString(urls[i].toString()), p);
-        }
-        return p;
+    public URL[] getClassPath() {
+        return (urlClassLoader == null ?
+                new URL[] {} :
+                urlClassLoader.getURLs());
     }
 
-    public void setClassPath(Value v) {
-        Pair pa = pair(v);
-        URL[] urls = new URL[length(pa)];
-        for (int i=0; pa != EMPTYLIST; i++, pa = (Pair)pa.cdr()) {
-            urls[i] = url(pa.car());
-        }
-        try {
-            urlClassLoader =  new URLClassLoader(urls, classLoader);
-        } catch (AccessControlException e) {}
+    public void extendClassPath(URL url) {
+        if (urlClassLoader == null) return;
+        urlClassLoader.addURL(url);
     }
 
     public Value getInputPort() {

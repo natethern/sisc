@@ -1,3 +1,10 @@
+2006-02-28  Matthias Radestock  <matthias@sorted.org>
+
+	* Replaced |current-class-path| and related functions with
+	  functions to inspect and extend a list of class path
+	  extensions. This addresses various class/resource loading
+	  weirdnesses reported in bug 1432887.
+
 2006-02-27  Scott G. Miller <sgmiller@gmail.com>
 
 	* Added the buffer-io module, which provides functionality

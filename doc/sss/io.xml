@@ -3160,26 +3160,41 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <para>
         Some &SISC; features require classes and other resources to be
         loaded. By default, &SISC; will use the current thread's class
-        loader, or, if none is present, the system class loader. This
-        can be augmented using the following functions:
+        loader, or, if none is present, the system class
+        loader. &SISC; maintains a list of class path extensions onto
+        which class and resource loading falls back. This list can be
+        inspected and extended using the following functions:
         <blockquote>
           <para>
-            <indexterm><primary>current-class-path</primary></indexterm>
+            <indexterm><primary>class-path-extension</primary></indexterm>
             &parameter;
             <methodsynopsis language="scheme">
               <type>string-list</type>
-              <methodname>current-class-path</methodname>
-              <methodparam choice="opt">
+              <methodname>class-path-extension</methodname>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Retrieves the current class path extension. The class
+                path extension is a list of strings representing URLs,
+                typically pointing to jar files or directories. It is
+                used a fall back during class and resource loading.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>class-path-extension-append!</primary></indexterm>
+            &parameter;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>class-path-extension-append!</methodname>
+              <methodparam>
                 <parameter>class-path</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Retrieves or sets the current class path. The class
-                path is a list of strings representing URLs, typically
-                pointing to jar files. When &SISC; attempts to load a
-                class or other resource, it searches these locations
-                before falling back on the default class loader.
+                Appends a list of URLs to the current class path
+                extension.
               </para>
               <para>
                 The elements of the <parameter>class-path</parameter>
@@ -3190,31 +3205,12 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </para>
             </blockquote>
           </para>
-          <para>
-            <indexterm><primary>with-class-path</primary></indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>with-class-path</methodname>
-              <methodparam>
-                <parameter>string-list</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>thunk</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>   
-                Evaluates <parameter>thunk</parameter> with a
-                <parameter>string-list</parameter> as the setting for
-                the <literal>current-class-path</literal>.
-              </para>
-            </blockquote>
-          </para>
         </blockquote>
-        Note that <literal>current-class-path</literal> is a 
-        <link linkend="Parameters">parameter</link>, so each thread has
-        it's own setting, initially inherited from the parent thread.
+        Note that the class path extension is part of the dynamic
+        environment,, so each thread has its own setting, initially
+        inherited from the parent thread. See <link
+        linkend="Threads"/> for more details on &SISC;'s threading
+        semantics.
       </para>
     </sect2>
   </sect1>

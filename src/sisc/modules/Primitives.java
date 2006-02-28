@@ -2,7 +2,7 @@ package sisc.modules;
 
 interface Primitives {
 
-    //next: 142
+    //next: 144
     int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -24,6 +24,8 @@ interface Primitives {
         CHARACTERQ = 30,
         CHAREQUAL = 140,
         CIRCULARQ = 62,
+        CLASSPATHEXTENSION = 142,
+        CLASSPATHEXTENSIONAPPEND = 143,
         COMPACTSTRINGREP = 7,
         COMPLEXQ = 37,
         CONS = 85,

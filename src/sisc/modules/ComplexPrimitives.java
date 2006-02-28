@@ -7,6 +7,7 @@ import sisc.interpreter.*;
 import sisc.nativefun.*;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URL;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.MemorySymEnv;
 import sisc.util.*;
@@ -47,6 +48,8 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             define("sisc-initial-environment", SISCINITIAL);
             define("string->number", STRING2NUMBER);
             define("with-failure-continuation", WITHFC);
+            define("class-path-extension", CLASSPATHEXTENSION);
+            define("class-path-extension-append!", CLASSPATHEXTENSIONAPPEND);
         }
     }
     
@@ -80,6 +83,13 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
         SIZESWITCH: switch (vls) {
         case 0:
             switch (id) {
+            case CLASSPATHEXTENSION:
+                URL[] urls = r.dynenv.getClassPath();
+                Pair p = EMPTYLIST;
+                for (int i=urls.length-1; i>=0; i--) {
+                    p = new Pair(new SchemeString(urls[i].toString()), p);
+                }
+                return p;
             case COMPACTSTRINGREP: return truth(SchemeString.compactRepresentation);
             case CURRENTWIND: return r.dynenv.wind;
             case GENSYM: 
@@ -98,6 +108,11 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
             }
         case 1:
             switch (id) {
+            case CLASSPATHEXTENSIONAPPEND:
+                for (Pair p = pair(vlr[0]); p != EMPTYLIST; p = (Pair)p.cdr()) {
+                    r.dynenv.extendClassPath(url(p.car()));
+                }
+                return VOID;
             case NUMBER2STRING: return new SchemeString(num(vlr[0]).toString());
             case GETENVIRONMENT:
                 try {
