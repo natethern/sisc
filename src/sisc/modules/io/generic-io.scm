@@ -208,8 +208,8 @@
 (define-method (gio/input-port-location (<filter-input-port> i))
   (input-port-location (:in i)))
 
-(define-method (gio/input-port-location (<sisc.io.source-input-port> i))
-  (native-input-port-location i))
+(define-method (gio/input-port-location (<native-input-port> i))
+  (native-input-port-location (unwrap-native-input-port i)))
 
 ; Native port classes
 ; Finally, add back the R5RS function logic

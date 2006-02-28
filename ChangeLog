@@ -1,3 +1,8 @@
+2006-02-28  Scott G. Miller <sgmiller@gmail.com>
+
+	* Fixed the fact that |input-port-location| wasn't generic.
+	  See bug 1440409.
+
 2006-02-28  Matthias Radestock  <matthias@sorted.org>
 
 	* Replaced |current-class-path| and related functions with
