@@ -3,17 +3,13 @@ package sisc.io;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import sisc.interpreter.Context;
-import sisc.interpreter.Interpreter;
 import sisc.util.Util;
-import sun.security.krb5.internal.r;
 
 public class StreamOutputPort
     extends AutoflushOutputPort
     implements BinaryOutputPort {
 
     public OutputStream out;
-    public Charset charSet;
     
     public StreamOutputPort(OutputStream out, boolean aflush) {
         super(aflush);
@@ -34,7 +30,7 @@ public class StreamOutputPort
     }
 
     protected void writeHelper(String s) throws IOException {
-        out.write(s.getBytes(charSet.getName()));
+        out.write(s.getBytes(Util.getDefaultCharacterSet().getName()));
     }
 
     protected void writeHelper(byte[] b, int offset, int length)
