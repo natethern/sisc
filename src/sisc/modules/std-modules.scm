@@ -629,6 +629,8 @@
    open-output-file
    open-binary-input-file
    open-binary-output-file
+   open-character-input-port
+   open-character-output-port
    close-input-port
    close-output-port
    port?
