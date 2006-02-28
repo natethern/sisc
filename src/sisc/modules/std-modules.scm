@@ -643,6 +643,7 @@
    make-wrapped-constructor
    unwrap-native-input-port
    unwrap-native-output-port
+   input-port-location
    gio/char-ready?
    gio/peek-char
    gio/read
@@ -656,6 +657,7 @@
    gio/write-string
    gio/display
    gio/flush-output-port
+   gio/input-port-location
    gio/close
    <port> <input-port> <output-port>
    <character-input-port> <character-output-port>

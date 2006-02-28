@@ -1,7 +1,7 @@
 (define-generics gio/char-ready? gio/peek-char
   gio/read gio/read-char gio/read-block gio/read-string gio/read-code
   gio/write gio/write-char gio/write-block gio/write-string
-  gio/display gio/flush-output-port gio/close
+  gio/display gio/flush-output-port gio/close gio/input-port-location
   open-character-input-port open-character-output-port)
 
 ; Define the native types
@@ -13,7 +13,8 @@
   (make-type '|sisc.modules.io.Buffer|))
 
 (define-java-classes
-  <sisc.io.writer-output-port> <sisc.io.reader-input-port> <sisc.io.charset>)
+  <sisc.io.writer-output-port> <sisc.io.reader-input-port> <sisc.io.charset>
+  <sisc.io.source-input-port>)
 
 (define-generic-java-methods get-input-stream get-output-stream for-name)
 
@@ -43,6 +44,7 @@
 (define native-open-output-file (getprop 'open-output-file))
 (define native-close-input-port (getprop 'close-input-port))
 (define native-close-output-port (getprop 'close-output-port))
+(define native-input-port-location (getprop 'input-port-location))
 
 (define set-filter-in!)
 (define set-filter-out!)
@@ -105,6 +107,9 @@
 
 (define (flush-output-port . port)
   (gio/flush-output-port (outport port)))
+
+(define (input-port-location port)
+  (gio/input-port-location port))
 
 (define close-output-port)
 (define close-input-port)
@@ -199,6 +204,12 @@
 (define-method (gio/close (<filter-output-port> i))
   (flush-output-port i)
   (close-output-port (:out i)))
+
+(define-method (gio/input-port-location (<filter-input-port> i))
+  (input-port-location (:in i)))
+
+(define-method (gio/input-port-location (<sisc.io.source-input-port> i))
+  (native-input-port-location i))
 
 ; Native port classes
 ; Finally, add back the R5RS function logic
