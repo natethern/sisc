@@ -297,6 +297,52 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 </para>
               </blockquote>
             </para>
+            <para>
+              <indexterm><primary>open-character-input-port</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>input-port</type>
+                <methodname>open-character-input-port</methodname>
+                <methodparam>
+                  <parameter>binary-input-port</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Creates an input port which reads from the
+                  provided binary input port.  The character
+                  set is retrieved from the <literal>character-set</literal>
+                  dynamic parameter.
+                </para>
+              </blockquote>
+            </para>
+            <para>
+              <indexterm><primary>open-character-output-port</primary>
+              </indexterm>
+              &procedure;
+              <methodsynopsis language="scheme">
+                <type>output-port</type>
+                <methodname>open-character-output-port</methodname>
+                <methodparam>
+                  <parameter>binary-output-port</parameter>
+                </methodparam>
+                <methodparam choice="opt">
+                  <parameter>auto-flush</parameter>
+                </methodparam>
+              </methodsynopsis>
+              <blockquote>
+                <para>
+                  Creates an output port which writes to the
+                  provided binary output port.  The character
+                  set is retrieved from the <literal>character-set</literal>
+                  dynamic parameter.  If the optional
+                  <parameter>auto-flush</parameter> argument is provided
+                  and is non-false, the port will automatically flush
+                  after each write call.
+                </para>
+              </blockquote>
+            </para>
           </blockquote>
         </para>
       </sect3>
