@@ -1170,7 +1170,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               &procedure;
               <methodsynopsis language="scheme">
                 <type>buffer-output-port</type>
-                <methodname>open-output-buffer</methodname> <void/>
+                <methodname>open-output-buffer</methodname> 
+                <void/>
               </methodsynopsis>
               <blockquote>
                 <para>
@@ -3217,6 +3218,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             <methodsynopsis language="scheme">
               <type>string-list</type>
               <methodname>class-path-extension</methodname>
+              <void/>
             </methodsynopsis>
             <blockquote>
               <para>
