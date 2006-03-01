@@ -9,7 +9,17 @@ import sisc.env.DynamicEnvironment;
 
 public class ThreadContext extends Util {
 
-    protected Stack interpreters = new Stack();
+    public static class State {
+        public final Interpreter interpreter;
+        public final ClassLoader classLoader;
+
+        public State(Interpreter r, ClassLoader cl) {
+            this.interpreter = r;
+            this.classLoader = cl;
+        }
+    }
+
+    protected Stack states = new Stack();
     protected Random r = new Random();
     
     public WeakReference hostThread;
@@ -31,27 +41,27 @@ public class ThreadContext extends Util {
         return unicityMajor + (unicityMinor*31104000000L);
     }
 
-    /*********** interpreter stack maintenance ***********/
+    /*********** state stack maintenance ***********/
 
     public Interpreter currentInterpreter() {
-        return (interpreters.empty() ?
-                null : (Interpreter)interpreters.peek());
+        return (states.empty() ?
+                null : ((State)states.peek()).interpreter);
     }
 
     public Interpreter currentInterpreter(AppContext ctx) {
-        for (Iterator it = interpreters.iterator(); it.hasNext();) {
-            Interpreter r = (Interpreter)it.next();
+        for (Iterator it = states.iterator(); it.hasNext();) {
+            Interpreter r = ((State)it.next()).interpreter;
             if (r.dynenv.ctx == ctx) return r;
         }
         return null;
     }
 
-    protected void pushInterpreter(Interpreter r) {
-        interpreters.push(r);
+    protected void pushState(State s) {
+        states.push(s);
     }
 
-    protected Interpreter popInterpreter() {
-        return (Interpreter)interpreters.pop();
+    protected State popState() {
+        return (State)states.pop();
     }
 
     public Thread nativeThread() {

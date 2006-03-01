@@ -194,13 +194,36 @@ public abstract class Context extends Util {
      * @return The newly created Interpreter
      */
     public static Interpreter enter(DynamicEnvironment dynenv) {
+
         dynenv.bind();
-        Thread currentThread = Thread.currentThread(); 
+
+        //set thread's context class loader
+        ClassLoader currentClassLoader = Util.currentClassLoader();
+        ClassLoader newClassLoader =
+            determineClassLoader(currentClassLoader,
+                                 dynenv.getClassLoader());
+        Thread currentThread = Thread.currentThread();
+        try {
+            currentThread.setContextClassLoader(newClassLoader);
+        } catch (java.security.AccessControlException e) {
+        }
+
         ThreadContext tctx = lookupThreadContext();
         tctx.setHostThread(dynenv, currentThread);
         Interpreter res = createInterpreter(tctx, dynenv);
-        tctx.pushInterpreter(res);
+        tctx.pushState(new ThreadContext.State(res, currentClassLoader));
         return res;
+    }
+
+    private static ClassLoader determineClassLoader(ClassLoader currentCL,
+                                                    ClassLoader newCL) {
+        try {
+            for (ClassLoader cl = newCL; cl != null; cl = cl.getParent()) {
+                if (currentCL == cl) return newCL;
+            }
+        } catch (java.security.AccessControlException e) {
+        }
+        return currentCL;
     }
 
     /**
@@ -216,8 +239,15 @@ public abstract class Context extends Util {
      */
     public static void exit() {
         ThreadContext tctx = lookupThreadContext();
-        Interpreter r = tctx.popInterpreter();
+        ThreadContext.State s = tctx.popState();
+        Interpreter r = s.interpreter;
         returnInterpreter(r);
+
+        //restore thread's context class loader
+        try {
+            Thread.currentThread().setContextClassLoader(s.classLoader);
+        } catch(java.security.AccessControlException e) {
+        }
     }
 
     /**
