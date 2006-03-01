@@ -1,3 +1,8 @@
+2006-03-01  Scott G. Miller <sgmiller@gmail.com>
+
+	* Expressions after a multiline comment weren't 
+	  always read correctly.  See bug 1441078. 
+	  
 2006-02-28  Scott G. Miller <sgmiller@gmail.com>
 
 	* Fixed the fact that |input-port-location| wasn't generic.

@@ -339,10 +339,10 @@ public class Parser extends Util implements Tokens {
                 o=new AnnotatedExpr(p.cdr(), p.car());
                 break;
             case '|': 
+                //InputPort is, HashMap state, Integer def, int radix, int flags
                 //Nested multiline comment
                 lexer.skipMultilineComment(is);
-                o=nextExpression(is, state, flags);
-                break;
+                return _nextExpression(is, state, def, radix, flags); 
             default:
                 Value[] v=null;
                 is.pushback(c);
