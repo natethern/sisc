@@ -27,7 +27,6 @@ public class REPL {
      */
     public REPL(DynamicEnvironment dynenv, Procedure repl) {
         this(new SchemeThread(dynenv, repl));
-        primordialThread.env = dynenv;
     }
 
     public REPL(SchemeThread primordialThread) {
