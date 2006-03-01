@@ -52,8 +52,10 @@ public class DynamicEnvironment extends Util implements Cloneable {
     //the lexer is stateful
     public Parser parser = new Parser(new Lexer());
 
+    private Thread bindingThread;
     private ClassLoader classLoader;
     private ExtensibleURLClassLoader urlClassLoader;
+    private URL[] initialClassPathExtension;
 
     private static class ExtensibleURLClassLoader extends URLClassLoader {
 
@@ -99,10 +101,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
         this.parser.lexer.strictR5RS =
             ctx.getProperty("sisc.strictR5RS", defaultStrictR5RS).equals("true");
 
-        classLoader = currentClassLoader();
-        try {
-            urlClassLoader = new ExtensibleURLClassLoader(new URL[]{}, classLoader);
-        } catch (AccessControlException e) {}
+        initialClassPathExtension = new URL[]{};
     }
 
     public SchemeInputPort getCurrentInPort() {
@@ -118,10 +117,10 @@ public class DynamicEnvironment extends Util implements Cloneable {
         res.parser = new Parser(new Lexer());
         res.parser.annotate = parser.annotate;
         res.parser.lexer.strictR5RS = parser.lexer.strictR5RS;
-        try {
-            res.urlClassLoader =
-                new ExtensibleURLClassLoader(getClassPath(), classLoader);
-        } catch (AccessControlException e) {}
+        res.initialClassPathExtension = getClassPath();
+        res.bindingThread = null;
+        res.classLoader = null;
+        res.urlClassLoader = null;
         WeakHashMap newParams=new WeakHashMap();
         newParams.putAll(res.parameters);
         res.parameters = newParams;
@@ -135,6 +134,29 @@ public class DynamicEnvironment extends Util implements Cloneable {
             return this;
         }
     }
+
+    /**
+     * Binds this DynamicEnvironment to the current thread.
+     *
+     * DynamicEnvironments must not be used across different
+     * threads. This method enforces this. It also initialises the
+     * DynamicEnvironments's class loader, which, if the security
+     * permissions allow it, will have the current thread's context
+     * class loader as a parent.
+     */
+    public void bind() {
+        Thread currentThread = Thread.currentThread();
+        if (bindingThread == null) {
+            bindingThread = currentThread;
+            classLoader = currentClassLoader();
+            try {
+                urlClassLoader = new ExtensibleURLClassLoader(initialClassPathExtension, classLoader);
+            } catch (AccessControlException e) {}
+        } else if (bindingThread != currentThread) {
+            throw new RuntimeException(liMessage(SISCB, "dynenvrebind"));
+        }
+    }
+        
 
     public ClassLoader getClassLoader() {
         return (urlClassLoader == null) ? classLoader : urlClassLoader;

@@ -194,8 +194,10 @@ public abstract class Context extends Util {
      * @return The newly created Interpreter
      */
     public static Interpreter enter(DynamicEnvironment dynenv) {
+        dynenv.bind();
+        Thread currentThread = Thread.currentThread(); 
         ThreadContext tctx = lookupThreadContext();
-        tctx.setHostThread(dynenv, Thread.currentThread());
+        tctx.setHostThread(dynenv, currentThread);
         Interpreter res = createInterpreter(tctx, dynenv);
         tctx.pushInterpreter(res);
         return res;
