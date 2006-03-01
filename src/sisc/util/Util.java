@@ -179,7 +179,16 @@ public abstract class Util implements Version {
         } catch (java.security.AccessControlException e) {
         }
         if (cl == null) {
-            cl = ClassLoader.getSystemClassLoader();
+            try {
+                cl = Util.class.getClassLoader();
+            } catch (java.security.AccessControlException e) {
+            }
+        }
+        if (cl == null) {
+            try {
+                cl = ClassLoader.getSystemClassLoader();
+            } catch (java.security.AccessControlException e) {
+            }
         }
         if (cl == null) {
             throw new RuntimeException(liMessage(SISCB, "notclassloader"));
