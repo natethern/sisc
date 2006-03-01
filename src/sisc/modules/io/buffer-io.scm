@@ -15,7 +15,7 @@
   (make <buffer-input-port> (_open-input-buffer buff)))
 
 (define (call-with-input-buffer buffer proc)
-  (let* ([port (open-input-buffer str)]
+  (let* ([port (open-input-buffer buffer)]
          [result (proc port)])
     (close-input-port port)
     result))
