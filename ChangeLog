@@ -1,7 +1,13 @@
+2006-03-02  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed intricate class and resource loading problems.  See bug
+	  1434594.
+
 2006-03-01  Scott G. Miller <sgmiller@gmail.com>
 
-	* Expressions after a multiline comment weren't 
-	  always read correctly.  See bug 1441078. 
+	* Fixed bug in multiline comment parsing - expressions after a
+	  multiline comment weren't always read correctly.  See bug
+	  1441078.
 	  
 2006-02-28  Scott G. Miller <sgmiller@gmail.com>
 

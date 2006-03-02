@@ -462,14 +462,14 @@ public class IO extends IndexedProcedure {
                     return FALSE;
                 }
             case FINDRESOURCE:
-                url = f.dynenv.getClassLoader().getResource(string(f.vlr[0]));
+                url = Util.currentClassLoader().getResource(string(f.vlr[0]));
                 if (url == null) 
                     return FALSE;
                 else return new SchemeString(url.toString());
             case FINDRESOURCES:
                 java.util.Enumeration e;
                 try {
-                    e = f.dynenv.getClassLoader().getResources(string(f.vlr[0]));
+                    e = Util.currentClassLoader().getResources(string(f.vlr[0]));
                 } catch (IOException ex) {
                     return EMPTYLIST;
                 }

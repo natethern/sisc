@@ -9,6 +9,7 @@ import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
+import sisc.util.Util;
 
 public class Types extends IndexedFixableProcedure {
 
@@ -103,7 +104,7 @@ public class Types extends IndexedFixableProcedure {
             return truth(v1 instanceof SchemeType);
         case MAKETYPE:
             try {
-                Class cl = Class.forName(symval(v1), true, Context.currentInterpreter().dynenv.getClassLoader());
+                Class cl = Class.forName(symval(v1), true, Util.currentClassLoader());
                 if (!Value.class.isAssignableFrom(cl))
                     throw new RuntimeException(liMessage(TYPESDB, "notaschemetype", symval(v1)));
                 return new SchemeType(cl);

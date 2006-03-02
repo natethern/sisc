@@ -60,7 +60,7 @@ public class Operation extends IndexedProcedure {
             case JAVA_CLASS:
                 String cname = symval(f.vlr[0]);
                 try {
-                    Class c = Util.resolveType(cname, f.dynenv.getClassLoader());
+                    Class c = Util.resolveType(cname);
                     return Util.makeJObj(c, Class.class);
                 } catch(IOException e) {
                     throwPrimException(liMessage(Util.S2JB, "classnotfound", cname));
@@ -115,7 +115,7 @@ public class Operation extends IndexedProcedure {
                 interfaces[i] = Util.jclass(f.vlr[i]);
             }
             try {
-                return Util.makeJObj(Proxy.getProxyClass(f.dynenv.getClassLoader(), interfaces), Class.class);
+                return Util.makeJObj(Proxy.getProxyClass(Util.currentClassLoader(), interfaces), Class.class);
             } catch (IllegalArgumentException e) {
                 throw new RuntimeException(liMessage(Util.S2JB, "proxyinterfaceillegal", Reflection.typesString(interfaces)));
             } catch (NullPointerException e) {

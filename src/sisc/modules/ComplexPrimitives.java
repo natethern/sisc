@@ -156,7 +156,7 @@ public class ComplexPrimitives extends IndexedProcedure implements Primitives {
                 return VOID;
             case LOADNL:
                 try {
-                    Class clazz=Class.forName(string(vlr[0]), true, r.dynenv.getClassLoader());
+                    Class clazz=Class.forName(string(vlr[0]), true, Util.currentClassLoader());
                     return (NativeLibrary)clazz.newInstance();
                 } catch (Exception e) {
                     throwPrimException(e.getMessage());
