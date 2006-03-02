@@ -643,14 +643,6 @@ public abstract class Util implements Version {
         return FALSE;
     }
 
-    public static final Pair collectionToList(Collection c) {
-        Pair rv=EMPTYLIST;
-        for (Iterator i=c.iterator(); i.hasNext();) {
-            rv=new Pair((Value)i.next(), rv);
-        }
-        return rv;
-    }
-
     /* Localization and Internationalization */
     public static Symbol SISCB = Symbol.intern("sisc.Messages");
     public static WeakHashMap bundles = new WeakHashMap();
