@@ -102,8 +102,8 @@
 (define (write v . port)
   (gio/write v (outport port)))
 
-(define (write-byte char . port)
-  (gio/write-byte char (outport port)))
+(define (write-byte byte . port)
+  (gio/write-byte byte (outport port)))
 
 (define (write-char char . port)
   (gio/write-char char (outport port)))
@@ -195,8 +195,8 @@
 (define-method (gio/write (<value> v) (<filter-output-port> o))
   (gio/write v (:out o)))
 
-(define-method (gio/write-byte (<char> c) (<filter-output-port> o))
-  (gio/write-byte c (:out o)))
+(define-method (gio/write-byte (<number> b) (<filter-output-port> o))
+  (gio/write-byte b (:out o)))
 
 (define-method (gio/write-char (<char> c) (<filter-output-port> o))
   (gio/write-char c (:out o)))
@@ -279,11 +279,11 @@
 (define-method (gio/write (<value> v) (<sisc.data.scheme-output-port> o))
   (native-write v o))
 
-(define-method (gio/write-byte (<number> c) (<native-output-port> o))
-  (gio/write-byte c (unwrap-native-output-port o)))
+(define-method (gio/write-byte (<number> b) (<native-output-port> o))
+  (gio/write-byte b (unwrap-native-output-port o)))
 
-(define-method (gio/write-byte (<number> c) (<sisc.data.scheme-output-port> o))
-  (native-write-byte c o))
+(define-method (gio/write-byte (<number> b) (<sisc.data.scheme-output-port> o))
+  (native-write-byte b o))
 
 (define-method (gio/write-char (<char> c) (<native-output-port> o))
   (gio/write-char c (unwrap-native-output-port o)))
