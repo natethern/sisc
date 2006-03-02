@@ -111,7 +111,6 @@ public class OptionalPrimitives extends IndexedFixableProcedure {
             }
             return reverseInPlace(c);
         case MAPCAR:
-            lists=pair(v1);
             return mapcar(pair(v1));
         case REVERSE:
             return reverse(pair(v1));
