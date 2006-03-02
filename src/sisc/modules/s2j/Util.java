@@ -241,7 +241,7 @@ public abstract class Util extends IndexedFixableProcedure {
      * Map a type name to its corresponding class.
      *
      * This just calls <code>resolveType(name,
-     * getClassLoader())</code>.
+     * currentClassLoader())</code>.
      */
     public static Class resolveType(String name) throws IOException {
         return resolveType(name, currentClassLoader());
