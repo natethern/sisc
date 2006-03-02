@@ -163,6 +163,10 @@
     (set-annotation! gproc 'name name)
     gproc))
 
+(define (fetch-named-generic-procedure table name)
+  (hashtable/get! table name (lambda ()
+                               (make-named-generic-procedure name))))
+
 (define (reflect-java-class-members jclass)
   (define (helper fetch create)
     (filter-map (lambda (m) (and (memq 'public (java/modifiers m))
@@ -177,11 +181,10 @@
      gproc))
   (for-each (lambda (table fetch create)
               (for-each (lambda (member)
-                          (add-method (hashtable/get!
-                                       table
-                                       (car member)
-                                       make-generic-procedure)
-                                      (cdr member)))
+                          (add-method
+                           (fetch-named-generic-procedure table
+                                                          (car member))
+                           (cdr member)))
                         (helper fetch create)))
             (list *REFLECTED-METHODS*
                   *REFLECTED-FIELD-ACCESSORS*
@@ -226,12 +229,7 @@
               ;;reflection cache.
               ;;In any case, the performance gain would be marginal -
               ;;less than 1% at the time of writing.
-              (hashtable/get! table
-                              name
-                              (lambda ()
-                                (let ([p (make-generic-procedure)])
-                                  (set-annotation! p 'name name)
-                                  p)))))
+              (fetch-named-generic-procedure table name)))
            args)))
 
 ;;;;;;;;;; HIGH LEVEL PROCEDURES AND SYNTAX ;;;;;;;;;;

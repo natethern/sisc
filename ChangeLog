@@ -10,6 +10,10 @@
 	* Fixed intricate class and resource loading problems.  See bug
 	  1434594.
 
+	* Fixed procedure naming problem in generic java methods, field
+	  accessors and modifiers, which had caused error reporting on
+	  these procedures to sometimes omit the name. See bug 1442022.
+
 2006-03-01  Scott G. Miller <sgmiller@gmail.com>
 
 	* Fixed bug in multiline comment parsing - expressions after a
