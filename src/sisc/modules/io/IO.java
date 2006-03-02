@@ -111,6 +111,10 @@ public class IO extends IndexedProcedure {
 
     private static Value readChar(Interpreter f, InputPort i) 
         throws ContinuationException {
+        if (i instanceof BinaryInputPort) {
+            System.err.println(Util.warn("charoponbinport", 
+                    ((Value)i).synopsis()));
+        }
         try {
             int c=i.read();
             return new SchemeCharacter((char)c);
@@ -138,6 +142,10 @@ public class IO extends IndexedProcedure {
 
     private static Value read(Interpreter r, InputPort i, int flags) 
         throws ContinuationException {
+        if (i instanceof BinaryInputPort) {
+            System.err.println(Util.warn("charoponbinport", 
+                    ((Value)i).synopsis()));
+        }
         try {
             return r.dynenv.parser.nextExpression(i, flags);
         } catch (EOFException e) {
