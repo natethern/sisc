@@ -613,13 +613,16 @@
 
 (module generic-io
   (char-ready?
+   peek-byte
    peek-char
    read
+   read-byte
    read-char
    read-block
    read-string
    read-code
    write
+   write-byte
    write-char
    write-block
    write-string
@@ -645,13 +648,16 @@
    unwrap-native-output-port
    input-port-location
    gio/char-ready?
+   gio/peek-byte
    gio/peek-char
    gio/read
+   gio/read-byte
    gio/read-char
    gio/read-block
    gio/read-string
    gio/read-code
    gio/write
+   gio/write-byte
    gio/write-char
    gio/write-block
    gio/write-string
@@ -754,12 +760,15 @@
     (putprop x (eval (sc-expand x)))
     ($sc-put-cte x `(global . ,x)))
  '(char-ready?
+   peek-byte
    peek-char
    read
+   read-byte
    read-char
    read-string
    read-code
    write
+   write-byte
    write-char
    write-string
    display

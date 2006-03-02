@@ -4,6 +4,7 @@ import java.io.IOException;
 
 public interface BinaryOutputPort extends OutputPort {
 
+    void write(int b) throws IOException;
     void write(byte[] b, int offset, int length) throws IOException;
 }
 /*

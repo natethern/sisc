@@ -1,6 +1,6 @@
-(define-generics gio/char-ready? gio/peek-char
+(define-generics gio/char-ready? gio/peek-char gio/peek-byte gio/read-byte
   gio/read gio/read-char gio/read-block gio/read-string gio/read-code
-  gio/write gio/write-char gio/write-block gio/write-string
+  gio/write gio/write-char gio/write-block gio/write-string gio/write-byte
   gio/display gio/flush-output-port gio/close gio/input-port-location
   open-character-input-port open-character-output-port)
 
@@ -31,11 +31,14 @@
 ; First, save the original functions
 (define native-char-ready?      (getprop 'char-ready?))
 (define native-peek-char        (getprop 'peek-char))
+(define native-peek-byte        (getprop 'peek-byte))
 (define native-read             (getprop 'read))
 (define native-read-char        (getprop 'read-char))
+(define native-read-byte        (getprop 'read-byte))
 (define native-read-string      (getprop 'read-string))
 (define native-read-code        (getprop 'read-code))
 (define native-write            (getprop 'write))
+(define native-write-byte       (getprop 'write-byte))
 (define native-write-char       (getprop 'write-char))
 (define native-write-string     (getprop 'write-string))
 (define native-display          (getprop 'display))
@@ -75,8 +78,14 @@
 (define (peek-char . port)
   (gio/peek-char (inport port)))
 
+(define (peek-byte . port)
+  (gio/peek-byte (inport port)))
+
 (define (read . port)
   (gio/read (inport port)))
+
+(define (read-byte . port)
+  (gio/read-byte (inport port)))
 
 (define (read-char . port)
   (gio/read-char (inport port)))
@@ -92,6 +101,9 @@
 
 (define (write v . port)
   (gio/write v (outport port)))
+
+(define (write-byte char . port)
+  (gio/write-byte char (outport port)))
 
 (define (write-char char . port)
   (gio/write-char char (outport port)))
@@ -150,11 +162,17 @@
 (define-method (gio/char-ready? (<filter-input-port> i))
   (gio/char-ready? (:in i)))
 
+(define-method (gio/peek-byte (<filter-input-port> i))
+  (gio/peek-byte (:in i)))
+
 (define-method (gio/peek-char (<filter-input-port> i))
   (gio/peek-char (:in i)))
 
 (define-method (gio/read (<filter-input-port> i))
   (gio/read (:in i)))
+
+(define-method (gio/read-byte (<filter-input-port> i))
+  (gio/read-byte (:in i)))
 
 (define-method (gio/read-char (<filter-input-port> i))
   (gio/read-char (:in i)))
@@ -176,6 +194,9 @@
 
 (define-method (gio/write (<value> v) (<filter-output-port> o))
   (gio/write v (:out o)))
+
+(define-method (gio/write-byte (<char> c) (<filter-output-port> o))
+  (gio/write-byte c (:out o)))
 
 (define-method (gio/write-char (<char> c) (<filter-output-port> o))
   (gio/write-char c (:out o)))
@@ -225,11 +246,17 @@
 (define-method (gio/char-ready? (<sisc.data.scheme-input-port> i))
   (native-char-ready? i))
 
+(define-method (gio/peek-byte (<sisc.data.scheme-input-port> i))
+  (native-peek-byte i))
+
 (define-method (gio/peek-char (<sisc.data.scheme-input-port> i))
   (native-peek-char i))
 
 (define-method (gio/read (<sisc.data.scheme-input-port> i))
   (native-read i))
+
+(define-method (gio/read-byte (<sisc.data.scheme-input-port> i))
+  (native-read-byte i))
 
 (define-method (gio/read-char (<sisc.data.scheme-input-port> i))
   (native-read-char i))
@@ -251,6 +278,15 @@
 
 (define-method (gio/write (<value> v) (<sisc.data.scheme-output-port> o))
   (native-write v o))
+
+(define-method (gio/write-byte (<number> c) (<native-output-port> o))
+  (gio/write-byte c (unwrap-native-output-port o)))
+
+(define-method (gio/write-byte (<number> c) (<sisc.data.scheme-output-port> o))
+  (native-write-byte c o))
+
+(define-method (gio/write-char (<char> c) (<native-output-port> o))
+  (gio/write-char c (unwrap-native-output-port o)))
 
 (define-method (gio/write-char (<char> c) (<sisc.data.scheme-output-port> o))
   (native-write-char c o))

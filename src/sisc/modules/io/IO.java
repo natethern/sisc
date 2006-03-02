@@ -15,7 +15,7 @@ public class IO extends IndexedProcedure {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
-        //NEXT = 28,
+        //NEXT = 31,
 
         ABSPATHQ            = 0,
         CHARREADY           = 3,
@@ -36,13 +36,16 @@ public class IO extends IndexedProcedure {
         OPENOUTPUTFILE      = 19,
         OPENSOURCEINPUTFILE = 20,
         OUTPORTQ            = 22,
+        PEEKBYTE            = 30,
         PEEKCHAR            = 23,
         PORTQ               = 27,
         READ                = 21,
+        READBYTE            = 29,
         READCHAR            = 18,
         READSTRING          = 25,
         READCODE            = 11,
         WRITE               = 1,
+        WRITEBYTE           = 28,
         WRITECHAR           = 7,
         WRITESTRING         = 26;
         
@@ -72,13 +75,16 @@ public class IO extends IndexedProcedure {
             define("open-output-file"   , OPENOUTPUTFILE);
             define("open-source-input-file", OPENSOURCEINPUTFILE);
             define("output-port?"       , OUTPORTQ);
+            define("peek-byte"          , PEEKBYTE);
             define("peek-char"          , PEEKCHAR);
             define("port?"              , PORTQ);
             define("read"               , READ);
+            define("read-byte"          , READBYTE);
             define("read-char"          , READCHAR);
             define("read-code"          , READCODE);
             define("read-string"        , READSTRING);
             define("write"              , WRITE);
+            define("write-byte"         , WRITEBYTE);
             define("write-char"         , WRITECHAR);
             define("write-string"       , WRITESTRING);
         }
@@ -108,6 +114,19 @@ public class IO extends IndexedProcedure {
         try {
             int c=i.read();
             return new SchemeCharacter((char)c);
+        } catch (EOFException e) {
+            return EOF;
+        } catch (IOException e2) {
+            throwIOException(f, liMessage(IOB, "errorreading", i.toString(),
+                                          e2.getMessage()), e2);
+        }
+        return null; //Should never happen
+    }
+
+    private static Value readByte(Interpreter f, InputPort i) throws ContinuationException {
+        try {
+            int c=i.read();
+            return Quantity.valueOf(c);
         } catch (EOFException e) {
             return EOF;
         } catch (IOException e2) {
@@ -270,8 +289,15 @@ public class IO extends IndexedProcedure {
                 if (v instanceof SchemeCharacter)
                     f.dynenv.getCurrentInPort().pushback(((SchemeCharacter)v).c);
                 return v;
+            case PEEKBYTE:
+                v=readByte(f, f.dynenv.getCurrentInPort());
+                if (v instanceof Quantity)
+                    f.dynenv.getCurrentInPort().pushback(((Quantity)v).indexValue());
+                return v;
             case READ:
                 return read(f, f.dynenv.getCurrentInPort());
+            case READBYTE:
+                return readByte(f, f.dynenv.getCurrentInPort());
             case READCHAR:
                 return readChar(f, f.dynenv.getCurrentInPort());
             case READCODE:
@@ -295,15 +321,24 @@ public class IO extends IndexedProcedure {
                 return displayOrWrite(f, f.dynenv.getCurrentOutPort(), f.vlr[0], true);
             case WRITE:
                 return displayOrWrite(f, f.dynenv.getCurrentOutPort(), f.vlr[0], false);
+            case PEEKBYTE:
+                inport=inport(f.vlr[0]);
+                Value v=readByte(f, inport);
+                if (v instanceof Quantity)
+                    inport.pushback(((Quantity)v).indexValue());
+                return v;
             case PEEKCHAR:
                 inport=inport(f.vlr[0]);
-                Value v=readChar(f, inport);
+                v=readChar(f, inport);
                 if (v instanceof SchemeCharacter)
                     inport.pushback(((SchemeCharacter)v).c);
                 return v;
             case READ:
                 inport=inport(f.vlr[0]);
                 return read(f, inport);
+            case READBYTE:
+                inport=inport(f.vlr[0]);
+                return readByte(f, inport);
             case READCHAR:
                 inport=inport(f.vlr[0]);
                 return readChar(f, inport);
@@ -454,6 +489,15 @@ public class IO extends IndexedProcedure {
                                                   e.getMessage()), e);
                 }
                 return VOID;
+            case WRITEBYTE:
+                try {
+                    ((BinaryOutputPort)f.dynenv.getCurrentOutPort()).write(num(f.vlr[0]).indexValue());
+                } catch (IOException e) {
+                    throwIOException(f, liMessage(IOB, "errorwriting",
+                                                  f.dynenv.out.toString(),
+                                                  e.getMessage()), e);
+                }
+                return VOID;
             case FILEEXISTSQ:
                 try {
                     url(f.vlr[0]).openConnection().getInputStream().close();
@@ -503,6 +547,16 @@ public class IO extends IndexedProcedure {
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "errorwriting",
                                                   port.toString(),
+                                                  e.getMessage()), e);
+                }
+                return VOID;
+            case WRITEBYTE:
+                BinaryOutputPort bport=(BinaryOutputPort)outport(f.vlr[1]);
+                try {
+                    bport.write(num(f.vlr[0]).indexValue());
+                } catch (IOException e) {
+                    throwIOException(f, liMessage(IOB, "errorwriting",
+                                                  bport.toString(),
                                                   e.getMessage()), e);
                 }
                 return VOID;

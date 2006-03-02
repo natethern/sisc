@@ -20,24 +20,34 @@ public class StreamOutputPort
         return out;
     }
 
+    public void write(int b) throws IOException {
+        writeHelper(b);
+        if (autoflush) flush();
+    }
+    
     public void write(byte[] b, int offset, int length) throws IOException {
         writeHelper(b, offset, length);
         if (autoflush) flush();
     }
 
     protected void writeHelper(char v) throws IOException {
+        System.err.println(Util.warn("charoponbinport", synopsis()));
         out.write(v);
     }
 
     protected void writeHelper(String s) throws IOException {
+        System.err.println(Util.warn("charoponbinport", synopsis()));
         out.write(s.getBytes(Util.getDefaultCharacterSet().getName()));
     }
 
-    protected void writeHelper(byte[] b, int offset, int length)
-        throws IOException {
-        out.write(b, offset, length);
+    protected void writeHelper(int b) throws IOException {
+        out.write(b);
     }
 
+    protected void writeHelper(byte[] b, int offset, int length)
+    throws IOException {
+        out.write(b, offset, length);
+    }
     public void flush() throws IOException {
         out.flush();
     }
