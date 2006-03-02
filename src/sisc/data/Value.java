@@ -20,7 +20,8 @@ public abstract class Value extends Expression implements Immediate {
         error(r, liMessage(SISCB,"nonprocapp", synopsis()));
     }
 
-    public String synopsis() {        return synopsis(Defaults.SYNOPSIS_LENGTH);
+    public String synopsis() {        
+        return synopsis(Defaults.SYNOPSIS_LENGTH);
     }
 
     /**
