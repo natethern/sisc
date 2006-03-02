@@ -878,15 +878,15 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         In addition to the &R5RS; I/O functions, &SISC; provides a
         symmetric set of functions for reading and writing binary data
         to and from ports with no character set translation.  These
-        ports are operated on in the same way as character ports,
-        i.e. with <function>read</function>,
+        ports are operated on using the binary I/O functions described below.
+        Using character-oriented operations (such as the traditional &R5RS;
+        functions <function>read</function>,
         <function>read-char</function>, <function>display</function>,
-        etc.
-        In addition to the standard operations, binary ports provides block
-        input/output functions, that allow a Scheme program to read
-        blocks of more than one byte of data at a time from binary ports.
-        &SISC; stores data that is read or is to be written in a 
-        binary buffer (see <xref linkend="Buffers"/>).
+        etc.) is an error. 
+        Binary ports also provide block input/output functions, that allow 
+        a Scheme program to read blocks of more than one byte of data at a
+        time from binary ports. &SISC; stores data that is read or is to be
+        written in block fashion in a binary buffer (see <xref linkend="Buffers"/>).
       </para>
       <para>
         <blockquote>
@@ -903,9 +903,9 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-		        Creates an input port in the same manner as &R5RS;
+                Creates an input port in the same manner as &R5RS;
                 <function>open-input-file</function>, producing an
-		        input port that does no character-set decoding on the
+                input port that does no character-set decoding on the
                 bytes read as input.
               </para>
             </blockquote>
@@ -1028,6 +1028,50 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </para>
             </blockquote>
           </para>
+          <para>
+            There are several operations specifically available for
+            use on binary ports.  
+          </para>
+          <para id="func-peek-byte">
+            <indexterm><primary>peek-byte</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>integer</type>
+              <methodname>peek-byte</methodname>
+              <methodparam choice="opt">
+                <parameter>binary-input-port</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Similar to <function>peek-char</function>, reads ahead
+                one byte in the stream, returning the next byte available
+                but not advancing the stream.  The byte is returned
+                as an integer.  The current input port is used
+                unless specified.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-read-byte">
+            <indexterm><primary>read-byte</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>integer</type>
+              <methodname>read-byte</methodname>
+              <methodparam choice="opt">
+                <parameter>binary-input-port</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Reads a single byte from the stream, advancing the
+                stream and returning the byte as an integer.
+                The current input port is used unless specified.
+              </para>
+            </blockquote>
+          </para>
           <para id="func-read-block">
             <indexterm><primary>read-block</primary>
             </indexterm>
@@ -1044,14 +1088,16 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodparam>
                 <parameter>count</parameter>
               </methodparam>
-              <methodparam>
+              <methodparam choice="opt">
                 <parameter>binary-input-port</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
                 Reads up to <parameter>count</parameter> bytes of data
-                from the provided <parameter>binary-input-port</parameter>
+                from the current input port or the
+                <parameter>binary-input-port</parameter> parameter
+                if provided,
                 into the binary buffer <parameter>buffer</parameter>
                 starting at position <parameter>offset</parameter>. 
                 Note that less
@@ -1059,6 +1105,27 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 The number of bytes actually read is returned.  If the
                 end-of-file is encountered before any bytes could be
                 read, <literal>&num;!eof</literal> will be returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-write-byte">
+            <indexterm><primary>write-byte</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>undefined</type>
+              <methodname>write-byte</methodname>
+              <methodparam><parameter>integer</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>binary-output-port</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Writes a single byte specified as an integer 
+                to the given <parameter>binary-output-port</parameter>
+                if provided, current output port otherwise. 
               </para>
             </blockquote>
           </para>
@@ -1078,7 +1145,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <methodparam>
                 <parameter>count</parameter>
               </methodparam>
-              <methodparam>
+              <methodparam choice="opt">
                 <parameter>binary-output-port</parameter>
               </methodparam>
             </methodsynopsis>
@@ -1087,7 +1154,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 Writes <parameter>count</parameter> bytes of data from
                 the provided <parameter>buffer</parameter> at 
                 starting point <parameter>offset</parameter> to the
-                given <parameter>binary-output-port</parameter>.  Exactly
+                given <parameter>binary-output-port</parameter> or
+                to the current output port if unspecified.  Exactly
                 <parameter>count</parameter> bytes will be written.
               </para>
             </blockquote>
