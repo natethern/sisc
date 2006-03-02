@@ -2,7 +2,7 @@ Source: sisc
 Section: interpreters
 Priority: optional
 Maintainer: Scott G. Miller <sgmiller@gmail.com>
-Build-Depends: debhelper (>= 4.0.0), java2-compiler, ant (>= 1.6.0), docbook-xml (>= 4.3)
+Build-Depends: debhelper (>= 4.0.0), java2-compiler, ant (>= 1.6.0), docbook-xml (>= 4.3), docbook-xsl (>= 1.68.0)
 Standards-Version: 3.6.1
 
 Package: sisc
