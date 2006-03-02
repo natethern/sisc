@@ -1,13 +1,16 @@
 package sisc.ser;
 
 import java.io.*;
+import sisc.util.Util;
 
 public class NestedObjectInputStream extends ObjectInputStream {
 
     private Deserializer d;
+    private ClassLoader cl;
 
     NestedObjectInputStream(InputStream out) throws IOException {
         super(out);
+        cl = Util.currentClassLoader();
     }
     
     public Deserializer getDeserializerInstance() {
@@ -17,6 +20,13 @@ public class NestedObjectInputStream extends ObjectInputStream {
     public void setDeserializerInstance(Deserializer d) {
         this.d = d;
     }
+
+    protected Class resolveClass(ObjectStreamClass desc)
+        throws IOException, ClassNotFoundException {
+
+        return Class.forName(desc.getName(), true, cl);
+    }
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public

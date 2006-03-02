@@ -62,7 +62,7 @@ public class StreamDeserializer extends SLL2Deserializer {
         Class c=(Class)classPool.get(i);
         if (c==null) {
             try {
-                c=Class.forName(readUTF());
+                c=Class.forName(readUTF(), true, Util.currentClassLoader());
                 classPool.put(i, c);
             } catch (ClassNotFoundException cnf) {
                 throw new IOException(cnf.toString());
