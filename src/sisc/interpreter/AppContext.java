@@ -194,13 +194,10 @@ public class AppContext extends Util {
     }
 
     /**
-     * Attempts to find and load the default SISC heap into the
-     * provided Interpreter.
+     * Attempts to find and load the default SISC heap into this
+     * AppContext.
      *
-     * @param interp The interpreter whose AppContext will host
-     * the contents of the heap
-     * 
-     * @see findHeap
+     * @see #findHeap(String)
      */
     public void setDefaultHeap() throws IOException {
         URL u=findHeap(null);
