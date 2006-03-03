@@ -9,31 +9,75 @@
     implementation of Java interfaces in Scheme.
   </para>
   <sect1 id="JavaToScheme">
-    <title>Java-to-Scheme Interface</title>
-    <sect2>
-      <title>Contexts and Environments</title>
-          
+    <title>Calling Scheme from Java</title>
+    <para>
+      Calling programmer-defined Scheme code from Java is
+      a simple process, but requires some initialization 
+      before proceeding.  Depending on the use case of &SISC;,
+      the initialization may be largely automatic.  
+      Any Scheme call first requires three resources:
+      <orderedlist>
+        <listitem>
+          <para>
+            An Application Context (<classname>AppContext</classname>),
+            which encapsulates the entirety of a single application's 
+            interactions with &SISC;.  This is initialized with ...
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            A Heap, which provides the environments and base code
+            to execute programs using ...
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            An <classname>Interpreter</classname>, which provides
+            the engine and API for actually evaluating Scheme code.
+          </para>
+        </listitem>
+      </orderedlist>
+      Each resource is described in the sections below.  The gateway
+      for interacting with these resources is primarily the 
+      <classname>sisc.interpreter.Context</classname> utility class.
+    </para>
+    <sect2 id="appcontexts">
+      <title>Application Contexts</title>
       <para>
-        Multiple Scheme applications can run within a single &SISC;
-        runtime. Each application has its own top level environment and
-        evaluator. An application is represented by instances of the
-        <classname>sisc.interpreter.AppContext</classname> class.  Most
-        API interactions use the <classname>AppContext</classname> 
-        to indicate which application is being accessed.  However,
-        existing Java applications may not be aware of Scheme code,
-        and thus there are provisions in &SISC; for consulting a
-        <emphasis>default</emphasis> <classname>AppContext</classname>
-        when being called by such unaware code. 
+        The Application Context, represented by the class
+        <classname>sisc.interpreter.AppContext</classname>, holds
+        references to the top-level environment, global configuration
+        properties, and other resources which are unique to a
+        single usage of &SISC;.  This should not be confused
+        with multiple threads or invocations into the same
+        application. 
       </para>
       <para>
-        The default <classname>AppContext</classname> is created
-        implicitly when requested by &SISC; when performing an operation
-        which requires it, and initialized with the default
-        heap.  It can be explicitly set and retrieved using
-        the following methods in the <classname>sisc.interpreter.Context</classname>
-        class:
+        An AppContext is created simply using the default constructor,
+        or a constructor which takes a Java
+        <classname>Properties</classname> class with overrides
+        for global Scheme properties as described throughout
+        this manual.
       </para>
       <para>
+        The application context is the token used
+        by most of the API for calling Scheme from Java code,
+        though many of the API calls can either infer the
+        <classname>AppContext</classname> from the currently
+        executing thread, or defer to a default context.
+      </para>
+      <para>
+        A default application context may be necessary when Scheme code
+        is called through callbacks or other Java mechanisms in 
+        code which is not aware of &SISC; or the Scheme code
+        which is being called.  The default application context
+        can be set explicitly after creating the context,
+        but is also set implicitly by &SISC; if there is not
+        already a default context when one is needed.
+        To set the default application context, use the following
+        method from <classname>Context</classname>:
+      </para>
+      <para id="func_set_default_app_context">
         <methodsynopsis language="java">
           <modifier>public</modifier>
            <void/>
@@ -49,8 +93,8 @@
             to the instance provided.
           </para>
         </blockquote>
-      </para>             
-      <para>
+      </para>                   
+      <para id="func_get_default_app_context">
         <methodsynopsis language="java">
           <modifier>public</modifier>
           <type>sisc.interpreter.AppContext</type>
@@ -66,19 +110,149 @@
         </blockquote>
       </para>             
       <para>
-        <methodsynopsis language="java">
-          <modifier>public</modifier>
-          <type>sisc.interpreter.AppContext</type>
-          <methodname>currentAppContext</methodname>        
-          <void/>    
-        </methodsynopsis>
+        Remember that an application context is nearly always useless
+        until initialized with a heap, as described in the next
+        section.
+      </para>
+    </sect2>
+    <sect2>
+      <title>The &SISC; Heap</title>
+      <para>
+        The heap is a serialization of all the pre-compiled code which
+        makes up both the base Scheme language provided by &SISC;, and
+        many of it's libraries.  Distributions of &SISC; come with a
+        prepackaged heap which is sufficient for most usages, and
+        customizing a heap should be viewed as a last resort, as 
+        precompiled libraries usually solve the same problem.
+      </para>
+      <para>
+        A heap is a randomly accessed structure which must be loaded
+        into an application context.  The heap can be automatically
+        located if it is in the directory pointed to by the
+        <literal>SISC_HOME</literal> environment variable, the
+        current directory, or on the Java classpath.  In the last case
+        however, it will be loaded into memory entirely, rather than
+        read in as needed.  The automatic heap location involves
+        calling <function>setDefaultHeap</function> on the 
+        <classname>AppContext</classname>, and is used
+        when an application context is created implicitly.
+      </para>
+      <blockquote>
+        <para>
+          <indexterm><primary>findHeap</primary>
+          </indexterm>
+          <methodsynopsis language="java">
+            <modifier>public</modifier>
+            <void/>
+            <methodname>setDefaultHeap</methodname>
+            <void/>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Uses <function>findHeap</function>, <function>openHeap</function>,
+              and <function>setHeap</function> to find and register 
+              a default heap with this application context
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <para>
+        The URL that is produced through this discovery can be 
+        obtained using the <function>findHeap</function> method in 
+        <classname>AppContext</classname>:
+      </para>
+      <blockquote>
+        <para>
+          <indexterm><primary>findHeap</primary>
+          </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <modifier>static</modifier>
+            <type>java.net.URL</type>
+            <methodname>findHeap</methodname>
+            <methodparam choice="opt">
+              <type>String</type>
+              <parameter>heapName</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Searches for the heap with the given name, or
+              if null, <literal>sisc.shp</literal> in several candidate locations.
+              If a heap is found, a URL pointing to it is returned,
+              otherwise null is returned.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <para>
+        Once located, the heap is opened and registered with the
+        <classname>AppContext</classname>, allowing the context
+        to then be used for Scheme evaluation.  This is done
+        with the <function>openHeap</function> and <function>setHeap</function>
+        methods:
+      </para>
+      <blockquote>
+        <para>
+          <indexterm><primary>openHeap</primary>
+          </indexterm>
+          <methodsynopsis language="java">
+            <modifier>public</modifier>
+            <modifier>static</modifier>
+            <type>sisc.ser.SeekableInputStream</type>
+            <methodname>openHeap</methodname>
+            <methodparam>
+              <type>java.net.URL</type>
+              <parameter>heapURL</parameter>
+            </methodparam>
+          </methodsynopsis>
+        </para>
         <blockquote>
           <para>
-            Retrieves the current <classname>AppContext</classname> on 
-            an internal call, or the default during an external call.
+            Opens the heap pointed to by the given
+            URL, returning an appropriate random
+            access input stream suitable for passing
+            to <function>setHeap</function>.
           </para>
         </blockquote>
-      </para>             
+      </blockquote>
+      <blockquote>
+        <para>
+          <indexterm><primary>setHeap</primary>
+          </indexterm>
+          <methodsynopsis language="java">
+            <modifier>public</modifier>
+            <type>boolean</type>
+            <methodname>setHeap</methodname>
+            <methodparam>
+              <type>sisc.ser.SeekableInputStream</type>
+              <parameter>heap</parameter>
+            </methodparam>
+          </methodsynopsis>
+        </para>
+        <blockquote>
+          <para>
+            Registers the given heap stream with the
+            application context.  Returns true 
+            if the registration is successful, false
+            otherwise.
+          </para>
+        </blockquote>
+      </blockquote>
+    </sect2>
+    <sect2>
+      <title>The Interpreter</title>
+      <para>
+        The <classname>Interpreter</classname> class contains the
+        engine for evaluating Scheme code, and API methods for
+        triggering that evaluation.  Each thread of execution 
+        must have its own <classname>Interpreter</classname> instance.
+        Interpreters are obtained before one or more calls into
+        Scheme, and using methods on the
+        <classname>Context</classname> helper class depending on
+        whether the call is an <emphasis>Internal</emphasis> or
+        <emphasis>External</emphasis> call.
+      </para>
       <para>      
         A Scheme application can execute in multiple threads. Each thread must
         have its own dynamic environment, containing entities such as the current
@@ -90,265 +264,37 @@
         executed by an interpreter different from the one that initiated the
         internal call so that the state of the latter can be preserved.
       </para>        
-    </sect2>
-    <sect2>
-      <title>Calling Scheme From Java</title>
-      <para>
-        A call to Scheme from Java can occur in one of two contexts:
-        <itemizedlist>
-          <listitem>
-            <para>
-              Within a call from Scheme to Java - we shall call this an
-              <quote>internal call</quote>.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Elsewhere, e.g. as the result of a timer expiration or
-              as part of a thread created by Java - we shall call this
-              an <quote>external call</quote>.
-            </para>
-          </listitem>
-        </itemizedlist>
-        The <classname>sisc.interpreter.Context</classname> class is the key
-        point where both the above call scenarios are managed.
-      </para>
-      <sect3>
-        <title>Internal Calls</title>
+      <warning>
         <para>
-          When making an internal call, one typically wants to make the call in an
-          interpreter that shares the same <classname>AppContext</classname> and
-          <classname>DynamicEnvironment</classname> as the calling interpreter. One can
-          get hold of such an interpreter using
-          <programlisting>
-Interpreter r = Context.enter();
-          </programlisting>
-          One can determine if a call is internal in the following manner:
-          <programlisting>
-Interpreter current = Context.currentInterpreter();
-if (current == null) { ...make external call...}
-else { ...make internal call... }
-          </programlisting>
-          The calls themselves are made using one of several
-          <function>eval</function> methods on the
-          <classname>sisc.interpreter.Interpreter</classname>:
-          <indexterm><primary>eval</primary>
-          </indexterm>
-          
-          <itemizedlist>
-            <listitem>
-              <methodsynopsis language="java">
-                <modifier>public</modifier>
-                <type>Value</type>
-                <methodname>eval</methodname>
-                <methodparam>
-                  <type>String</type>
-                  <parameter>expr</parameter>
-                </methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Evaluates expressions read from a string, returning
-                  the result of the evaluation of the last
-                  expression.
-                </para>
-              </blockquote>
-            </listitem>
-            <listitem>
-              <methodsynopsis language="java">
-                <modifier>public</modifier>
-                <type>Value</type>
-                <methodname>eval</methodname>
-                <methodparam>
-                  <type>InputStream</type>
-                  <parameter>stream</parameter>
-                </methodparam>
-                <methodparam>
-                  <type>String</type>
-                  <parameter>sourceId</parameter>
-                </methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  Evaluates expressions read from an input stream, returning
-                  the result of the evaluation of the last
-                  expression. The <parameter>sourceId</parameter>
-                  identifies the source of the stream for display
-                  purposes.
-                </para>
-              </blockquote>
-            </listitem>
-            <listitem>
-              <methodsynopsis language="java">
-                <modifier>public</modifier>
-                <type>Value</type>
-                <methodname>eval</methodname>
-                <methodparam>
-                  <type>Value</type>
-                  <parameter>val</parameter>
-                </methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  This is the same as calling <literal>(eval
-                  </literal><parameter>val</parameter><literal>)
-                  </literal> in Scheme.
-                </para>
-              </blockquote>
-            </listitem>
-            <listitem>
-              <methodsynopsis language="java">
-                <modifier>public</modifier>
-                <type>Value</type>
-                <methodname>eval</methodname>
-                <methodparam>
-                  <type>Procedure</type>
-                  <parameter>proc</parameter>
-                </methodparam>
-                <methodparam>
-                  <type>Value[]</type>
-                  <parameter>args</parameter>
-                </methodparam>
-              </methodsynopsis>
-              <blockquote>
-                <para>
-                  This is the same as calling
-                  <literal>(</literal><parameter>proc</parameter>
-                  <parameter>arg</parameter> ...<literal>) </literal> in
-                  Scheme.  This is the most efficient type of call, as
-                  it requires no parsing or compilation.
-                </para>
-              </blockquote>
-            </listitem>
-          </itemizedlist>
-          Several such calls can be made consecutively on the same interpreter.
+          In <emphasis>any</emphasis> case, the programmer must ensure
+          that all calls to an interpreter are made by the same thread.
+          If another thread wishes to execute Scheme code, it must
+          follow the API below to obtain a different interpreter.
         </para>
-        <para>
-          Before returning from the code that is making the internal
-          calls one must call
-          <programlisting>
-Context.exit()
-          </programlisting>
-          in order to release the resources associated with the call
-          context.
-        </para>
-      </sect3>
+      </warning>
       <sect3>
         <title>External Calls</title>
         <para>
-          The main challenge when making external calls is in which
-          application and dynamic environment to make the call.  The
-          Java code is thus responsible for managing a single instance
-          of <classname>sisc.interpreter.AppContext</classname>.
-          The <classname>AppContext</classname> instance
-          acts as a token that can be used to obtain new
-          interpreters that are associated with specific applications
-          and have a fresh dynamic environment:
-          <programlisting>
-Interpreter r = Context.enter(appContext);
-          </programlisting>
+          An external call is a call made from Java to Scheme with no
+          preceding call from Scheme to Java, in other words, the call
+          is entirely external to the Scheme environment.  This may
+          occur as a result of a timer expiration or a thread created
+          by Java.  In this 
+          case, the application context must be specified, and a new
+          dynamic environment (containing thread specific information
+          such as the current input and output ports)
+          must be created.  The preferred method for an external call
+          is called a <emphasis>managed external call</emphasis>,
+          and uses the visitor pattern with the following method
+          in the <classname>Context</classname> class:
         </para>
-        <para>
-          <classname>AppContext</classname>s are usually created by
-          calling one of the two primary constructors of the
-          class. The first takes no arguments and results in an
-          application context whose application properties are defined
-          by the Java system properties. The second constructors takes
-          a <classname>Properties</classname> object as an argument,
-          allowing the Java system properties to be overridden with
-          custom application properties.
-        </para>
-        <para>
-          After creation, <classname>AppContext</classname>s are
-          typically augmented by loading a heap image into them. Heap
-          images are randomly accessable, and are therefor more
-          efficient if accessed in their entirety rather than as a stream.  
-          If not loaded from disk, this entails first transfering the image over a
-          stream into memory, then operating on the entire heap in
-          memory.  A typical initialization sequence, loading the heap
-          image from disk, would be:
-          <programlisting>
-AppContext ctx = new AppContext();
-Interpreter r = Context.enter(ctx);
-REPL.loadHeap(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream("sisc.shp","r")));
-Context.exit();
-          </programlisting> 
-          <note>
-            <title>Finding a Heap</title>
-            <para>
-              The <classname>REPL</classname> class contains additional helpers for
-              finding and loading heap images.  In particular, 
-              <methodname>loadDefaultHeap</methodname> can both locate a heap in
-              several common locations, or on the classpath, and load it into a
-              provided interpreter.  For other mechanisms, consult the &SISC; 
-              Javadocs.
-            </para>
-           </note>
-        </para>
-        <para>
-          Sometimes one may want to use a different mechanism for
-          finding applications and dynamic environments. For instance,
-          threads created from Scheme should probably execute within
-          the application that created them and using a dynamic
-          environment that is cloned from the dynamic environment
-          present when the thread is started. There is therefore a
-          general mechanism for obtaining a new interpreter that uses
-          a specific application and dynamic environment:
-          <programlisting>
-Interpreter r = Context.enter(appContext, dynamicEnv);
-          </programlisting>
-          External calls are made in the same way as internal calls,
-          e.g. using one of the eval methods. Before returning from
-          the code that is making the external calls one must call
-          <programlisting>
-Context.exit()
-          </programlisting>
-          in order to release the resources associated with the call
-          context.  It is preferred, however, that the managed external call 
-          approach be used instead, as described in the next section
-        </para>
-      </sect3>
-      <sect3>
-        <title>Managed External Calls</title>
-        <para>
-          The methods <function>enter</function> and <function>exit</function> as 
-          described in the last section hide much of the complexity of
-          managing the state involved in an executing Scheme program.  They
-          do have some weaknesses, however.  Because they cannot enforce that
-          all intervening calls to the Interpreter run in the same thread,
-          subtle issues can arrise if the Interpreter context is saved as a reference
-          in a program and used by competing threads.  Other, more subtle
-          issues exist, such as the association of a thread handle (as retrievable
-          using SRFI-18) in Scheme with the Java thread which is making the call.
-          For this reason, it is preferred that the programmer use 
-          a <emphasis>managed external call</emphasis> whenever possible.
-        </para>
-        <para>
-          A managed external call is performed by calling <methodname>Context.execute</methodname>,
-          passing an optional application name and a required lightweight object
-          which implements the <classname>sisc.interpreter.SchemeCaller</classname>
-          interface, which is in turn required to implement the <methodname>execute</methodname>
-          method.  <literal>Context</literal> will create an Interpreter, associate
-          a Scheme thread handle, and call the visitor's <methodname>execute</methodname> method, 
-          passing the Interpreter.  
-        </para> 
- 	    <para>
- 	      The body of the visitor can then call the usual methods on Interpreter, still
- 	      ensuring that all the calls happen with the same thread.  The programmer is
- 	      relieved of the responsibility of calling <methodname>enter</methodname> and 
- 	      <methodname>exit</methodname>, and additional steps are taken behind the scenes
- 	      to prevent subtle sharing problems.  
- 	    </para>
- 	    <para>
- 	      The contract for the <methodname>execute</methodname> in Context is as follows:
- 	    </para>      
         <blockquote>
           <para>
             <indexterm><primary>execute</primary>
             </indexterm>
             <methodsynopsis language="java">
               <modifier>public</modifier>
-              <modifier>public static</modifier>
+              <modifier>static</modifier>
               <type>Object</type>
               <methodname>execute</methodname>
               <methodparam choice="opt">
@@ -359,12 +305,14 @@ Context.exit()
                 <type>sisc.interpreter.SchemeCaller</type>
                 <parameter>caller</parameter>
               </methodparam>
+              <exception>sisc.interpreter.SchemeException</exception>
             </methodsynopsis>
             <blockquote>
               <para>
                 Creates an Interpreter context for the application context
-                if provided, the current application otherwise, and calls
-                <methodname>execute</methodname> in the caller with the
+                if provided, the current or default application
+                otherwise, and calls
+                <function>execute</function> in the caller with the
                 Interpreter.  When the caller returns, the Interpreter
                 is freed, and the return value of the caller is returned.
               </para>
@@ -372,8 +320,9 @@ Context.exit()
           </para>
         </blockquote>
         <para>
-          And implementors of the <classname>sisc.interpreter.SchemeCaller</classname>
-          are responsible for implementing the following method:
+          The visitor instances implement
+          <classname>sisc.interpreter.SchemeCaller</classname>
+          and are responsible for implementing the following method:
         </para>        
         <blockquote>
           <para>
@@ -387,6 +336,7 @@ Context.exit()
                 <type>sisc.interpreter.Interpreter</type>
                 <parameter>r</parameter>
               </methodparam>
+              <exception>sisc.interpreter.SchemeException</exception>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -396,6 +346,222 @@ Context.exit()
             </blockquote>
           </para>
         </blockquote>
+        <para>
+          Interpreters can also be obtained using the
+          <function>enter</function> method of
+          <classname>Context</classname>, then several calls can
+          be made to the interpreter, then the interpreter released using
+          <function>exit</function>. This has some weaknesses, however.  
+          Because this pair of calls cannot enforce that
+          all intervening calls to the Interpreter run in the same thread,
+          subtle issues can arrise if the Interpreter context is saved as a reference
+          in a program and used by competing threads.  Other, more subtle
+          issues exist, such as the association of a thread handle (as retrievable
+          using SRFI-18) in Scheme with the Java thread which is making the call.
+          For this reason, it is preferred that the programmer use 
+          the managed external call form whenever possible.  
+        </para>
+        <blockquote>
+          <para>
+            <indexterm><primary>enter</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>sisc.interpreter.Interpreter</type>
+              <methodname>enter</methodname>
+              <methodparam choice="opt">
+                <type>sisc.interpreter.AppContext</type>
+                <parameter>ctx</parameter>
+              </methodparam>  
+              <methodparam choice="opt">
+                <type>sisc.env.DynamicEnvironment</type>
+                <parameter>ctx</parameter>
+              </methodparam>  
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Obtains an instance of Interpreter for the provided
+                application context if provided, the current or default
+                otherwise.  If provided, the given dynamic environment
+                is used rather than the environment selected
+                automatically for the type of call.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+        <para>
+          The dynamic environment optional argument in the
+          <function>enter</function> method may be specified if 
+          one wants to use a different mechanism for
+          finding applications and dynamic environments. For instance,
+          threads created from Scheme should probably execute within
+          the application that created them and using a dynamic
+          environment that is cloned from the dynamic environment
+          present when the thread is started. The
+          <function>enter</function> method can therefore be used as
+          general mechanism for obtaining a new interpreter that uses
+          a specific application and dynamic environment.
+        </para>
+        <para>
+          When the Interpreter is no longer by the current thread
+          needed it <emphasis>must</emphasis> be released using:
+        </para>
+        <blockquote>
+          <para>
+            <indexterm><primary>exit</primary>
+            </indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <void/>
+              <methodname>exit</methodname>
+              <void/>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Release the resources of the current interpreter.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </sect3>
+      <sect3>
+        <title>Internal Calls</title>
+        <para>
+          Internal calls are calls to Scheme made from Java,
+          from a previous call into Java from Scheme.  In other
+          words, the call to Scheme is made internally from 
+
+          other Scheme code. 
+          One can determine if a call is internal in the following manner:
+          <programlisting>
+Interpreter current = Context.currentInterpreter();
+if (current == null) { ...make external call...}
+else { ...make internal call... }
+          </programlisting>
+        </para>
+        <para>
+          This case is more complex, as it
+          requires maintaining the correct dynamic environment
+          and Interpreter instance to preserve return context.
+          When making an internal call, one typically wants to make 
+          the call in an interpreter that shares the same application 
+          context and dynamic enviornment as the calling interpreter.
+        </para>
+        <para>
+          Fortunately, the details are managed by the
+          <classname>Context</classname> helper class.
+          The same calling mechanisms are used as in an external call,
+          but the application context is ommited as a parameter to the
+          functions.
+        </para>
+      </sect3>
+      <sect3>
+        <title>The Interpreter API</title>
+        <para>
+          No matter which mechanism is used, the
+          <classname>Interpreter</classname> is eventually used to
+          call Scheme code, using any of the following methods:
+        </para>
+        <indexterm><primary>eval</primary>
+        </indexterm>
+        <itemizedlist>
+          <listitem>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>eval</methodname>
+              <methodparam>
+                <type>String</type>
+                <parameter>expr</parameter>
+              </methodparam>
+              <exception>sisc.interpreter.SchemeException</exception>
+              <exception>java.io.IOException</exception>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Evaluates expressions read from a string, returning
+                the result of the evaluation of the last
+                expression.
+              </para>
+            </blockquote>
+          </listitem>
+          <listitem>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>eval</methodname>
+              <methodparam>
+                <type>InputStream</type>
+                <parameter>stream</parameter>
+              </methodparam>
+              <methodparam>
+                <type>String</type>
+                <parameter>sourceId</parameter>
+              </methodparam>
+              <exception>sisc.interpreter.SchemeException</exception>
+              <exception>java.io.IOException</exception>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Evaluates expressions read from an input stream, returning
+                the result of the evaluation of the last
+                expression. The <parameter>sourceId</parameter>
+                identifies the source of the stream for display
+                purposes.
+              </para>
+            </blockquote>
+          </listitem>
+          <listitem>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>eval</methodname>
+              <methodparam>
+                <type>Value</type>
+                <parameter>val</parameter>
+              </methodparam>
+              <exception>sisc.interpreter.SchemeException</exception>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                This is the same as calling <literal>(eval
+                </literal><parameter>val</parameter><literal>)
+                </literal> in Scheme.
+              </para>
+            </blockquote>
+          </listitem>
+          <listitem>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <type>Value</type>
+              <methodname>eval</methodname>
+              <methodparam>
+                <type>Procedure</type>
+                <parameter>proc</parameter>
+              </methodparam>
+              <methodparam>
+                <type>Value[]</type>
+                <parameter>args</parameter>
+              </methodparam>
+              <exception>sisc.interpreter.SchemeException</exception>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                This is the same as calling
+                <literal>(</literal><parameter>proc</parameter>
+                <parameter>arg</parameter> ...<literal>) </literal> in
+                Scheme.  This is the most efficient type of call, as
+                it requires no parsing or compilation.
+              </para>
+            </blockquote>
+          </listitem>
+        </itemizedlist>
+        <para>
+          Several such calls can be made consecutively on the same
+          interpreter.  A <classname>SchemeException</classname> may
+          be thrown by any of these methods if an error occurs in the
+          Scheme code.  
+        </para>
       </sect3>
     </sect2>
     <sect2>
@@ -478,9 +644,135 @@ Context.exit()
         </para>
       </sect3>
     </sect2>
+    <sect2>
+      <title>Quick Reference</title>
+      <para>
+        The tables below cover the most common use cases for calling
+        Scheme from Java, and provide simple pseudocode examples.
+      </para>
+      <para>
+        <table frame="all">
+          <title>Typical Java to Scheme, External Calls</title>
+          <tgroup cols="2" align="left">
+            <colspec colname='situation'/>
+            <colspec colname='code'/>
+            <thead>
+              <row>
+                <entry align="center">Situation</entry>
+                <entry align="center">Code</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry namest="situation" nameend="code" align="center">
+                  <emphasis>Default Application Context</emphasis>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>Heap can be located automatically...</para>
+                </entry>
+                <entry><emphasis>No action required.</emphasis></entry>
+              </row>
+              <row>
+                <entry>
+                  <para>...or, with a custom heap</para>
+                </entry>
+                <entry>
+                  <programlisting>
+AppContext ctx=new AppContext();
+SeekableInputStream myHeap=AppContext.openHeap(myHeapURL);
+ctx.setHeap(myHeap);
+Context.setDefaultAppContext(ctx);
+                  </programlisting>
+                </entry>
+              </row>
+              <row>
+                <entry><para>Then, making the external call.</para>
+                </entry>
+                <entry>
+                  <programlisting>
+Context.execute(mySchemeCaller);
+                  </programlisting>
+                </entry>
+              </row>
+              <row>
+                <entry namest="situation" nameend="code" align="center">
+                  <emphasis>Custom Application Context</emphasis>
+                </entry>
+              </row>
+              <row>
+                <entry><para>Creating the context.</para>
+                </entry>
+                <entry>
+                  <programlisting>
+AppContext ctx=new AppContext(myProperties);
+                  </programlisting>
+                </entry>
+              </row>
+              <row>
+                <entry>
+                  <para>Heap can be located automatically ...</para>
+                </entry>
+                <entry>
+                  <programlisting>
+ctx.loadDefaultHeap();
+                  </programlisting>
+                </entry>                    
+              </row>
+              <row>
+                <entry>
+                  <para>... or, with a custom heap</para>
+                </entry>
+                <entry>
+                  <programlisting>
+SeekableInputStream myHeap=AppContext.openHeap(myHeapURL);
+ctx.setHeap(myHeap);
+                  </programlisting>
+                </entry>
+              </row>
+              <row>
+                <entry><para>Then, making the external call.</para>
+                </entry>
+                <entry>
+                  <programlisting>
+Context.execute(ctx, mySchemeCaller);
+                  </programlisting>
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <table frame="all">
+          <title>Typical Java to Scheme, Internal Calls</title>
+          <tgroup cols="2" align="left">
+            <colspec colname='situation'/>
+            <colspec colname='code'/>
+            <thead>
+              <row>
+                <entry align="center">Situation</entry>
+                <entry align="center">Code</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry><para>Making the internal call.</para>
+                </entry>
+                <entry>
+                  <programlisting>
+Context.execute(mySchemeCaller);
+                  </programlisting>
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </para>
+    </sect2>
   </sect1>
   <sect1 id="SchemeToJava">
-    <title>High Level Scheme-to-Java Interface</title>
+    <title>Calling Java from Scheme</title>
     <para>
       &requires; 
       <emphasis role="bold">
