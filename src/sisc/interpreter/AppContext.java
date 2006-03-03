@@ -1,9 +1,17 @@
 package sisc.interpreter;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import sisc.REPL;
 import sisc.ser.*;
+import sisc.boot.HeapAnchor;
 import sisc.data.*;
 
+import java.security.AccessControlException;
 import java.util.Properties;
 import sisc.env.SymbolicEnvironment;
 import sisc.util.Util;
@@ -138,6 +146,163 @@ public class AppContext extends Util {
 
     public LibraryBinding lookupBinding(Expression e) throws IOException {
         return libraries.lookupBinding(e);
+    }
+
+    /**
+     * Loads zero or more Scheme source files or compiled libraries
+     * into the provided interpreter.
+     * 
+     * @param r The Interpreter which will execute code in the loaded files
+     * @param files An array of Strings naming files to load.
+     * @return true on success, false if any source file produced
+     * an error.
+     */
+    public boolean loadSourceFiles(String[] files) {
+        boolean returnStatus=true;
+        Symbol loadSymb = Symbol.get("load");
+        Interpreter r=Context.enter(this);
+        try {
+            Procedure load=(Procedure)r.lookup(loadSymb, Util.TOPLEVEL);
+            for (int i=0; i<files.length; i++) {
+                try {
+                    r.eval(load, new Value[] {new SchemeString(files[i])});
+                } catch (SchemeException se) {
+                    Value vm=se.m;
+                    try {
+                        r.eval((Procedure)r.lookup(Symbol.get("print-error"), Util.TOPLEVEL),
+                               new Value[] {vm, se.e});
+                    } catch (SchemeException se2) {
+                        if (vm instanceof Pair) {
+                            System.err.println(REPL.simpleErrorToString((Pair)vm));
+                        } else {
+                            System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
+                        }
+                    }
+                    returnStatus=false;
+                }
+            }
+            return returnStatus;
+        } finally {
+            Context.exit();
+        }
+    }
+
+    /**
+     * Given a SeekableInputStream which
+     * is attached to a SISC heap file, loads the heap into this
+     * AppContext and initializes it.  Returns true on success,
+     * false otherwise.
+     */       
+    public boolean loadHeap(SeekableInputStream in)
+        throws ClassNotFoundException {
+    
+        Interpreter r=Context.enter(this);
+        try {
+            try {
+                r.getCtx().loadEnv(r, new SeekableDataInputStream(in));
+            } catch (IOException e) {
+                System.err.println("\n"+Util.liMessage(Util.SISCB, 
+                                                       "errorloadingheap"));
+                e.printStackTrace();
+                return false;
+            } 
+            
+            try {
+                File[] roots=File.listRoots();
+                SchemeString[] rootss=new SchemeString[roots.length];
+                for (int i=0; i<roots.length; i++)
+                    rootss[i]=new SchemeString(roots[i].getPath());
+                r.define(Symbol.get("fs-roots"),
+                         Util.valArrayToList(rootss, 0, rootss.length),
+                         Util.SISC);
+            } catch (java.security.AccessControlException ace) {}
+            
+            try {
+                r.eval("(initialize)");
+            } catch (SchemeException se) {
+                System.err.println(Util.liMessage(Util.SISCB, "errorduringinitialize")+
+                                   REPL.simpleErrorToString((Pair)se.m));
+            } catch (IOException e) {
+                System.err.println(Util.liMessage(Util.SISCB, "errorduringinitialize")+
+                                   e.getMessage());
+            }
+        } finally {        
+            Context.exit();
+        }
+        return true;
+    }
+
+    /**
+     * Attempts to find and load the default SISC heap into the
+     * provided Interpreter.
+     *
+     * @param interp The interpreter whose AppContext will host
+     * the contents of the heap
+     * 
+     * @see findHeap
+     */
+    public void loadDefaultHeap() throws IOException {
+        URL u=findHeap(null);
+        if (u == null) {
+            throw new RuntimeException(Util.liMessage(Util.SISCB,
+                                                      "errorloadingheap"));
+        }
+        try {
+            if (!loadHeap(openHeap(u)))
+                throw new RuntimeException(Util.liMessage(Util.SISCB,
+                                                          "errorloadingheap"));
+        } catch(ClassNotFoundException e) {
+            throw new RuntimeException(Util.liMessage(Util.SISCB,
+                                                      "errorloadingheap"));
+        }
+    }
+
+    public static SeekableInputStream openHeap(URL u) throws IOException {
+        //Handle files separately, as they can be efficiently used
+        //on disk in random access fashion.
+        if (u.getProtocol().equals("file")) {
+            return new BufferedRandomAccessInputStream(new File(u.getPath()), "r",  1, 8192);
+        } else return new MemoryRandomAccessInputStream(u.openStream());
+    }
+
+    /**
+     * Locate a heap.
+     *
+     * If the heap cannot be located at the supplied location then an
+     * attempt is made to find it as a resource <tt>"sisc.shp"</tt>.
+     *
+     * @param heapLocation The file path/name for the heap file. When
+     * this is <tt>null</tt> it defaults to the value of the
+     * <tt>sisc.heap</tt> system property and, if that is not present,
+     * <tt>"sisc.shp"</tt>
+     */
+    public static URL findHeap(String heapLocation) {
+        URL rv=null;
+        try {
+            if (heapLocation==null) {
+                try {
+                    heapLocation = System.getProperty("sisc.heap");
+                } catch (SecurityException se) {}
+                if (heapLocation == null) {
+                    heapLocation = "file:sisc.shp";
+                }
+            }
+            rv=new URL(heapLocation);
+        } catch (MalformedURLException e) {
+        }
+        if (mightExist(rv)) return rv;
+        rv = sisc.boot.HeapAnchor.class
+                 .getResource("sisc.shp");
+        if (mightExist(rv)) return rv;
+        rv=AppContext.class.getResource("sisc/boot/sisc.shp");
+        return rv;
+    }
+    
+    static boolean mightExist(URL u) {
+        if (u==null) return false;
+        if (u.getProtocol().equals("file")) {
+            return new File(u.getPath()).exists();
+        } else return true;
     }
 }
 

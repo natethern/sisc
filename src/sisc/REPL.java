@@ -34,43 +34,6 @@ public class REPL {
         primordialThread.thread.setDaemon(true);
     }
     
-    /**
-     * Locate a heap.
-     *
-     * If the heap cannot be located at the supplied location then an
-     * attempt is made to find it as a resource <tt>"sisc.shp"</tt>.
-     *
-     * @param heapLocation The file path/name for the heap file. When
-     * this is <tt>null</tt> it defaults to the value of the
-     * <tt>sisc.heap</tt> system property and, if that is not present,
-     * <tt>"sisc.shp"</tt>
-     */
-    public static SeekableInputStream findHeap(String heapLocation) {
-        try {
-            if (heapLocation==null) {
-                try {
-                    heapLocation = System.getProperty("sisc.heap");
-                } catch (SecurityException se) {}
-                if (heapLocation == null) {
-                    heapLocation = "sisc.shp";
-                }
-            }
-            return new BufferedRandomAccessInputStream(heapLocation, "r", 
-                    1, 8192);
-        } catch (IOException e) {
-            InputStream heapIS = sisc.boot.HeapAnchor.class
-                .getResourceAsStream("sisc.shp");
-            if (null == heapIS) {
-                return null;
-            }
-            try {
-                return new MemoryRandomAccessInputStream(heapIS);
-            } catch (IOException e2) {
-                return null;
-            }
-        }
-    }
-
     public static String simpleErrorToString(Pair p) {
         StringBuffer b=new StringBuffer();
         String location=null;
@@ -99,106 +62,6 @@ public class REPL {
         return b.toString();
     }
 
-    /**
-     * Attempts to find and load the default SISC heap into the
-     * provided Interpreter.
-     *
-     * @param interp The interpreter whose AppContext will host
-     * the contents of the heap
-     * 
-     * @see #findHeap(String)
-     */
-    public static void loadDefaultHeap(Interpreter interp) {
-        SeekableInputStream heap = findHeap(null);
-        if (heap == null) {
-            throw new RuntimeException(Util.liMessage(Util.SISCB,
-                                                      "errorloadingheap"));
-        }
-        try {
-            if (!REPL.loadHeap(interp, heap))
-                throw new RuntimeException(Util.liMessage(Util.SISCB,
-                                                          "errorloadingheap"));
-        } catch(ClassNotFoundException e) {
-            throw new RuntimeException(Util.liMessage(Util.SISCB,
-                                                      "errorloadingheap"));
-        }
-    }
-
-    /**
-     * Given an existing interpreter and a SeekableInputStream which
-     * is attached to a SISC heap file, loads the heap into the
-     * interpreter and initializes it.  Returns true on success,
-     * false otherwise.
-     */       
-    public static boolean loadHeap(Interpreter r, SeekableInputStream in)
-        throws ClassNotFoundException {
-
-        try {
-            r.getCtx().loadEnv(r, new SeekableDataInputStream(in));
-        } catch (IOException e) {
-            System.err.println("\n"+Util.liMessage(Util.SISCB, 
-                                                   "errorloadingheap"));
-            e.printStackTrace();
-            return false;
-        }
-
-        try {
-            File[] roots=File.listRoots();
-            SchemeString[] rootss=new SchemeString[roots.length];
-            for (int i=0; i<roots.length; i++)
-                rootss[i]=new SchemeString(roots[i].getPath());
-            r.define(Symbol.get("fs-roots"),
-                     Util.valArrayToList(rootss, 0, rootss.length),
-                     Util.SISC);
-        } catch (java.security.AccessControlException ace) {}
-        
-        try {
-            r.eval("(initialize)");
-        } catch (SchemeException se) {
-            System.err.println(Util.liMessage(Util.SISCB, "errorduringinitialize")+
-                               simpleErrorToString((Pair)se.m));
-        } catch (IOException e) {
-            System.err.println(Util.liMessage(Util.SISCB, "errorduringinitialize")+
-                               e.getMessage());
-        }
-        
-        return true;
-    }
-
-    /**
-     * Loads zero or more Scheme source files or compiled libraries
-     * into the provided interpreter.
-     * 
-     * @param r The Interpreter which will execute code in the loaded files
-     * @param files An array of Strings naming files to load.
-     * @return true on success, false if any source file produced
-     * an error.
-     */
-    public static boolean loadSourceFiles(Interpreter r, String[] files) {
-        boolean returnStatus=true;
-        Symbol loadSymb = Symbol.get("load");
-        Procedure load=(Procedure)r.lookup(loadSymb, Util.TOPLEVEL);
-        for (int i=0; i<files.length; i++) {
-            try {
-                r.eval(load, new Value[] {new SchemeString(files[i])});
-            } catch (SchemeException se) {
-                Value vm=se.m;
-        try {
-            r.eval((Procedure)r.lookup(Symbol.get("print-error"), Util.TOPLEVEL),
-                   new Value[] {vm, se.e});
-        } catch (SchemeException se2) {
-            if (vm instanceof Pair) {
-                System.err.println(simpleErrorToString((Pair)vm));
-            } else {
-                System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
-            }
-        }
-        returnStatus=false;
-            }
-        }
-        return returnStatus;
-    }
-
     public void go() {
         if (primordialThread.thunk == null) {
             System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
@@ -224,7 +87,7 @@ public class REPL {
             System.exit(0);
         }
 
-        SeekableInputStream heap = findHeap((String)args.get("heap"));
+        URL heap = AppContext.findHeap((String)args.get("heap"));
         if (heap==null) {
             System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
             return;
@@ -248,17 +111,17 @@ public class REPL {
 
         AppContext ctx = new AppContext(props);
         Context.setDefaultAppContext(ctx);
-        Interpreter r = Context.enter(ctx);
-        if (!loadHeap(r, heap)) 
+        if (!ctx.loadHeap(AppContext.openHeap(heap))) 
             return;
 
         boolean filesLoadedSuccessfully = 
-            loadSourceFiles(r, (String[])((Vector)args.get("files")).toArray(new String[0]));
+            ctx.loadSourceFiles((String[])((Vector)args.get("files")).toArray(new String[0]));
             
         boolean noRepl=args.get("no-repl")!=null;
         boolean call=args.get("call-with-args")!=null;
         int returnCode = 0;
-        
+
+        Interpreter r=Context.enter(ctx);
         String expr=(String)args.get("eval");
         if (expr!=null) {
             Value v=Util.VOID;
