@@ -1,9 +1,9 @@
 package sisc.interpreter;
 
+import java.io.IOException;
 import java.util.*;
 import sisc.env.DynamicEnvironment;
 import sisc.util.Util;
-import sisc.REPL;
 
 /**
  * Context is a utility class which facilitates Java to Scheme
@@ -74,12 +74,8 @@ public abstract class Context extends Util {
 
     /*********** thread context lookup ***********/
 
-    public static ThreadContext lookupThreadContext(Thread thread) {
-        return (ThreadContext)currentThreadContext.get();
-    }
-
     public static ThreadContext lookupThreadContext() {
-        return lookupThreadContext(Thread.currentThread());
+        return (ThreadContext)currentThreadContext.get();
     }
 
     /*********** main interface ***********/
@@ -132,10 +128,10 @@ public abstract class Context extends Util {
         if (defaultAppContext == null) {
             setDefaultAppContext(new AppContext());
             try {
-                Interpreter r = Context.enter(defaultAppContext);
-                REPL.loadDefaultHeap(r);
-            } finally {
-                Context.exit();
+                defaultAppContext.loadDefaultHeap();
+            } catch (IOException e) {
+                throw new RuntimeException(Util.liMessage(Util.SISCB,
+                "errorloadingheap"));
             }
         }
 

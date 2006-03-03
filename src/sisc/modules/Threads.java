@@ -351,10 +351,10 @@ public class Threads extends IndexedFixableProcedure {
         case THREADINTERRUPT:
             c=sthread(v1);
             c.thread.interrupt();
-            Context.lookupThreadContext(c.thread).interrupt=true;
+            c.threadContext.interrupt=true;
             return VOID;
         case THREADINTERRUPTEDQ:
-            return truth(Context.lookupThreadContext(sthread(v1).thread).interrupt);
+            return truth(sthread(v1).threadContext.interrupt);
         case THREADNAME:
             return new SchemeString(sthread(v1).thread.getName());
         case THREADPRIORITY:

@@ -15,6 +15,7 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
     public DynamicEnvironment env;
     public Procedure thunk;
     public Thread thread;
+    public ThreadContext threadContext;
     public int state;
     public Value rv;
 
@@ -47,6 +48,7 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
     }
     
     public void run() {
+        threadContext=Context.lookupThreadContext();
         Interpreter interp = Context.enter(env);
         Context.lookupThreadContext().hostThread=new WeakReference(this);
 
