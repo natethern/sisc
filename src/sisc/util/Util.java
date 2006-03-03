@@ -172,6 +172,34 @@ public abstract class Util implements Version {
         error(r, list(new Pair(MESSAGE, errormessage)));
     }
 
+    public static String simpleErrorToString(Pair p) {
+        StringBuffer b=new StringBuffer();
+        String location=null;
+        String message=null;
+        Pair parent = null;
+        while (p!=EMPTYLIST && (location==null || message==null)) {
+            Pair cp=(Pair)p.car();
+            if (cp.car().equals(MESSAGE))
+                message=cp.cdr().toString();
+            else if (cp.car().equals(LOCATION))
+                location=cp.cdr().toString();
+            else if (cp.car().equals(PARENT))
+                parent=(Pair)cp.cdr();
+            p=(Pair)p.cdr();
+        }
+        if (location==null)
+            b.append(liMessage(SISCB, "error"));
+        else 
+            b.append(liMessage(SISCB, "errorinwhere", location));
+        if (message!=null) 
+            b.append(": ").append(message);
+        else
+            b.append('.');
+        if (parent!=null)
+            b.append("\n  ").append(simpleErrorToString(parent));
+        return b.toString();
+    }
+
     public static ClassLoader currentClassLoader() {
         ClassLoader cl = null;
         try {

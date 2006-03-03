@@ -290,6 +290,41 @@ public class Interpreter extends Util {
         return interpret(APPEVAL);
     }
 
+    /**
+     * Loads zero or more Scheme source files or compiled libraries.
+     *
+     * @param files An array of Strings naming files to load.
+     * @return true on success, false if any source file produced
+     * an error.
+     */
+    public boolean loadSourceFiles(String[] files) {
+
+        boolean returnStatus = true;
+        Procedure load =
+            (Procedure)lookup(Symbol.get("load"), Util.TOPLEVEL);
+
+        for (int i=0; i<files.length; i++) {
+            try {
+                eval(load, new Value[] {new SchemeString(files[i])});
+            } catch (SchemeException se) {
+                Value vm=se.m;
+                try {
+                    eval((Procedure)lookup(Symbol.get("print-error"), Util.TOPLEVEL),
+                         new Value[] {vm, se.e});
+                } catch (SchemeException se2) {
+                    if (vm instanceof Pair) {
+                        System.err.println(Util.simpleErrorToString((Pair)vm));
+                    } else {
+                        System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
+                    }
+                }
+                returnStatus = false;
+            }
+        }
+
+        return returnStatus;
+    }
+
     public SymbolicEnvironment lookupContextEnv(Symbol s) {
         return getCtx().lookupContextEnv(s);
     }

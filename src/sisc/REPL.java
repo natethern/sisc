@@ -34,34 +34,6 @@ public class REPL {
         primordialThread.thread.setDaemon(true);
     }
     
-    public static String simpleErrorToString(Pair p) {
-        StringBuffer b=new StringBuffer();
-        String location=null;
-        String message=null;
-        Pair parent = null;
-        while (p!=Util.EMPTYLIST && (location==null || message==null)) {
-            Pair cp=(Pair)p.car();
-            if (cp.car().equals(Util.MESSAGE))
-                message=cp.cdr().toString();
-            else if (cp.car().equals(Util.LOCATION))
-                location=cp.cdr().toString();
-            else if (cp.car().equals(Util.PARENT))
-                parent=(Pair)cp.cdr();
-            p=(Pair)p.cdr();
-        }
-        if (location==null)
-            b.append(Util.liMessage(Util.SISCB, "error"));
-        else 
-            b.append(Util.liMessage(Util.SISCB, "errorinwhere", location));
-        if (message!=null) 
-            b.append(": ").append(message);
-        else
-            b.append('.');
-        if (parent!=null)
-            b.append("\n  ").append(simpleErrorToString(parent));
-        return b.toString();
-    }
-
     public void go() {
         if (primordialThread.thunk == null) {
             System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
@@ -87,12 +59,6 @@ public class REPL {
             System.exit(0);
         }
 
-        URL heap = AppContext.findHeap((String)args.get("heap"));
-        if (heap==null) {
-            System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
-            return;
-        }
-
         Properties props = new Properties();
         String configFile = (String)args.get("properties");
         if (configFile != null) {
@@ -111,17 +77,24 @@ public class REPL {
 
         AppContext ctx = new AppContext(props);
         Context.setDefaultAppContext(ctx);
+
+        URL heap = AppContext.findHeap((String)args.get("heap"));
+        if (heap==null) {
+            System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
+            return;
+        }
         if (!ctx.setHeap(AppContext.openHeap(heap))) 
             return;
 
+        Interpreter r = Context.enter(ctx);
+
         boolean filesLoadedSuccessfully = 
-            ctx.loadSourceFiles((String[])((Vector)args.get("files")).toArray(new String[0]));
+            r.loadSourceFiles((String[])((Vector)args.get("files")).toArray(new String[0]));
             
         boolean noRepl=args.get("no-repl")!=null;
         boolean call=args.get("call-with-args")!=null;
         int returnCode = 0;
 
-        Interpreter r=Context.enter(ctx);
         String expr=(String)args.get("eval");
         if (expr!=null) {
             Value v=Util.VOID;

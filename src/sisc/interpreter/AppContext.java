@@ -149,45 +149,6 @@ public class AppContext extends Util {
     }
 
     /**
-     * Loads zero or more Scheme source files or compiled libraries
-     * into the provided interpreter.
-     * 
-     * @param r The Interpreter which will execute code in the loaded files
-     * @param files An array of Strings naming files to load.
-     * @return true on success, false if any source file produced
-     * an error.
-     */
-    public boolean loadSourceFiles(String[] files) {
-        boolean returnStatus=true;
-        Symbol loadSymb = Symbol.get("load");
-        Interpreter r=Context.enter(this);
-        try {
-            Procedure load=(Procedure)r.lookup(loadSymb, Util.TOPLEVEL);
-            for (int i=0; i<files.length; i++) {
-                try {
-                    r.eval(load, new Value[] {new SchemeString(files[i])});
-                } catch (SchemeException se) {
-                    Value vm=se.m;
-                    try {
-                        r.eval((Procedure)r.lookup(Symbol.get("print-error"), Util.TOPLEVEL),
-                               new Value[] {vm, se.e});
-                    } catch (SchemeException se2) {
-                        if (vm instanceof Pair) {
-                            System.err.println(REPL.simpleErrorToString((Pair)vm));
-                        } else {
-                            System.err.println(Util.liMessage(Util.SISCB, "errorduringload")+vm);
-                        }
-                    }
-                    returnStatus=false;
-                }
-            }
-            return returnStatus;
-        } finally {
-            Context.exit();
-        }
-    }
-
-    /**
      * Given a SeekableInputStream which
      * is attached to a SISC heap file, loads the heap into this
      * AppContext and initializes it.  Returns true on success,
@@ -221,7 +182,7 @@ public class AppContext extends Util {
                 r.eval("(initialize)");
             } catch (SchemeException se) {
                 System.err.println(Util.liMessage(Util.SISCB, "errorduringinitialize")+
-                                   REPL.simpleErrorToString((Pair)se.m));
+                                   Util.simpleErrorToString((Pair)se.m));
             } catch (IOException e) {
                 System.err.println(Util.liMessage(Util.SISCB, "errorduringinitialize")+
                                    e.getMessage());
