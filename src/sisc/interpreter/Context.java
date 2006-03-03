@@ -128,7 +128,7 @@ public abstract class Context extends Util {
         if (defaultAppContext == null) {
             setDefaultAppContext(new AppContext());
             try {
-                defaultAppContext.loadDefaultHeap();
+                defaultAppContext.setDefaultHeap();
             } catch (IOException e) {
                 throw new RuntimeException(Util.liMessage(Util.SISCB,
                 "errorloadingheap"));

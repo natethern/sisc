@@ -111,7 +111,7 @@ public class REPL {
 
         AppContext ctx = new AppContext(props);
         Context.setDefaultAppContext(ctx);
-        if (!ctx.loadHeap(AppContext.openHeap(heap))) 
+        if (!ctx.setHeap(AppContext.openHeap(heap))) 
             return;
 
         boolean filesLoadedSuccessfully = 
