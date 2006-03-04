@@ -222,27 +222,24 @@ public class AppContext extends Util {
      * If the heap cannot be located at the supplied location then an
      * attempt is made to find it as a resource <tt>"sisc.shp"</tt>.
      *
-     * @param heapLocation The file path/name for the heap file. When
+     * @param heapLocation The URL for the heap file. When
      * this is <tt>null</tt> it defaults to the value of the
      * <tt>sisc.heap</tt> system property and, if that is not present,
      * <tt>"sisc.shp"</tt>
      */
-    public static URL findHeap(String heapLocation) {
+    public static URL findHeap(URL heapLocation) {
         URL rv=null;
         try {
             if (heapLocation==null) {
                 try {
-                    heapLocation = System.getProperty("sisc.heap");
+                    heapLocation = new URL("file",null,System.getProperty("sisc.heap"));
                 } catch (SecurityException se) {}
                 if (heapLocation == null) {
-                    heapLocation = "file:sisc.shp";
+                    heapLocation = new URL("file", null, "sisc.shp");
                 }
             }
-            rv=new URL(heapLocation);
+            rv=heapLocation;
         } catch (MalformedURLException e) {
-            try {
-                rv=new URL("file",null,heapLocation);
-            } catch (MalformedURLException e2) {}
         }
         if (mightExist(rv)) return rv;
         rv = sisc.boot.HeapAnchor.class
