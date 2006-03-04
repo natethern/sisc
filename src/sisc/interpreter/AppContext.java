@@ -240,6 +240,9 @@ public class AppContext extends Util {
             }
             rv=new URL(heapLocation);
         } catch (MalformedURLException e) {
+            try {
+                rv=new URL("file",null,heapLocation);
+            } catch (MalformedURLException e2) {}
         }
         if (mightExist(rv)) return rv;
         rv = sisc.boot.HeapAnchor.class
