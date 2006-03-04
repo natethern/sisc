@@ -147,7 +147,7 @@ public class AppContext extends Util {
      * AppContext and initializes it.  Returns true on success,
      * false otherwise.
      */       
-    public boolean setHeap(SeekableInputStream in)
+    public boolean addHeap(SeekableInputStream in)
         throws ClassNotFoundException {
     
         Interpreter r=Context.enter(this);
@@ -199,7 +199,7 @@ public class AppContext extends Util {
                                                       "errorloadingheap"));
         }
         try {
-            if (!setHeap(openHeap(u)))
+            if (!addHeap(openHeap(u)))
                 throw new RuntimeException(Util.liMessage(Util.SISCB,
                                                           "errorloadingheap"));
         } catch(ClassNotFoundException e) {

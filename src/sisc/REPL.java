@@ -83,7 +83,7 @@ public class REPL {
             System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
             return;
         }
-        if (!ctx.setHeap(AppContext.openHeap(heap))) 
+        if (!ctx.addHeap(AppContext.openHeap(heap))) 
             return;
 
         Interpreter r = Context.enter(ctx);
