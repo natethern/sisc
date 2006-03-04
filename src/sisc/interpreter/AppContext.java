@@ -150,17 +150,17 @@ public class AppContext extends Util {
     public boolean addHeap(SeekableInputStream in)
         throws ClassNotFoundException {
     
+        try {
+            loadEnv(new SeekableDataInputStream(in));
+        } catch (IOException e) {
+            System.err.println("\n"+Util.liMessage(Util.SISCB, 
+                                                   "errorloadingheap"));
+            e.printStackTrace();
+            return false;
+        }
+
         Interpreter r=Context.enter(this);
         try {
-            try {
-                r.getCtx().loadEnv(new SeekableDataInputStream(in));
-            } catch (IOException e) {
-                System.err.println("\n"+Util.liMessage(Util.SISCB, 
-                                                       "errorloadingheap"));
-                e.printStackTrace();
-                return false;
-            } 
-            
             try {
                 File[] roots=File.listRoots();
                 SchemeString[] rootss=new SchemeString[roots.length];
