@@ -120,7 +120,7 @@
       <para>
         The heap is a serialization of all the pre-compiled code which
         makes up both the base Scheme language provided by &SISC;, and
-        many of it's libraries.  Distributions of &SISC; come with a
+        many of its libraries.  Distributions of &SISC; come with a
         prepackaged heap which is sufficient for most usages, and
         customizing a heap should be viewed as a last resort, as 
         precompiled libraries usually solve the same problem.
@@ -139,7 +139,7 @@
       </para>
       <blockquote>
         <para>
-          <indexterm><primary>findHeap</primary>
+          <indexterm><primary>setDefaultHeap</primary>
           </indexterm>
           <methodsynopsis language="java">
             <modifier>public</modifier>
@@ -259,10 +259,12 @@
         input and output ports. Dynamic environments are represented by
         instances of the
         <classname>sisc.env.DynamicEnvironment</classname> class.       
-        A thread can be associated with multiple interpreters. The reason for
-        there being multiple interpreters is that internal calls need to be
-        executed by an interpreter different from the one that initiated the
-        internal call so that the state of the latter can be preserved.
+      </para>
+      <para>
+        Internal calls need to create fresh interpreters in order to
+        preserve and subsequently restore the state of the surrounding
+        Scheme execution. Thus a single thread may be home to several
+        interpreters.
       </para>        
       <warning>
         <para>
@@ -277,16 +279,16 @@
         <para>
           An external call is a call made from Java to Scheme with no
           preceding call from Scheme to Java, in other words, the call
-          is entirely external to the Scheme environment.  This may
-          occur as a result of a timer expiration or a thread created
-          by Java.  In this 
-          case, the application context must be specified, and a new
-          dynamic environment (containing thread specific information
-          such as the current input and output ports)
-          must be created.  The preferred method for an external call
-          is called a <emphasis>managed external call</emphasis>,
-          and uses the visitor pattern with the following method
-          in the <classname>Context</classname> class:
+          is entirely external to the Scheme environment.  For
+          example, this may occur as a result of a timer expiration or
+          a thread created by Java.  In this case, the application
+          context must be specified, and a new dynamic environment
+          (containing thread specific information such as the current
+          input and output ports) must be created.  The preferred
+          method for an external call is called a <emphasis>managed
+          external call</emphasis>, and uses the visitor pattern with
+          the following method in the <classname>Context</classname>
+          class:
         </para>
         <blockquote>
           <para>
