@@ -77,15 +77,13 @@ public class AppContext extends Util {
     }
 
     // Heapfile loading/saving
-    public void loadEnv(Interpreter r, SeekableDataInputStream i)
+    public void loadEnv(SeekableDataInputStream i)
         throws IOException, ClassNotFoundException {
 
-        Library s=Library.load(r.getCtx(), i);
+        Library s=Library.load(this, i);
         
         libraries.addLibrary(s);
         
-        CallFrame lstk=(CallFrame)s.getExpression(0);
-
         SymbolicEnvironment lsymenv=(SymbolicEnvironment)s.getExpression(SYMENV);
         try {
             symenv=lsymenv;
@@ -98,20 +96,15 @@ public class AppContext extends Util {
         } catch (Exception e) {
             e.printStackTrace();
             throw new IOException(e.getMessage());
-        } finally {
-            r.pop(lstk);
         }
     }
 
-    public void saveEnv(Interpreter r, OutputStream o, LibraryBuilder lb)
+    public void saveEnv(OutputStream o, LibraryBuilder lb)
         throws IOException {
-        r.push(r.nxp);
-        lb.add(r.stk);
         lb.add(SYMENV, symenv.asValue());
         lb.add(TOPLEVEL, toplevel_env.asValue());
 
         lb.buildLibrary("sisc", o);
-        r.pop(r.stk);
     }
 
     public SymbolicEnvironment lookupContextEnv(Symbol s) {
@@ -160,7 +153,7 @@ public class AppContext extends Util {
         Interpreter r=Context.enter(this);
         try {
             try {
-                r.getCtx().loadEnv(r, new SeekableDataInputStream(in));
+                r.getCtx().loadEnv(new SeekableDataInputStream(in));
             } catch (IOException e) {
                 System.err.println("\n"+Util.liMessage(Util.SISCB, 
                                                        "errorloadingheap"));

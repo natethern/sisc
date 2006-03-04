@@ -161,7 +161,7 @@ public class GenerateHeap {
         
         if (inHeap != null) {
             System.out.println("Reading input heap: " + inHeap);
-            ctx.loadEnv(r, new SeekableDataInputStream(new BufferedRandomAccessInputStream(inHeap, "r", 1, 8192)));
+            ctx.loadEnv(new SeekableDataInputStream(new BufferedRandomAccessInputStream(inHeap, "r", 1, 8192)));
         }
         
         r.define(Symbol.get("version"), new SchemeString(Util.VERSION), Util.SISC);
@@ -214,7 +214,7 @@ public class GenerateHeap {
             OutputStream out= //new GZIPOutputStream(
                                  new BufferedOutputStream(
                                     new FileOutputStream(outHeap));
-            ctx.saveEnv(r,out,lb);
+            ctx.saveEnv(out,lb);
             out.flush();
             out.close();
         } catch (Exception e) {
