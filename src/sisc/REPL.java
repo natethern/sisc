@@ -78,7 +78,15 @@ public class REPL {
         AppContext ctx = new AppContext(props);
         Context.setDefaultAppContext(ctx);
 
-        URL heap = AppContext.findHeap(new URL("file", null, (String)args.get("heap")));
+        URL heap=null;
+        try {
+            heap=new URL((String)args.get("heap"));
+        } catch (MalformedURLException mue) {
+            //Probably a straight file path
+            heap=new URL("file",null,(String)args.get("heap"));
+        }
+        
+        heap = AppContext.findHeap(heap);
         if (heap==null) {
             System.err.println(Util.liMessage(Util.SISCB, "heapnotfound"));
             return;
