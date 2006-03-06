@@ -156,7 +156,7 @@
           <blockquote>
             <para>
               Uses <function>findHeap</function>, <function>openHeap</function>,
-              and <function>setHeap</function> to find and register 
+              and <function>addHeap</function> to find and register 
               a default heap with this application context
             </para>
           </blockquote>
@@ -195,7 +195,7 @@
         Once located, the heap is opened and registered with the
         <classname>AppContext</classname>, allowing the context
         to then be used for Scheme evaluation.  This is done
-        with the <function>openHeap</function> and <function>setHeap</function>
+        with the <function>openHeap</function> and <function>addHeap</function>
         methods:
       </para>
       <blockquote>
@@ -218,18 +218,18 @@
             Opens the heap pointed to by the given
             URL, returning an appropriate random
             access input stream suitable for passing
-            to <function>setHeap</function>.
+            to <function>addHeap</function>.
           </para>
         </blockquote>
       </blockquote>
       <blockquote>
         <para>
-          <indexterm><primary>setHeap</primary>
+          <indexterm><primary>addHeap</primary>
           </indexterm>
           <methodsynopsis language="java">
             <modifier>public</modifier>
             <type>boolean</type>
-            <methodname>setHeap</methodname>
+            <methodname>addHeap</methodname>
             <methodparam>
               <type>sisc.ser.SeekableInputStream</type>
               <parameter>heap</parameter>
@@ -718,7 +718,7 @@ else { ...make internal call... }
                   <programlisting>
 AppContext ctx=new AppContext();
 SeekableInputStream myHeap=AppContext.openHeap(myHeapURL);
-ctx.setHeap(myHeap);
+ctx.addHeap(myHeap);
 Context.setDefaultAppContext(ctx);
                   </programlisting>
                 </entry>
@@ -763,7 +763,7 @@ ctx.loadDefaultHeap();
                 <entry>
                   <programlisting>
 SeekableInputStream myHeap=AppContext.openHeap(myHeapURL);
-ctx.setHeap(myHeap);
+ctx.addHeap(myHeap);
                   </programlisting>
                 </entry>
               </row>
