@@ -261,9 +261,9 @@ public class AppContext extends Util {
             } catch (AccessControlException ace) {
                 // Running as an applet.  need to actually open the file to try this out:
                 try {
-                    u.openConnection();
+                    u.openStream().close();
                     return true;
-                } catch (IOException e) {
+                } catch (Exception e) {
                     //Oops, guess not
                     return false;
                 }
