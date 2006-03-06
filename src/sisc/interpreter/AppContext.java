@@ -190,7 +190,7 @@ public class AppContext extends Util {
      * Attempts to find and load the default SISC heap into this
      * AppContext.
      *
-     * @see #findHeap(String)
+     * @see #findHeap(URL)
      */
     public void setDefaultHeap() throws IOException {
         URL u=findHeap(null);
@@ -228,29 +228,24 @@ public class AppContext extends Util {
      * <tt>"sisc.shp"</tt>
      */
     public static URL findHeap(URL heapLocation) {
-        URL rv=null;
-        try {
-            if (heapLocation==null) {
-                try {
-                    heapLocation = new URL("file",null,System.getProperty("sisc.heap"));
+        if (heapLocation==null) {
+            try {
+                heapLocation = Util.makeURL(System.getProperty("sisc.heap"));
                 } catch (SecurityException se) {}
-                if (heapLocation == null) {
-                    heapLocation = new URL("file", null, "sisc.shp");
-                }
+            if (heapLocation == null) {
+                heapLocation = Util.makeURL("sisc.shp");
             }
-            rv=heapLocation;
-        } catch (MalformedURLException e) {
         }
-        if (mightExist(rv)) return rv;
-        rv = sisc.boot.HeapAnchor.class
-                 .getResource("sisc.shp");
-        if (mightExist(rv)) return rv;
-        rv=AppContext.class.getResource("sisc/boot/sisc.shp");
-        return rv;
+        if (mightExist(heapLocation)) return heapLocation;
+        heapLocation = sisc.boot.HeapAnchor.class.getResource("sisc.shp");
+        if (mightExist(heapLocation)) return heapLocation;
+        heapLocation = AppContext.class.getResource("sisc/boot/sisc.shp");
+        if (mightExist(heapLocation)) return heapLocation;
+        return null;
     }
-    
-    static boolean mightExist(URL u) {
-        if (u==null) return false;
+
+    private static boolean mightExist(URL u) {
+        if (u == null) return false;
         if (u.getProtocol().equals("file")) {
             return new File(u.getPath()).exists();
         } else return true;
