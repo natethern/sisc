@@ -15,12 +15,7 @@ public class SISCApplet extends JApplet {
 
     public void init() {
         try {
-            AppContext ctx = new AppContext();
-            Context.setDefaultAppContext(ctx);
-            Interpreter r = Context.enter(ctx);            
-            REPL.loadDefaultHeap(r);
-            Context.exit();
-            SISCFrame sf=new SISCFrame(ctx);
+            SISCFrame sf=new SISCFrame(Context.getDefaultAppContext());
             //	sf.pack();
             //	sf.show();
             getContentPane().add(sf);
