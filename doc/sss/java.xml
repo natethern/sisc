@@ -32,6 +32,12 @@
         </listitem>
         <listitem>
           <para>
+            A Dynamic Environment, which contains thread specific
+            values such as the current I/O ports, and
+          </para>
+        </listitem>
+        <listitem>
+          <para>
             An <classname>Interpreter</classname>, which provides
             the engine and API for actually evaluating Scheme code.
           </para>
@@ -241,6 +247,34 @@
       </blockquote>
     </sect2>
     <sect2>
+      <title>The Dynamic Environment</title>
+      <para>
+        The dynamic environment, represented by the
+        <classname>sisc.env.DynamicEnvironment</classname> class, 
+        is the datastructure which stores dynamic
+        variables.  That is, variables whose values are not
+        scoped lexically and are associated with threads rather than
+        code.  This includes such values as the current input and
+        output ports, Scheme parameters, and the class path.  
+      </para>
+      <para>
+        Each interpreter contains a reference to its current dynamic 
+        environment, and the dynamic environment cannot be shared
+        between two threads, or by more than one application context 
+        called in the same thread.  They should be shared across
+        call boundaries in a single thread and single application, but
+        must be created anew for external calls and cross application
+        calls, and cloned for new threads.
+      </para>
+      <para> 
+        It should seem obvious, then, that maintaining the correct
+        dynamic environment in all call situations can be tricky.
+        Fortunately, the supported API calls in
+        <classname>Context</classname> detect and do the Right Thing
+        in most situations.
+      </para>
+    </sect2>
+    <sect2>
       <title>The Interpreter</title>
       <para>
         The <classname>Interpreter</classname> class contains the
@@ -307,7 +341,7 @@
                 <type>sisc.interpreter.SchemeCaller</type>
                 <parameter>caller</parameter>
               </methodparam>
-              <exception>sisc.interpreter.SchemeException</exception>
+              <exceptionname>sisc.interpreter.SchemeException</exceptionname>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -338,7 +372,7 @@
                 <type>sisc.interpreter.Interpreter</type>
                 <parameter>r</parameter>
               </methodparam>
-              <exception>sisc.interpreter.SchemeException</exception>
+              <exceptionname>sisc.interpreter.SchemeException</exceptionname>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -476,8 +510,8 @@ else { ...make internal call... }
                 <type>String</type>
                 <parameter>expr</parameter>
               </methodparam>
-              <exception>sisc.interpreter.SchemeException</exception>
-              <exception>java.io.IOException</exception>
+              <exceptionname>sisc.interpreter.SchemeException</exceptionname>
+              <exceptionname>java.io.IOException</exceptionname>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -500,8 +534,8 @@ else { ...make internal call... }
                 <type>String</type>
                 <parameter>sourceId</parameter>
               </methodparam>
-              <exception>sisc.interpreter.SchemeException</exception>
-              <exception>java.io.IOException</exception>
+              <exceptionname>sisc.interpreter.SchemeException</exceptionname>
+              <exceptionname>java.io.IOException</exceptionname>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -522,7 +556,7 @@ else { ...make internal call... }
                 <type>Value</type>
                 <parameter>val</parameter>
               </methodparam>
-              <exception>sisc.interpreter.SchemeException</exception>
+              <exceptionname>sisc.interpreter.SchemeException</exceptionname>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -545,7 +579,7 @@ else { ...make internal call... }
                 <type>Value[]</type>
                 <parameter>args</parameter>
               </methodparam>
-              <exception>sisc.interpreter.SchemeException</exception>
+              <exceptionname>sisc.interpreter.SchemeException</exceptionname>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -2708,7 +2742,7 @@ Foo fooObj = new Foo(1, 2);
                  The class precedence list is important when comparing types 
                  using the type system's <function>compare-types</function> procedure,
                  which is used by the generic procedure method selection algorithm 
-                 (see <xref linkend="comparemethods"/>).  Since generic Java methods
+                 (see <function>compare-methods</function> in <xref linkend="invokinggenerics"/>).  Since generic Java methods
                  and field accessors/mutators are implemented in terms of generic 
                  procedures they are all affected by the class precedence list.
            </para>

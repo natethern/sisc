@@ -932,7 +932,7 @@
         </para>
       </blockquote>
       </sect2>
-      <sect2>
+      <sect2 id="highlevelconcurrency">
 	<title>
 	  High-level Concurrency
 	</title>

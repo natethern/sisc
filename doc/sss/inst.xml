@@ -221,9 +221,8 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
               <entry>
                 Specifies a Java properties file that contains
                 application properties. Typically some of these
-                properties define defaults for <xref
-                linkend="config-parameters"> configuration
-                parameters</xref>. The file can be specified as a URL.
+                properties define defaults for configuration parameters (<xref
+                linkend="config-parameters"/>. The file can be specified as a URL.
               </entry>
             </row>
             <row>

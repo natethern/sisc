@@ -406,7 +406,7 @@ r / 2<superscript>s</superscript>
         association lists typically perform these operations in linear
         time based on the number of elements.
       </para>
-      <sect3>
+      <sect3 id="hashtablecreation">
         <title>Creation and Introspection</title>
         <para>
           Hash tables are a distinct data type. They can be created
@@ -415,7 +415,7 @@ r / 2<superscript>s</superscript>
           also supported.
         </para>
         <blockquote>
-          <para id="make-hashtable">
+          <para>
             <indexterm><primary>make-hashtable</primary>
             </indexterm>
             &procedure;
@@ -810,7 +810,8 @@ r / 2<superscript>s</superscript>
                 Setting <parameter>unsafe?</parameter> to &num;f
                 results in more efficient execution but may cause
                 deadlocks if <parameter>thunk</parameter> is unsafe.
-                See also <xref linkend="func-mutex-synchronize-unsafe"/>.
+                See also <function>mutex/synchronize-unsafe</function> in 
+                <xref linkend="highlevelconcurrency"/>.
               </para>
               <para>
                 When <parameter>hashtable</parameter> is
@@ -1200,8 +1201,8 @@ r / 2<superscript>s</superscript>
                 Setting <parameter>unsafe?</parameter> to &num;f
                 results in more efficient execution but may cause
                 deadlocks if <parameter>thunk</parameter> is unsafe.
-                See also <xref
-                  linkend="func-mutex-synchronize-unsafe"/>.
+                See also <function>mutex/synchronize-unsafe</function> in 
+                <xref linkend="highlevelconcurrency"/>.
               </para>
             </blockquote>
           </para>
@@ -1639,8 +1640,8 @@ com/foo/bar/baz/baz3.scm
             The <function>make-hash-table</function> function takes
             two additional optional arguments:
             <parameter>thread-safe?</parameter> and
-            <parameter>weak?</parameter>. See <xref
-              linkend="make-hashtable"/> for details.
+            <parameter>weak?</parameter>. See <function>make-hashtable</function>
+            in <xref linkend="hashtablecreation"/> for details.
           </para>
           <para>
             The basic hash table API is extended in a separate
@@ -1815,12 +1816,14 @@ com/foo/bar/baz/baz3.scm
                   <computeroutput>-Dsisc.slib=...</computeroutput> to
                   the <envar>JAVAOPT</envar> environment variable.
                 </para>
+              </formalpara>
+              <note>
                 <para>
                   Note that the value of this property should be a
                   fully qualified url,
                   e.g. <computeroutput>file:///usr/share/slib</computeroutput>
                 </para>
-              </formalpara>
+              </note>
             </listitem>
           </itemizedlist>
           You need to ensure that all potential users of

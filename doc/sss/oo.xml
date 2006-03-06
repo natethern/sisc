@@ -896,7 +896,7 @@
         </blockquote>
       </para>
     </sect2>
-    <sect2>
+    <sect2 id="invokinggenerics">
       <title>Invoking Generic Procedures</title>
       <para>
         Generic procedures are invoked like ordinary procedures. Upon
@@ -1008,7 +1008,7 @@
 (compare-methods (method ((next: next)(&lt;number&gt; x)(&lt;number&gt; y)) (next x y))
                  (method ((&lt;number&gt; x) . rest) (apply + x rest))
                  (list &lt;number&gt; &lt;number&gt;))
-  &arrow; 'more-specific
+                &arrow; 'more-specific
               </programlisting>
             </informalexample>
           </para>
