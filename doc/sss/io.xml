@@ -3324,7 +3324,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         </blockquote>
         Note that the class path extension is part of the dynamic
         environment,, so each thread has its own setting, initially
-        inherited from the parent thread. See <link
+        inherited from the parent thread. See <xref
         linkend="Threads"/> for more details on &SISC;'s threading
         semantics.
       </para>
