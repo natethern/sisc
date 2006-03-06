@@ -18,7 +18,7 @@ import sisc.util.Util;
  *   r.eval(someProcedure, new Value[] { ... some arguments ... });
  *   Context.exit();
  * </pre>
- * Alternately, one can use the SchemeCaller supported visitor pattern
+ * Preferrably, one should use the SchemeCaller supported visitor pattern
  * to allow Context to handle the management of the Interpreter Context,
  * as follows:
  * <pre>
@@ -128,7 +128,7 @@ public abstract class Context extends Util {
         if (defaultAppContext == null) {
             setDefaultAppContext(new AppContext());
             try {
-                defaultAppContext.setDefaultHeap();
+                defaultAppContext.addDefaultHeap();
             } catch (IOException e) {
                 throw new RuntimeException(Util.liMessage(Util.SISCB,
                 "errorloadingheap"));

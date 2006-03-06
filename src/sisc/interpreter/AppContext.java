@@ -192,7 +192,7 @@ public class AppContext extends Util {
      *
      * @see #findHeap(URL)
      */
-    public void setDefaultHeap() throws IOException {
+    public void addDefaultHeap() throws IOException {
         URL u=findHeap(null);
         if (u == null) {
             throw new RuntimeException(Util.liMessage(Util.SISCB,

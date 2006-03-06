@@ -139,18 +139,18 @@
         current directory, or on the Java classpath.  In the last case
         however, it will be loaded into memory entirely, rather than
         read in as needed.  The automatic heap location involves
-        calling <function>setDefaultHeap</function> on the 
+        calling <function>addDefaultHeap</function> on the 
         <classname>AppContext</classname>, and is used
         when an application context is created implicitly.
       </para>
       <blockquote>
         <para>
-          <indexterm><primary>setDefaultHeap</primary>
+          <indexterm><primary>addDefaultHeap</primary>
           </indexterm>
           <methodsynopsis language="java">
             <modifier>public</modifier>
             <void/>
-            <methodname>setDefaultHeap</methodname>
+            <methodname>addDefaultHeap</methodname>
             <void/>
           </methodsynopsis>
           <blockquote>
