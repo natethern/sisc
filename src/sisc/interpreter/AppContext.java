@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
 
 import sisc.REPL;
 import sisc.ser.*;
@@ -212,8 +213,13 @@ public class AppContext extends Util {
         //Handle files separately, as they can be efficiently used
         //on disk in random access fashion.
         if (u.getProtocol().equals("file")) {
-            return new BufferedRandomAccessInputStream(new File(u.getPath()), "r",  1, 8192);
-        } else return new MemoryRandomAccessInputStream(u.openStream());
+            try {
+                return new BufferedRandomAccessInputStream(new File(u.getPath()), "r",  1, 8192);
+            } catch (AccessControlException ace) {
+                //Must be an applet, we'll have to load it as a URL stream
+            }
+        } 
+        return new MemoryRandomAccessInputStream(u.openStream());
     }
 
     /**
@@ -237,9 +243,12 @@ public class AppContext extends Util {
             }
         }
         if (mightExist(heapLocation)) return heapLocation;
-        heapLocation = sisc.boot.HeapAnchor.class.getResource("sisc.shp");
-        if (mightExist(heapLocation)) return heapLocation;
-        heapLocation = AppContext.class.getResource("sisc/boot/sisc.shp");
+        Class anchor=null;
+        try {
+            anchor=Class.forName("sisc.boot.HeapAnchor");
+        } catch (ClassNotFoundException cnf) {}
+        if (anchor==null) anchor=AppContext.class;
+        heapLocation = anchor.getResource("/sisc/boot/sisc.shp");
         if (mightExist(heapLocation)) return heapLocation;
         return null;
     }
@@ -247,7 +256,19 @@ public class AppContext extends Util {
     private static boolean mightExist(URL u) {
         if (u == null) return false;
         if (u.getProtocol().equals("file")) {
-            return new File(u.getPath()).exists();
+            try {
+                return new File(u.getPath()).exists();
+            } catch (AccessControlException ace) {
+                // Running as an applet.  need to actually open the file to try this out:
+                try {
+                    u.openConnection();
+                    return true;
+                } catch (IOException e) {
+                    //Oops, guess not
+                    return false;
+                }
+                
+            }
         } else return true;
     }
 }
