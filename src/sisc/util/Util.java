@@ -520,6 +520,20 @@ public abstract class Util implements Version {
         }
     }
 
+    public static URL makeURL(String url) {
+        URL res = null;
+        if (url == null) return res;
+        try {
+            res = new URL(url);
+        } catch (MalformedURLException e) {
+            try {
+                res = new URL("file", null, url);
+            } catch (MalformedURLException ee) {
+            }
+        }
+        return res;
+    }
+
     public static URL url(Value v) {
         try {
             return url(string(v));
@@ -533,7 +547,7 @@ public abstract class Util implements Version {
         try {
             return new URL(s);
         } catch (MalformedURLException e) {
-            return new URL("file:" + s);
+            return new URL("file", null, s);
         }
     }
 
