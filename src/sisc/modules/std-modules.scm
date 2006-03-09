@@ -892,7 +892,8 @@
      clear-breakpoint!
      continue
      stack-trace
-     print-stack-trace)
+     print-stack-trace
+     unresolved-references)
   (import debugging-native)
   (import pretty-printing)
   (include "debug.scm"))
@@ -997,6 +998,13 @@
 (import srfi-7)
 (import srfi-22)
 (import srfi-55)
+
+;;check for unresolved references
+(let ()
+  (import* debugging unresolved-references)
+  (let ([refs (unresolved-references)])
+    (or (null? refs)
+        (display (format "unresolved references: ~a\n" refs)))))
 
 ;;Final initialization
 (let ()

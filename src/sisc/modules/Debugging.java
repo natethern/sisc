@@ -11,6 +11,8 @@ import sisc.ser.Deserializer;
 import java.io.IOException;
 
 import sisc.util.ExpressionVisitor;
+import sisc.util.FreeReference;
+import sisc.util.UndefinedVarException;
 
 public class Debugging extends IndexedProcedure {
 
@@ -27,7 +29,8 @@ public class Debugging extends IndexedProcedure {
         FILLRIBEXP = 10,
         FREEXPQ = 11,
         FRESYM = 12,
-        QTYPE = 13;
+        QTYPE = 13,
+        UNRESOLVEDREFS = 14;
 
     public static class Index extends IndexedLibraryAdapter {
 
@@ -50,6 +53,7 @@ public class Debugging extends IndexedProcedure {
             define("_free-reference-exp?", FREEXPQ);
             define("_free-reference-symbol", FRESYM);
             define("quantity-type", QTYPE);
+            define("unresolved-references", UNRESOLVEDREFS);
         }
     }
     
@@ -104,6 +108,23 @@ public class Debugging extends IndexedProcedure {
     
     public Value doApply(Interpreter f) throws ContinuationException {
         switch(f.vlr.length) {
+        case 0:
+            switch(id) {
+            case UNRESOLVEDREFS:
+                FreeReference[] refs = FreeReference.allReferences();
+                Pair res = EMPTYLIST;
+                for (int i = 0; i < refs.length; i++) {
+                    FreeReference ref = refs[i];
+                    try {
+                        ref.resolve();
+                    } catch (UndefinedVarException ex) {
+                        res = new Pair(ref.getName(), res);
+                    }
+                }
+                return res;
+            default:
+                throwArgSizeException();
+            }
         case 1:
             switch(id) {
             case QTYPE:

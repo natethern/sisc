@@ -2,12 +2,19 @@ package sisc.util;
 
 import sisc.data.*;
 import java.io.*;
+import java.util.Collections;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Iterator;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
 import sisc.util.ExpressionVisitor;
 
 public class FreeReference implements ExpressionVisitee {
+
+    private static Set allReferences =
+        Collections.synchronizedSet(new HashSet());
 
     private Symbol sym;
     private SymbolicEnvironment senv;
@@ -16,13 +23,19 @@ public class FreeReference implements ExpressionVisitee {
     public FreeReference(Symbol sym, SymbolicEnvironment senv) {
         this.senv = senv;
         this.sym = sym;
+        //allReferences.add(this);
+    }
+
+    public static FreeReference[] allReferences() {
+        Pair res = Util.EMPTYLIST;
+        return (FreeReference[])allReferences.toArray(new FreeReference[] {});
     }
 
     public Symbol getName() {
         return sym;
     }
 
-    private void resolve() throws UndefinedVarException {
+    public void resolve() throws UndefinedVarException {
         //this is an optimization that ensures we short-circuit
         //any DelegatingSymEnvs
         senv = (SymbolicEnvironment)senv.asValue();
@@ -52,6 +65,7 @@ public class FreeReference implements ExpressionVisitee {
         sym=(Symbol)s.readExpression();
         senv=s.readSymbolicEnvironment();
         envLoc=-1;
+        //allReferences.add(this);
     }
 
     public boolean equals(Object o) {
