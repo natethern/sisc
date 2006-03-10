@@ -116,6 +116,19 @@ public class Compiler extends CompilerConstants {
         }
     }
 
+    static void propagateNameAnnotation(Expression from, Expression to) {
+        if (from instanceof FreeReferenceExp) {
+            to.setAnnotation(PROCNAME, 
+                             ((FreeReferenceExp)from).getSym());
+        } else if (from instanceof LexicalReferenceExp) {
+            Symbol varName=(Symbol)((LexicalReferenceExp)from)
+                .getAnnotation(VARNAME, null);
+            if (varName != null) {
+                to.setAnnotation(PROCNAME, varName);
+            }
+        }
+    }
+
     static boolean isImmediate(Expression e) {
         return (e instanceof Immediate) ||
             ((e instanceof AnnotatedExpr) &&
@@ -367,16 +380,7 @@ public class Compiler extends CompilerConstants {
                  */
                 if (r.dynenv.emitDebuggingSymbols &&
                     rands[i] instanceof AppExp) {
-                    AppExp ae=(AppExp)rands[i];
-                    if (ae.exp instanceof FreeReferenceExp) {
-                        nxp.setAnnotation(PROCNAME, 
-                                          ((FreeReferenceExp)ae.exp).getSym());
-                    } else if (ae.exp instanceof LexicalReferenceExp) {
-                        Symbol varName=(Symbol)((LexicalReferenceExp)ae.exp)
-                            .getAnnotation(VARNAME, null);
-                        if (varName != null)
-                            nxp.setAnnotation(PROCNAME, varName);
-                    }
+                    propagateNameAnnotation(((AppExp)rands[i]).exp, nxp);
                 } 
 
                 lastRand = rands[i];
@@ -406,13 +410,9 @@ public class Compiler extends CompilerConstants {
         /* If we're emitting debugging symbols, annotate the AppEval
            with the name of the procedure. 
         */
-        if (r.dynenv.emitDebuggingSymbols)
-            if (rator instanceof FreeReferenceExp) {
-                nxp.setAnnotation(PROCNAME, ((FreeReferenceExp)rator).getSym());
-            } else if (rator instanceof LexicalReferenceExp &&
-                       rator.getAnnotation(VARNAME, null) !=null) {
-                nxp.setAnnotation(PROCNAME, rator.getAnnotation(VARNAME));
-            }
+        if (r.dynenv.emitDebuggingSymbols) {
+            propagateNameAnnotation(rator, nxp);
+        }
 
         Expression lastRand = rator;
         boolean allImmediate=isImmediate(rator);
