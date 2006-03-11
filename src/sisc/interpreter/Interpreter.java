@@ -395,7 +395,7 @@ public class Interpreter extends Util {
 
     public final CallFrame createFrame(Expression n,
                                        Value[] v,
-                                       boolean vlk,
+                                       boolean vk,
                                        Value[] l,
                                        Value[] e,
                                        SymbolicEnvironment t,
@@ -409,36 +409,19 @@ public class Interpreter extends Util {
             frameFreeList=frameFreeList.parent;
             frameFreeListSize--;
         }
-        rv.parent=p;
-        rv.fk=f;
         rv.nxp=n;
         rv.vlr=v;
-        rv.vlk=vlk;
-        rv.tpl=t;
-        rv.env=e;
+        rv.vlk=vk;
         rv.lcl=l;
+        rv.env=e;
+        rv.tpl=t;
+        rv.fk=f;
+        rv.parent=p;
         return rv;
     }
 
     public final void push(Expression n) {
-        CallFrame rv;
-        if (frameFreeList == null) {
-            rv=new CallFrame();
-        } else {
-            rv=frameFreeList;
-            frameFreeList=frameFreeList.parent;
-            frameFreeListSize--;
-        }
-
-        rv.parent=stk;
-        stk=rv;
-        stk.fk=fk;
-        stk.nxp=n;
-        stk.vlr=vlr;
-        stk.vlk=vlk;
-        stk.env=env;
-        stk.tpl=tpl;
-        stk.lcl=lcl;
+        stk = createFrame(n,vlr,vlk,lcl,env,tpl,fk,stk);
     }
     
     public final void returnFrame(CallFrame f) {
