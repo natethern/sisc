@@ -18,15 +18,34 @@ public class CallFrame extends Procedure {
     public SymbolicEnvironment   tpl; //The currently active top-level environment
     
     public CallFrame(Expression n, Value[] v,
-                     boolean vlk, Value[] l, Value[] e,
+                     boolean vk, Value[] l, Value[] e,
                      SymbolicEnvironment t,
                      CallFrame f, CallFrame p) {
+        /*
+          We really just want to call init(n,v,vk,l,e,t,f,p) here but
+          that seems lose us 2% on gabriel benchmarks, at least on
+          Sun's 1.5.0_05-b05 JVM on Linx 2.6.8-1-686-smp.
+        */
         nxp=n;
         vlr=v;
-        this.vlk=vlk;
+        vlk=vk;
+        lcl=l;
         env=e;
         tpl=t;
+        fk=f;
+        parent=p;
+    }
+
+    public final void init(Expression n, Value[] v,
+                           boolean vk, Value[] l, Value[] e,
+                           SymbolicEnvironment t,
+                           CallFrame f, CallFrame p) {
+        nxp=n;
+        vlr=v;
+        vlk=vk;
         lcl=l;
+        env=e;
+        tpl=t;
         fk=f;
         parent=p;
     }

@@ -409,14 +409,7 @@ public class Interpreter extends Util {
             frameFreeList=frameFreeList.parent;
             frameFreeListSize--;
         }
-        rv.nxp=n;
-        rv.vlr=v;
-        rv.vlk=vk;
-        rv.lcl=l;
-        rv.env=e;
-        rv.tpl=t;
-        rv.fk=f;
-        rv.parent=p;
+        rv.init(n,v,vk,l,e,t,f,p);
         return rv;
     }
 
