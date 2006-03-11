@@ -31,6 +31,12 @@ public class CallFrame extends Procedure {
         parent=p;
     }
 
+    public final void clear() {
+        vlr=lcl=env=null;
+        fk=parent=null;
+        tpl=null;
+    }
+
     public final CallFrame capture(Interpreter r) {
         // Set the captured flags all the way to the root.
         for (CallFrame w=this; w!=null && !w.vlk; w=w.parent) {

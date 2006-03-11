@@ -444,11 +444,9 @@ public class Interpreter extends Util {
     public final void returnFrame(CallFrame f) {
         if (f.vlk || frameFreeListSize >= FRAMEPOOLMAX) return;
 
-        //Clear these fields to avoid hanging onto otherwise
+        //Clear some fields to avoid hanging onto otherwise
         //garbage collectable data for too long
-        
-        f.lcl=f.vlr=f.env=null;
-        f.tpl=null;
+        f.clear();
 
         f.parent=frameFreeList;
         frameFreeList = f;
