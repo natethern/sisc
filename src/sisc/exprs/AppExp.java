@@ -132,13 +132,16 @@ public class AppExp extends Expression implements OptimisticHost {
             nxp=replaceWith;
             break;
         default:
-            rands[uexpPosition] = (replaceWith instanceof Immediate) ?
-                replaceWith : null;
-            Expression oldExp=exp;
-            exp=replaceWith;
-            FillRibExp fre=new FillRibExp(oldExp, uexpPosition, nxp, false);
-            nxp=fre;
-            fre.setHosts();
+            if (replaceWith instanceof Immediate) {
+                rands[uexpPosition] = replaceWith;
+            } else {
+                rands[uexpPosition] = null;
+                Expression oldExp=exp;
+                exp=replaceWith;
+                FillRibExp fre=new FillRibExp(oldExp, uexpPosition, nxp, false);
+                nxp=fre;
+                fre.setHosts();
+            }
         }
 
         if (allImmediate && !(replaceWith instanceof Immediate)) {
