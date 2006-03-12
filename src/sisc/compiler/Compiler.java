@@ -73,14 +73,6 @@ public class Compiler extends CompilerConstants {
         else return v;
     }
 
-    protected Expression compile(Interpreter r, Expression v, Pair sets,
-                                 SymbolicEnvironment env) 
-        throws ContinuationException {
-
-        return compile(r, v, sets, new ReferenceFactory(),
-                       REALTAIL, env, null);
-    }
-
     public Expression compile(Interpreter r, Expression v,
                               SymbolicEnvironment env) 
         throws ContinuationException {
