@@ -272,10 +272,10 @@ public class Compiler extends CompilerConstants {
             tmp=compile(r, expr.car(), sets, rf, 0, env, null);
             expr=(Pair)expr.cdr();
             
-            Expression conseq=compile(r, expr.car(), sets, rf, context,
+            Expression conseq=compile(r, expr.car(), sets, rf, 0,
                                       env, null);
             expr=(Pair)expr.cdr();
-            Expression altern=compile(r, expr.car(), sets, rf, context,
+            Expression altern=compile(r, expr.car(), sets, rf, 0,
                                       env, null);
             //if (isImmediate(conseq) && isImmediate(altern))
             //rv=new IfEval_imm(conseq, altern);
