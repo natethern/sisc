@@ -78,14 +78,14 @@ public class Compiler extends CompilerConstants {
         throws ContinuationException {
 
         return compile(r, v, sets, new ReferenceFactory(),
-                       REALTAIL | TAIL, env, null);
+                       REALTAIL, env, null);
     }
 
     public Expression compile(Interpreter r, Expression v,
                               SymbolicEnvironment env) 
         throws ContinuationException {
         Expression e=compile(r, v, EMPTYLIST, new ReferenceFactory(),
-                             REALTAIL | TAIL, env, null);
+                             REALTAIL, env, null);
         return e;
     }
 
@@ -202,7 +202,7 @@ public class Compiler extends CompilerConstants {
             expr=(Pair)expr.cdr();
             //Frees
             expr=(Pair)expr.cdr();
-            rv=compile(r, expr.car(), sets, rf, TAIL | LAMBDA | REALTAIL, 
+            rv=compile(r, expr.car(), sets, rf, REALTAIL, 
                        env, null);
             break;
         case LAMBDA:
@@ -232,7 +232,7 @@ public class Compiler extends CompilerConstants {
              expr=(Pair)expr.cdr();
                           ReferenceFactory nf=new ReferenceFactory(formals, lexicalSyms);
  
-             tmp=compile(r, expr.car(), sets, nf, TAIL | LAMBDA | REALTAIL, 
+             tmp=compile(r, expr.car(), sets, nf, REALTAIL, 
                          env, null);
              int[][] copies=resolveCopies(rf, lexicalSyms);
              int[] boxes=findBoxes(formals, sets);
@@ -277,13 +277,13 @@ public class Compiler extends CompilerConstants {
          }
          break;
         case _IF:
-            tmp=compile(r, expr.car(), sets, rf, PREDICATE, env, null);
+            tmp=compile(r, expr.car(), sets, rf, 0, env, null);
             expr=(Pair)expr.cdr();
             
-            Expression conseq=compile(r, expr.car(), sets, rf, TAIL | context,
+            Expression conseq=compile(r, expr.car(), sets, rf, context,
                                       env, null);
             expr=(Pair)expr.cdr();
-            Expression altern=compile(r, expr.car(), sets, rf, TAIL | context,
+            Expression altern=compile(r, expr.car(), sets, rf, context,
                                       env, null);
             //if (isImmediate(conseq) && isImmediate(altern))
             //rv=new IfEval_imm(conseq, altern);
@@ -357,7 +357,7 @@ public class Compiler extends CompilerConstants {
         boolean allImmediate=true;
 
         Expression nxp=new LetrecEval(compile(r, body, sets, nrf,
-                                              context | TAIL | LAMBDA, 
+                                              context, 
                                               env, null));
         
         /* If we're emitting debugging symbols, annotate the AppEval
@@ -507,13 +507,13 @@ public class Compiler extends CompilerConstants {
                             SymbolicEnvironment env)
     throws ContinuationException {        
         Expression last=compile(r, v[v.length - 1], sets, rf,
-                                TAIL | context, env, null);
+                                context, env, null);
         //if (v.size()==1) return last;
         
         Expression be=last;
         for (int i = v.length - 2; i >= 0; --i) {
             Expression e=compile(r, v[i],
-                                 sets, rf, COMMAND, env, null);
+                                 sets, rf, 0, env, null);
             addAnnotations(be, e.annotations);
             be = makeEvalExp(e, be);
         }

@@ -13,7 +13,7 @@ public abstract class CompilerConstants extends Util {
         SYNTACTIC_TOKEN_COUNT = 9,
         PROGRAM=0, APPLICATION=1, LAMBDA=2, _IF=3, BEGIN=4, QUOTE=5, SET=6, 
         DEFINE=7, MAKEANNOTATION=8, LETREC=9, FIX=10, UNKNOWN=-1, 
-        TAIL=1, COMMAND=2, PREDICATE=4, REALTAIL=8;
+        REALTAIL=1;
     
     public static final Map SYNTACTIC_TOKENS=new HashMap(SYNTACTIC_TOKEN_COUNT);
     
