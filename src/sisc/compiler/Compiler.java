@@ -224,8 +224,7 @@ public class Compiler extends CompilerConstants {
              expr=(Pair)expr.cdr();
                           ReferenceFactory nf=new ReferenceFactory(formals, lexicalSyms);
  
-             tmp=compile(r, expr.car(), sets, nf, REALTAIL, 
-                         env, null);
+             tmp=compile(r, expr.car(), sets, nf, REALTAIL, env, null);
              int[][] copies=resolveCopies(rf, lexicalSyms);
              int[] boxes=findBoxes(formals, sets);
              rv=new LambdaExp(formals.length, 
@@ -265,7 +264,6 @@ public class Compiler extends CompilerConstants {
              
              rv=compileLetrec(r, formals, lexicalSyms, rhses, expr.car(), 
                               sets, rf, env, context);
-                ((OptimisticHost)rv).setHosts();
          }
          break;
         case _IF:
@@ -277,9 +275,6 @@ public class Compiler extends CompilerConstants {
             expr=(Pair)expr.cdr();
             Expression altern=compile(r, expr.car(), sets, rf, 0,
                                       env, null);
-            //if (isImmediate(conseq) && isImmediate(altern))
-            //rv=new IfEval_imm(conseq, altern);
-            //            else 
             rv=new IfEval(conseq, altern);
             ((OptimisticHost)rv).setHosts();
             rv.annotations = tmp.annotations;
@@ -325,8 +320,6 @@ public class Compiler extends CompilerConstants {
             compileExpressions(r, exps, sets, rf, 0, env);
             Expression operout=compile(r,oper,sets, rf,0,env,an);
             rv = application(r, operout, exps, context, an, env);
-            if (rv instanceof AppExp) 
-                ((AppExp)rv).setHosts();
             break;
         default:
             error(r, "Unsupported syntactic type ["+eType+"].  Should never happen!");
@@ -382,7 +375,10 @@ public class Compiler extends CompilerConstants {
         }
         addAnnotations(nxp, lastRand.annotations);
         int[][] copies=resolveCopies(rf, lexicals);
-        return new LetrecExp(lastRand, rands, nxp, copies[0], copies[1], allImmediate);
+        LetrecExp res = new LetrecExp(lastRand, rands, nxp,
+                                      copies[0], copies[1], allImmediate);
+        res.setHosts();
+        return res;
     }
 
     public static final Expression application(Interpreter r, 
@@ -439,51 +435,53 @@ public class Compiler extends CompilerConstants {
             }
         }
         addAnnotations(nxp, lastRand.annotations);
-        AppExp safeExpr=new AppExp(lastRand, rands, nxp, allImmediate);
 
-        if (allImmediate) {
-            //The realtail check is necessary since an Optimistic Expression
-            //in real tail has no parent uExp
-            if (rator instanceof FreeReferenceExp && (context & REALTAIL)== 0) {
-                FreeReference ref=((FreeReferenceExp)rator).getReference();
-                Symbol ratorsym=ref.getName();
-                Value ratorval=env.lookup(ratorsym);
-                if (ratorval instanceof FixableProcedure) {
-                    Expression fixedCall=null;
+        if (allImmediate &&
+            rator instanceof FreeReferenceExp &&
+            //The realtail check is necessary since an Optimistic
+            //Expression in real tail has no parent uExp
+            (context & REALTAIL)== 0) {
+            FreeReference ref=((FreeReferenceExp)rator).getReference();
+            Symbol ratorsym=ref.getName();
+            Value ratorval=env.lookup(ratorsym);
+            if (ratorval instanceof FixableProcedure) {
+                Expression fixedCall=null;
 
-                    switch (rands.length) {
-                    case 0: 
-                        fixedCall = new FixedAppExp_0(ref);
-                        break;
-                    case 1: 
-                        fixedCall = new FixedAppExp_1((Immediate)rands[0],
-                                                      ref);
-                        break;
-                    case 2: 
-                        fixedCall = new FixedAppExp_2((Immediate)rands[0],
-                                                      (Immediate)rands[1],
-                                                      ref);
-                        break;
-                    case 3: 
-                        fixedCall = new FixedAppExp_3((Immediate)rands[0],
-                                                      (Immediate)rands[1],
-                                                      (Immediate)rands[2],
-                                                      ref);
-                        break;
-                    }
-                    if (fixedCall != null) {
-                        if (fixedCall instanceof OptimisticHost)
-                            ((OptimisticHost)fixedCall).setHosts();
-                        if (!r.dynenv.hedgedInlining) {
-                            addAnnotations(fixedCall, lastRand.annotations);
-                            ((OptimisticExpression)fixedCall).dropSafe();
-                        }
-                        return fixedCall;
-                    }
+                switch (rands.length) {
+                  case 0: 
+                      fixedCall = new FixedAppExp_0(ref);
+                      break;
+                  case 1: 
+                      fixedCall = new FixedAppExp_1((Immediate)rands[0],
+                                                    ref);
+                      break;
+                  case 2: 
+                      fixedCall = new FixedAppExp_2((Immediate)rands[0],
+                                                    (Immediate)rands[1],
+                                                    ref);
+                      break;
+                  case 3: 
+                      fixedCall = new FixedAppExp_3((Immediate)rands[0],
+                                                    (Immediate)rands[1],
+                                                    (Immediate)rands[2],
+                                                    ref);
+                      break;
                 }
-            } 
-        } 
-        return safeExpr;
+                if (fixedCall != null) {
+                    if (fixedCall instanceof OptimisticHost)
+                        ((OptimisticHost)fixedCall).setHosts();
+                    if (!r.dynenv.hedgedInlining) {
+                        addAnnotations(fixedCall, lastRand.annotations);
+                        ((OptimisticExpression)fixedCall).dropSafe();
+                    }
+                    return fixedCall;
+                }
+            }
+        }
+
+        AppExp res = new AppExp(lastRand, rands, nxp, allImmediate);
+        res.setHosts();
+        return res;
     }
 
     void compileExpressions(Interpreter r, Expression exprs[], 
