@@ -95,6 +95,9 @@ public class FixedAppExp_0 extends Expression
         try {
             AppExp safeExpr=(AppExp)Compiler.application(r, new FreeReferenceExp(ref), rands, 0, EMPTYLIST, r.getCtx().symenv);
             
+            if (safeExpr instanceof OptimisticExpression) {
+                ((OptimisticExpression)safeExpr).setHost(host, uexpPosition);
+            }
             host.alter(r, uexpPosition, safeExpr);
             throw new OptimismUnwarrantedException();
         } catch (ContinuationException ce) {
