@@ -229,9 +229,6 @@ public class Compiler extends CompilerConstants {
              rv=new LambdaExp(formals.length, 
                               tmp, infArity, copies[0], copies[1], 
                               (boxes.length==0 ? null :boxes));
-                if (tmp instanceof OptimisticExpression) {
-                    ((OptimisticExpression)tmp).setHost((LambdaExp)rv, 0);
-                }
          }
             break;
         case LETREC:

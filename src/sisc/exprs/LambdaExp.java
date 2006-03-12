@@ -3,15 +3,12 @@ package sisc.exprs;
 import java.io.*;
 import sisc.data.*;
 import sisc.env.LexicalUtils;
-import sisc.exprs.fp.OptimisticExpression;
-import sisc.exprs.fp.OptimisticHost;
-import sisc.exprs.fp.Utils;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
-public class LambdaExp extends Expression implements Immediate, OptimisticHost {
+public class LambdaExp extends Expression implements Immediate {
     public boolean infiniteArity;
     public int fcount, lcount, localIndices[], lexicalIndices[], boxes[];
     public Expression body;
@@ -25,10 +22,6 @@ public class LambdaExp extends Expression implements Immediate, OptimisticHost {
         lexicalIndices=lexids;
         this.boxes=boxes;
         lcount=localids.length+lexids.length;
-    }
-
-    public void setHosts() {
-        Utils.linkOptimistic(this, body, 0);
     }
 
     public void eval(Interpreter r) throws ContinuationException {
@@ -79,15 +72,6 @@ public class LambdaExp extends Expression implements Immediate, OptimisticHost {
         return v.visit(body);
     }
 
-    /* (non-Javadoc)
-     * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
-     */
-    public synchronized void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
-        body=replaceWith;
-        if (replaceWith instanceof OptimisticExpression) {
-            ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
-        }        
-    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public
