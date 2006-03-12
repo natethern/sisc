@@ -144,8 +144,6 @@ public class AppExp extends Expression implements OptimisticHost {
         if (allImmediate && !(replaceWith instanceof Immediate)) {
             allImmediate=false;
         }
-        if (replaceWith instanceof OptimisticHost) 
-            ((OptimisticHost)replaceWith).setHosts();
     }
 }
 

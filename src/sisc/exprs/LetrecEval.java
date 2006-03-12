@@ -55,9 +55,6 @@ public class LetrecEval extends Expression implements OptimisticHost {
      */
     public synchronized void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
         body=replaceWith;
-        if (replaceWith instanceof OptimisticExpression) {
-            ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
-        }        
     }
 
 }

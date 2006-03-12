@@ -67,8 +67,6 @@ public class IfEval extends Expression implements OptimisticHost {
             altern = replaceWith;
             break;
         }
-        if (replaceWith instanceof OptimisticHost) 
-            ((OptimisticHost)replaceWith).setHosts();
     }
 
 }

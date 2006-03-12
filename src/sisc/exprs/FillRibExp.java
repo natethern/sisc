@@ -81,9 +81,6 @@ public class FillRibExp extends Expression implements OptimisticHost {
             }
             break;
         }
-        if (replaceWith instanceof OptimisticExpression) {
-            ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
-        }        
     }
 }
 

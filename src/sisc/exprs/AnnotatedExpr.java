@@ -74,9 +74,6 @@ public class AnnotatedExpr extends Value implements OptimisticHost {
      */
     public synchronized void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
         expr=replaceWith;
-        if (replaceWith instanceof OptimisticExpression) {
-            ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
-        }
     }
 }
 /*

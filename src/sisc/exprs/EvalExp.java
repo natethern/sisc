@@ -90,9 +90,8 @@ public class EvalExp extends Expression implements OptimisticHost {
             post=replaceWith;
             break;
         }
-        if (replaceWith instanceof OptimisticHost) 
-            ((OptimisticHost)replaceWith).setHosts();
     }
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public
