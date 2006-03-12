@@ -26,13 +26,21 @@ public class FillRibExp extends Expression implements OptimisticHost {
     }
 
     public void setHosts() {
+        /*
+          'nxp' must not be an OptimisticExpression if it can end up
+          on the stack and hence be evaluated outside the context of
+          the eval method here.
+        */
+        if (!lastAndRatorImmediate || exp instanceof OptimisticExpression) {
+            Utils.assertNonOptimistic(nxp);
+        }
         Utils.linkOptimistic(this, exp, POS_EXP);
         Utils.linkOptimistic(this, nxp, POS_NXP);
     }
     
     public void eval(Interpreter r) throws ContinuationException {
-     try {
-         r.setVLR(pos, r.acc);
+        try {
+            r.setVLR(pos, r.acc);
             if (lastAndRatorImmediate) {
                 r.acc=exp.getValue(r);
                 r.next(nxp);
@@ -40,9 +48,9 @@ public class FillRibExp extends Expression implements OptimisticHost {
                 r.push(nxp);
                 r.next(exp);
             }      
-     } catch (OptimismUnwarrantedException uwe) {
-      eval(r);
-     } 
+        } catch (OptimismUnwarrantedException uwe) {
+            r.nxp = this;
+        } 
     }
 
     public Value express() {
