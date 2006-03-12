@@ -25,6 +25,16 @@ public class EvalExp extends Expression implements OptimisticHost {
     }
 
     public void setHosts() {
+        /*
+          'post' must not be an OptimisticExpression if 'pre' is
+          non-immediate or an OptimisticExpression. It could end up on
+          the stack and hence be evaluated outside the context of the
+          eval method here.
+        */
+        if (!preImmediate || pre instanceof OptimisticExpression) {
+            Utils.assertNonOptimistic(post);
+        }
+
         Utils.linkOptimistic(this, pre, POS_PRE);
         Utils.linkOptimistic(this, post, POS_POST);
     }

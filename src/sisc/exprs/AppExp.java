@@ -28,13 +28,31 @@ public class AppExp extends Expression implements OptimisticHost {
     }
 
     public void setHosts() {
+        /*
+          'nxp' must not be an OptimisticExpression if we have
+          non-immediate or OptimisticExpression operands. It could end
+          up on the stack and hence be evaluated outside the context
+          of the eval method here.
+        */
+        if (!allImmediate || haveOptimisticRands()) {
+            Utils.assertNonOptimistic(nxp);
+        }
+
         Utils.linkOptimistic(this, exp, POS_EXP);
         Utils.linkOptimistic(this, nxp, POS_NXP);
         for (int i=0; i<rands.length; i++) {
             Utils.linkOptimistic(this, rands[i], i);
         }
     }
-    
+
+    private boolean haveOptimisticRands() {
+        for (int i=0; i<rands.length; i++) {
+            if (rands[i] instanceof OptimisticExpression) return true;
+        }
+
+        return false;
+    }
+
     public void eval(Interpreter r) throws ContinuationException {
         try {
             r.newVLR(l);
