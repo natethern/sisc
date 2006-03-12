@@ -194,8 +194,7 @@ public class Compiler extends CompilerConstants {
             expr=(Pair)expr.cdr();
             //Frees
             expr=(Pair)expr.cdr();
-            rv=compile(r, expr.car(), sets, rf, REALTAIL, 
-                       env, null);
+            rv=compile(r, expr.car(), sets, rf, context, env, null);
             break;
         case LAMBDA:
          {
