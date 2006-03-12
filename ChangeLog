@@ -1,7 +1,7 @@
 2006-03-12  Matthias Radestock  <matthias@sorted.org>
 
-	* Fixed bug in optimistic expressions - 'if' branches were failing
-	  unoptimisation. See bug 1448023.
+	* Fixed several bugs in optimistic expressions triggered during
+	  unoptimisation.  See bugs 1448023, 1448219.
 
 2006-03-08  SISC 1.13.0-alpha Released
 

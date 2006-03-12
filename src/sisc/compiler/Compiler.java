@@ -499,13 +499,10 @@ public class Compiler extends CompilerConstants {
                             SymbolicEnvironment env)
     throws ContinuationException {        
         Expression last=compile(r, v[v.length - 1], sets, rf,
-                                context, env, null);
-        //if (v.size()==1) return last;
-        
+                                (v.length > 1 ? REALTAIL : 0), env, null);
         Expression be=last;
         for (int i = v.length - 2; i >= 0; --i) {
-            Expression e=compile(r, v[i],
-                                 sets, rf, 0, env, null);
+            Expression e=compile(r, v[i], sets, rf, 0, env, null);
             addAnnotations(be, e.annotations);
             be = makeEvalExp(e, be);
         }
