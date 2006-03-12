@@ -288,8 +288,8 @@ public class Compiler extends CompilerConstants {
             //if (isImmediate(conseq) && isImmediate(altern))
             //rv=new IfEval_imm(conseq, altern);
             //            else 
-               rv=new IfEval(conseq, altern);
-
+            rv=new IfEval(conseq, altern);
+            ((OptimisticHost)rv).setHosts();
             rv.annotations = tmp.annotations;
             rv = makeEvalExp(tmp, rv);
             break;

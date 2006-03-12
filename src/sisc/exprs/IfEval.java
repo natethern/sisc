@@ -6,8 +6,15 @@ import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
+import sisc.exprs.fp.OptimismUnwarrantedException;
+import sisc.exprs.fp.OptimisticExpression;
+import sisc.exprs.fp.OptimisticHost;
+import sisc.exprs.fp.Utils;
 
-public class IfEval extends Expression {
+public class IfEval extends Expression implements OptimisticHost {
+
+    private static final int POS_CONSEQ=0, POS_ALTERN=1;
+
     public Expression conseq, altern;
 
     public IfEval(Expression conseq, Expression altern) {
@@ -15,8 +22,17 @@ public class IfEval extends Expression {
         this.altern=altern;
     }
 
+    public void setHosts() {
+        Utils.linkOptimistic(this, conseq, POS_CONSEQ);
+        Utils.linkOptimistic(this, altern, POS_ALTERN);
+    }
+
     public void eval(Interpreter r) throws ContinuationException {
-        r.next(truth(r.acc) ? conseq : altern);
+        try {
+            r.next(truth(r.acc) ? conseq : altern);
+        } catch (OptimismUnwarrantedException uwe) {
+            r.nxp=this;
+        }
     }
 
     public Value express() {
@@ -38,6 +54,23 @@ public class IfEval extends Expression {
     public boolean visit(ExpressionVisitor v) {
         return v.visit(conseq) && v.visit(altern);
     }
+
+    /* (non-Javadoc)
+     * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
+     */
+    public synchronized void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
+        switch(uexpPosition) {
+        case POS_CONSEQ:
+            conseq = replaceWith;
+            break;
+        case POS_ALTERN:
+            altern = replaceWith;
+            break;
+        }
+        if (replaceWith instanceof OptimisticHost) 
+            ((OptimisticHost)replaceWith).setHosts();
+    }
+
 }
 
 /*
