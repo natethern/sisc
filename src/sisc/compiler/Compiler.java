@@ -338,8 +338,8 @@ public class Compiler extends CompilerConstants {
         boolean allImmediate=true;
 
         Expression nxp=new LetrecEval(compile(r, body, sets, nrf,
-                                              context, 
-                                              env, null));
+                                              0, env, null));
+        ((OptimisticHost)nxp).setHosts();
         
         /* If we're emitting debugging symbols, annotate the AppEval
            with the name of the procedure. 

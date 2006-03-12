@@ -6,18 +6,30 @@ import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
+import sisc.exprs.fp.OptimismUnwarrantedException;
+import sisc.exprs.fp.OptimisticExpression;
+import sisc.exprs.fp.OptimisticHost;
+import sisc.exprs.fp.Utils;
 
-public class LetrecEval extends Expression {
+public class LetrecEval extends Expression implements OptimisticHost {
 
     public Expression body;
     public LetrecEval(Expression body) {
         this.body=body;
     }
 
+    public void setHosts() {
+        Utils.linkOptimistic(this, body, 0);
+    }
+
     public void eval(Interpreter r) throws ContinuationException {
-        r.nxp=body;
         for (int i=r.vlr.length-1; i>=0; i--) {
             ((Box)r.lcl[i]).val=r.vlr[i];
+        }
+        try {
+            r.next(body);
+        } catch (OptimismUnwarrantedException uwe) {
+            r.nxp = this;
         }
     }
 
@@ -37,6 +49,17 @@ public class LetrecEval extends Expression {
     public boolean visit(ExpressionVisitor v) {
         return v.visit(body);
     }
+
+    /* (non-Javadoc)
+     * @see sisc.exprs.OptimisticHost#alter(int, sisc.data.Expression)
+     */
+    public synchronized void alter(Interpreter r, int uexpPosition, Expression replaceWith) {
+        body=replaceWith;
+        if (replaceWith instanceof OptimisticExpression) {
+            ((OptimisticExpression)replaceWith).setHost(this, uexpPosition);
+        }        
+    }
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public
