@@ -46,7 +46,7 @@ public class LocalReferenceExp extends Expression implements Immediate {
     }
 
     public int hashCode() {
-        return idx | 0xeb000000;
+        return idx | 0xea000000;
     }
 }
 /*
