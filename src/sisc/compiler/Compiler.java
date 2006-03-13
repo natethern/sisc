@@ -326,7 +326,28 @@ public class Compiler extends CompilerConstants {
         return rv;
     }
 
-    public Expression compileLetrec(Interpreter r,
+    public static final Expression makeFillRib(Interpreter r,
+                                               Expression lastRand,
+                                               Expression rand,
+                                               int pos,
+                                               Expression nxp,
+                                               boolean immediate) {
+        nxp = new FillRibExp(lastRand, pos, nxp, immediate);
+        addAnnotations(nxp, rand.annotations);
+
+        /* If we're emitting debugging symbols, annotate the
+         * FillRibExps with the names of the functions in the operator
+         * position.
+         */
+        if (r.dynenv.emitDebuggingSymbols && rand instanceof AppExp) {
+            AppExp ae=(AppExp)rand;
+            propagateNameAnnotation(ae.exp, nxp);
+        }
+
+        return nxp;
+    }
+
+   public Expression compileLetrec(Interpreter r,
                                     Symbol[] formals, Symbol[] lexicals,
                                     Expression[] rands,
                                     Expression body, Pair sets, 
@@ -341,7 +362,7 @@ public class Compiler extends CompilerConstants {
                                               0, env, null));
         ((OptimisticHost)nxp).setHosts();
         
-        /* If we're emitting debugging symbols, annotate the AppEval
+        /* If we're emitting debugging symbols, annotate the LetrecEval
            with the name of the procedure. 
         */
         if (r.dynenv.emitDebuggingSymbols)
@@ -351,25 +372,13 @@ public class Compiler extends CompilerConstants {
 
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
-                addAnnotations(nxp, lastRand.annotations);
-
-                nxp=new FillRibExp(lastRand, i, nxp, allImmediate);
-
-                /* If we're emitting debugging symbols, annotate the
-                 * FillRibExps with the names of the functions in the 
-                 * operator position.
-                 */
-                if (r.dynenv.emitDebuggingSymbols &&
-                    rands[i] instanceof AppExp) {
-                    propagateNameAnnotation(((AppExp)rands[i]).exp, nxp);
-                } 
-
+                nxp = makeFillRib(r, lastRand, rands[i], i, nxp, allImmediate);
                 lastRand = rands[i];
                 rands[i] = null;
                 allImmediate=false;
             }
         }
-        addAnnotations(nxp, lastRand.annotations);
+
         int[][] copies=resolveCopies(rf, lexicals);
         LetrecExp res = new LetrecExp(lastRand, rands, nxp,
                                       copies[0], copies[1], allImmediate);
@@ -401,36 +410,16 @@ public class Compiler extends CompilerConstants {
         Expression lastRand = rator;
         boolean allImmediate=isImmediate(rator);
 
+        addAnnotations(nxp, lastRand.annotations);
+
         for (int i= 0; i<rands.length; i++) {
             if (!isImmediate(rands[i])) {
-                addAnnotations(nxp, lastRand.annotations);
-                nxp = new FillRibExp(lastRand, i, nxp, allImmediate);
-
-                /* If we're emitting debugging symbols, annotate the
-                 * FillRibExps with the names of the functions in the 
-                 * operator position.
-                 */
-
-                if (r.dynenv.emitDebuggingSymbols &&
-                    rands[i] instanceof AppExp) {
-                    AppExp ae=(AppExp)rands[i];
-                    if (ae.exp instanceof FreeReferenceExp) {
-                        nxp.setAnnotation(PROCNAME, 
-                                          ((FreeReferenceExp)ae.exp).getSym());
-                    } else if (ae.exp instanceof LexicalReferenceExp) {
-                        Symbol varName=(Symbol)((LexicalReferenceExp)ae.exp)
-                            .getAnnotation(VARNAME, null);
-                        if (varName != null)
-                            nxp.setAnnotation(PROCNAME, varName);
-                    }
-                } 
-
+                nxp = makeFillRib(r, lastRand, rands[i], i, nxp, allImmediate);
                 lastRand = rands[i];
                 rands[i] = null;
                 allImmediate=false;
             }
         }
-        addAnnotations(nxp, lastRand.annotations);
 
         if (allImmediate &&
             rator instanceof FreeReferenceExp &&
@@ -464,10 +453,15 @@ public class Compiler extends CompilerConstants {
                       break;
                 }
                 if (fixedCall != null) {
+                    if (annotation!=null)
+                        setAnnotations(fixedCall, annotation);
+                    if (r.dynenv.emitDebuggingSymbols) {
+                        propagateNameAnnotation(rator, fixedCall);
+                    }
+                    addAnnotations(fixedCall, lastRand.annotations);
                     if (fixedCall instanceof OptimisticHost)
                         ((OptimisticHost)fixedCall).setHosts();
                     if (!r.dynenv.hedgedInlining) {
-                        addAnnotations(fixedCall, lastRand.annotations);
                         ((OptimisticExpression)fixedCall).dropSafe();
                     }
                     return fixedCall;
@@ -476,6 +470,8 @@ public class Compiler extends CompilerConstants {
         }
 
         AppExp res = new AppExp(lastRand, rands, nxp, allImmediate);
+        if (annotation!=null)
+            setAnnotations(res, annotation);
         res.setHosts();
         return res;
     }
