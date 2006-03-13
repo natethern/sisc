@@ -93,8 +93,8 @@ public class FixedAppExp_0 extends Expression
             Procedure.throwPrimException(liMessage(SISCB, "nosafeexpr"));
         }
         try {
-            AppExp safeExpr=(AppExp)Compiler.application(r, new FreeReferenceExp(ref), rands, 0, EMPTYLIST, r.getCtx().symenv);
-            
+            AppExp safeExpr=(AppExp)Compiler.application(r, new FreeReferenceExp(ref), rands, 0, getAnnotations(), r.getCtx().symenv);
+
             if (safeExpr instanceof OptimisticExpression) {
                 ((OptimisticExpression)safeExpr).setHost(host, uexpPosition);
             }
