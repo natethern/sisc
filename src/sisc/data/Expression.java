@@ -52,6 +52,17 @@ public abstract class Expression extends Util
         return annotations.keySet();
     }
 
+    public synchronized Pair getAnnotations() {
+        Pair res = EMPTYLIST;
+        if (annotations == null) return res;
+        for (Iterator i = annotations.entrySet().iterator(); i.hasNext();) {
+            Map.Entry en = (Map.Entry)i.next();
+            res = new Pair(new Pair((Value)en.getKey(), (Value)en.getValue()),
+                           res);
+        }
+        return res;
+    }
+
     public void serializeAnnotations(Serializer s) throws IOException {
         if (annotations == null) {
             s.writeInt(0);
