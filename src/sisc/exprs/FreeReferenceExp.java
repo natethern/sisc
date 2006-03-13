@@ -13,8 +13,7 @@ import sisc.util.ExpressionVisitor;
 import sisc.util.FreeReference;
 import sisc.util.UndefinedVarException;
 
-public class FreeReferenceExp extends Expression 
-    implements Immediate, OptimisticExpression {
+public class FreeReferenceExp extends Expression implements Immediate {
 
     private FreeReference ref;
     private OptimisticHost host;
@@ -81,14 +80,6 @@ public class FreeReferenceExp extends Expression
         return ref;
     }
 
-    public void setHost(OptimisticHost host, int uexpPosition) {
-        this.host=host;
-        this.uexpPosition=uexpPosition;
-    }
-
-    public void dropSafe() {
-        host=null;
-    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public
