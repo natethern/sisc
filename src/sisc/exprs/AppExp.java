@@ -10,6 +10,7 @@ import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
+import sisc.compiler.Compiler;
 
 public class AppExp extends Expression implements OptimisticHost {
     public static final int POS_EXP=-1, POS_NXP=-2;
@@ -135,12 +136,10 @@ public class AppExp extends Expression implements OptimisticHost {
             if (replaceWith instanceof Immediate) {
                 rands[uexpPosition] = replaceWith;
             } else {
+                nxp = Compiler.makeFillRib(r, exp, replaceWith, uexpPosition, nxp, false);
+                exp = replaceWith;
                 rands[uexpPosition] = null;
-                Expression oldExp=exp;
-                exp=replaceWith;
-                FillRibExp fre=new FillRibExp(oldExp, uexpPosition, nxp, false);
-                nxp=fre;
-                fre.setHosts();
+                ((FillRibExp)nxp).setHosts();
             }
         }
 
