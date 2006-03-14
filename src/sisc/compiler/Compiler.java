@@ -112,12 +112,6 @@ public class Compiler extends CompilerConstants {
         if (from instanceof FreeReferenceExp) {
             to.setAnnotation(PROCNAME, 
                              ((FreeReferenceExp)from).getSym());
-        } else if (from instanceof LexicalReferenceExp) {
-            Symbol varName=(Symbol)((LexicalReferenceExp)from)
-                .getAnnotation(VARNAME, null);
-            if (varName != null) {
-                to.setAnnotation(PROCNAME, varName);
-            }
         }
     }
 
@@ -541,13 +535,15 @@ public class Compiler extends CompilerConstants {
                 return new FreeReferenceExp(s,env);
 
             Immediate ref;
-            if (r.lcl) 
-                ref=new LocalReferenceExp(r.idx);
-            else ref=new LexicalReferenceExp(r.idx);
-            
-            if (assq(s, sets)!=FALSE)
-                return new UnboxExp(ref);
-            else return (Expression)ref;
+            if (r.lcl) {
+                ref = new LocalReferenceExp(r.idx);
+            } else {
+                ref = new LexicalReferenceExp(r.idx);
+            }
+
+            return (assq(s, sets)!=FALSE) ?
+                new UnboxExp(ref) :
+                (Expression)ref;
         }
     }
 
