@@ -5,12 +5,7 @@ import sisc.data.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
-import java.util.Set;
-import sisc.ser.Serializer;
-import sisc.ser.Deserializer;
-import java.io.IOException;
 
-import sisc.util.ExpressionVisitor;
 import sisc.util.FreeReference;
 import sisc.util.UndefinedVarException;
 
@@ -57,43 +52,6 @@ public class Debugging extends IndexedProcedure {
         }
     }
     
-    public static class SISCExpression extends Value {
-        public Expression e;
-        
-        SISCExpression(Expression e) {
-            this.e=e;
-        }
-
-        public Value setAnnotation(Symbol key, Value v) {
-            return e.setAnnotation(key, v);
-        }
- 
-        public Set getAnnotationKeys() {
-            return e.getAnnotationKeys();
-        }
-
-        public Value getAnnotation(Symbol key) {
-            return e.getAnnotation(key);
-        }
-
-        public void display(ValueWriter w) throws IOException {
-            w.append("#<").append(liMessage(SISCB, "expression")).append(' ').append(e.express()).append('>');
-        }
-
-        public void serialize(Serializer s) throws IOException {
-            s.writeExpression(e);
-        }
-
-        public void deserialize(Deserializer s) throws IOException {
-            e=s.readExpression();
-        }
-
-        public boolean visit(ExpressionVisitor v) {
-            return v.visit(e);
-        }
-
-    }
-
     public Debugging(int id) {
         super(id);
     }
@@ -130,18 +88,17 @@ public class Debugging extends IndexedProcedure {
             case QTYPE:
                 return Quantity.valueOf(num(f.vlr[0]).type);
             case FREEXPQ:
-                return truth(((SISCExpression)f.vlr[0]).e
-                             instanceof FreeReferenceExp);
+                return truth(expr(f.vlr[0]) instanceof FreeReferenceExp);
             case FRESYM:
-                return ((FreeReferenceExp)((SISCExpression)f.vlr[0]).e).getSym();
+                return ((FreeReferenceExp)expr(f.vlr[0])).getSym();
             case FILLRIBQ:
-                return truth(f.vlr[0] instanceof SISCExpression &&
-                             ((SISCExpression)f.vlr[0]).e instanceof FillRibExp);
+                return truth(f.vlr[0] instanceof ExpressionValue &&
+                             expr(f.vlr[0]) instanceof FillRibExp);
             case FILLRIBEXP:
-                return new SISCExpression(((FillRibExp)((SISCExpression)f.vlr[0]).e).exp);
+                return new ExpressionValue(((FillRibExp)expr(f.vlr[0])).exp);
             case EXPRESSV:
-                if (f.vlr[0] instanceof SISCExpression) {
-                    return ((SISCExpression)f.vlr[0]).e.express();
+                if (f.vlr[0] instanceof ExpressionValue) {
+                    return expr(f.vlr[0]).express();
                 } else {
                     Closure c=(Closure)f.vlr[0];
                     return list(c.arity ? sym("infinite") : sym("finite"),
@@ -157,7 +114,7 @@ public class Debugging extends IndexedProcedure {
             case CONT_NXP:
                 CallFrame cn=getCont(f.vlr[0]);
                 if (cn.nxp==null) return EMPTYLIST;
-                return new SISCExpression(cn.nxp);
+                return new ExpressionValue(cn.nxp);
             case CONT_VLR:
                 return new SchemeVector(getCont(f.vlr[0]).vlr);
             case CONT_ENV:
