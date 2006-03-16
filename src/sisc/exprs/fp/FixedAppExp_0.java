@@ -23,16 +23,16 @@ public class FixedAppExp_0 extends Expression
     public FreeReference ref;
     public OptimisticHost host;
     public int uexpPosition;
-    
+
     public FixedAppExp_0(FreeReference ref) {
         this.ref=ref;
     }
-    
+
     public void setHost(OptimisticHost host, int uexpPos) {
         this.host=host;
         uexpPosition=uexpPos;
     }
-    
+
     public void eval(Interpreter r) throws ContinuationException {
         r.nxp=null;
         r.acc=getValue(r);
@@ -41,32 +41,23 @@ public class FixedAppExp_0 extends Expression
     public Value doGetValue(FixableProcedure proc, Interpreter r) throws ContinuationException {
         return proc.apply();
     }
-    
+
     public Value getValue(Interpreter r) throws ContinuationException {
         try {
-            Expression e=ref.getValue();
-            if (e!=proc) {
-                //If the definition has changed (or has never been seen before)
-                //check if its still fixable.  If not, revert to the safe expression
-                if (proc==null || (e instanceof FixableProcedure)) {    
-                    proc=(FixableProcedure)e;
+            Expression e = ref.getValue();
+            if (e != proc) {
+                //If the definition has changed (or has never been
+                //seen before) check if its still fixable.  If not,
+                //revert to the safe expression
+                if (e instanceof FixableProcedure) {
+                    proc = (FixableProcedure)e;
                 } else {
                     revert(r);
                 }
             }
             return doGetValue(proc, r);
-        } catch (ClassCastException cc) {
-            try {
-                if (ref.getValue() instanceof FixableProcedure) {
-                    error(r, getName(),
-                          liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
-                          cc);
-                } else {
-                    revert(r);
-                }
-            } catch (UndefinedVarException udv) {
-                revert(r);
-            }
+        } catch (UndefinedVarException uve) {
+            error(r, liMessage(SISCB,"undefinedvar", uve.var));
         } catch (NestedPrimRuntimeException npr) {
             Procedure.error(r, getName(), npr);
         } catch (OptimismUnwarrantedException uwe) {
@@ -77,8 +68,6 @@ public class FixedAppExp_0 extends Expression
             if (msg == null)
                 msg = re.toString();
             error(r, ref.getName(), msg, re);
-        } catch (UndefinedVarException ue) {
-            revert(r);
         }
         // Should be unreachable;
         return null;
@@ -128,7 +117,6 @@ public class FixedAppExp_0 extends Expression
     public boolean visit(ExpressionVisitor v) {
         return ref.visit(v) && v.visit((Expression)host);
     }
-
 
    public void dropSafe() {
        host=null;
