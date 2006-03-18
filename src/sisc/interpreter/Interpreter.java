@@ -202,6 +202,10 @@ public class Interpreter extends Util {
         vlr[pos]=v;
     }
 
+    public final void setFailureContinuation(Expression e) {
+        fk = createFrame(e, null, false, lcl, env, tpl, fk, stk);
+    }
+
     public void error(Pair error)  throws ContinuationException {
         Expression last = (nxp != null ? nxp : lxp);
         acc = new Values(new Value[] {
@@ -393,14 +397,14 @@ public class Interpreter extends Util {
     protected CallFrame frameFreeList;
     protected int frameFreeListSize;
 
-    public final CallFrame createFrame(Expression n,
-                                       Value[] v,
-                                       boolean vk,
-                                       Value[] l,
-                                       Value[] e,
-                                       SymbolicEnvironment t,
-                                       CallFrame f,
-                                       CallFrame p) {
+    private final CallFrame createFrame(Expression n,
+                                        Value[] v,
+                                        boolean vk,
+                                        Value[] l,
+                                        Value[] e,
+                                        SymbolicEnvironment t,
+                                        CallFrame f,
+                                        CallFrame p) {
         CallFrame rv;
         if (frameFreeList == null) {
             rv=new CallFrame();
