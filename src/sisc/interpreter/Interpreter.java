@@ -182,23 +182,24 @@ public class Interpreter extends Util {
         returnFrame(c);
     }
 
+    private final void makeSafe() {
+        /*
+          The frame which contains the current vlr has been captured
+          by a continuation. As a result, several, possibly
+          concurrent, evaluations may reach it. In order to prevent
+          these evaluations from stepping on eachother's toes
+          (i.e. modify the same vlr), we copy the vlr before writing
+          to it. The copy does not need to be marked as captured since
+          it is private to the current computation.
+        */
+        Value[] newvlr = createValues(vlr.length);
+        System.arraycopy(vlr, 0, newvlr, 0, vlr.length);
+        vlr = newvlr;
+        vlk = false;
+    }
+
     public final void setVLR(int pos, Value v) {
-        if (vlk) {
-            /**
-               The frame which contains the current vlr has been
-               captured by a continuation. As a result, several,
-               possibly concurrent, evaluations may reach it. In order
-               to prevent these evaluations from stepping on
-               eachother's toes (i.e. modify the same vlr), we copy
-               the vlr before writing to it. The copy does not need to
-               be marked as captured since it is private to the
-               current computation.
-            **/
-            Value[] newvlr = createValues(vlr.length);
-            System.arraycopy(vlr, 0, newvlr, 0, vlr.length);
-            vlr = newvlr;
-            vlk = false;
-        }
+        if (vlk) makeSafe();
         vlr[pos]=v;
     }
 
