@@ -208,13 +208,11 @@ public class Interpreter extends Util {
     }
 
     public void error(Pair error)  throws ContinuationException {
-        Expression last = (nxp != null ? nxp : lxp);
+        push(nxp == null ? lxp : nxp);
         acc = new Values(new Value[] {
                              error,
-                             new ApplyParentFrame(new CallFrame(last, 
-                                                                vlr, vlk,
-                                                                lcl, env,
-                                                                tpl, fk, stk).capture(this))});
+                             new ApplyParentFrame(stk.capture(this))
+                         });
         throw new ContinuationException(fk);
     }
 
