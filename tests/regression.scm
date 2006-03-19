@@ -334,4 +334,8 @@
                                  ((with/fc (lambda (m e) (esc 'failed))
                                            (lambda ()
                                              (eval '(lambda () (+ ((lambda () #f) 3))))))))))))
-                    
+
+(should-be 1453863 1/2
+           (with/fc
+               (lambda (m e) (e 2))
+             (lambda () (/ (/ (/ (/ 1 0)))))))

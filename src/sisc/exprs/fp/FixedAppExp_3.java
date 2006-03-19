@@ -25,14 +25,14 @@ public class FixedAppExp_3 extends FixedAppExp_2 {
         Utils.linkOptimistic(this, (Expression)op2, 2);
     }
 
+    public Expression[] getOperands() {
+        return new Expression[] {(Expression)op0, (Expression)op1, (Expression)op2};
+    }
+
     public Value doGetValue(FixableProcedure proc, Interpreter r) throws ContinuationException {
         return proc.apply(op0.getValue(r), op1.getValue(r), op2.getValue(r));
     }
 
-    protected void revert(Interpreter r) {
-        revert(r, new Expression[] {(Expression)op0, (Expression)op1, (Expression)op2});
-    }    
-    
     public Value express() {
         return new Pair(sym("FixedAppExp"), new Pair(ref.getName(), 
                                                      list(((Expression)op0).express(),

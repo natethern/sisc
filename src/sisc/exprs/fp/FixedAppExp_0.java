@@ -2,12 +2,11 @@ package sisc.exprs.fp;
 
 import java.io.*;
 
-import sisc.compiler.Compiler;
 import sisc.data.*;
+import sisc.interpreter.*;
 import sisc.exprs.AppExp;
 import sisc.exprs.FillRibExp;
 import sisc.exprs.FreeReferenceExp;
-import sisc.interpreter.*;
 import sisc.nativefun.FixableProcedure;
 import sisc.nativefun.NestedPrimRuntimeException;
 import sisc.ser.Serializer;
@@ -15,6 +14,8 @@ import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 import sisc.util.FreeReference;
 import sisc.util.UndefinedVarException;
+import sisc.compiler.Compiler;
+import sisc.compiler.CompilerConstants;
 
 public class FixedAppExp_0 extends Expression 
     implements Immediate, OptimisticExpression {
@@ -56,33 +57,39 @@ public class FixedAppExp_0 extends Expression
                 }
             }
             return doGetValue(proc, r);
-        } catch (UndefinedVarException uve) {
-            error(r, liMessage(SISCB,"undefinedvar", uve.var));
-        } catch (NestedPrimRuntimeException npr) {
-            Procedure.error(r, getName(), npr);
-        } catch (OptimismUnwarrantedException uwe) {
-            throw uwe;
-        } catch (RuntimeException re) {
-            //re.printStackTrace();
-            String msg = re.getMessage();
-            if (msg == null)
-                msg = re.toString();
-            error(r, ref.getName(), msg, re);
+        } catch (UndefinedVarException e) {
+            forceRevert(r);
+        } catch (OptimismUnwarrantedException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            forceRevert(r);
         }
         // Should be unreachable;
         return null;
     }
 
-    protected void revert(Interpreter r) {
-        revert(r, ZV);
+    public Expression[] getOperands() {
+        return ZV;
     }
 
-    protected void revert(Interpreter r, Expression[] rands) {
+    public final void forceRevert(Interpreter r) {
+        revert(r, getOperands(), CompilerConstants.REALTAIL);
+    }
+
+    public final void revert(Interpreter r) {
+        revert(r, getOperands());
+    }
+
+    public final void revert(Interpreter r, Expression[] rands) {
+        revert(r, rands, 0);
+    }
+
+    public final void revert(Interpreter r, Expression[] rands, int flags) {
         if (host == null) {
             Procedure.throwPrimException(liMessage(SISCB, "nosafeexpr"));
         }
         try {
-            AppExp safeExpr=(AppExp)Compiler.application(r, new FreeReferenceExp(ref), rands, 0, getAnnotations(), r.getCtx().symenv);
+            AppExp safeExpr=(AppExp)Compiler.application(r, new FreeReferenceExp(ref), rands, flags, getAnnotations(), r.getCtx().symenv);
 
             if (safeExpr instanceof OptimisticExpression) {
                 ((OptimisticExpression)safeExpr).setHost(host, uexpPosition);

@@ -1,3 +1,8 @@
+2006-03-19  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed a bug that caused invocation of error continuations to be
+	  rather unpredictable. See bug 1453863.
+
 2006-03-12  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed several bugs in optimistic expressions triggered during
