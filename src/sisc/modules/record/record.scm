@@ -137,7 +137,7 @@
 (define (field-index type tag)
   (let loop ((i 0) (tags (record-type-field-tags type)))
     (cond ((null? tags)
-           (error "record type has no such field" type tag))
+           (error "record type ~a has no field ~a" (record-type-name type) tag))
           ((eq? tag (car tags))
            i)
           (else
@@ -158,7 +158,7 @@
                       args
                       indexes)
             new)
-          (error "wrong number of arguments to constructor" type args)))))
+          (error "wrong number of arguments to constructor for record type ~a; expected ~a args, got ~a" (record-type-name type) arg-count args)))))
 
 (define (record-predicate type)
   (lambda (thing)
@@ -169,14 +169,14 @@
     (lambda (thing)
       (if (eq? (record-type thing) type)
           (record-ref thing index)
-          (error "accessor applied to bad value" type tag thing)))))
+          (error "accessor for ~a in record type ~a applied to ~a" tag (record-type-name type) thing)))))
 
 (define (record-modifier type tag)
   (let ((index (field-index type tag)))
     (lambda (thing value)
       (if (eq? (record-type thing) type)
           (record-set! thing index value)
-          (error "modifier applied to bad value" type tag thing)))))
+          (error "modifier for ~a in record type ~a applied to ~a" tag (record-type-name type) thing)))))
 
 ;; define-struct ala MzScheme
 (define-syntax define-struct-helper

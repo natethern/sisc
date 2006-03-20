@@ -1,3 +1,7 @@
+2006-03-20  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed error reporting in records module. See bug 1454411.
+
 2006-03-19  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a bug that caused invocation of error continuations to be
