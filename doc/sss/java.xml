@@ -824,9 +824,10 @@ Context.execute(mySchemeCaller);
     <sect2 id="JavaClasses">
       <title>Classes</title>
       <para>
-        Java classes are types in &SISC;'s extensible type
-        system. They are made accessible to Scheme code by one of the
-        following procedures / special forms:
+        Java classes are types in &SISC;'s extensible type system (see
+        <xref linkend="TypeSystem"/>). They are made accessible to
+        Scheme code by one of the following procedures / special
+        forms:
         <blockquote>
           <para>
             <indexterm><primary>java-class</primary></indexterm>
