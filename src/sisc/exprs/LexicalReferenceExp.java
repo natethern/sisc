@@ -15,8 +15,8 @@ public class LexicalReferenceExp extends Expression implements Immediate {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.nxp=null;
         r.acc=r.env[idx];
+        r.nxp=null;
         //r.lx++;
     }
 

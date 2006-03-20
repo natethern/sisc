@@ -15,8 +15,8 @@ public class LocalReferenceExp extends Expression implements Immediate {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.nxp=null;
         r.acc=r.lcl[idx];
+        r.nxp=null;
         //r.lc++;
     }
 

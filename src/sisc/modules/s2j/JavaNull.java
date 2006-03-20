@@ -53,7 +53,6 @@ public class JavaNull extends JavaObject {
 
     public void apply(Interpreter r)
         throws ContinuationException {
-        r.nxp = null;
         error(r, liMessage(Util.S2JB, "cannotapplynull"));
     }
 }

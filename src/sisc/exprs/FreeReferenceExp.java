@@ -32,8 +32,8 @@ public class FreeReferenceExp extends Expression implements Immediate {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.nxp = null;
         r.acc = getValue(r);
+        r.nxp = null;
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {

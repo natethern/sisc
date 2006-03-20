@@ -179,7 +179,6 @@ public class JavaObject extends Procedure {
 
     public void apply(Interpreter r)
         throws ContinuationException {
-        r.nxp = null;
         try {
             switch(getObjType()) {
             case JCLASS:    r.acc = apply((Class)obj, r.vlr); break;
@@ -202,6 +201,7 @@ public class JavaObject extends Procedure {
             e.printStackTrace(System.err);
             error(r, e.getMessage());
         }
+        r.nxp = null;
     }
 
     protected static final Value apply(Class obj, Value[] arg) {

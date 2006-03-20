@@ -46,8 +46,6 @@ public abstract class FixableProcedure extends Procedure implements NamedValue {
     
     public void apply(Interpreter r) throws ContinuationException {
         //long start=System.currentTimeMillis();
-        r.lxp = r.nxp;
-        r.nxp = null;
         try {
             switch(r.vlr.length) {
             case 0: r.acc=apply(); break;
@@ -72,6 +70,7 @@ public abstract class FixableProcedure extends Procedure implements NamedValue {
                 msg = re.toString();
             error(r, getName(), msg, re);
         }
+        r.nxp = null;
         //time+=System.currentTimeMillis()-start;
     }
     

@@ -15,8 +15,8 @@ public class UnboxExp extends Expression implements Immediate {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.nxp=null;
         r.acc=((Box)ref.getValue(r)).val;
+        r.nxp=null;
         //r.ux++;
     }
 

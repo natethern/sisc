@@ -35,8 +35,8 @@ public class FixedAppExp_0 extends Expression
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.nxp=null;
         r.acc=getValue(r);
+        r.nxp=null;
     }
 
     public Value doGetValue(FixableProcedure proc, Interpreter r) throws ContinuationException {

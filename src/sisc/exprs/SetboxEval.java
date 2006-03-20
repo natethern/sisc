@@ -15,8 +15,8 @@ public class SetboxEval extends Expression {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        r.nxp=null;
         ((Box)ref.getValue(r)).val=r.acc;
+        r.nxp=null;
     }
 
     public Value express() {
