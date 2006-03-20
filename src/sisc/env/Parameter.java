@@ -8,25 +8,25 @@ public abstract class Parameter extends Procedure {
     public abstract Value getValue(Interpreter r) throws ContinuationException;
     public abstract void setValue(Interpreter r, Value v) throws ContinuationException;
 
-    public void apply(Interpreter r)
-        throws ContinuationException {
-        r.nxp = null;
+    public void apply(Interpreter r)  throws ContinuationException {
+
         Value res = null;
-        synchronized (r.dynenv) {
-            switch (r.vlr.length) {
-            case 0:
-                res = getValue(r);
-                break;
-            case 1:
-                res = getValue(r);
-                setValue(r, r.vlr[0]);
-                if (null == res) res = FALSE;
-                break;
-            default:
-                error(r, liMessage(SISCB, "parameterargs", synopsis()));
-            }
-            r.acc = res;
+
+        switch (r.vlr.length) {
+          case 0:
+              res = getValue(r);
+              break;
+          case 1:
+              res = getValue(r);
+              setValue(r, r.vlr[0]);
+              if (null == res) res = FALSE;
+              break;
+          default:
+              error(r, liMessage(SISCB, "parameterargs", synopsis()));
         }
+
+        r.acc = res;
+        r.nxp = null;
     }
 }
     
