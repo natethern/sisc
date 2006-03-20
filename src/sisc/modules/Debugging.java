@@ -113,7 +113,7 @@ public class Debugging extends IndexedProcedure {
                 return truth(getCont(f.vlr[0]).vlk);
             case CONT_NXP:
                 CallFrame cn=getCont(f.vlr[0]);
-                if (cn.nxp==null) return EMPTYLIST;
+                if (cn.nxp==null) return FALSE;
                 return new ExpressionValue(cn.nxp);
             case CONT_VLR:
                 return new SchemeVector(getCont(f.vlr[0]).vlr);
@@ -121,7 +121,7 @@ public class Debugging extends IndexedProcedure {
                 return new Values(getCont(f.vlr[0]).env);
             case CONT_PARENT: 
                 cn=getCont(f.vlr[0]);
-                if (cn.parent==null) return EMPTYLIST;
+                if (cn.parent==null) return FALSE;
                 return cn.parent;
             default:
                 throwArgSizeException();

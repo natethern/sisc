@@ -205,7 +205,7 @@
 
 (define (stack-trace k . base)
   (cond
-    [(or (null? k) 
+    [(or (not k)
 	 (and (not (null? base))
 	      (eq? k (car base))))
      '()]
@@ -214,8 +214,7 @@
     [else
       (let ([nxp (continuation-nxp k)]
             [stk (apply stack-trace (continuation-stk k) base)])
-        (if (null? nxp)
-            stk
+        (if nxp
             (cons (cons nxp 
                         (let ([nxp-annot (annotations-to-assoc nxp)])
                           (map (lambda (v)
@@ -226,7 +225,8 @@
                                  column-number
                                  source-file
                                  proc-name))))
-                  stk))))))
+                  stk)
+            stk))]))
 
 (define (stack-trace-entry-has-data? entry)
   (define (known? x)
