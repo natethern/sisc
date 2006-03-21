@@ -54,7 +54,7 @@
     </condition>
     <property name="optimization" value="on"/>
     <property name="dist" value="${basedir}/dist"/>
-    <property name="doc.style" value="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl"/>
+    <property name="doc.style" value="/usr/share/xml/docbook/stylesheet/nwalsh/html/chunk.xsl"/>
     <available file="${doc.style}" property="docstyle.present"/>
     <mkdir dir="${libdir}"/>
     <available classname="junit.framework.TestCase"
@@ -416,11 +416,22 @@
              token="@@@doc.style@@@"
              value="${doc.style}"/>
     <mkdir dir="${gendocdir}/sss"/>
+<!--
+    The Java XSLT processors seem incapable of handling the docbook
+    stylesheets
+
     <style basedir="${docdir}/sss"
            includes="${sss}.xml"
            destdir="${gendocdir}/sss"
            style="${docdir}/sss/style.xsl">
     </style>
+-->
+    <exec dir="${docdir}/sss" executable="xsltproc">
+      <arg value="-o"/>
+      <arg file="${gendocdir}/sss/${sss}.html"/>
+      <arg file="${docdir}/sss/style.xsl"/>
+      <arg file="${docdir}/sss/${sss}.xml"/>
+    </exec>
     <copy file="${docdir}/sss/sss.css" tofile="${gendocdir}/sss/sss.css"/>
     <delete file="${gendocdir}/sss/sss.html"/>
   </target>
