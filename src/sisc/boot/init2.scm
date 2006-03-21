@@ -756,7 +756,7 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
                          (interaction-environment))])
             (pretty-print source outf)
             (newline outf)
-            (loop (read inf)))))
+            (loop (read-code inf)))))
     (close-output-port outf)
     (close-input-port inf)))
 
