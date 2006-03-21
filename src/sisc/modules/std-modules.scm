@@ -903,7 +903,6 @@
      trace-let
      trace
      untrace
-     stack-trace
      set-breakpoint!
      clear-breakpoint!
      continue
