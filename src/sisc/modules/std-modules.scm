@@ -261,18 +261,18 @@
    buffer-ref
    buffer-set!
    buffer-length
-   buffer-copy!)   
+   buffer-copy!)
   (import type-system)
   (import binary-io-native)
   (include "io/buffer.scm"))
 
 (module file-manipulation
   (directory-list
-   file-hidden? 
+   file-hidden?
    file-is-directory?
-   file-is-file? 
-   file-is-readable? 
-   file-is-writeable? 
+   file-is-file?
+   file-is-readable?
+   file-is-writeable?
    file-length
    file-last-modified
    file-rename!
@@ -309,10 +309,10 @@
   (set! file-is-writeable? (normalize file/is-writeable?))
   (set! file-length (normalize file/length))
   (set! file-last-modified (normalize file/last-modified))
-  (set! file-rename! 
+  (set! file-rename!
     (lambda (f1 f2)
       (file/rename! (normalize-url f1) (normalize-url f2))))
-  (set! file-set-last-modified! 
+  (set! file-set-last-modified!
     (lambda (f1 v)
       (file/set-last-modified! (normalize-url f1) v)))
   (set! file-set-read-only! (normalize file/set-read-only!))
@@ -755,8 +755,8 @@
 (import generic-io)
 
 ; Good Lord what a hack!
-(for-each 
-  (lambda (x) 
+(for-each
+  (lambda (x)
     (putprop x (eval (sc-expand x)))
     ($sc-put-cte x `(global . ,x)))
  '(char-ready?
@@ -780,7 +780,7 @@
    port?
    input-port?
    output-port?))
-   
+
 (let ()
   (import type-system)
   (import oo)
@@ -818,6 +818,22 @@
   (import* binary-io call-with-binary-input-file call-with-binary-output-file)
   (import* type-system instance-of?)
   (include "io/serial-io.scm"))
+
+(module java-io
+  (->binary-input-port ->binary-output-port
+   ->character-input-port ->character-output-port
+   ->jinput-stream ->joutput-stream
+   ->jreader ->jwriter)
+
+  (import s2j)
+  (import generic-procedures)
+  (import type-system)
+  (import oo)
+
+  (import gio/filtergenerics)
+
+  (include "io/java-io.scm"))
+
 
 (module networking
   (open-tcp-listener

@@ -1,3 +1,7 @@
+2006-03-20  Alessandro Colomba  <acolomba@users.sourceforge.net>
+
+	* Added java-io module as per bug 1455041.
+
 2006-03-20  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed error reporting in records module. See bug 1454411.
@@ -21,10 +25,10 @@
 2006-03-02  Scott G. Miller <sgmiller@gmail.com>
 
 	* Added byte-oriented read/write procedures.
-	
+
 	* Modified binary ports to warn when they are used for
 	  character operations.  See bug 1439761.
-	  
+
 2006-03-02  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed intricate class and resource loading problems.  See bug
@@ -39,12 +43,12 @@
 	* Fixed bug in multiline comment parsing - expressions after a
 	  multiline comment weren't always read correctly.  See bug
 	  1441078.
-	  
+
 2006-02-28  Scott G. Miller <sgmiller@gmail.com>
 
 	* Fixed the fact that |input-port-location| wasn't generic.
 	  See bug 1440409.
-	  
+
 	* Documented the character-port wrapping functions
 	  |open-character-(input|output)-port|.
 
@@ -58,17 +62,17 @@
 2006-02-27  Scott G. Miller <sgmiller@gmail.com>
 
 	* Added the buffer-io module, which provides functionality
-	  similar to string-io, but for binary buffers.  See bug 
+	  similar to string-io, but for binary buffers.  See bug
 	  1439657.
-	  
+
 2006-02-22  Scott G. Miller <sgmiller@gmail.com>
 
-	* Modified SignalHook to have callbacks happen in 
-	  an appropriate, thread safe DynamicEnvironment. 
-	  
+	* Modified SignalHook to have callbacks happen in
+	  an appropriate, thread safe DynamicEnvironment.
+
 	* Fixed a bug in the invalid-syntax branch of let
       optimization where states weren't merged. See bug 1434848.
-      
+
 2006-02-22  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug 1435707 - Java->Scheme calls via S2J proxies now
@@ -77,11 +81,11 @@
 2006-02-21  Scott G. Miller <sgmiller@gmail.com>
 
 	* Modified SchemeCaller and Context.execute() to throw
-	  a SchemeException, allowing more flexible Java side 
+	  a SchemeException, allowing more flexible Java side
 	  error handling.
-	  
+
 	* Modified sisc.sh to support older shells. See bug 1431789.
-	
+
 2006-02-20  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a number of bugs in srfi-43 by merging in changes from the
@@ -96,7 +100,7 @@
 
 	* Fix numerous undefined variable references in various SRFIs,
 	  fixing bugs 1433481, 1433487, 1433495, 1433501 and 1433526.
-	
+
 2006-02-17  Matthias Radestock  <matthias@sorted.org>
 
 	* Added missing export for |string-concatenate-reverse/shared| in
@@ -116,10 +120,10 @@
 
 2006-02-14  Scott G. Miller <sgmiller@gmail.com>
 
-	* Modify the signal hooking mechanisms to make their callbacks 
+	* Modify the signal hooking mechanisms to make their callbacks
 	  in the same dynamic environment in which they were registered,
-	  and drop the "main" AppContext assumption. 
-	  
+	  and drop the "main" AppContext assumption.
+
 2006-02-13  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed handling of dependencies in |compile-file|. See bug
@@ -149,20 +153,20 @@
 
 	* Provided types for all native Scheme values (e.g. <box>,
 	  <thread>, etc).  See feature request 1423513.
-	  
+
 2005-01-31  Scott G. Miller <sgmiller@gmail.com>
 
 	* Fixed bug where UTF-8 was not in fact the default character
 	  set. See bug 1391498.  Thanks to Norman Gray for the patch.
-	  
+
 	* Modifications to stack trace printing to omit initial
 	  info-less frames from the stack trace.
-	
+
 	* Require a Charset for the creation of SourceInputPorts.
-	
-	* Make the default Scheme port for DynamicEnvironment and 
+
+	* Make the default Scheme port for DynamicEnvironment and
 	  the REPL Listen socket a character port.
-	  
+
 2006-01-10  Matthias Radestock  <matthias@sorted.org>
 
 	* Updated srfi-13 to latest reference implementation, which fixes
@@ -188,11 +192,11 @@
 
 	* Use a more robust (if #t (...)) wrapper to prevent
 	  definitions in the else clauses of cond and case.
-	  
+
 2005-11-17  Scott G. Miller <sgmiller@gmail.com>
- 
+
  	* Added support for SRFI 61.
- 	
+
 2005-11-16  Matthias Radestock  <matthias@sorted.org>
 
 	* Added type check of all args used by string=? and char=?. See
@@ -220,7 +224,7 @@
 2005-10-28  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed minor problem with some of the srfi modules - they were
-	  not registering the srfi as a feature.	  
+	  not registering the srfi as a feature.
 
 2005-10-11  Matthias Radestock  <matthias@sorted.org>
 
@@ -258,11 +262,11 @@
 
 2005-08-22  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Fixed a second optimistic expression bug in AppExp which would 
+	* Fixed a second optimistic expression bug in AppExp which would
 	  create a crufty uExp on the stack after some reverts.
-	  
+
 	* Made the alter methods thread safe.
-	
+
 2005-08-22  Matthias Radestock  <matthias@sorted.org>
 
 	* Indicate support for srfi-62.
@@ -278,7 +282,7 @@
 
 	* Made double-precision floating point the default (previously it
 	  was arbitrary precision)
-	
+
 2005-08-16  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed (or, rather, added) hash codes for boxes and uninterned
@@ -297,11 +301,11 @@
 	* Fixed the dependencies of the heap-jar target.
 
 	* Fixed parser error reporting when permissive parsing is disabled.
-		  
+
 2005-07-21  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fix bug in SRFI-19's date->julian-day.  See bug 1238375.
-	
+
 2005-06-06  SISC 1.11.1-beta Released
 
 2005-05-30  Matthias Radestock  <matthias@sorted.org>
@@ -323,9 +327,9 @@
 
 	* Fixed a garbage leak in Closure which could result
 	  in unnecessary values being on the stack, and thus causing
-	  problems with serialization.  Thanks to Allesandro Colomba 
+	  problems with serialization.  Thanks to Allesandro Colomba
 	  for spotting the bug.
-	  
+
 2005-04-29  Matthias Radestock  <matthias@sorted.org>
 
 	* Added some exports missing from srfi-35. Thanks to Andrew Wilcox
@@ -333,28 +337,28 @@
 
 2005-04-27  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Updated SRFI-42, fixing a bug in :while reported on 
+	* Updated SRFI-42, fixing a bug in :while reported on
 	  comp.lang.scheme.
 
 2005-04-20  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed issues with trace, which annoyingly required
 	  an untrace then trace when a traced procedure is redefined.
-	  
+
 2005-04-15  Scott G. Miller  <sgmiller@gmail.com>
 
-	* More efficiently fixed bug 1181453.  
-	  Not copying the VLR in Closure on infinite-arity procedures 
-	  can in rare cases corrupt a captured continuation. 
-	  Moved most of the rest-args logic into Interpreter.	 
+	* More efficiently fixed bug 1181453.
+	  Not copying the VLR in Closure on infinite-arity procedures
+	  can in rare cases corrupt a captured continuation.
+	  Moved most of the rest-args logic into Interpreter.
 
 2005-04-14  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed bug in logand with big integers.
-	
+
 	* Fixed missing i18n'ed message for the above error.
 	  Thanks to Alessandro Colomba for spotting them.
-	
+
 2005-04-12  SISC 1.11.0-alpha Released
 
 2005-04-12  Scott G. Miller  <sgmiller@gmail.com>
@@ -366,28 +370,28 @@
 
 	* Added the Context.execute()/SchemeCaller interface
 	  for simplified Java -> Scheme calls.
-	  
+
 	* Always associate the Java thread in Context.enter with
-	  the thread context, which should fix thread/current, at 
+	  the thread context, which should fix thread/current, at
 	  least in a managed external call.
-	  
+
 2005-04-07  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Changes to the build environment and additions to 
+	* Changes to the build environment and additions to
 	  create a Debian package for SISC.
-	  
+
 2005-04-04  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed design flaw in the strict R5RS which raised
 	  an error when reserved characters are encountered
 	  even in strings.
-	  
+
 2005-03-31  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Added the "tpl" register to the Interpreter, which
 	  contains the toplevel environment for all implicit uses
 	  such as load, getprop, putprop.
-	  
+
 2005-03-29  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed bug in SRFI-27 which was causing the secure-random-source
@@ -397,14 +401,14 @@
 
 2005-03-27  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Altered psyntax to not generate separately compilable 
+	* Altered psyntax to not generate separately compilable
       bindings for implicit exports. See bug 1124005.
 
 2005-03-25  Scott G. Miller  <sgmiller@gmail.com>
 
-	* New implementation of SRFI-14 based on SRFI-60 for bitvectors. 
+	* New implementation of SRFI-14 based on SRFI-60 for bitvectors.
 	  Should be much faster, and Unicode compliant.
-	
+
 2005-03-23  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Added support for SRFI-55 (and build it in by default)
@@ -417,33 +421,33 @@
 2005-03-15  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Changed stack trace printing to condense duplicate lines.
-	
+
 2005-03-14  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Implemented the logical operators (and, or, xor, not bit-count) for
 	  all integers (instead of just fixed ones), and updated the SRFI-60
 	  implementation to use the new logcount.
-	 
+
 2005-03-08  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Added support for SRFI 60.
-	
+
 2005-02-24  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Lazy dynamic-wind installation isn't semantically safe.  
+	* Lazy dynamic-wind installation isn't semantically safe.
 	  Removed it.  See bug 1151368.
-	  
+
 2005-02-23  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Altered the REPL code to keep a stack-trace base frame, so we
 	  don't show most of the REPL's trace in exception printing.
-	  
+
 2005-02-19  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Made the default serialization for Expressions to throw
 	  an error.  This will trickle down to non-serializable expressions
 	  like threads, I/O ports, etc.
-	  
+
 2005-02-14  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a bug in syntax-object->datum and hence define-macro. See
@@ -458,7 +462,7 @@
 
 	* Added system introspection functions to the OS module.  These
 	  may or may not be supporteed.
-      
+
 2005-01-22  Matthias Radestock  <matthias@sorted.org>
 
 	* Prevent NPEs in code that has illegal naked references in
@@ -468,27 +472,27 @@
 
 2005-01-16  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Fixed a bug where the SLL2 serializer was writing the 
-	  string length rather than the number of bytes in its 
+	* Fixed a bug where the SLL2 serializer was writing the
+	  string length rather than the number of bytes in its
 	  representation length, breaking deserialization.
-	
-	* Removed inline-primitives and inline-usual-primitives, as 
+
+	* Removed inline-primitives and inline-usual-primitives, as
 	  this is done automatically and safely now.
 
-	* Applied two contributed patches: one which fixes the 
+	* Applied two contributed patches: one which fixes the
 	  project's Maven description, and another that searches
 	  for sisc.shp in the SISC jar library if not found through
 	  other means.  Both are courtesy of Matthew Daniel.
-	
+
 2005-01-15  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Catch an AccessControlException which can be thrown by SignalHook.
 	  (#1096523)
-	  
-	* Fixed a bug where optimizer was encountering pre-ananlyzed 
-	  code (due to recursion in the expander which calls eval), 
+
+	* Fixed a bug where optimizer was encountering pre-ananlyzed
+	  code (due to recursion in the expander which calls eval),
 	  and choking on it.  (#1099750)
-	  
+
 2005-01-11  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Added permissive-parsing parameter, which when true, causes
@@ -504,7 +508,7 @@
 	  an error.
 
 	* Fixed bug in gio/read-block - it wasn't accepting generic ports.
-	
+
 2005-01-05  Magnus Jonsson <magnus@smartelectronix.com>
 	* Fix complex division bug (#1096496)
 
@@ -568,9 +572,9 @@
 
 2004-12-01  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Allow arbitrary values as NamedValue names, 
+	* Allow arbitrary values as NamedValue names,
 	  fixing a bug in SRFI-18.
-	 
+
 2004-11-29  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed bug in quasiquote introduced with the immutability
@@ -581,7 +585,7 @@
 2004-11-19  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed mutex state management bug in SRFI-18.
-	
+
 2004-11-18  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Finished making all the numeric operators work in some
@@ -596,7 +600,7 @@
 2004-11-14  Released SISC 1.9.3-rc
 
 2004-11-13  Scott G. Miller  <sgmiller@gmail.com>
-	
+
 	* Deprecated .sll support, which seems incompatible
           with the engine changes in 1.9.
 
@@ -619,28 +623,28 @@
 
 	* Fixed a bug that caused multi-values to be recycled when they
 	  shouldn't.
-	
+
 2004-11-06  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Set the lcl even on thunks, to prevent value leaks from
 	  persisting in the stack.  See bug 1060726.
-	  
+
 	* StreamDeserializer now resolves symbolic environments
-	  in the same way as BlockDeserializer. 
-	  
+	  in the same way as BlockDeserializer.
+
 2004-11-05  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Define the I/O procedures as toplevel with psyntax,
 	  so that they aren't syntax-expanded as references
-	  to the generic-io module.  
-	  
+	  to the generic-io module.
+
 2004-11-04  Released SISC 1.9.2-rc
 
 2004-11-04  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed bug in error handling of load causing a null pointer
 	  exception.
-	  
+
 	* Fixed CTL-C in the REPL.
 
 2004-10-27  Matthias Radestock  <matthias@sorted.org>
@@ -654,11 +658,11 @@
 	* Removed old-s2j and old-generic-procedures. Finally!
 
 2004-10-24  Scott G. Miller  <sgmiller@gmail.com>
- 
+
  	* Fixed primitive calls had no error handling, fixed.
- 	
+
  	* Some read I/O generics were not redefined at top level, fixed.
- 	
+
 2004-10-19  Matthias Radestock  <matthias@sorted.org>
 
 	* Allowed java proxies to define hashCode, equals and toString.
@@ -673,31 +677,31 @@
 2004-10-16  Scott G. Miller   <sgmiller@gmail.com>
 
 	* LibraryAE was getting deserialized instead of the child
-	  environment due to a name conflict.  
-	  
+	  environment due to a name conflict.
+
 2004-10-16  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Made some attempt to display line/column numbers from load
 	  and parsing so that one can trace the start of an s-expression
 	  where syntax-errors occur, for example.
-	  
+
 2004-10-15  Scott G. Miller   <sgmiller@gmail.com>
 
-	* Created a dedicated flag for marking call frames as captured.  
+	* Created a dedicated flag for marking call frames as captured.
 	  Previously, vlk was overloaded, causing rare continuation bugs.
 	  See bug 1038532.
-	  
+
 2004-10-14  Scott G. Miller   <sgmiller@gmail.com>
 
-	* Fixed a bug in REPL that was passing the wrong array type to 
+	* Fixed a bug in REPL that was passing the wrong array type to
 	  interpret.  This was breaking uses of "sisc -c".  See bug 972606.
-	  
+
 	* Implemented fine grained library-delta serialization and moved
 	  the interrupt handler's thread off the stack.  See bug 1046307.
 
 	* Fixed various mismatches between generic I/O and the low level
 	  I/O functions scattered in the source (current-*-port for example).
-	  	  
+
 2004-10-13  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Fixed bug in psyntax that broke shadowing of imports at the top
@@ -749,27 +753,27 @@
 	* Better handling of infinity and NaN in the quantity library.
 
 	* Pretty-printing is now a module.
-	
+
 	* Added thread/interrupted? to the threading library.
-	
+
 2004-07-22  Scott G. Miller   <sgmiller@gmail.com>
 
 	* Fixed REPL annotations
 
-	* Fixed psyntax's quasiquote macro to preserve 
+	* Fixed psyntax's quasiquote macro to preserve
 	  immutable pairs for inert quasiquotes. See bug 994759.
 
 2004-07-08  Scott G. Miller   <scgmille@freenetproject.org>
 
-	* Fixed |equal?| on numbers, which was insensitive to 
+	* Fixed |equal?| on numbers, which was insensitive to
           exactness.
 
 2004-06-20  Scott G. Miller   <scgmille@freenetproject.org>
 
 	* Added the os module.
-	
+
 2004-06-17  Scott G. Miller   <scgmille@freenetproject.org>
-	
+
 	* Print a stack trace when an error occurs loading source
 	  files from the commandline, if possible.
 
@@ -783,7 +787,7 @@
 	* Updated srfi-45 to latest version.
 
 2004-06-09  Scott G. Miller   <scgmille@freenetproject.org>
-	
+
 	* Fix REPL handling of Scheme exceptions as they relate
           to return codes.
 
@@ -797,7 +801,7 @@
           lists its bindings.
 
 2004-05-20  Scott G. Miller   <scgmille@freenetproject.org>
-	
+
 	* Moved the analysis pass after the optimizer so
 	we can use the 1.8 optimizer instead of one which
 	preserves the metadata
@@ -813,10 +817,10 @@
 2004-01-01 -> 2004-05-20  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Added support for immediate primitive calls,
-	  an optimization which breaks R5RS compliance by breaking 
+	  an optimization which breaks R5RS compliance by breaking
 	  redefinition.
-	
-	* Added .scm versions of all files which were previously 
+
+	* Added .scm versions of all files which were previously
 	  expanded only, and added a "bootstrap" target to the
 	  build.
 
@@ -824,22 +828,22 @@
 	  is more safe-for-space.  Various changes to the compiler
 	  and the core classes to support this.
 
-	* Support for trapping signals from the OS using an 
+	* Support for trapping signals from the OS using an
 	  unsupported (but apparently everpresent) Sun library.
 
 	* Support for ctl-c to break execution in the REPL.
 
 	* Interrupts are now enabled by default.
 
-	* Native procedures now separated into a Complex (requiring 
-	  the interpreter context) and Simple (dependent only on 
+	* Native procedures now separated into a Complex (requiring
+	  the interpreter context) and Simple (dependent only on
 	  parameters) form.  Simple procedure calls may be made immediate.
 
 	* Updated the pattern matching library to a more recent
 	  version from IU.
 
 	* Added support for weak hashtables.
-	  
+
 2004-04-12  Released SISC 1.8.8
 
 2004-04-08  Scott G. Miller <scgmille@freenetproject.org>
@@ -903,7 +907,7 @@
 2004-01-04  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed serialization of Java Objects from serial ports.
-	
+
 2004-01-04  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed stream (de)serialization to be tail recursive. See bug
@@ -914,12 +918,12 @@
 	* Fixed bug 830507, method dispatch problem
 
 	* Fixed string comparison in SRFI-13.
-	
+
 2003-12-08  Scott G. Miller <scgmille@freenetproject.org>
 
-	* Fixed recycled VLR[] bug in |apply|, and 
+	* Fixed recycled VLR[] bug in |apply|, and
 	  a recycling space leak during serialization.
-	  
+
 2003-10-24  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Fixed char-whitespace? returning #f for #\return
@@ -941,17 +945,17 @@
 2003-10-08  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a space leak in ThreadContext/Context.
-      
+
 2003-10-06  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Partially fixed a bug where delay couldn't resolve make-promise
 	  in the report environment.
-      
+
 2003-09-25  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a bug which caused a custom environment to replace toplevel
 	  if it was called in eval and had an expansion error.
-	  
+
 2003-09-23  SISC 1.8.4-rc Released
 
 2003-09-21  Matthias Radestock  <matthias@sorted.org>
@@ -965,9 +969,9 @@
 2003-09-18  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed subtle bug in the use of the vlk register that was causing
-	  a fatal NullPointerException when continuations were incompletely 
+	  a fatal NullPointerException when continuations were incompletely
 	  captured.
-	  
+
 	* Fixed bug in PARAMETERIZE - it was only allowing one expression
 	  in the body.
 
@@ -983,17 +987,17 @@
 	  id clashes.
 
 2003-09-08  Scott G. Miller  <scgmille@freenetproject.org>
-	
-	* Modified the expander and optimizer to track syntactic tokens 
+
+	* Modified the expander and optimizer to track syntactic tokens
 	  (#%if and friends) the same as the unredefined symbolic forms.
-	  
+
 2003-09-08  SISC 1.8.3-beta Released
 
 2003-09-08  Scott G. Miller  <scgmille@freenetproject.org>
-	
+
 	* Modified the pretty-printer to properly print expressions
 	  containing syntactic tokens.
-	  
+
 2003-09-07  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed optimizer bug that caused breakage when handling IFs with
@@ -1002,10 +1006,10 @@
 	* Added SRFI-42.
 
 2003-09-04  Scott G. Miller  <scgmille@freenetproject.org>
-	
+
 	* Support for return-status from call-with-args, eval, or
 	  the repl using (exit return-code).
-	  
+
 2003-08-17  Matthias Radestock  <matthias@sorted.org>
 
 	* Added SISC Compiled Code (.scc) library support, which is more
@@ -1016,7 +1020,7 @@
 2003-08-10  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Added sane underpinnings for explicit syntax (#%quote, etc).
-	
+
 2003-08-04  Matthias Radestock  <matthias@sorted.org>
 
 	* Improved slib's O/S detection.
@@ -1071,12 +1075,12 @@
 
 	* Added stream compatible serialization mode, and changed
 	  serial-io to use it.
-	  
+
 2003-06-20  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Retooled the evaluation pipeline so that syntax is expanded
 	  in the interaction, rather than a global environment.
-      
+
 2003-06-18  Matthias Radestock  <matthias@lshift.net>
 
 	* Fixed and rationalized SISC's command line parameters.
@@ -1098,10 +1102,10 @@
 
 2003-06-04  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* Separated character from binary IO. 
-	
+	* Separated character from binary IO.
+
 	* Added ability to choose character sets for I/O.
-	
+
 2003-06-02  Matthias Radestock  <matthias@sorted.org>
 
 	* Revised s2j, making several significant changes and
@@ -1164,7 +1168,7 @@
 
 2003-05-01  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* Fixed serialization problem with Hashtables requiring 
+	* Fixed serialization problem with Hashtables requiring
 	  initialized expressions
 
 2003-04-28  Matthias Radestock  <matthias@sorted.org>
@@ -1226,12 +1230,12 @@
 	* Fixed bug in exception handling logic that was causing breakage
 	  on non-Scheme exceptions, e.g. exceptions thrown by s2j.
 
-2003-03-13  Scott G. Miller  <scgmille@freenetproject.org> 
+2003-03-13  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed an inherent design flaw in the Symbol garbage collection.
 
 2003-03-10  SISC 1.7.7 Released
-	
+
 2003-03-10  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed bug in recreating datastructures of compiled libraries,
@@ -1240,11 +1244,11 @@
 	* Renamed the buffer library to buffers, to match the manual.
 
 	* Fixed a bug where the OS isn't correctly detected under OS/2.
-	
+
 2003-03-10  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed typo in SRFI-6
-	
+
 	* Fixed a bug in the reference implementation of SRFI-1.
 
 2003-03-07  SISC 1.7.6 Released
@@ -1270,14 +1274,14 @@
 2003-02-20  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Minor bug fix in compiled-library geneation.
-	  
+
 2003-02-18  SISC 1.7.4-rc Released
 
 2003-02-17  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed problem of missing implicitly exported bindings in
 	  compiled libraries.
-	
+
 	* Adding r5rs module to srfi compiled library, fixing breakage due
 	  to missing definitions.
 
@@ -1311,9 +1315,9 @@
 2003-01-31  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Modified the syntax expander to generate non-unique symbols
-	  for module names and module bindings, allowing modules 
+	  for module names and module bindings, allowing modules
 	  created/serialized on one SISC version to run on another.
-	
+
 2003-01-30  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Clear the LexicalEnvironment when calling eval.  This doesn't
@@ -1321,7 +1325,7 @@
 	  of unnecessarily used memory, especially in serialization.
 
 	* Fixed additional entrypoint wastage in LibraryBuilder.
-	
+
 2003-01-29  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed a bug in Interpreter which caused the failure continuation
@@ -1329,7 +1333,7 @@
 	  thrown.
 
 	* Fixed compile issues for Java < 1.4
-	
+
 	* Added |stack-trace-on-error| parameter.
 
 2003-01-23  Scott G. Miller  <scgmille@freenetproject.org>
@@ -1362,10 +1366,10 @@
 	  symbols.  This caused import* and anonymous top-level modules
 	  to fail.
 
-	* Hooked circular printing code to error message code so that 
+	* Hooked circular printing code to error message code so that
 	  circular structures print properly (and don't stack overflow)
 	  when generating error messages.
-	
+
 2002-12-24  Matthias Radestock  <matthias@sorted.org>
 
 	* Added |equal?|-based hashtables.
@@ -1384,9 +1388,9 @@
 
 2002-12-14  Scott G. Miller <scgmille@freenetproject.org>
 
-	* Fixed a rare, complicated memory leak involving the 
+	* Fixed a rare, complicated memory leak involving the
 	  CallFrame recycling pool.
-	
+
 2002-12-10  Scott G. Miller <scgmille@freenetproject.org>
 
 	* Refactored the REPL such that the main SISC thread is also
@@ -1395,9 +1399,9 @@
 	* Re-added thread/current
 
 2002-12-09  Scott G. Miller <scgmille@freenetproject.org>
- 
+
 	* Fixed error in arbint->double conversion.
-	
+
 	* Created the file-manipulation library.
 
 2002-11-30  Matthias Radestock  <matthias@sorted.org>
@@ -1472,7 +1476,7 @@
 2002-10-18  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Modified open-library to support arbitrary URLs.
-	
+
 2002-10-18  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed bug in serialization of references to classes in S2J.
@@ -1509,7 +1513,7 @@
 2002-10-10  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Created the compiled-libraries module, which allows one
-          to create additive heaps (expanded and compiled libraries).  
+          to create additive heaps (expanded and compiled libraries).
 
 2002-10-08  Scott G. Miller  <scgmille@freenetproject.org>
 
@@ -1519,7 +1523,7 @@
 
 2002-10-07  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* Fixed Lite build 
+	* Fixed Lite build
 
 	* Module bindings were being loaded at start time, and
 	  only R5RS bindings were lazy loaded.  Now all are, as intended.
@@ -1536,7 +1540,7 @@
 
 2002-09-29  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* Key developers increased the value of 
+	* Key developers increased the value of
           (floor (/ (- (system-time) 307461060000) 31536000000))
 
 2002-09-29  Matthias Radestock  <matthias@sorted.org>
@@ -1575,7 +1579,7 @@
 2002-09-24  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Re-added block IO (now in the 'block-io' module)
-	  but using the new buffer type which is definitely 
+	  but using the new buffer type which is definitely
 	  binary safe, unlike strings.
 
 	* Added a binary buffer type in the 'buffer' module.
@@ -1612,7 +1616,7 @@
 	* Rationalized retrieval and display of stack trace information.
 
 2002-08-28  Scott G. Miller  <scgmille@freenetproject.org>
-	
+
 	* Fixed a number of Quantity-lib bugs pointed out by Justin Sampson
 		- parsing of negative imaginary numbers
 		- log of negative numbers (now works)
@@ -1634,13 +1638,13 @@
 	* Fixed handling of AnnotatedExprs when written to expanded source
 
 	* Fixed load's handling of .sce/.pp files
-	
+
 2002-08-04  Matthias Radestock  <matthias@sorted.org>
 
 	* Implemented SRFIs 19,25,26,28
 
 2002-08-01  Released SISC r1.5.5
-	
+
 2002-07-25  Released SISC b1.5.5rc2
 
 2002-07-24  Scott G. Miller  <scgmille@freenetproject.org>
@@ -1649,12 +1653,12 @@
 
 	* Slightly more efficient intBound
 
-	* Fixed errors with thread error handling 
+	* Fixed errors with thread error handling
 
 2002-07-22  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Updated to most recent version of psyntax (7/12)
-	
+
 	* Fixed getprop errors that were breaking the pretty-printer.
 
 	* Re-removed void, void? from the report environment.
@@ -1670,10 +1674,10 @@
 
 2002-07-15  Scott G. Miller  <scgmille@freenetproject.org>
 
-	* Added sisc-initial-environment.  
+	* Added sisc-initial-environment.
 
 	* I18Ned much of Primitives.
-	
+
 	* putprop/getprop can now take a first class environment
 	  as their second argument.
 
@@ -1683,7 +1687,7 @@
 
 	* Added set-symbolic-environment!  Renamed get-environment
 	  to get-symbolic-environment!
-	
+
 	* Fixed DefineEval to be compiled with the environment it
 	  will be making the definition into.  This fixes (define ...)
 	  in a non-toplevel environment.
@@ -1741,7 +1745,7 @@
 
 	* Added get-environment, which returns a symbolic environment
 	  given its name (as a symbol).
-	
+
 2002-06-14  Matthias Radestock  <matthias@sorted.org>
 
 	* Added with-current-url procedure.
@@ -1766,7 +1770,7 @@
 2002-06-07  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Error handling revamped to pass along error information
-	  through Scheme->Java->Scheme ... calls. 
+	  through Scheme->Java->Scheme ... calls.
 
 2002-06-04  Matthias Radestock  <matthias@sorted.org>
 
@@ -1784,10 +1788,10 @@
 
 	* Matthias' change of self-evaluating to exclude vectors
 	  causes the expander to raise an error for unquoted
-	  vectors, which is actually the specified behavior.  
+	  vectors, which is actually the specified behavior.
 
 2002-05-28  Released SISC b1.5.0
-	
+
 2002-06-01  Matthias Radestock  <matthias@sorted.org>
 
 	* Upgrade to latest version of syntax-case. This fixes some bugs
@@ -1848,7 +1852,7 @@
 2002-04-27 Released 1.4.0
 
 2002-04-27  Scott G. Miller  <scgmille@freenetproject.org>
-  
+
 	* Fixed bugs found in the RC2 round of testing.
 
 2002-04-22  Matthias Radestock  <matthias@sorted.org>
@@ -1862,7 +1866,7 @@
 	  continuations
 
 2002-04-21  Scott G. Miller  <scgmille@freenetproject.org>
-	
+
 	* Implemented a three level (empty->sisc-bindings->r5rs) chained
           toplevel environment, that allows us to properly implement
 	  (scheme-report-environment).
@@ -1891,7 +1895,7 @@
 2002-04-12  Scott G. Miller  <scgmille@freenetproject.org>
 
 	* Fixed real?, which was returning #t for non-numbers
-	
+
 	* Fixed read to produce mutable data.
 
 2002-04-12  Matthias Radestock  <matthias@sorted.org>
@@ -1924,7 +1928,7 @@
 	  and enhancements
 
 2002-03-15  Scott G. Miller <scgmille@freenetproject.org>
-	
+
 	* Fixed SQRT for large integers, with the side effect
 	  of producing exact results for exact arguments with an exact
 	  square root.
@@ -1936,7 +1940,7 @@
 
 	* Fixed equality problems with Immutables
 
-	* Modified REPL to allow third party applications to load 
+	* Modified REPL to allow third party applications to load
 	  heaps easier.
 
 	* Pervasive localization effort.  See the manual for details.
@@ -1956,7 +1960,7 @@
 	  thread-local variables.
 
 2002-02-28  Scott G. Miller  <scgmille@freenetproject.org>
-	
+
 	* Fixed a couple of math bugs in Quantity-64float
 
 2002-02-25  Matthias Radestock  <matthias@sorted.org>
@@ -1984,11 +1988,11 @@
 
 2002-02-16  Scott G. Miller <scgmille@freenetproject.org>
 
-	* Fixed two bugs in SNative's append.  First is that the last 
+	* Fixed two bugs in SNative's append.  First is that the last
 	  (in this case second) argument to append can be any object. Second
 	  is that that R5RS mandates that everything *but* the last is
 	  newly allocated.
-	
+
 2002-02-15  Matthias Radestock  <matthias@sorted.org>
 
 	* Added new, experimental Scheme->Java interface module
@@ -1998,7 +2002,7 @@
 	* Added parameter (vector-length-prefixing) which
 	  specified whether pretty-print should display the prefixed
 	  length of a vector.
-	
+
 2002-02-12  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed CHAR-UPPER-CASE? and CHAR-LOWER-CASE?
@@ -2026,12 +2030,12 @@
 
 	* Added support for the common ASCII escape sequences (i.e. \n, \r
 	  etc) when reading/writing strings.
-	
+
 	* Fixed bug in string comparison.
-	
+
 	* Fixed bug that gave wrong #f results in EQUAL? when comparing
 	  mutable to immutable objects.
-	
+
 	* Fixed bug in PEEK-CHAR - \#nul was not being pushed back after
 	  being read.
 
@@ -2042,7 +2046,7 @@
 
 	* Changed Primitive's throw RuntimeExceptions to
           throwPrimExceptions.
- 
+
 	* Corrected error reporting of invalid indices to strings
 
 2002-01-28 Scott G. Miller <scgmille@freenetproject.org>
@@ -2051,7 +2055,7 @@
 	  created with ', `, ',', ,@, etc.
 
 	* Added synopsis() to Value, which allows abbreviated printing.
-	
+
 2002-01-27  Matthias Radestock <matthias@sorted.org>
 
 	* Added support for reading case sensitive symbols using the
@@ -2110,7 +2114,7 @@
 	* Made literal strings, vectors and lists immutable
 
 2001-12-04  Scott G. Miller  <scgmille@freenetproject.org>
-	
+
 	* Fixed string->number, which should have been able to accept
 	  #[xobd]num format numbers as well as ordinary ones.
 
@@ -2128,11 +2132,11 @@
 	* Fixed handling of uncertain digits in exact numbers.
 
         * Added Thread support (preliminary)
-  
+
         * Fixed equals? handling of immutable data (more specifically,
           equals? handling of subclasses of values)
 
-12/1/2001 Scott G. Miller <scgmille@freenetproject.org>	
+12/1/2001 Scott G. Miller <scgmille@freenetproject.org>
 
 	* Removed BeginExp, DefineExp, FreeSetExp, IfExp, and LexicalSetExp,
           which were replaced with EvalExp, which simply evaluates
@@ -2141,12 +2145,12 @@
 
 r1.2.3  Performance enhancements
 
-        * Added ashr, the complement to ashl.  
- 
+        * Added ashr, the complement to ashl.
+
 	* In fixing other reader errors, 1.2.2 fixed hex digit handling.
 	  Fixed.
 
-	* exact? and inexact? should error on non-numbers.  They 
+	* exact? and inexact? should error on non-numbers.  They
 	  weren't.  Fixed.
 
 	* eqv? in scheme was relying on above bug for correct operation.
@@ -2154,7 +2158,7 @@ r1.2.3  Performance enhancements
 r1.2.2  Minor enhancements, bug fixes
 
 	* Output ports do not automatically flush now (except for
-	  console out).  
+	  console out).
 
 	* Added 'flush-output-port' which takes an output port
  	  and finalizes any writes
@@ -2166,7 +2170,7 @@ r1.2.2  Minor enhancements, bug fixes
 	* #\return wasn't recognized on read, but could be produced
           on write.  Fixed.
 
-	* (null-environment) was returning a completely empty 
+	* (null-environment) was returning a completely empty
 	  environment, which is incorrect in SISC, since the special
 	  forms (quote, lambda, etc) should still be present.  Fixed.
 
@@ -2180,24 +2184,24 @@ r1.2.2  Minor enhancements, bug fixes
 r1.2.1  Bugfixes
 
 	* Ratio simplification now properly handles numerator
-	  and denominator signs sanely.  
+	  and denominator signs sanely.
 
 	* Full-sisc now includes J2S, Netlib, Exec, and Debug
-	
+
 r1.2.0  Major enhancements
 
 	* New serialization structure.  The heap can be serialized in 1/3
           the space, and we can shave .7 seconds off SISC startup time.
           Also, the heap isn't tied to a specific version of SISC.
 	  (Not present in sisc-lite)
-	
+
 	* Dead code eliminated
 
-	* Default Quantity lib is now double precision floating point 
+	* Default Quantity lib is now double precision floating point
 	  instead of arbitrary precision.  In the future, the library
           will be selectable at startup
 
-	* Some minor performance tweaks 
+	* Some minor performance tweaks
 
 r1.1.3  Bug fixes (Never formally released)
 
@@ -2206,7 +2210,7 @@ r1.1.3  Bug fixes (Never formally released)
 	* Fixed scalability issue in Pair.display.  Couldn't handle
 	  incredibly large lists because it was using a recursive
 	  print method (which doesnt work well in Java, stack smash)
-	
+
 r1.1.2  Bug fixes
 
 	* Fixed startup scripts for windows
@@ -2217,14 +2221,14 @@ r1.1.2  Bug fixes
 
 	* Limiting lexical depth to 65536, function argument count to
           65536
-	
+
 r1.1.1  Bug fixes, code cleaning
 
-	* Startup scripts werent able to load files, fixed 
-	
+	* Startup scripts werent able to load files, fixed
+
 	* Error in the syntax expander wasnt handling final cdr
           unquotes in a quasi-quoted list
-  
+
 	* Vector printing optimizations
 
 	* Scheme source optimized and tidied to hide scaffolding functions
@@ -2235,20 +2239,20 @@ r1.1.0  Many many changes.  v1.1.0 is on average 45% faster than 1.0.3
 
         * LexicalEnvironments don't need symbol information,
           this was an old debugging mode that isn't necessary.
-          Result is a smaller heap and small boost to 
+          Result is a smaller heap and small boost to
           performance.
-        
+
         Added Matthias Radestock's optimizations:
         * replace recursion with loops in LexicalEnvironment.lookup and
-	  LexicalEnvironment.set => no noticable difference, but might 
+	  LexicalEnvironment.set => no noticable difference, but might
           show in deeply nested expressions
 
-	* recycler for FillRibExp along the same lines as CallFrames. 
+	* recycler for FillRibExp along the same lines as CallFrames.
 	  This gives a 5-10% performance boost.
 
 	* creation of {*}Eval instances in constructor of
-	  {FreeSet,If,LexicalSet}Expr, rather than in eval method. 
-	  Shifts the burden from runtime to compile time and results in 
+	  {FreeSet,If,LexicalSet}Expr, rather than in eval method.
+	  Shifts the burden from runtime to compile time and results in
 	  ~5% performance boost.
 
         Added Immediates, which fill the value rib directly (16% bonus)
@@ -2259,15 +2263,15 @@ r1.1.0  Many many changes.  v1.1.0 is on average 45% faster than 1.0.3
         and chooses branches with a decidable constant test-exp:
            (if 3 1 2) => 1
            (if #f 1 2) => 2
-        
+
         Made SISC thread safe.  Also added two new methods in Interpreter:
 
         * newContext(Interpreter):  Creates a new Interpreter context
           in which expressions can be interpreted.  By having multiple
           Interpreter contexts, you can run multiple scheme programs in the
-          same environment simultaneously (multithreaded scheme).  
-  
-        * eval(String): Evaluates the given String as a scheme expression in 
+          same environment simultaneously (multithreaded scheme).
+
+        * eval(String): Evaluates the given String as a scheme expression in
           the current context and returns the resulting value.  This should
           be helpful for running scheme expressions from Java.
 
@@ -2275,7 +2279,7 @@ r1.1.0  Many many changes.  v1.1.0 is on average 45% faster than 1.0.3
 
         Fixed R5RS env handling.  There were a number of side cases
         where the R5RS env was not immutable, or where shadowing the R5RS
-        environment wasn't reflected in procedures defined before that 
+        environment wasn't reflected in procedures defined before that
         shadowed binding.
 
         Fixed abs for complex numbers.
@@ -2291,7 +2295,7 @@ r1.0.3  Cruft bug that disabled number->string
           allowed in a floating point calculation
         Some minor code cleanup
         Some minor speed improvements (very minor)
-r1.0.2  Added Boxes back into the language since they were used in 
+r1.0.2  Added Boxes back into the language since they were used in
   	  variable references.
 r1.0.1	Fixed continuation capturing bug related to side-effects on the
   	  value rib.

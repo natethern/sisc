@@ -1,10 +1,10 @@
 <chapter id="IO">
   <title>I/O</title>
   <para>
-      &SISC;'s I/O routines are implemented in a flexible manner, allowing 
+      &SISC;'s I/O routines are implemented in a flexible manner, allowing
     extensions to create new I/O sources that will behave as
     standard Scheme port objects.  The ports can then be operated on
-    with all &R5RS; port operations, as well as some &SISC; specific 
+    with all &R5RS; port operations, as well as some &SISC; specific
     port functions.
   </para>
   <sect1>
@@ -38,7 +38,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         <footnote>
           <para>
             Handling of JAR files in URLS may be dependent on the
-            &SISC; host language, as well as some uncommon protocols.  
+            &SISC; host language, as well as some uncommon protocols.
             FILE, HTTP and FTP should be expected to work with any
             host language.
           </para>
@@ -148,7 +148,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         automatically flush
         <footnote>
           <para>
-            The console output port is an exception, as it is 
+            The console output port is an exception, as it is
             an auto-flush port.
           </para>
         </footnote>.  Enabling auto-flush can be done when the
@@ -401,7 +401,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                   Writes exactly <parameter>count</parameter> characters from
                   the given string <parameter>buffer</parameter> starting from
                   the integer position <parameter>offset</parameter> to the
-                  implicit or specified character output port.  
+                  implicit or specified character output port.
                 </para>
               </blockquote>
             </para>
@@ -432,7 +432,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 </methodparam>
                 <methodparam choice="opt">
                   <parameter>encoding</parameter>
-                </methodparam>              
+                </methodparam>
                 <methodparam>
                   <parameter>procedure</parameter>
                 </methodparam>
@@ -490,7 +490,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           The following procedures wrap a thunk, redirecting the input
           and output of the thunk while it is evaluating to an input or
           output port other than the
-          <literal>current-input-port</literal> 
+          <literal>current-input-port</literal>
           and <literal>current-output-port</literal>. Invoking escaping
           continuations from inside the procedure restores the original
           port, and invoking a continuation captured inside the procedure
@@ -513,11 +513,11 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 </methodparam>
               </methodsynopsis>
               <blockquote>
-                <para>   
+                <para>
                   Evaluates <parameter>thunk</parameter> with
                   <parameter>input-port</parameter> as the
                   <literal>current-input-port</literal> for the duration
-                  of the evaluation.  
+                  of the evaluation.
                 </para>
               </blockquote>
             </para>
@@ -536,11 +536,11 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 </methodparam>
               </methodsynopsis>
               <blockquote>
-                <para>   
+                <para>
                   Evaluates <parameter>thunk</parameter> with
                   <parameter>output-port</parameter> as the
                   <literal>current-output-port</literal> for the duration
-                  of the evaluation.  
+                  of the evaluation.
                 </para>
               </blockquote>
             </para>
@@ -659,7 +659,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     </sect2>
     <sect2 id="StringPorts"> <title>String Ports</title>
       <para>
-        &requires; 
+        &requires;
         <emphasis role="bold">
           (import <emphasis>string-io</emphasis>)
         </emphasis>
@@ -792,7 +792,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
             </methodsynopsis>
             <blockquote>
-              <para>   
+              <para>
                 Evaluates <parameter>thunk</parameter> with a
                 string-input-port created from
                 <parameter>string</parameter> as the
@@ -813,7 +813,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
             </methodsynopsis>
             <blockquote>
-              <para>   
+              <para>
                 Evaluates <parameter>thunk</parameter> with a
                 string-output-port created as the
                 <literal>current-output-port</literal> for the duration
@@ -869,7 +869,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     <sect2 id="BinaryIO">
       <title>Binary Ports and Block IO</title>
       <para>
-        &requires; 
+        &requires;
         <emphasis role="bold">
           (import <emphasis>binary-io</emphasis>)
         </emphasis>
@@ -882,8 +882,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         Using character-oriented operations (such as the traditional &R5RS;
         functions <function>read</function>,
         <function>read-char</function>, <function>display</function>,
-        etc.) is an error. 
-        Binary ports also provide block input/output functions, that allow 
+        etc.) is an error.
+        Binary ports also provide block input/output functions, that allow
         a Scheme program to read blocks of more than one byte of data at a
         time from binary ports. &SISC; stores data that is read or is to be
         written in block fashion in a binary buffer (see <xref linkend="Buffers"/>).
@@ -1030,7 +1030,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
           </para>
           <para>
             There are several operations specifically available for
-            use on binary ports.  
+            use on binary ports.
           </para>
           <para id="func-peek-byte">
             <indexterm><primary>peek-byte</primary>
@@ -1099,7 +1099,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <parameter>binary-input-port</parameter> parameter
                 if provided,
                 into the binary buffer <parameter>buffer</parameter>
-                starting at position <parameter>offset</parameter>. 
+                starting at position <parameter>offset</parameter>.
                 Note that less
                 than <parameter>count</parameter> bytes may be read.
                 The number of bytes actually read is returned.  If the
@@ -1123,9 +1123,9 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-                Writes a single byte specified as an integer 
+                Writes a single byte specified as an integer
                 to the given <parameter>binary-output-port</parameter>
-                if provided, current output port otherwise. 
+                if provided, current output port otherwise.
               </para>
             </blockquote>
           </para>
@@ -1152,7 +1152,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             <blockquote>
               <para>
                 Writes <parameter>count</parameter> bytes of data from
-                the provided <parameter>buffer</parameter> at 
+                the provided <parameter>buffer</parameter> at
                 starting point <parameter>offset</parameter> to the
                 given <parameter>binary-output-port</parameter> or
                 to the current output port if unspecified.  Exactly
@@ -1201,14 +1201,14 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <sect3>
         <title>Buffer I/O</title>
         <para>
-          &requires; 
+          &requires;
           <emphasis role="bold">
             (import <emphasis>buffer-io</emphasis>)
           </emphasis>
-        </para>        
+        </para>
         <para>
           A module is also provided for input and output to and from
-          binary buffers using buffer ports, similar to character I/O to 
+          binary buffers using buffer ports, similar to character I/O to
           and from strings using string ports.
         </para>
         <para>
@@ -1238,7 +1238,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               &procedure;
               <methodsynopsis language="scheme">
                 <type>buffer-output-port</type>
-                <methodname>open-output-buffer</methodname> 
+                <methodname>open-output-buffer</methodname>
                 <void/>
               </methodsynopsis>
               <blockquote>
@@ -1328,7 +1328,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 </methodparam>
               </methodsynopsis>
               <blockquote>
-                <para>   
+                <para>
                   Evaluates <parameter>thunk</parameter> with a
                   buffer-input-port created from
                   <parameter>buffer</parameter> as the
@@ -1349,7 +1349,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 </methodparam>
               </methodsynopsis>
               <blockquote>
-                <para>   
+                <para>
                   Evaluates <parameter>thunk</parameter> with a
                   buffer-output-port created as the
                   <literal>current-output-port</literal> for the duration
@@ -1362,10 +1362,217 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         </para>
       </sect3>
     </sect2>
+    <sect2 id="JavaPorts"> <title>Java Ports</title>
+      <para>
+        &requires;
+        <emphasis role="bold">
+          (import <emphasis>java-io</emphasis>)
+        </emphasis>
+      </para>
+      <para>
+        This module provides procedures to convert between Scheme and
+        Java I/O types. In general, non-character Scheme ports map to
+        plain Java streams, while character Scheme ports map to Java
+        readers and writers.
+      </para>
+      <para>
+        The following example is somewhat contrived, but illustrates
+        a common usage pattern:
+        <programlisting>
+          <![CDATA[
+;; A convoluted Hello World example.
+(import s2j)
+(import java-io)
+
+(define-java-classes
+  (<java.lang.system> |java.lang.System|))
+
+(define-generic-java-field-accessors
+  (:jout out))
+
+(let ((stdout (open-character-output-port
+               (->binary-output-port
+                (:jout (java-null <java.lang.system>)) #t) #t)))
+  (display "Hello, world!" stdout))
+          ]]>
+        </programlisting>
+      </para>
+      <para>
+        <blockquote>
+          <para id="func--&gt;binary-input-port">
+            <indexterm><primary>-&gt;binary-input-port</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>binary-input-port</type>
+              <methodname>-&gt;binary-input-port</methodname>
+              <methodparam>
+                <parameter>jinput-stream</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a binary input port associated to the
+                <classname>java.io.InputStream</classname> object
+                passed as the <parameter>jinput-stream</parameter>
+                parameter.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func--&gt;binary-output-port">
+            <indexterm><primary>-&gt;binary-output-port</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>binary-output-port</type>
+              <methodname>-&gt;binary-output-port</methodname>
+              <methodparam>
+                <parameter>joutput-stream</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>aflush?</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a binary input port associated to the
+                <classname>java.io.OutputStream</classname> object
+                passed as the <parameter>joutput-stream</parameter>
+                parameter. If the optional boolean
+                <parameter>aflush?</parameter> parameter is not
+                provided, the port will not autoflush by default.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func--&gt;character-input-port">
+            <indexterm><primary>-&gt;character-input-port</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>character-input-port</type>
+              <methodname>-&gt;character-input-port</methodname>
+              <methodparam>
+                <parameter>jreader</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a character input port associated to the
+                <classname>java.io.Reader</classname> object passed as
+                the <parameter>jreader</parameter> parameter.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func--&gt;character-output-port">
+            <indexterm><primary>-&gt;character-output-port</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>character-output-port</type>
+              <methodname>-&gt;character-output-port</methodname>
+              <methodparam>
+                <parameter>jwriter</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>aflush?</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a binary input port associated to the
+                <classname>java.io.Writer</classname> object passed as
+                the <parameter>joutput-stream</parameter>
+                parameter. If the optional boolean
+                <parameter>aflush?</parameter> parameter is not
+                provided, the port will not autoflush by default.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func--&gt;jinput-stream">
+            <indexterm><primary>-&gt;jinput-stream</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>jinput-stream</type>
+              <methodname>-&gt;jinput-stream</methodname>
+              <methodparam>
+                <parameter>input-port</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a <classname>java.io.InputStream</classname>
+                object associated to the given Scheme
+                <parameter>input-port</parameter>. The function
+                produces an error if a character port is passed.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func--&gt;joutput-stream">
+            <indexterm><primary>-&gt;joutput-stream</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>joutput-stream</type>
+              <methodname>-&gt;joutput-stream</methodname>
+              <methodparam>
+                <parameter>output-port</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a <classname>java.io.OutputStream</classname>
+                object associated to the given Scheme
+                <parameter>output-port</parameter>. The function
+                produces an error if a character port is passed.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func--&gt;jreader">
+            <indexterm><primary>-&gt;jreader</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>jreader</type>
+              <methodname>-&gt;jreader</methodname>
+              <methodparam>
+                <parameter>character-input-port</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a <classname>java.io.Reader</classname> object
+                associated to the given Scheme
+                <parameter>character-input-port</parameter>.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func--&gt;jwriter">
+            <indexterm><primary>-&gt;jwriter</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>jwriter</type>
+              <methodname>-&gt;jwriter</methodname>
+              <methodparam>
+                <parameter>character-output-port</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a <classname>java.io.Writer</classname> object
+                associated to the given Scheme
+                <parameter>character-output-port</parameter>.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
     <sect2 id="SerialIO">
       <title>Serialization</title>
       <para>
-        &requires; 
+        &requires;
         <emphasis role="bold">
           (import <emphasis>serial-io</emphasis>)
         </emphasis>
@@ -1386,8 +1593,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         serialized values.
       </para>
       <para>
-        Serial ports are composed onto and thus are binary ports, 
-        i.e. all operations applicable to binary ports also apply to 
+        Serial ports are composed onto and thus are binary ports,
+        i.e. all operations applicable to binary ports also apply to
         serial ports.
       </para>
       <sect3 id="serialportcreation">
@@ -1429,7 +1636,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodsynopsis>
               <blockquote>
                 <para>
-                  Creates a serial output port which can be used to 
+                  Creates a serial output port which can be used to
                   write external representations of Scheme values
                   to the provided binary output port.
                 </para>
@@ -1496,7 +1703,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <para>
                   Calls <parameter>procedure</parameter> with a new
                   serial input port attached to
-                  <parameter>binary-input-port</parameter>. 
+                  <parameter>binary-input-port</parameter>.
                   The result of the thunk is returned.
                 </para>
               </blockquote>
@@ -1519,7 +1726,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <para>
                   Calls <parameter>procedure</parameter> with a new
                   serial output port attached to
-                  <parameter>binary-output-port</parameter>. 
+                  <parameter>binary-output-port</parameter>.
                   The result of the thunk is returned.
                 </para>
               </blockquote>
@@ -1570,7 +1777,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                   input port attached to the specified
                   <parameter>binary-output-port</parameter> as the
                   <literal>current-output-port</literal> for the
-                  duration of the evaluation. The port is 
+                  duration of the evaluation. The port is
                   <emphasis>not</emphasis> closed when
                   <parameter>thunk</parameter> returns.
                 </para>
@@ -1732,7 +1939,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
   <sect1 id="netio">
     <title>Networking</title>
     <para>
-        &requires; 
+        &requires;
       <emphasis role="bold">
         (import <emphasis>networking</emphasis>)
       </emphasis>
@@ -1758,17 +1965,17 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     </para>
     <itemizedlist>
       <listitem>
-        <para> 
+        <para>
           A hostname, to be resolved through the domain name system.
         </para>
       </listitem>
       <listitem>
-        <para> 
+        <para>
           An IPv4 network address in the standard dotted quad format. (RFC-791)
         </para>
       </listitem>
       <listitem>
-        <para> 
+        <para>
           An IPv6 network address in colon separated hexadecimal form,
           and zero-shortened form. (RFC-2373)
         </para>
@@ -1801,7 +2008,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-                Attempts to resolve a hostname provided as a string into an 
+                Attempts to resolve a hostname provided as a string into an
                 IP address in dotted-quad form.  If the host cannot be
                 found, &f; is returned.
               </para>
@@ -1883,7 +2090,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
               <methodparam choice="opt">
                 <parameter>encoding</parameter>
-              </methodparam>              
+              </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
@@ -1904,7 +2111,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
               <methodparam choice="opt">
                 <parameter>encoding</parameter>
-              </methodparam>                                          
+              </methodparam>
               <methodparam choice="opt">
                 <parameter>auto-flush</parameter>
               </methodparam>
@@ -1933,7 +2140,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-                Opens a binary input port to the socket.  
+                Opens a binary input port to the socket.
               </para>
             </blockquote>
           </para>
@@ -1958,7 +2165,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <emphasis>not</emphasis> auto-flush.
               </para>
             </blockquote>
-          </para>          
+          </para>
           <para id="func-close-socket">
             <indexterm><primary>close-socket</primary>
             </indexterm>
@@ -1972,7 +2179,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-                Closes an IP socket.  
+                Closes an IP socket.
               </para>
             </blockquote>
           </para>
@@ -2032,7 +2239,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 Attempts to connect to the host at the given hostname or IP
                 address encoded as a string, at the given TCP port
                 specified as an integer.  An error is raised if the host
-                cannot be found or the connection fails.  If successful, 
+                cannot be found or the connection fails.  If successful,
                 a socket is returned.
               </para>
             </blockquote>
@@ -2109,7 +2316,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <type>undefined</type>
               <methodname>set-so-timeout!</methodname>
               <methodparam>
-                <parameter>socket</parameter>	  
+                <parameter>socket</parameter>
               </methodparam>
               <methodparam>
                 <parameter>timeout</parameter>
@@ -2133,7 +2340,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       <title>UDP</title>
       <para>
         UDP sockets can be obtained for both receive only and
-        send/receive sessions. 
+        send/receive sessions.
       </para>
       <note>
         <para>
@@ -2194,7 +2401,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-                Opens a UDP socket for sending datagrams to 
+                Opens a UDP socket for sending datagrams to
                 the Internet host specified by
                 <parameter>remote-host</parameter>, on port
                 <parameter>remote-port</parameter>.
@@ -2207,7 +2414,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         After obtaining a UDP socket, input and output ports can be
         obtained in the usual manner.  It is an error to attempt to
         obtain an output-port from a listening UDP socket, or an input
-        port from a sending UDP socket.  
+        port from a sending UDP socket.
       </para>
       <para>
         UDP input ports behave as
@@ -2284,7 +2491,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 Datagrams larger than
                 <parameter>datagram-size</parameter> are truncated to
                 that size.  If unspecified, the default datagram size
-                is 1500 bytes.  
+                is 1500 bytes.
               </para>
             </blockquote>
           </para>
@@ -2308,13 +2515,13 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodsynopsis>
             <blockquote>
               <para>
-                Opens a multicast UDP socket for sending datagrams 
+                Opens a multicast UDP socket for sending datagrams
                 to the specified multicast
                 <parameter>group</parameter>, on the specified
                 <parameter>port</parameter>.  The returned socket will
                 also be capable of listening to that group on the same
                 port (and optionally bound only to the interface
-                addressed by <parameter>interface-address</parameter>), 
+                addressed by <parameter>interface-address</parameter>),
                 though the socket will not initially be a member of
                 the group.  If provided,
                 <parameter>datagram-size</parameter> specifies the
@@ -2322,24 +2529,24 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 Datagrams larger than
                 <parameter>datagram-size</parameter> are truncated to
                 that size.  If unspecified, the default datagram size
-                is 1500 bytes.  
+                is 1500 bytes.
               </para>
             </blockquote>
           </para>
         </blockquote>
       </para>
-      <para> 
+      <para>
         Once a sending socket has been obtained (the second form), an
         output-port can be obtained in the usual manner, and datagrams
         can be immediately sent to the multicast group.  To receive
         datagrams, sockets returned from both forms must
-        <emphasis>join</emphasis> a multicast group.  
+        <emphasis>join</emphasis> a multicast group.
       </para>
       <para>
         A multicast group is specified by a class D IP address and by a
         standard UDP port number. Class D IP addresses are in the range
         224.0.0.0 to 239.255.255.255, inclusive. The address 224.0.0.0 is
-        reserved and should not be used. 
+        reserved and should not be used.
       </para>
       <para>
         Groups are joined and left using the following functions:
@@ -2361,7 +2568,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
             </methodsynopsis>
             <blockquote>
-              <para>		
+              <para>
                 Causes the given multicast socket to join the group
                 specified by the Internet address in
                 <parameter>group</parameter>.  Once joined, read
@@ -2385,7 +2592,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
             </methodsynopsis>
             <blockquote>
-              <para>		
+              <para>
                 Causes the given multicast socket to leave the group
                 specified by the Internet address in
                 <parameter>group</parameter>.  Read operations on any
@@ -2426,7 +2633,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
             </methodsynopsis>
             <blockquote>
-              <para>		
+              <para>
                 Sets the multicast TTL of the given socket to
                 <parameter>ttl</parameter>, an integer.  All datagrams
                 sent after this call will have their TTL set to the
@@ -2445,7 +2652,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
   <sect1 id="UserDefinedPorts">
     <title>User Defined Ports</title>
     <para>
-        &requires; 
+        &requires;
       <emphasis role="bold">
         (import <emphasis>generic-io</emphasis>)
       </emphasis>
@@ -2503,7 +2710,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         filter ports, which provide a slot for storing a nested port.
         In a filter port, the methods transform the operation and read
         or write the resulting data to the nested port.  Finally, the
-        native port types are filter ports whose target is a Java 
+        native port types are filter ports whose target is a Java
         I/O stream.
       </para>
       <para>
@@ -2800,7 +3007,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               <para>
                 Pretty-prints the specified value, either to the specified
                 output-port, or to the console if no output-port is
-                specified. 
+                specified.
               </para>
             </blockquote>
           </para>
@@ -2848,7 +3055,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         by the file's extension) which type of file is being loaded to
         load that file in the correct manner.  The file types
         currently supported are those described in <xref
-                                                         linkend="FileExtensions"/>.  
+                                                         linkend="FileExtensions"/>.
       </para>
       <para>
         When a pure source file is loaded, each s-expression is evaluated
@@ -2908,7 +3115,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
         </blockquote>
-      </para>      
+      </para>
     </sect2>
     <sect2 id="Resources">
       <title>Locating Resources</title>
@@ -2966,7 +3173,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     <sect2 id="FileManipulation">
       <title>File Manipulation</title>
       <para>
-        &requires; 
+        &requires;
         <emphasis role="bold">
           (import <emphasis>file-manipulation</emphasis>)
         </emphasis>
@@ -2977,9 +3184,9 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         attributes.  The file-manipulation library acts on filenames
         in the same manner as other Scheme file related functions,
         e.g. it accepts file and directory names as strings, which are
-        resolved relative to the current URL.  
+        resolved relative to the current URL.
       </para>
-      <para> 
+      <para>
         The following functions act on both files and directories.
         With the exception of <function>file-exists?</function> and
         <function>get-parent-url</function>, the  behavior when
@@ -2998,7 +3205,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>      
+            <para>
               Attempts to remove the given file or directory.  If
               successful, <literal>#t</literal> is returned.
             </para>
@@ -3015,7 +3222,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>      
+            <para>
               Returns true if the given file or directory exists.
             </para>
           </blockquote>
@@ -3031,7 +3238,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>      
+            <para>
               Returns true if the given string names an existing
               directory.
             </para>
@@ -3048,7 +3255,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>      
+            <para>
               Returns true if the given string names an existing
               file.
             </para>
@@ -3065,10 +3272,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>      
+            <para>
               Returns the number of milliseconds since the Unix
               epoch (Jan 1, 1970) of the date the file or directory
-              was last modified.  
+              was last modified.
             </para>
           </blockquote>
         </para>
@@ -3086,12 +3293,12 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>      
+            <para>
               Renames the given source file or directory to the
               destination.  This can be used both to rename a file
               or directory or to move a file/directory in the same
               filesystem.  If successful, <literal>#t</literal> is
-              returned.  
+              returned.
             </para>
           </blockquote>
         </para>
@@ -3109,7 +3316,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>      
+            <para>
               Sets the last modified date of the given filename to
               the given integer (in number of milliseconds since the
               epoch).  Returns <literal>#t</literal> if successful.
@@ -3127,7 +3334,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
             </methodsynopsis>
             <blockquote>
-              <para>      
+              <para>
                 Given any URL, returns the URL of its parent.  For
                 filenames, as an example, the parent directory is
                 returned.
@@ -3151,7 +3358,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>     
+            <para>
               Returns <literal>#t</literal> if the file can be opened
               for reading.
             </para>
@@ -3168,7 +3375,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>     
+            <para>
               Returns <literal>#t</literal> if the file can be opened
               for writing.
             </para>
@@ -3185,8 +3392,8 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>      
-              Returns the length, in bytes, of the given file.  
+            <para>
+              Returns the length, in bytes, of the given file.
             </para>
           </blockquote>
         </para>
@@ -3201,7 +3408,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>      
+            <para>
               Sets the given file read-only.  Returns
               <literal>#t</literal> if successful.
             </para>
@@ -3226,7 +3433,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </methodparam>
           </methodsynopsis>
           <blockquote>
-            <para>      
+            <para>
               Retrieves the children of the given directory, as a
               list of strings.  Each string names one child, and is
               a filename relative to the given directory.
@@ -3244,7 +3451,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
             </methodsynopsis>
             <blockquote>
-              <para>      
+              <para>
                 Attempts to creates the given directory.  Returns
                 <literal>#t</literal> if successful.
               </para>
@@ -3261,7 +3468,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </methodparam>
             </methodsynopsis>
             <blockquote>
-              <para>      
+              <para>
                 Attempts to creates the given directory and all
                 non-existing parent directories.  Returns
                 <literal>#t</literal> if successful.
