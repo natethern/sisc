@@ -339,3 +339,11 @@
            (with/fc
                (lambda (m e) (e 2))
              (lambda () (/ (/ (/ (/ 1 0)))))))
+
+(should-be 1456295 #f
+           (with/fc
+               (lambda (m e) #f)
+               (lambda () (import threading)
+                          (begin (thread/holds-lock? (mutex/new) (mutex/new)) #t))))
+
+

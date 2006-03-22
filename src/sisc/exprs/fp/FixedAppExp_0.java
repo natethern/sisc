@@ -5,7 +5,6 @@ import java.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.exprs.AppExp;
-import sisc.exprs.FillRibExp;
 import sisc.exprs.FreeReferenceExp;
 import sisc.nativefun.FixableProcedure;
 import sisc.nativefun.NestedPrimRuntimeException;

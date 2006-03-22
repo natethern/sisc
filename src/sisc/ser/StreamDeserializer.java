@@ -4,7 +4,6 @@ import sisc.util.Util;
 import java.util.*;
 import java.io.*;
 import sisc.data.*;
-import sisc.env.SymbolicEnvironment;
 import sisc.interpreter.AppContext;
 
 public class StreamDeserializer extends SLL2Deserializer {

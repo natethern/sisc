@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import sisc.data.Expression;
-import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
 
 public interface Serializer extends ObjectOutput {

@@ -5,7 +5,6 @@ import java.util.*;
 import sisc.data.Expression;
 import sisc.data.Singleton;
 import sisc.data.Value;
-import sisc.env.SymbolicEnvironment;
 import sisc.interpreter.AppContext;
 import sisc.util.InternedValue;
 

@@ -4,15 +4,10 @@ import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.data.*;
 import java.io.IOException;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.net.URL;
 import sisc.io.StreamOutputPort;
 import sisc.io.StreamInputPort;
-import sisc.io.BinaryOutputPort;
-import sisc.io.BinaryInputPort;
 
 public class BufferIO extends IndexedProcedure {
 
@@ -25,7 +20,7 @@ public class BufferIO extends IndexedProcedure {
 
     public static class Index extends IndexedLibraryAdapter {
         
-        public Value construct(int id) {
+        public Value construct(Object context, int id) {
             return new BufferIO(id);
         }
         

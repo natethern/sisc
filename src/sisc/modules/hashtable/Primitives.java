@@ -9,6 +9,213 @@ public class Primitives extends IndexedFixableProcedure {
     public static final Symbol SHASHB =
         Symbol.intern("sisc.modules.hashtable.Messages");
 
+    public static final HashtableBase shash(Value o) {
+        try {
+            return (HashtableBase)o;
+        } catch (ClassCastException e) { typeError(SHASHB, "hashtable", o); }
+        return null;
+    }
+
+    /**
+     * The Simple procedures are purely functional procedures
+     * which do not need to access interpreter registers to execute
+     */
+    public static class Simple extends IndexedFixableProcedure {
+        public Simple() {}
+
+        Simple(int id) {
+            super(id);
+        }
+ 
+        public Value apply(Value v1) throws ContinuationException {
+            switch (id) {
+              case HTQ:
+                  return truth(v1 instanceof HashtableBase);
+              case HT_HASH_BY_EQ:
+                  return Quantity.valueOf(System.identityHashCode(v1));
+              case HT_HASH_BY_EQV:
+                  return Quantity.valueOf(v1.hashCode());
+              case HT_HASH_BY_EQUAL:
+                  return Quantity.valueOf(v1.valueHashCode());
+              case HT_HASH_BY_STRING_EQ:
+                  return Quantity.valueOf(string(v1).hashCode());
+              case HT_HASH_BY_STRING_CI_EQ:
+                  return Quantity.valueOf(string(v1).toLowerCase().hashCode());
+              default:
+                  HashtableBase h = shash(v1);
+                  switch(id) {
+                    case HT_TO_ALIST:
+                        return h.toAList();
+                    case HT_KEYS:
+                        return h.keys();
+                    case HT_SIZE:
+                        return Quantity.valueOf(h.size());
+                    case HT_THREAD_SAFEQ:
+                        return truth(h instanceof SynchronizedHashtable);
+                    case HT_WEAKQ:
+                        return truth((h instanceof WeakHashtable) ||
+                                     ((h instanceof SynchronizedHashtable) &&
+                                      ((SynchronizedHashtable)h).getDelegate()
+                                      instanceof WeakHashtable));
+                    case HT_EQUALSFN:
+                        return h.getEqualsProc();
+                    case HT_HASHFN:
+                        return h.getHashProc();
+                    default:
+                        throwArgSizeException();
+                        return VOID; //dummy
+                  }
+            }
+        }
+
+        public Value apply(Value v1, Value v2) throws ContinuationException {
+            return apply(new Value[] {v1, v2});
+        }
+
+        public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+            return apply(new Value[] {v1, v2, v3}); 
+        }
+
+        public Value apply(Value[] v) throws ContinuationException {
+            if (id == HT_MAKE) {
+                if (v.length == 4) {
+                    Procedure equalsProc = proc(v[0]);
+                    Procedure hashProc = proc(v[1]);
+                    HashtableBase res =
+                        truth(v[3]) ?
+                        new WeakHashtable(equalsProc, hashProc) :
+                        new Hashtable(equalsProc, hashProc);
+                    if (truth(v[2])) {
+                        res = new SynchronizedHashtable(res);
+                    }
+                    return res;
+                } else {
+                    throwArgSizeException();
+                }
+            }
+
+            Value def = FALSE;
+            Value res = null;
+            HashtableBase h = shash(v[0]);
+            switch(id) {
+              case HT_GET:
+                  switch (v.length) {
+                    case 2: break;
+                    case 3: def = v[2]; break;
+                    default:
+                        throwArgSizeException();
+                  }
+                  res = h.get(v[1]);
+                  break;
+              default:
+                  throwArgSizeException();
+            }
+            return (res == null) ? def : res;
+        }
+    }
+    
+    /**
+     * The Complex procedures either have a side effect, or
+     * require the interpreter to execute
+     */
+    public static class Complex extends CommonIndexedProcedure {
+        public Complex() {}
+        
+        Complex(int id) {
+            super(id);
+        }
+
+        public Value apply(Value v1) throws ContinuationException {
+            HashtableBase h = shash(v1);
+            switch(id) {
+              case HT_CLEAR:
+                  h.clear();
+                  return VOID;
+              default:
+                  throwArgSizeException();
+            }
+            return VOID; //dummy
+        }            
+
+        public Value apply(Value v1, Value v2) throws ContinuationException {
+            return apply(new Value[] {v1, v2});
+        }
+
+        public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+            return apply(new Value[] {v1, v2, v3}); 
+        }
+
+        public Value apply(Value[] v) throws ContinuationException {
+            Value def = FALSE;
+            Value res = null;
+            HashtableBase h = shash(v[0]);
+            switch(id) {
+              case HT_PUT:
+                  switch (v.length) {
+                    case 3: break;
+                    case 4: def = v[3]; break;
+                    default:
+                        throwArgSizeException();
+                  }
+                  res = h.put(v[1], v[2]);
+                  break;
+              case HT_REMOVE:
+                  switch (v.length) {
+                    case 2: break;
+                    case 3: def = v[2]; break;
+                    default:
+                        throwArgSizeException();
+                  }
+                  res = h.remove(v[1]);
+                  break;
+              case HT_ADD_ALIST:
+                  switch (v.length) {
+                    case 2: h.addAList(pair(v[1])); return h;
+                    default:
+                        throwArgSizeException();
+                  }
+              default:
+                  throwArgSizeException();
+            }
+            return (res == null) ? def : res;
+        }
+    }
+    
+    /**
+     * The Index 
+     */
+    public static class Index extends IndexedLibraryAdapter {
+
+        public Index() {
+            define("hashtable/make", HT_MAKE);
+            define("hashtable?", HTQ);
+            define("hashtable/put!", Complex.class, HT_PUT);
+            define("hashtable/get", HT_GET);
+            define("hashtable/remove!", Complex.class, HT_REMOVE);
+            define("hashtable/clear!", Complex.class, HT_CLEAR);
+            define("hashtable/size", HT_SIZE);
+            define("hashtable->alist", HT_TO_ALIST);
+            define("hashtable/add-alist!", Complex.class, HT_ADD_ALIST);
+            define("hashtable/keys", HT_KEYS);
+            define("hashtable/thread-safe?", HT_THREAD_SAFEQ);
+            define("hashtable/weak?", HT_WEAKQ);
+            define("hashtable/equivalence-function", HT_EQUALSFN);
+            define("hashtable/hash-function", HT_HASHFN);
+            define("hash-by-eq", HT_HASH_BY_EQ);
+            define("hash-by-eqv", HT_HASH_BY_EQV);
+            define("hash-by-equal", HT_HASH_BY_EQUAL);
+            define("hash-by-string=", HT_HASH_BY_STRING_EQ);
+            define("hash-by-string-ci=", HT_HASH_BY_STRING_CI_EQ);
+        }
+        
+        public Value construct(Object context, int id) {
+            if (context == null || context==Simple.class) {
+                return new Simple(id);
+            } else return new Complex(id);
+        }
+        
+    }
+
     protected static final int
         //NEXT = 19,
         HT_MAKE = 0,
@@ -30,163 +237,7 @@ public class Primitives extends IndexedFixableProcedure {
         HT_HASH_BY_STRING_CI_EQ = 18,
         HT_EQUALSFN = 15,
         HT_HASHFN = 16;
-
-    public static class Index extends IndexedLibraryAdapter {
-
-        public Value construct(int id) {
-            return new Primitives(id);
-        }
-
-        public Index() {
-            define("hashtable/make", HT_MAKE);
-            define("hashtable?", HTQ);
-            define("hashtable/put!", HT_PUT);
-            define("hashtable/get", HT_GET);
-            define("hashtable/remove!", HT_REMOVE);
-            define("hashtable/clear!", HT_CLEAR);
-            define("hashtable/size", HT_SIZE);
-            define("hashtable->alist", HT_TO_ALIST);
-            define("hashtable/add-alist!", HT_ADD_ALIST);
-            define("hashtable/keys", HT_KEYS);
-            define("hashtable/thread-safe?", HT_THREAD_SAFEQ);
-            define("hashtable/weak?", HT_WEAKQ);
-            define("hashtable/equivalence-function", HT_EQUALSFN);
-            define("hashtable/hash-function", HT_HASHFN);
-            define("hash-by-eq", HT_HASH_BY_EQ);
-            define("hash-by-eqv", HT_HASH_BY_EQV);
-            define("hash-by-equal", HT_HASH_BY_EQUAL);
-            define("hash-by-string=", HT_HASH_BY_STRING_EQ);
-            define("hash-by-string-ci=", HT_HASH_BY_STRING_CI_EQ);
-        }
-    }
-    
-    public Primitives(int id) {
-        super(id);
-    }
-    
-    public Primitives() {}
-
-    public static final HashtableBase shash(Value o) {
-        try {
-            return (HashtableBase)o;
-        } catch (ClassCastException e) { typeError(SHASHB, "hashtable", o); }
-        return null;
-    }
-
-    public Value apply(Value v1) throws ContinuationException {
-        switch (id) {
-          case HTQ:
-              return truth(v1 instanceof HashtableBase);
-          case HT_HASH_BY_EQ:
-              return Quantity.valueOf(System.identityHashCode(v1));
-          case HT_HASH_BY_EQV:
-              return Quantity.valueOf(v1.hashCode());
-          case HT_HASH_BY_EQUAL:
-              return Quantity.valueOf(v1.valueHashCode());
-          case HT_HASH_BY_STRING_EQ:
-              return Quantity.valueOf(string(v1).hashCode());
-          case HT_HASH_BY_STRING_CI_EQ:
-              return Quantity.valueOf(string(v1).toLowerCase().hashCode());
-          default:
-              HashtableBase h = shash(v1);
-              switch(id) {
-                case HT_CLEAR:
-                    h.clear();
-                    return VOID;
-                case HT_TO_ALIST:
-                    return h.toAList();
-                case HT_KEYS:
-                    return h.keys();
-                case HT_SIZE:
-                    return Quantity.valueOf(h.size());
-                case HT_THREAD_SAFEQ:
-                    return truth(h instanceof SynchronizedHashtable);
-                case HT_WEAKQ:
-                    return truth((h instanceof WeakHashtable) ||
-                                 ((h instanceof SynchronizedHashtable) &&
-                                  ((SynchronizedHashtable)h).getDelegate()
-                                  instanceof WeakHashtable));
-                case HT_EQUALSFN:
-                    return h.getEqualsProc();
-                case HT_HASHFN:
-                    return h.getHashProc();
-                default:
-                    throwArgSizeException();
-                    return VOID; //dummy
-              }
-        }
-    }
-
-    public Value apply(Value v1, Value v2) throws ContinuationException {
-        return apply(new Value[] {v1, v2});
-    }
-
-    public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
-        return apply(new Value[] {v1, v2, v3}); 
-    }
-
-    public Value apply(Value[] v) throws ContinuationException {
-        if (id == HT_MAKE) {
-            if (v.length == 4) {
-                Procedure equalsProc = proc(v[0]);
-                Procedure hashProc = proc(v[1]);
-                HashtableBase res =
-                    truth(v[3]) ?
-                    new WeakHashtable(equalsProc, hashProc) :
-                    new Hashtable(equalsProc, hashProc);
-                if (truth(v[2])) {
-                    res = new SynchronizedHashtable(res);
-                }
-                return res;
-            } else {
-                throwArgSizeException();
-            }
-        }
-
-        Value def = FALSE;
-        Value res = null;
-        HashtableBase h = shash(v[0]);
-        switch(id) {
-          case HT_PUT:
-              switch (v.length) {
-                case 3: break;
-                case 4: def = v[3]; break;
-                default:
-                    throwArgSizeException();
-              }
-              res = h.put(v[1], v[2]);
-              break;
-          case HT_GET:
-              switch (v.length) {
-                case 2: break;
-                case 3: def = v[2]; break;
-                default:
-                    throwArgSizeException();
-              }
-              res = h.get(v[1]);
-              break;
-          case HT_REMOVE:
-              switch (v.length) {
-                case 2: break;
-                case 3: def = v[2]; break;
-                default:
-                    throwArgSizeException();
-              }
-              res = h.remove(v[1]);
-              break;
-          case HT_ADD_ALIST:
-              switch (v.length) {
-                case 2: h.addAList(pair(v[1])); return h;
-                default:
-                    throwArgSizeException();
-              }
-          default:
-              throwArgSizeException();
-        }
-        return (res == null) ? def : res;
-    }
-
-}
+ }
 
 /*
  * The contents of this file are subject to the Mozilla Public

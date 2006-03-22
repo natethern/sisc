@@ -1,15 +1,9 @@
 package sisc.interpreter;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 
-import sisc.REPL;
 import sisc.ser.*;
-import sisc.boot.HeapAnchor;
 import sisc.data.*;
 
 import java.security.AccessControlException;

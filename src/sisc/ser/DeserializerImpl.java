@@ -7,7 +7,6 @@ import java.math.BigInteger;
 
 import sisc.data.Expression;
 import sisc.data.Value;
-import sisc.util.Util;
 import sisc.interpreter.AppContext;
 
 public abstract class DeserializerImpl extends BerEncoding implements Deserializer {

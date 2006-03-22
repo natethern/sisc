@@ -396,7 +396,7 @@ public class Interpreter extends Util {
     protected CallFrame frameFreeList;
     protected int frameFreeListSize;
 
-    private final CallFrame createFrame(Expression n,
+    public final CallFrame createFrame(Expression n,
                                         Value[] v,
                                         boolean vk,
                                         Value[] l,

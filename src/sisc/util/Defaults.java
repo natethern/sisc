@@ -1,7 +1,5 @@
 package sisc.util;
 
-import sisc.data.Value;
-
 public abstract class Defaults {
 
     public static int     SYNOPSIS_LENGTH             = 30;

@@ -1,8 +1,6 @@
 package sisc.ser;
 
 import java.io.*;
-import java.math.*;
-import sisc.env.SymbolicEnvironment;
 import sisc.data.Expression;
 import sisc.data.Singleton;
 import sisc.interpreter.Context;

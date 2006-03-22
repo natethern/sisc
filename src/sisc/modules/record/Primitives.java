@@ -3,8 +3,9 @@ package sisc.modules.record;
 import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
+import sisc.util.Util;
 
-public class Primitives extends IndexedFixableProcedure {
+public abstract class Primitives extends Util {
 
     public static final Symbol SRECORDB =
         Symbol.intern("sisc.modules.record.Messages");
@@ -17,28 +18,6 @@ public class Primitives extends IndexedFixableProcedure {
         RECORD_REF = 5,
         RECORD_SET = 6;
 
-    public static class Index extends IndexedLibraryAdapter {
-
-        public Value construct(int id) {
-            return new Primitives(id);
-        }
-
-        public Index() {
-            define("make-record", RECORD_MAKE);
-            define("record?", RECORDQ);
-            define("record-type", RECORD_TYPE);
-            define("record-type!", RECORD_SET_TYPE);
-            define("record-ref", RECORD_REF);
-            define("record-set!", RECORD_SET);
-        }
-    }
-    
-    public Primitives(int id) {
-        super(id);
-    }
-    
-    public Primitives() {}
-
     public static final Record record(Value o) {
         try {
             return (Record)o;
@@ -46,43 +25,96 @@ public class Primitives extends IndexedFixableProcedure {
         return null;
     }
 
-    public Value apply(Value v1) throws ContinuationException {
-        switch (id) {
-        case RECORDQ:
-            return truth(v1 instanceof Record);
-        case RECORD_TYPE:
-            return record(v1).getType();
-        default:
-            throwArgSizeException();
+    /**
+     * The Simple procedures are purely functional procedures
+     * which do not need to access interpreter registers to execute
+     */
+    public static class Simple extends IndexedFixableProcedure {
+        public Simple() {}
+
+        Simple(int id) {
+            super(id);
         }
-        return VOID;
+
+        public Value apply(Value v1) throws ContinuationException {
+            switch (id) {
+            case RECORDQ:
+                return truth(v1 instanceof Record);
+            case RECORD_TYPE:
+                return record(v1).getType();
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
+
+        public Value apply(Value v1, Value v2) throws ContinuationException {
+            switch (id) {
+            case RECORD_MAKE:
+                return new Record(v1, num(v2).indexValue());
+            case RECORD_REF:
+                return record(v1).getSlot(num(v2).indexValue());
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
     }
     
-    
-    public Value apply(Value v1, Value v2) throws ContinuationException {
-        switch (id) {
-        case RECORD_MAKE:
-            return new Record(v1, num(v2).indexValue());
-        case RECORD_SET_TYPE:
-            record(v1).setType(v2);
-            return VOID;
-        case RECORD_REF:
-            return record(v1).getSlot(num(v2).indexValue());
-        default:
-            throwArgSizeException();
+    /**
+     * The Complex procedures either have a side effect, or
+     * require the interpreter to execute
+     */
+    public static class Complex extends CommonIndexedProcedure {
+        public Complex() {}
+     
+        Complex(int id) {
+            super(id);
         }
-        return VOID;
+
+        public Value apply(Value v1, Value v2) throws ContinuationException {
+            switch (id) {
+            case RECORD_SET_TYPE:
+                record(v1).setType(v2);
+                return VOID;
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
+
+        public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+            switch (id) {
+            case RECORD_SET:
+                record(v1).setSlot(num(v2).indexValue(), v3);
+                return VOID;
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
     }
     
-    public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
-        switch (id) {
-        case RECORD_SET:
-            record(v1).setSlot(num(v2).indexValue(), v3);
-            return VOID;
-        default:
-            throwArgSizeException();
+    /**
+     * The Index 
+     */
+    public static class Index extends IndexedLibraryAdapter {
+
+        public Index() {
+            define("make-record", RECORD_MAKE);
+            define("record?", RECORDQ);
+            define("record-type", RECORD_TYPE);
+            define("record-type!", Complex.class, RECORD_SET_TYPE);
+            define("record-ref", RECORD_REF);
+            define("record-set!", Complex.class, RECORD_SET);
         }
-        return VOID;
+        
+        public Value construct(Object context, int id) {
+            if (context == null || context==Simple.class) {
+                return new Simple(id);
+            } else return new Complex(id);
+        }
+        
     }
 }
 

@@ -553,8 +553,7 @@ public class Compiler extends CompilerConstants {
         InputPort in=new StreamInputPort(System.in);
         SymbolicEnvironment env=new MemorySymEnv();
         Compiler.addSpecialForms(env);
-        new sisc.modules.SimplePrimitives.Index().bindAll(r, env);        
-        new sisc.modules.ComplexPrimitives.Index().bindAll(r, env);        
+        new sisc.modules.Primitives.Index().bindAll(r, env);        
         Compiler c=new Compiler();
         Expression v=c.compile(r, p.nextExpression(in), env);
         System.out.println(v.express());

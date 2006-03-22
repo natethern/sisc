@@ -412,7 +412,8 @@
         <para>
          Often it is unnecessary to have access to the full Interpreter
          context to implement a native procedure.  If the 
-         arguments to the procedure are sufficient, it is recommended
+         arguments to the procedure are sufficient and the procedure
+         is purely functional (causes no side effects), it is recommended
          that the programmer create a <emphasis>fixable</emphasis>
          native procedure.  These native procedures may be inlined
          into generated code when enabled, allowing much faster

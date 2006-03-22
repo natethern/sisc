@@ -8,98 +8,59 @@ import sisc.nativefun.*;
 import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.util.ExpressionVisitor;
+import sisc.util.Util;
 
-public class Threads extends IndexedFixableProcedure {
-
-    protected static final Symbol THREADB =
-        Symbol.intern("sisc.modules.Messages");
-
-    protected static final Symbol MUTEX = Symbol.get("mutex");
-
-    protected static final int // {0,21} 
-        THREADSTART = 1,
-        THREADYIELD = 2,
-        THREADSLEEP = 3,
-        THREADINTERRUPT = 4,
-        THREADJOIN = 5,
-        THREADCURRENT = 6,
-        THREADQ = 7,
-        THREADNOTIFY = 8,
-        THREADNOTIFYALL = 9,
-        THREADWAIT = 10,
-        THREADNAME = 11,
-        THREADPRIORITY = 12,
-        THREADDAEMONQ = 13,
-        SETTHREADNAME = 14,
-        SETTHREADPRIORITY = 15,
-        SETTHREADDAEMON = 16,
-        THREADSTATE = 17,
-        THREADINTERRUPTEDQ = 18,
-        THREADHOLDSLOCKQ = 19,
-        THREADSRUNNING = 20,
-        MUTEXNEW = 22,
-        MUTEXLOCK = 23,
-        MUTEXUNLOCK = 24,
-        CONDVARNOTIFY = 25,
-        CONDVARNOTIFYALL = 26,
-        MUTEXOF = 28,
-        MUTEXQ = 29,
-        CONDVARQ = 30,
-        CONDVARNEW = 31,
-        THREADSETRESULT = 32;
+public class Threads extends Util {
 
     protected static Symbol S_READY = Symbol.get("ready"),
         S_RUNNING = Symbol.get("running"),
         S_FINISHED = Symbol.get("finished"),
         S_FINISHED_ABNORMALLY = Symbol.get("finished-with-error");
 
-    public static class Index extends IndexedLibraryAdapter {
 
-        public Value construct(int id) {
-            return new Threads(id);
-        }
+    protected static final Symbol THREADB =
+        Symbol.intern("sisc.modules.Messages");
 
-        public Index() {
-            define("thread?", THREADQ);
-            define("thread/start", THREADSTART);
-            define("thread/yield", THREADYIELD);
-            define("thread/interrupt", THREADINTERRUPT);
-            define("thread/join", THREADJOIN);
-            define("thread/current", THREADCURRENT);
-            define("thread/notify", THREADNOTIFY);
-            define("thread/notify-all", THREADNOTIFYALL);
-            define("thread/wait", THREADWAIT);
-            define("thread/name", THREADNAME);
-            define("thread/name!", SETTHREADNAME);
-            define("thread/priority", THREADPRIORITY);
-            define("thread/daemon?", THREADDAEMONQ);
-            define("thread/daemon!", SETTHREADDAEMON);
-            define("thread/priority!", SETTHREADPRIORITY);
-            define("thread/state", THREADSTATE);
-            define("thread/interrupted?", THREADINTERRUPTEDQ);
-            define("thread/holds-lock?", THREADHOLDSLOCKQ);
+    protected static final Symbol MUTEX = Symbol.get("mutex");
 
-            define("thread/_set-result!", THREADSETRESULT);
-            define("thread/_active-thread-count", THREADSRUNNING);
-
-            define("condvar?", CONDVARQ);
-            define("condvar/new", CONDVARNEW);
-            define("condvar/notify", CONDVARNOTIFY);
-            define("condvar/notify-all", CONDVARNOTIFYALL);
-
-            define("mutex?", MUTEXQ);
-            define("mutex-of", MUTEXOF);
-            define("mutex/new", MUTEXNEW);
-            define("mutex/lock!", MUTEXLOCK);
-            define("mutex/unlock!", MUTEXUNLOCK);
-        }
+    public static final SchemeThread sthread(Value o) {
+        try {
+            return (SchemeThread)o;
+        } catch (ClassCastException e) { typeError(THREADB, 
+                                                   "sthread", o); }
+        return null;
     }
 
-    public Threads(int id) {
-        super(id);
+    public static final Mutex mutex(Value o) {
+        try {
+            return (Mutex)o;
+        } catch (ClassCastException e) { typeError(THREADB,
+                                                   "mutex", o); }
+        return null;
     }
 
-    public Threads() {}
+    public static final CondVar condvar(Value o) {
+        try {
+            return (CondVar)o;
+        } catch (ClassCastException e) { typeError(THREADB, 
+                                                   "condvar", o); }
+        return null;
+    }
+
+    static Symbol stateOf(SchemeThread c) {
+        switch (c.getState()) {
+        case SchemeThread.READY:
+            return S_READY;
+        case SchemeThread.RUNNING:
+            return S_RUNNING;
+        case SchemeThread.FINISHED:
+            return S_FINISHED;
+        case SchemeThread.FINISHED_ABNORMALLY:
+            return S_FINISHED_ABNORMALLY;
+        default:
+            return null;
+        }
+    } 
 
     public static class CondVar extends Value implements NamedValue {
 
@@ -227,7 +188,6 @@ public class Threads extends IndexedFixableProcedure {
                 } catch (InterruptedException e) {}
             }
         }
-
         public void display(ValueWriter w) throws IOException {
             displayNamedOpaque(w, "mutex");
         }
@@ -255,223 +215,273 @@ public class Threads extends IndexedFixableProcedure {
         }
     }
 
-    public static final SchemeThread sthread(Value o) {
-        try {
-            return (SchemeThread)o;
-        } catch (ClassCastException e) { typeError(THREADB, 
-                                                   "sthread", o); }
-        return null;
-    }
+    public static class Index extends IndexedLibraryAdapter {
 
-    public static final Mutex mutex(Value o) {
-        try {
-            return (Mutex)o;
-        } catch (ClassCastException e) { typeError(THREADB,
-                                                   "mutex", o); }
-        return null;
-    }
-
-    public static final CondVar condvar(Value o) {
-        try {
-            return (CondVar)o;
-        } catch (ClassCastException e) { typeError(THREADB, 
-                                                   "condvar", o); }
-        return null;
-    }
-
-    static Symbol stateOf(SchemeThread c) {
-        switch (c.getState()) {
-        case SchemeThread.READY:
-            return S_READY;
-        case SchemeThread.RUNNING:
-            return S_RUNNING;
-        case SchemeThread.FINISHED:
-            return S_FINISHED;
-        case SchemeThread.FINISHED_ABNORMALLY:
-            return S_FINISHED_ABNORMALLY;
-        default:
-            return null;
+        public Value construct(Object context, int id) {
+            if (context == null || context == Simple.class) {
+                return new Simple(id);            
+            } else return new Complex(id);
         }
-    } 
 
+        public Index() {
+            define("thread/daemon!", Complex.class, SETTHREADDAEMON);
+            define("thread/interrupt", Complex.class, THREADINTERRUPT);
+            define("thread/join", Complex.class, THREADJOIN);
+            define("thread/name!", Complex.class, SETTHREADNAME);
+            define("thread/new", Complex.class, THREADNEW);
+            define("thread/notify", Complex.class, THREADNOTIFY);
+            define("thread/notify-all", Complex.class, THREADNOTIFYALL);
+            define("thread/priority!", Complex.class, SETTHREADPRIORITY);
+            define("thread/result", Complex.class, THREADRESULT);
+            define("thread/_set-result!", Complex.class, THREADSETRESULT);
+            define("thread/start", Complex.class, THREADSTART);
+            define("thread/yield", Complex.class, THREADYIELD);
 
-    public Value apply() throws ContinuationException {
-        switch(id) {
-        case MUTEXNEW:
-            return new Mutex();
-        case CONDVARNEW:
-            return new CondVar();
-        case THREADCURRENT:
-            SchemeThread t=(SchemeThread)Context.lookupThreadContext().hostThread.get();
-            if (t==null) return FALSE;
-            else return t;
-        //case THREADSRUNNING:
-        //    return Quantity.valueOf(SchemeThread.schemeThreads.activeCount());
-        case THREADYIELD:
-            Thread.yield();
-            return VOID;
-        default:
-            throwArgSizeException();
+            define("condvar/notify", Complex.class, CONDVARNOTIFY);
+            define("condvar/notify-all", Complex.class, CONDVARNOTIFYALL);
+
+            define("mutex/lock!", Complex.class, MUTEXLOCK);
+            define("mutex/unlock!", Complex.class, MUTEXUNLOCK);
+
+            define("thread?", THREADQ);
+            define("thread/current", THREADCURRENT);
+            define("thread/wait", THREADWAIT);
+            define("thread/name", THREADNAME);
+            define("thread/daemon?", THREADDAEMONQ);
+            define("thread/priority",THREADPRIORITY);
+            define("thread/state", THREADSTATE);
+            define("thread/interrupted?", THREADINTERRUPTEDQ);
+            define("thread/holds-lock?", THREADHOLDSLOCKQ);
+
+            define("thread/_active-thread-count", THREADSRUNNING);
+
+            define("condvar?", CONDVARQ);
+            define("condvar/new", CONDVARNEW);
+            
+            define("mutex?", MUTEXQ);
+            define("mutex-of", MUTEXOF);
+            define("mutex/new", MUTEXNEW);
         }
-        return VOID;
     }
-    
-    public Value apply(Value v1) throws ContinuationException {
-        switch(id) {
-        case THREADQ:
-            return truth(v1 instanceof SchemeThread);
-        case MUTEXQ:
-            return truth(v1 instanceof Mutex);
-        case CONDVARQ:
-            return truth(v1 instanceof CondVar);
-        case MUTEXOF:
-            return Mutex.of(v1);
-        case MUTEXLOCK:
-            return mutex(v1).acquire();
-        case MUTEXUNLOCK:
-            mutex(v1).unlock();
-            return TRUE;
-        case CONDVARNOTIFY:
-            condvar(v1).c_notify();
-            return VOID;
-        case CONDVARNOTIFYALL:
-            condvar(v1).c_notifyall();
-            return VOID;
-        case THREADSTART:
-            SchemeThread c=sthread(v1);
-            c.start();
-            while (c.state==SchemeThread.READY) {
-                synchronized(c) {
-                    try {
-                        c.wait(500);
-                    } catch (InterruptedException e) {}
-                }
+
+    /**
+     * The Simple procedures are purely functional procedures
+     * which do not need to access interpreter registers to execute
+     */
+    public static class Simple extends IndexedFixableProcedure {
+        public Simple() {}
+
+        Simple(int id) {
+            super(id);
+        }
+        public Value apply() throws ContinuationException {
+            switch(id) {
+            case MUTEXNEW:
+                return new Mutex();
+            case CONDVARNEW:
+                return new CondVar();
+            case THREADCURRENT:
+                SchemeThread t=(SchemeThread)Context.lookupThreadContext().hostThread.get();
+                if (t==null) return FALSE;
+                else return t;
+            default:
+                throwArgSizeException();
             }
             return VOID;
-        case THREADINTERRUPT:
-            c=sthread(v1);
-            c.thread.interrupt();
-            c.threadContext.interrupt=true;
-            return VOID;
-        case THREADINTERRUPTEDQ:
-            return truth(sthread(v1).threadContext.interrupt);
-        case THREADNAME:
-            return new SchemeString(sthread(v1).thread.getName());
-        case THREADPRIORITY:
-            return Quantity.valueOf(sthread(v1).thread.getPriority());
-        case THREADDAEMONQ:
-            return truth(sthread(v1).thread.isDaemon());
-        case THREADJOIN:
-            c=sthread(v1);
-            if (c.state>=SchemeThread.RUNNING) {
-                try {
-                    c.thread.join();
-                } catch (InterruptedException ie) {}
-            } else {
-                throwPrimException(liMessage(THREADB,"threadnotstarted"));
-            }
-        case THREADSTATE:
-            c=sthread(v1);
-            return stateOf(c);
-        default:
-            throwArgSizeException();
         }
-        return VOID;
-    }
-    
-    public Value apply(Value v1, Value v2) throws ContinuationException {
-        switch(id) {
-        case MUTEXUNLOCK:
-            mutex(v1).unlock(condvar(v2));
-            return TRUE;
-        case MUTEXLOCK:
-            long timeout=num(v2).longValue();
-            return mutex(v1).lock(timeout);
-        case THREADJOIN:
-            SchemeThread c=sthread(v1);
-
-            if (c.state>=SchemeThread.RUNNING) {
-                try {
-                    c.thread.join(num(v2).indexValue());
-                } catch (InterruptedException ie) {}
-                if (c.state==SchemeThread.RUNNING) 
-                    return FALSE;
-                else return stateOf(c);
-            } else {
-                throw new RuntimeException(liMessage(THREADB,"threadnotstarted"));
-            }
-        case THREADHOLDSLOCKQ:
-            return truth(mutex(v1).owner==sthread(v1).thread);
-        case THREADSETRESULT:
-            sthread(v1).rv=v2;
-            return VOID;
-        case SETTHREADPRIORITY:
-            sthread(v1).thread.setPriority(num(v2).indexValue());
-            return VOID;
-        case SETTHREADDAEMON:
-            sthread(v1).thread.setDaemon(truth(v2));
-            return VOID;
-        case SETTHREADNAME:
-            c=sthread(v1);
-            c.thread.setName(string(v2));
-            return VOID;
-        default:
-            throwArgSizeException();
-        }
-        return VOID;
-    }
-    
-    public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
-        switch(id) {
-        case MUTEXUNLOCK:
-            return mutex(v1).unlock(condvar(v2), num(v3).longValue());
-        default:
-            throwArgSizeException();
-        }
-        return VOID;
-    }
-
-    public static class ComplexThreads extends IndexedProcedure {
         
-        protected static final int 
-            THREADNEW = 0,
-            THREADRESULT = 1;
-
-        public ComplexThreads(int id) {
+        public Value apply(Value v1) throws ContinuationException {
+            switch(id) {
+            case THREADQ:
+                return truth(v1 instanceof SchemeThread);
+            case MUTEXQ:
+                return truth(v1 instanceof Mutex);
+            case CONDVARQ:
+                return truth(v1 instanceof CondVar);
+            case MUTEXOF:
+                return Mutex.of(v1);
+            case THREADINTERRUPTEDQ:
+                return truth(sthread(v1).threadContext.interrupt);
+            case THREADNAME:
+                return new SchemeString(sthread(v1).thread.getName());
+            case THREADPRIORITY:
+                return Quantity.valueOf(sthread(v1).thread.getPriority());
+            case THREADDAEMONQ:
+                return truth(sthread(v1).thread.isDaemon());
+            case THREADSTATE:
+                SchemeThread c=sthread(v1);
+                return stateOf(c);
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
+        
+        public Value apply(Value v1, Value v2) throws ContinuationException {
+            switch(id) {
+            case THREADHOLDSLOCKQ:
+                return truth(mutex(v2).owner==sthread(v1).thread);
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
+    }
+    
+    /**
+     * The Complex procedures either have a side effect, or
+     * require the interpreter to execute
+     */
+    public static class Complex extends CommonIndexedProcedure {
+        public Complex() {}
+      
+        Complex(int id) {
             super(id);
         }
 
-        public ComplexThreads() {}
-
-        public static class Index extends IndexedLibraryAdapter {
-
-            public Value construct(int id) {
-                return new ComplexThreads(id);
+        public Value apply() throws ContinuationException {
+            switch(id) {
+            case THREADYIELD:
+                Thread.yield();
+                return VOID;
+            default:
+                throwArgSizeException();                    
             }
-
-            public Index() {
-                define("thread/new", THREADNEW);
-                define("thread/result", THREADRESULT);
-            }
+            return VOID;
         }
-        
-        public Value doApply(Interpreter f) throws ContinuationException {
-            switch(f.vlr.length) {
-            case 1:
-                switch(id) {
-                case THREADNEW:
-                    return new SchemeThread(f.dynenv, proc(f.vlr[0]));
-                case THREADRESULT:
-                    return sthread(f.vlr[0]).getResult(f);
-                default:
-                    throwArgSizeException();                    
+
+        public Value apply(Interpreter f, Value v1) throws ContinuationException {
+            switch(id) {
+            case THREADNEW:
+                return new SchemeThread(f.dynenv, proc(f.vlr[0]));
+            case THREADRESULT:
+                return sthread(f.vlr[0]).getResult(f);
+            case THREADINTERRUPT:
+                SchemeThread c=sthread(v1);
+                c.thread.interrupt();
+                c.threadContext.interrupt=true;
+                return VOID;
+            case CONDVARNOTIFY:
+                condvar(v1).c_notify();
+                return VOID;
+            case CONDVARNOTIFYALL:
+                condvar(v1).c_notifyall();
+                return VOID;
+            case MUTEXLOCK:
+                return mutex(v1).acquire();
+            case MUTEXUNLOCK:
+                mutex(v1).unlock();
+                return TRUE;
+            case THREADSTART:
+                c=sthread(v1);
+                c.start();
+                while (c.state==SchemeThread.READY) {
+                    synchronized(c) {
+                        try {
+                            c.wait(500);
+                        } catch (InterruptedException e) {}
+                    }
+                }
+                return VOID;
+            case THREADJOIN:
+                c=sthread(v1);
+                if (c.state>=SchemeThread.RUNNING) {
+                    try {
+                        c.thread.join();
+                    } catch (InterruptedException ie) {}
+                } else {
+                    throwPrimException(liMessage(THREADB,"threadnotstarted"));
                 }
             default:
                 throwArgSizeException();                    
             }
             return VOID;
         }
+        
+        public Value apply(Value v1, Value v2) throws ContinuationException {
+            switch(id) {
+            case MUTEXUNLOCK:
+                mutex(v1).unlock(condvar(v2));
+                return TRUE;
+            case MUTEXLOCK:
+                long timeout=num(v2).longValue();
+                return mutex(v1).lock(timeout);
+            case THREADJOIN:
+                SchemeThread c=sthread(v1);
+
+                if (c.state>=SchemeThread.RUNNING) {
+                    try {
+                        c.thread.join(num(v2).indexValue());
+                    } catch (InterruptedException ie) {}
+                    if (c.state==SchemeThread.RUNNING) 
+                        return FALSE;
+                    else return stateOf(c);
+                } else {
+                    throw new RuntimeException(liMessage(THREADB,"threadnotstarted"));
+                }
+            case THREADSETRESULT:
+                sthread(v1).rv=v2;
+                return VOID;
+            case SETTHREADPRIORITY:
+                sthread(v1).thread.setPriority(num(v2).indexValue());
+                return VOID;
+            case SETTHREADDAEMON:
+                sthread(v1).thread.setDaemon(truth(v2));
+                return VOID;
+            case SETTHREADNAME:
+                c=sthread(v1);
+                c.thread.setName(string(v2));
+                return VOID;
+            default:
+                throwArgSizeException();                    
+            }
+            return VOID;
+        }
+        
+        public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+            switch(id) {
+            case MUTEXUNLOCK:
+                return mutex(v1).unlock(condvar(v2), num(v3).longValue());
+            default:
+                throwArgSizeException();                    
+            }
+            return VOID;
+        }                
     }
+    
+    protected static final int // Next: 33 
+        THREADNEW = 0,
+        THREADRESULT = 21,
+        THREADSTART = 1,
+        THREADYIELD = 2,
+        THREADSLEEP = 3,
+        THREADINTERRUPT = 4,
+        THREADJOIN = 5,
+        THREADCURRENT = 6,
+        THREADQ = 7,
+        THREADNOTIFY = 8,
+        THREADNOTIFYALL = 9,
+        THREADWAIT = 10,
+        THREADNAME = 11,
+        THREADPRIORITY = 12,
+        THREADDAEMONQ = 13,
+        SETTHREADNAME = 14,
+        SETTHREADPRIORITY = 15,
+        SETTHREADDAEMON = 16,
+        THREADSTATE = 17,
+        THREADINTERRUPTEDQ = 18,
+        THREADHOLDSLOCKQ = 19,
+        THREADSRUNNING = 20,
+        MUTEXNEW = 22,
+        MUTEXLOCK = 23,
+        MUTEXUNLOCK = 24,
+        CONDVARNOTIFY = 25,
+        CONDVARNOTIFYALL = 26,
+        MUTEXOF = 28,
+        MUTEXQ = 29,
+        CONDVARQ = 30,
+        CONDVARNEW = 31,
+        THREADSETRESULT = 32;
 
 }
 /*

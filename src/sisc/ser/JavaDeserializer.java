@@ -1,11 +1,9 @@
 package sisc.ser;
 
 import java.io.*;
-import java.math.*;
 
 import sisc.data.Expression;
 import sisc.data.Symbol;
-import sisc.data.Value;
 import sisc.env.SymbolicEnvironment;
 import sisc.env.DelegatingSymEnv;
 import sisc.util.InternedValue;

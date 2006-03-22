@@ -105,7 +105,6 @@
 (native-module networking-native "sisc.modules.io.Networking$Index")
 (native-module debugging-native  "sisc.modules.Debugging$Index")
 (native-module threading-native  "sisc.modules.Threads$Index")
-(native-module threading-complex-native  "sisc.modules.Threads$ComplexThreads$Index")
 (native-module types-native      "sisc.modules.Types$Index")
 (native-module s2j-reflection    "sisc.modules.s2j.Reflection$Index")
 (native-module s2j-operation    "sisc.modules.s2j.Operation$Index")
@@ -166,7 +165,6 @@
    synchronized-unsafe
    parallel)
   (import threading-native)
-  (import threading-complex-native)
   (include "thread.scm"))
 
 (module procedure-properties
@@ -959,6 +957,8 @@
    max-memory
    garbage-collect)
   (import s2j)
+  (import* oo make)
+  (import* generic-io-types <native-input-port> <native-output-port>)
   (import* type-system instance-of?)
   (include "os/process.scm")
   (include "os/system.scm")

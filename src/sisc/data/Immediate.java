@@ -1,6 +1,5 @@
 package sisc.data;
 
-import sisc.exprs.fp.OptimismUnwarrantedException;
 import sisc.interpreter.ContinuationException;
 import sisc.interpreter.Interpreter;
 

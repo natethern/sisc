@@ -23,7 +23,6 @@ public class StreamSerializer extends SLL2Serializer {
     protected void writeExpression(Expression e, boolean flush)
         throws IOException {
 
-        int sizeStartOffset = -1;
         int posi=nextEp;
         
         Integer epIndex=(Integer)entryPoints.get(e);

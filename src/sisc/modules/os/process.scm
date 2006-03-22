@@ -36,20 +36,23 @@
        (instance-of? val <java.lang.process>)))
 
 (define (get-process-stdout process)
-  (java-unwrap 
-    (java-new <sisc.io.stream-input-port> 
-              (get-input-stream process))))
+  (make <native-input-port>
+    (java-unwrap 
+      (java-new <sisc.io.stream-input-port> 
+                (get-input-stream process)))))
 
 (define (get-process-stderr process)
-  (java-unwrap 
-    (java-new <sisc.io.stream-input-port> 
-            (get-error-stream process))))
+  (make <native-input-port>
+    (java-unwrap 
+      (java-new <sisc.io.stream-input-port> 
+              (get-error-stream process)))))
 
 (define (get-process-stdin process . aflush)
-  (java-unwrap 
-    (java-new <sisc.io.stream-output-port> 
-              (get-output-stream process)
-	     (->jboolean (if (null? aflush) #f (car aflush))))))
+  (make <native-output-port>
+    (java-unwrap 
+      (java-new <sisc.io.stream-output-port> 
+                (get-output-stream process)
+	       (->jboolean (if (null? aflush) #f (car aflush)))))))
 	    
 (define (spawn-process progname . arglist)
   (let ([runtime (get-runtime)])

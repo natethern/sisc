@@ -3,7 +3,6 @@ package sisc.io;
 import java.io.*;
 
 import sisc.io.Charset;
-import sisc.util.Util;
 
 public class SourceInputPort extends ReaderInputPort {
 

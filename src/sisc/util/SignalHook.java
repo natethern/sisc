@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import sisc.data.Pair;
 import sisc.data.Procedure;
 import sisc.env.DynamicEnvironment;
 import sisc.interpreter.Context;

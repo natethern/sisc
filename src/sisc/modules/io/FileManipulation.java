@@ -2,16 +2,146 @@ package sisc.modules.io;
 
 import java.io.*;
 import java.net.*;
-import java.net.MalformedURLException;
 
 import sisc.interpreter.*;
 import sisc.nativefun.*;
+import sisc.util.Util;
 import sisc.data.*;
 
 /**
  * Scheme functions for manipulating files and directories.
  */
-public class FileManipulation extends IndexedFixableProcedure {
+public class FileManipulation extends Util {
+
+    public static final File fileHandle(Value o) {
+        URL u=url(o);
+        if (!"file".equals(u.getProtocol()))
+            Procedure.throwPrimException(liMessage(IO.IOB, "notafileurl"));
+        String path=URLDecoder.decode(u.getPath());
+        return new File(path);
+    }
+
+    /**
+     * The Simple procedures are purely functional procedures
+     * which do not need to access interpreter registers to execute
+     */
+    public static class Simple extends IndexedFixableProcedure {
+        public Simple() {}
+
+        Simple(int id) {
+            super(id);
+        }
+
+        public Value apply(Value v1) throws ContinuationException {
+            switch(id) {
+            case DIRECTORYQ:
+                return truth(fileHandle(v1).isDirectory());
+            case FILEQ:
+                return truth(fileHandle(v1).isFile());
+            case HIDDENQ:
+                return truth(fileHandle(v1).isHidden());
+            case READABLE:
+                return truth(fileHandle(v1).canRead());
+            case WRITEABLE:
+                return truth(fileHandle(v1).canWrite());
+            case DIRLIST:
+                Pair p=EMPTYLIST;
+                String[] contents=fileHandle(v1).list();
+                if (contents == null)
+                    throwPrimException(liMessage(IO.IOB, "nosuchdirectory",
+                                                 string(v1)));
+                for (int i=contents.length-1; i>=0; i--) 
+                    p=new Pair(new SchemeString(contents[i]), p);
+                return p;
+            case LENGTH:
+                return Quantity.valueOf(fileHandle(v1).length());
+            case LASTMODIFIED:
+                return Quantity.valueOf(fileHandle(v1).lastModified());
+            case GETPARENTURL:
+                try {
+                    return new SchemeString(fileHandle(v1)
+                                            .getParentFile().toURL().toString());
+                } catch (MalformedURLException m) {
+                    m.printStackTrace();
+                }
+                break;
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
+    }
+    
+    /**
+     * The Complex procedures either have a side effect, or
+     * require the interpreter to execute
+     */
+    public static class Complex extends CommonIndexedProcedure {
+        public Complex() {}
+   
+        Complex(int id) {
+            super(id);
+        }
+
+        public Value apply(Value v1) throws ContinuationException {
+            switch(id) {
+            case SETREADONLY:
+                return truth(fileHandle(v1).setReadOnly());
+            case DELETE:
+                return truth(fileHandle(v1).delete());
+            case MAKEDIRECTORY:
+                return truth(fileHandle(v1).mkdir());
+            case MAKEDIRECTORIES:
+                return truth(fileHandle(v1).mkdirs());
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
+
+        public Value apply(Value v1, Value v2) throws ContinuationException {
+            switch(id) {
+            case SETLASTMODIFIED:
+                return truth(fileHandle(v1).setLastModified(num(v2).longValue()));
+            case RENAME:
+                return truth(fileHandle(v1).renameTo(fileHandle(v2)));
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
+    }
+    
+    /**
+     * The Index 
+     */
+    public static class Index extends IndexedLibraryAdapter {
+
+        public Index() {
+            define("file/hidden?", HIDDENQ);
+            define("file/is-directory?", DIRECTORYQ);
+            define("file/is-file?", FILEQ);
+            define("file/is-readable?", READABLE);
+            define("file/is-writeable?", WRITEABLE);
+            define("directory/list", DIRLIST);
+            define("file/last-modified", LASTMODIFIED);
+            define("file/set-last-modified!", Complex.class, SETLASTMODIFIED);
+            define("file/set-read-only!", Complex.class, SETREADONLY);
+            define("file/length", LENGTH);
+            define("file/rename!", Complex.class, RENAME);
+            define("file/delete!", Complex.class, DELETE);
+            define("_get-parent-url", GETPARENTURL);
+            define("_make-directory!", Complex.class, MAKEDIRECTORY);
+            define("_make-directories!", Complex.class, MAKEDIRECTORIES);
+        }
+        
+        public Value construct(Object context, int id) {
+            if (context == null || context==Simple.class) {
+                return new Simple(id);
+            } else return new Complex(id);
+        }
+        
+    }
 
     protected static final int DIRECTORYQ = 1,
         FILEQ = 2,
@@ -28,105 +158,7 @@ public class FileManipulation extends IndexedFixableProcedure {
         DELETE = 15,
         READABLE = 16,
         WRITEABLE = 17;
-
-    public static class Index extends IndexedLibraryAdapter {
-
-        public Value construct(int id) {
-            return new FileManipulation(id);
-        }
-        
-        public Index() {
-            define("file/hidden?", HIDDENQ);
-            define("file/is-directory?", DIRECTORYQ);
-            define("file/is-file?", FILEQ);
-            define("file/is-readable?", READABLE);
-            define("file/is-writeable?", WRITEABLE);
-            define("directory/list", DIRLIST);
-            define("file/last-modified", LASTMODIFIED);
-            define("file/set-last-modified!", SETLASTMODIFIED);
-            define("file/set-read-only!", SETREADONLY);
-            define("file/length", LENGTH);
-            define("file/rename!", RENAME);
-            define("file/delete!", DELETE);
-            define("_get-parent-url", GETPARENTURL);
-            define("_make-directory!", MAKEDIRECTORY);
-            define("_make-directories!", MAKEDIRECTORIES);
-        }
-    }
-    
-    public FileManipulation(int id) {
-        super(id);
-    }
-    
-    public FileManipulation() {}
-    
-    public static final File fileHandle(Value o) {
-        URL u=url(o);
-        if (!"file".equals(u.getProtocol()))
-            throwPrimException(liMessage(IO.IOB, "notafileurl"));
-        String path=URLDecoder.decode(u.getPath());
-        return new File(path);
-    }
-
-    public Value apply(Value v1) throws ContinuationException {
-        switch(id) {
-        case DIRECTORYQ:
-            return truth(fileHandle(v1).isDirectory());
-        case FILEQ:
-            return truth(fileHandle(v1).isFile());
-        case HIDDENQ:
-            return truth(fileHandle(v1).isHidden());
-        case READABLE:
-            return truth(fileHandle(v1).canRead());
-        case WRITEABLE:
-            return truth(fileHandle(v1).canWrite());
-        case DIRLIST:
-            Pair p=EMPTYLIST;
-            String[] contents=fileHandle(v1).list();
-            if (contents == null)
-                throwPrimException(liMessage(IO.IOB, "nosuchdirectory",
-                                             string(v1)));
-            for (int i=contents.length-1; i>=0; i--) 
-                p=new Pair(new SchemeString(contents[i]), p);
-            return p;
-        case LENGTH:
-            return Quantity.valueOf(fileHandle(v1).length());
-        case LASTMODIFIED:
-            return Quantity.valueOf(fileHandle(v1).lastModified());
-        case SETREADONLY:
-            return truth(fileHandle(v1).setReadOnly());
-        case DELETE:
-            return truth(fileHandle(v1).delete());
-        case GETPARENTURL:
-            try {
-                return new SchemeString(fileHandle(v1)
-                                        .getParentFile().toURL().toString());
-            } catch (MalformedURLException m) {
-                m.printStackTrace();
-            }
-            break;
-        case MAKEDIRECTORY:
-            return truth(fileHandle(v1).mkdir());
-        case MAKEDIRECTORIES:
-            return truth(fileHandle(v1).mkdirs());
-        default:
-            throwArgSizeException();
-        }
-        return VOID;
-    }
-    
-    public Value apply(Value v1, Value v2) throws ContinuationException {
-        switch(id) {
-        case SETLASTMODIFIED:
-            return truth(fileHandle(v1).setLastModified(num(v2).longValue()));
-        case RENAME:
-            return truth(fileHandle(v1).renameTo(fileHandle(v2)));
-        default:
-            throwArgSizeException();
-        }
-        return VOID;
-    }
-}
+ }
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file

@@ -4,8 +4,6 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 import sisc.data.*;
-import sisc.ser.*;
-import sisc.io.*;
 import sisc.interpreter.*;
 import sisc.env.DynamicEnvironment;
 import sisc.util.Util;

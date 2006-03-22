@@ -7,7 +7,7 @@ import sisc.nativefun.*;
 import sisc.data.*;
 import sisc.exprs.AnnotatedExpr;
 
-public class Annotations extends IndexedFixableProcedure {
+public abstract class Annotations  {
     protected static final int ANNOTATION = 0,
         ANNOTATIONQ = 1,
         ANNOTATIONKEYS = 2,
@@ -17,11 +17,16 @@ public class Annotations extends IndexedFixableProcedure {
         MAKEANNOTATION = 7,
         SETANNOTATION = 8,
         SETANNOTATIONSTRIPPED = 6;
-    
+
+    /**
+     * The Index 
+     */
     public static class Index extends IndexedLibraryAdapter {
         
-        public Value construct(int id) {
-            return new Annotations(id);
+        public Value construct(Object context, int id) {
+            if (context == null || context==Simple.class) {
+                return new Simple(id);
+            } else return new Complex(id);
         }
         
         public Index() {
@@ -32,86 +37,119 @@ public class Annotations extends IndexedFixableProcedure {
             define("annotation-expression", ANNOTATIONEXPR);
             define("annotation-stripped", ANNOTATIONSTRIPPED);
             define("make-annotation", MAKEANNOTATION);
-            define("set-annotation!", SETANNOTATION);
-            define("set-annotation-stripped!", SETANNOTATIONSTRIPPED);
+            define("set-annotation!", Complex.class, SETANNOTATION);
+            define("set-annotation-stripped!", Complex.class, SETANNOTATIONSTRIPPED);
         }
     }
-    
-    public Annotations(int id) {
-        super(id);
-    }
-    
-    public Annotations() {
-    }
- 
-    public Value apply(Value v1) throws ContinuationException {
-        switch (id) {
-        case ANNOTATIONKEYS: {
-            Pair akl=EMPTYLIST;
-            for (Iterator i=v1.getAnnotationKeys().iterator(); i.hasNext();) 
-                akl=new Pair((Symbol)i.next(), akl);
-            return akl;
+    /**
+     * The Simple procedures are purely functional procedures
+     * which do not need to access interpreter registers to execute
+     */
+    public static class Simple extends IndexedFixableProcedure {
+        public Simple() {}
+        
+        Simple(int id) {
+            super(id);
         }
-        case ANNOTATIONSTRIPPED:
-            return annotated(v1).stripped;
-        case ANNOTATIONQ:
-            return truth(v1 instanceof AnnotatedExpr);
-        case ANNOTATIONSRC:
-            Value rv;
-            if (v1 instanceof AnnotatedExpr) 
-                rv=annotated(v1).annotation;
-            else 
-                rv=FALSE;
-            return rv;
-        case ANNOTATIONEXPR:
-            if (v1 instanceof AnnotatedExpr) 
-                return (Value)annotated(v1).expr;
-            else return v1;
-        default:
-            throwArgSizeException();
-        }        
-        return VOID;
-    }
-    
-    public Value apply(Value v1, Value v2) throws ContinuationException {
-        switch (id) {
-        case SETANNOTATIONSTRIPPED:
-            annotated(v1).stripped=v2;
+        
+        
+        public Value apply(Value v1) throws ContinuationException {
+            switch (id) {
+            case ANNOTATIONKEYS: {
+                Pair akl=EMPTYLIST;
+                for (Iterator i=v1.getAnnotationKeys().iterator(); i.hasNext();) 
+                    akl=new Pair((Symbol)i.next(), akl);
+                return akl;
+            }
+            case ANNOTATIONSTRIPPED:
+                return annotated(v1).stripped;
+            case ANNOTATIONQ:
+                return truth(v1 instanceof AnnotatedExpr);
+            case ANNOTATIONSRC:
+                Value rv;
+                if (v1 instanceof AnnotatedExpr) 
+                    rv=annotated(v1).annotation;
+                else 
+                    rv=FALSE;
+                return rv;
+            case ANNOTATIONEXPR:
+                if (v1 instanceof AnnotatedExpr) 
+                    return (Value)annotated(v1).expr;
+                else return v1;
+            default:
+                throwArgSizeException();
+            }        
             return VOID;
-        case ANNOTATION:
-            return v1.getAnnotation(symbol(v2));
-        default:
-            throwArgSizeException();
         }
-        return VOID;
+        
+        public Value apply(Value v1, Value v2) throws ContinuationException {
+            switch (id) {
+            case ANNOTATION:
+                return v1.getAnnotation(symbol(v2));
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
+        
+        public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+            switch (id) {
+            case MAKEANNOTATION:
+                AnnotatedExpr ae=new AnnotatedExpr(v1, v2);
+                ae.stripped=v3;
+                return ae;
+            case ANNOTATION:
+                return v1.getAnnotation(symbol(v2), v3);
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
     }
     
-    public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
-        switch (id) {
-        case MAKEANNOTATION:
-            AnnotatedExpr ae=new AnnotatedExpr(v1, v2);
-            ae.stripped=v3;
-            return ae;
-        case ANNOTATION:
-            return v1.getAnnotation(symbol(v2), v3);
-        case SETANNOTATION:
-            return v1.setAnnotation(symbol(v2), v3);
-        default:
-            throwArgSizeException();
+    /**
+     * The Complex procedures either have a side effect, or
+     * require the interpreter to execute
+     */
+    public static class Complex extends CommonIndexedProcedure {
+        public Complex() {}
+        
+        Complex(int id) {
+            super(id);
         }
-        return VOID;
-    }
-    
-    public Value apply(Value[] vlr) throws ContinuationException {
-        switch(id) {
-        case SETANNOTATION:
-            return vlr[0].setAnnotation(symbol(vlr[1]),
-                                          vlr[2],
-                                          vlr[3]);
-        default:
-            throwArgSizeException();
+
+        public Value apply(Value v1, Value v2) throws ContinuationException {
+            switch (id) {
+            case SETANNOTATIONSTRIPPED:
+                annotated(v1).stripped=v2;
+                return VOID;
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
         }
-        return VOID;
+
+        public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
+            switch (id) {
+            case SETANNOTATION:
+                return v1.setAnnotation(symbol(v2), v3);
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
+        
+        public Value apply(Value[] vlr) throws ContinuationException {
+            switch(id) {
+            case SETANNOTATION:
+                return vlr[0].setAnnotation(symbol(vlr[1]),
+                                              vlr[2],
+                                              vlr[3]);
+            default:
+                throwArgSizeException();
+            }
+            return VOID;
+        }
     }
 }
 

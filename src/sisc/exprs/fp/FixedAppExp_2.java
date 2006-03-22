@@ -4,7 +4,6 @@ import java.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.FixableProcedure;
-import sisc.nativefun.NestedPrimRuntimeException;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;

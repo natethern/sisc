@@ -1,17 +1,15 @@
 package sisc.nativefun;
 
-import java.io.*;
 import sisc.interpreter.*;
 import sisc.data.*;
-import sisc.io.ValueWriter;
 
 /**
  * A fixable procedure is a Scheme procedure similar to a NativeProcedure,
  * but which does not need access to the Interpreter to be implemented, 
- * and requires three or fewer arguments.
+ * causes no side-effects, and requires three or fewer arguments.
  * In general, most purely functional procedures are fixable.
  */
-public abstract class FixableProcedure extends Procedure implements NamedValue {
+public abstract class FixableProcedure extends NativeProcedure implements NamedValue {
 
     /**
      * A fixable procedure must subclass one of the following methods
@@ -44,38 +42,19 @@ public abstract class FixableProcedure extends Procedure implements NamedValue {
         return VOID;
     }
     
-    public void apply(Interpreter r) throws ContinuationException {
-        //long start=System.currentTimeMillis();
-        try {
-            switch(r.vlr.length) {
-            case 0: r.acc=apply(); break;
-            case 1: r.acc=apply(r.vlr[0]); break;
-            case 2: r.acc=apply(r.vlr[0],r.vlr[1]); break;
-            case 3: r.acc=apply(r.vlr[0],r.vlr[1],r.vlr[2]); break;
-            default: r.acc=apply(r.vlr); break;
-            }
-            r.returnVLR();
-        } catch (ClassCastException cc) {
-            //cc.printStackTrace();
-            error(r,
-                  getName(),
-                  liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
-                  cc);
-        } catch (NestedPrimRuntimeException npr) {
-            error(r, getName(), npr);
-        } catch (RuntimeException re) {
-            //re.printStackTrace();
-            String msg = re.getMessage();
-            if (msg == null)
-                msg = re.toString();
-            error(r, getName(), msg, re);
+   public Value doApply(Interpreter r) throws ContinuationException {
+        switch (r.vlr.length) {
+        case 0:
+            return apply();
+        case 1:
+            return apply(r.vlr[0]);
+        case 2:
+            return apply(r.vlr[0], r.vlr[1]);
+        case 3:
+            return apply(r.vlr[0], r.vlr[1], r.vlr[2]);
+        default:
+            return apply(r.vlr);
         }
-        r.nxp = null;
-        //time+=System.currentTimeMillis()-start;
-    }
-    
-    public void display(ValueWriter w) throws IOException {
-        displayNamedOpaque(w, "native procedure");
     }
 }
 

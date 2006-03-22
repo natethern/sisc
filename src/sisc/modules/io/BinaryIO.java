@@ -29,7 +29,7 @@ public class BinaryIO extends IndexedProcedure {
 
     public static class Index extends IndexedLibraryAdapter {
         
-        public Value construct(int id) {
+        public Value construct(Object context, int id) {
             return new BinaryIO(id);
         }
         

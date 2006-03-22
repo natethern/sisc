@@ -5,15 +5,29 @@ import sisc.data.*;
 import sisc.interpreter.*;
 
 public abstract class IndexedLibraryAdapter extends NativeLibrary {
+    static class Token {
+        Class context;
+        int id;
+        
+        public Token(Class context, int id) {
+            this.context=context;
+            this.id=id;
+            
+        }
+    }
     protected HashMap bindings=new HashMap(0);
 
-    public abstract Value construct(int id);
+    public abstract Value construct(Object context, int id);
 
     protected void define(String s, int id) {
-        Symbol name=Symbol.get(s);
-        bindings.put(name, new Integer(id));
+        define(s, null, id);
     }
 
+    protected void define(String s, Class context, int id) {
+        Symbol name=Symbol.get(s);
+        bindings.put(name, new Token(context, id));
+    }
+    
     public String getLibraryName() {
         return getClass().getName();
     }
@@ -29,12 +43,11 @@ public abstract class IndexedLibraryAdapter extends NativeLibrary {
 
 
     public Value getBindingValue(Interpreter r, Symbol name) throws NoSuchMethodError {
-        Integer i=(Integer)bindings.get(name);
-        try {
-            int inum=i.intValue();
-            Value v=construct(inum);
+        Token t=(Token)bindings.get(name);
+        try {            
+            Value v=construct(t.context, t.id);
             if (v instanceof NamedValue)
-             v.setName(name);
+                v.setName(name);
            
          return v;
         } catch (NullPointerException n) {
