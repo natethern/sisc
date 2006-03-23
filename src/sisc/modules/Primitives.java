@@ -801,8 +801,7 @@ public abstract class Primitives extends Util {
                 case WITHFC:
                     Procedure proc=proc(vlr[1]);
                     Procedure ehandler=proc(vlr[0]);
-                    r.fk=r.createFrame(new ApplyValuesContEval(ehandler),
-                                       null, false, r.lcl, r.env, r.tpl, r.fk, r.stk);
+                    r.setFailureContinuation(new ApplyValuesContEval(ehandler));
                     r.setupTailCall(ZV);
                     return proc;
                 case CALLWITHVALUES:
