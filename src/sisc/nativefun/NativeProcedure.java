@@ -35,9 +35,18 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
             error(r, getName(), npr);
         } catch (RuntimeException re) {
             //re.printStackTrace();
-            String msg = javaExceptionToString(re);
+            String msg=null;
+            
+            // We make an exception for the two simplest classes of error,
+            // since their error itself is descriptive enough.
+            if (re instanceof PrimRuntimeException || 
+                re.getClass()==RuntimeException.class) {
+                msg=re.getMessage();
+            } else {
+                msg = javaExceptionToString(re);
+            }
             if (msg == null)
-                msg = re.toString();
+                msg = re.getMessage();
             error(r, getName(), msg, re);
         }
         //time+=System.currentTimeMillis()-start;
