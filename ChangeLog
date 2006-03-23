@@ -1,9 +1,11 @@
 2006-03-22  Scott G. Miller <sgmiller@gmail.com>
  
-    * Converted side-effecting primitives to non-fixable procedures,
-      fixing bug 1448235.
+	* Converted side-effecting primitives to non-fixable procedures,
+	  fixing bug 1448235.
       
-    * Genericized the process (os module) ports.  See bug 1448191.
+	* Genericized the process (os module) ports.  See bug 1448191.
+
+	* Fixed bug in |thread/holds-lock?|. See bug 1456295.
     
 2006-03-21  Matthias Radestock  <matthias@sorted.org>
 
