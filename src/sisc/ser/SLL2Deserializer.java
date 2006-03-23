@@ -63,7 +63,6 @@ public abstract class SLL2Deserializer extends DeserializerImpl {
                   e = (Expression)clazz.newInstance();
               } catch (InstantiationException ie) {
                   ie.printStackTrace();
-                  ie.getCause().printStackTrace();
                   throw new IOException(ie.getMessage());
               } catch (IllegalAccessException iae) {
                   iae.printStackTrace();
