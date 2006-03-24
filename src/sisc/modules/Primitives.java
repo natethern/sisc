@@ -213,6 +213,7 @@ public abstract class Primitives extends Util {
             define("make-immutable-vector", MAKEIMMUTABLEVECTOR);
             define("native-library-name", NLNAME);
             define("native-library-version", NLVERSION);
+            define("max-stack-trace-depth", MAXSTACKTRACEDEPTH);
             define("max-float-precision", MAXFLOATPRECISION);
             define("min-float-precision", MINFLOATPRECISION);
             define("null-environment", NULLENVIRONMENT);
@@ -273,6 +274,7 @@ public abstract class Primitives extends Util {
         public final Value apply() throws ContinuationException {
             switch (id) {
             case ADD: return Quantity.ZERO;
+            case MAXSTACKTRACEDEPTH : return Quantity.valueOf(maxStackTraceDepth);
             case MAXFLOATPRECISION: return Quantity.valueOf(maxFloatPrecision);
             case MINFLOATPRECISION: return Quantity.valueOf(minFloatPrecision);
             case MUL: return Quantity.ONE;
@@ -974,7 +976,7 @@ public abstract class Primitives extends Util {
     
     
 
-    // next: 145
+    // next: 146
     static final int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -1049,6 +1051,7 @@ public abstract class Primitives extends Util {
         MAKESTRING = 99,
         MAKEVECTOR = 65,
         MAKEIMMUTABLEVECTOR = 130,
+        MAXSTACKTRACEDEPTH = 145,
         MAXFLOATPRECISION = 9,
         MINFLOATPRECISION = 10,
         MUL = 11,

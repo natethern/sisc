@@ -42,6 +42,9 @@ public abstract class Util implements Version {
     public static final int maxFloatPrecision =
         Integer.parseInt(safeGetProperty("sisc.maxFloatPrecision",
                                          Integer.toString(Defaults.MAX_FLOAT_PRECISION)));
+    public static final int maxStackTraceDepth =
+        Integer.parseInt(safeGetProperty("sisc.maxStackTraceDepth",
+                                         Integer.toString(Defaults.MAX_STACK_TRACE_DEPTH)));
 
     protected static final Value[] ZV = new Value[0];
     protected static final Quantity FIVE = Quantity.valueOf(5);

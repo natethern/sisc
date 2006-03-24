@@ -386,6 +386,29 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                     using arbitrary precision floats.
                   </entry>
                 </row>
+                <row>
+                  <entry>
+                    <indexterm><primary>max-stack-trace-depth</primary></indexterm>
+                    <envar>maxStackTraceDepth</envar></entry>
+                  <entry><function>max-stack-trace-depth</function></entry>
+                  <entry>0</entry>
+                  <entry>
+                    Specifies the maximum depth of virtual call
+                    stacks, which are used to obtain proper stack
+                    traces even in the presence of tail recursion and
+                    continuation capture and invocation, while still
+                    preserving tail-call semantics and safe-for-space
+                    guarantees. See <xref
+                    linkend="Debugging"/>. Collecting this information
+                    is computationally expensive, so this feature is
+                    turned off by default. A value of
+                    <literal>16</literal> is about right for debugging
+                    most applications. Large values allow collection
+                    of more information but carry a large performance
+                    penalty, small values result in some call
+                    information being lost.
+                  </entry>
+                </row>
               </tbody>
             </tgroup>
           </informaltable>
