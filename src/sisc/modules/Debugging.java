@@ -12,7 +12,6 @@ import sisc.util.UndefinedVarException;
 public class Debugging extends IndexedProcedure {
 
     protected static final int EXPRESSV = 0,
-        COMPILE = 1,
         CONT_VLR = 2,
         CONT_NXP = 3,
         CONT_ENV = 4,
@@ -25,7 +24,7 @@ public class Debugging extends IndexedProcedure {
         FREEXPQ = 11,
         FRESYM = 12,
         QTYPE = 13,
-        UNRESOLVEDREFS = 14;
+        UNRESOLVEDREFS = 1;
 
     public static class Index extends IndexedLibraryAdapter {
 
@@ -35,7 +34,6 @@ public class Debugging extends IndexedProcedure {
         
         public Index() {
             define("express", EXPRESSV);
-            define("_compile", COMPILE);
             define("error-continuation-k", ERROR_CONT_K);
             define("continuation-vlk", CONT_VLK);
             define("continuation-vlr", CONT_VLR);
@@ -104,9 +102,6 @@ public class Debugging extends IndexedProcedure {
                     return list(c.arity ? sym("infinite") : sym("finite"),
                                 Quantity.valueOf(c.fcount), c.body.express());
                 }
-            case COMPILE:
-                return new Closure(false, (short)0, 
-                                   f.compile(f.vlr[0]), ZV, new int[0]);
             case ERROR_CONT_K:
                 return getCont(f.vlr[0]);
             case CONT_VLK:
@@ -123,15 +118,6 @@ public class Debugging extends IndexedProcedure {
                 cn=getCont(f.vlr[0]);
                 if (cn.parent==null) return FALSE;
                 return cn.parent;
-            default:
-                throwArgSizeException();
-            }
-        case 2:
-            switch (id) {
-            case COMPILE:
-                return new Closure(false, (short)0, 
-                                   f.compile(f.vlr[0], env(f.vlr[1])), 
-                                   ZV, new int[0]);
             default:
                 throwArgSizeException();
             }

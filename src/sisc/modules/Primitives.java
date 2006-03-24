@@ -121,6 +121,7 @@ public abstract class Primitives extends Util {
             define("call-with-failure-continuation", Complex.class, CALLFC);
             define("call-with-values", Complex.class, CALLWITHVALUES);
             define("compact-string-rep", Complex.class, COMPACTSTRINGREP);
+            define("_compile", Complex.class, COMPILE);
             define("current-wind", Complex.class, CURRENTWIND);
             define("eval", Complex.class, EVALUATE);
             define("gensym", Complex.class, GENSYM);
@@ -721,6 +722,12 @@ public abstract class Primitives extends Util {
                     r.nxp=r.compile(vlr[0]);                
                     r.env=null;
                     return VOID;
+                case COMPILE:
+                    return new Closure(false,
+                                       (short)0, 
+                                       r.compile(vlr[0]),
+                                       ZV,
+                                       new int[0]);
                 case CALLEC:
                     Value kproc=vlr[0];
                     r.setupTailCall(r.stk);
@@ -798,6 +805,12 @@ public abstract class Primitives extends Util {
                     r.nxp=r.compile(vlr[0], tpl);
                     r.env=null;
                     return VOID;
+                case COMPILE:
+                    return new Closure(false,
+                                       (short)0, 
+                                       r.compile(vlr[0], env(vlr[1])),
+                                       ZV,
+                                       new int[0]);
                 case WITHFC:
                     Procedure proc=proc(vlr[1]);
                     Procedure ehandler=proc(vlr[0]);
@@ -961,7 +974,7 @@ public abstract class Primitives extends Util {
     
     
 
-    // next: 144
+    // next: 145
     static final int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -986,6 +999,7 @@ public abstract class Primitives extends Util {
         CLASSPATHEXTENSION = 142,
         CLASSPATHEXTENSIONAPPEND = 143,
         COMPACTSTRINGREP = 7,
+        COMPILE = 144,
         COMPLEXQ = 37,
         CONS = 85,
         CONSIMMUTABLE = 131,
