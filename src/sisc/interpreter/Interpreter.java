@@ -513,9 +513,9 @@ public class Interpreter extends Util {
         }
     }
 
-    public final void setupTailCall(Value vlr0) {
+    public final void setupTailCall(Expression e, Value vlr0) {
         saveVLR = true;
-        nxp = APPEVAL;
+        nxp = e;
         if (vlk) {
             newVLR(1);
         } else {
@@ -527,9 +527,9 @@ public class Interpreter extends Util {
         vlr[0] = vlr0;
     }
 
-    public final void setupTailCall(Value[] newvlr) {
+    public final void setupTailCall(Expression e, Value[] newvlr) {
         saveVLR = true;
-        nxp = APPEVAL;
+        nxp = e;
         if (!vlk) {
             returnValues(vlr);
         }

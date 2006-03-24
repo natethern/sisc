@@ -15,6 +15,13 @@ public class ApplyValuesContEval extends Expression {
         consumer=c;
     }
 
+    private final static Expression AVCE_APPEVAL
+        = annotatedAppEval("eval");
+
+    private static Expression annotatedAppEval(String fn) {
+        return annotatedAppEval(ApplyValuesContEval.class, fn);
+    }
+
     public void eval(Interpreter r) throws ContinuationException {
         if (r.acc instanceof Values) {
             final Value[] vlr = ((Values)r.acc).values;
@@ -31,7 +38,7 @@ public class ApplyValuesContEval extends Expression {
             r.newVLR(1);
             r.vlr[0]=r.acc;
         }
-        r.nxp=APPEVAL;
+        r.nxp=AVCE_APPEVAL;
         r.acc=consumer;
     }
 

@@ -30,6 +30,25 @@ public abstract class Primitives extends Util {
         ("0123456789abcdefghijklmnopqrstuvwxyz"+
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ-_").toCharArray();
 
+    private final static Expression CALLEC_APPEVAL
+        = annotatedAppEval("call-with-escape-continuation");
+    private final static Expression CALLCC_APPEVAL
+        = annotatedAppEval("call-with-current-continuation");
+    private final static Expression CALLFC_APPEVAL
+        = annotatedAppEval("call-with-failure-continuation");
+    private final static Expression WITHFC_APPEVAL
+        = annotatedAppEval("with-failure-continuation");
+    private final static Expression WITHSTACKMARKER_APPEVAL
+        = annotatedAppEval("with-stack-marker");
+    private final static Expression CALLWITHVALUES_APPEVAL
+        = annotatedAppEval("call-with-values");
+    private final static Expression APPLY_APPEVAL
+        = annotatedAppEval("apply");
+
+    private static Expression annotatedAppEval(String fn) {
+        return annotatedAppEval(Primitives.class, fn);
+    }
+
     protected static String base64encode(long v) {
         StringBuffer b=new StringBuffer();
         while (v!=0) {
@@ -148,6 +167,7 @@ public abstract class Primitives extends Util {
             define("vector-fill!", Complex.class, VECTORFILL);
             define("vector-set!", Complex.class, VECTORSET);
             define("with-failure-continuation", Complex.class, WITHFC);
+            define("with-stack-marker", Complex.class, WITHSTACKMARKER);
             define("class-path-extension", Complex.class, CLASSPATHEXTENSION);
             define("class-path-extension-append!", Complex.class, CLASSPATHEXTENSIONAPPEND);
             
@@ -274,7 +294,7 @@ public abstract class Primitives extends Util {
         public final Value apply() throws ContinuationException {
             switch (id) {
             case ADD: return Quantity.ZERO;
-            case MAXSTACKTRACEDEPTH : return Quantity.valueOf(maxStackTraceDepth);
+            case MAXSTACKTRACEDEPTH: return Quantity.valueOf(maxStackTraceDepth);
             case MAXFLOATPRECISION: return Quantity.valueOf(maxFloatPrecision);
             case MINFLOATPRECISION: return Quantity.valueOf(minFloatPrecision);
             case MUL: return Quantity.ONE;
@@ -732,15 +752,15 @@ public abstract class Primitives extends Util {
                                        new int[0]);
                 case CALLEC:
                     Value kproc=vlr[0];
-                    r.setupTailCall(r.stk);
+                    r.setupTailCall(CALLEC_APPEVAL, r.stk);
                     return kproc;
                 case CALLCC:
                     kproc=vlr[0];
-                    r.setupTailCall(r.stk.capture(r));
+                    r.setupTailCall(CALLCC_APPEVAL, r.stk.capture(r));
                     return kproc;
                 case CALLFC:
                     kproc=vlr[0];
-                    r.setupTailCall(r.fk.capture(r));
+                    r.setupTailCall(CALLFC_APPEVAL, r.fk.capture(r));
                     return kproc;
                 case CURRENTWIND:
                     r.dynenv.wind = vlr[0];
@@ -794,6 +814,12 @@ public abstract class Primitives extends Util {
                         throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
                         return VOID;
                     }
+                case WITHSTACKMARKER:
+                    Procedure proc = proc(vlr[0]);
+                    //marker frames are distinguished by a null nxp
+                    r.push(null);
+                    r.setupTailCall(WITHSTACKMARKER_APPEVAL, ZV);
+                    return proc;
                 default:
                     break SIZESWITCH;
                 }
@@ -817,13 +843,13 @@ public abstract class Primitives extends Util {
                     Procedure proc=proc(vlr[1]);
                     Procedure ehandler=proc(vlr[0]);
                     r.setFailureContinuation(new ApplyValuesContEval(ehandler));
-                    r.setupTailCall(ZV);
+                    r.setupTailCall(WITHFC_APPEVAL, ZV);
                     return proc;
                 case CALLWITHVALUES:
                     Procedure producer=proc(vlr[0]);
                     Procedure consumer=proc(vlr[1]);
                     r.push(new ApplyValuesContEval(consumer));
-                    r.setupTailCall(ZV);
+                    r.setupTailCall(CALLWITHVALUES_APPEVAL, ZV);
                     return producer;
                 case GETPROP:
                     Value ret = null;
@@ -964,7 +990,7 @@ public abstract class Primitives extends Util {
                 for (; args != EMPTYLIST; args = (Pair)args.cdr()) {
                     newvlr[j++] = args.car();
                 }
-                r.setupTailCall(newvlr);
+                r.setupTailCall(APPLY_APPEVAL, newvlr);
                 return proc;
             default:
                 throwArgSizeException();
@@ -973,10 +999,8 @@ public abstract class Primitives extends Util {
         }
     }
 
-    
-    
 
-    // next: 146
+    // next: 147
     static final int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -1118,6 +1142,7 @@ public abstract class Primitives extends Util {
         VECTORSET = 112,
         VOIDQ = 33,
         WITHFC = 105,
+        WITHSTACKMARKER = 146,
         _VOID = 5;
 }
 /*

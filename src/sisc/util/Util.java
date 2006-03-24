@@ -782,6 +782,13 @@ public abstract class Util implements Version {
         return "<" + e.getClass().getName() + ">: "+ e.getMessage();
     }
 
+    public static Expression annotatedAppEval(Class clazz, String fn) {
+        Expression e = new AppEval(true);
+        e.setAnnotation(Symbol.get("source-file"),
+                        new SchemeString(clazz.getName() + "/" + fn));
+        return e;
+    }
+
     private static Charset defaultCharset = null;
 
     static {
