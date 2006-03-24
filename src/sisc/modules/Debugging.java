@@ -11,6 +11,7 @@ import sisc.util.UndefinedVarException;
 
 public class Debugging extends IndexedProcedure {
 
+    //NEXT: 15
     protected static final int EXPRESSV = 0,
         CONT_VLR = 2,
         CONT_NXP = 3,
@@ -18,6 +19,7 @@ public class Debugging extends IndexedProcedure {
         CONT_FK = 5,
         CONT_VLK = 6,
         CONT_PARENT = 7,
+        CONT_STK = 14,
         ERROR_CONT_K = 8,
         FILLRIBQ = 9,
         FILLRIBEXP = 10,
@@ -41,6 +43,7 @@ public class Debugging extends IndexedProcedure {
             define("continuation-env", CONT_ENV);
             define("continuation-fk", CONT_FK);
             define("continuation-stk", CONT_PARENT);
+            define("continuation-stack-trace", CONT_STK);
             define("_fill-rib?", FILLRIBQ);
             define("_fill-rib-exp", FILLRIBEXP);
             define("_free-reference-exp?", FREEXPQ);
@@ -118,6 +121,9 @@ public class Debugging extends IndexedProcedure {
                 cn=getCont(f.vlr[0]);
                 if (cn.parent==null) return FALSE;
                 return cn.parent;
+            case CONT_STK:
+                cn=getCont(f.vlr[0]);
+                return (cn.tracer == null) ? FALSE : cn.tracer.toValue();
             default:
                 throwArgSizeException();
             }
