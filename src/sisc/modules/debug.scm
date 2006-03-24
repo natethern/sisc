@@ -189,14 +189,6 @@
 
 ;;;;;;;;;;;;;; exception display ;;;;;;;;;;;;;;;;;;;;
           
-(define (annotations-to-assoc expr)
-  (let loop ([x ()] [keys (annotation-keys expr)])
-    (if (null? keys) x
-        (loop
-         (cons (cons (car keys) (annotation expr (car keys)))
-               x)
-         (cdr keys)))))
-
 (define (stack-trace k . base)
   (cond
     [(or (not k)
@@ -206,39 +198,26 @@
     [(annotation k 'unsafe-cont) => (lambda (nk)
 				      (apply stack-trace nk base))]
     [else
-      (let ([nxp (continuation-nxp k)]
-            [stk (apply stack-trace (continuation-stk k) base)])
-        (if nxp
-            (cons (cons nxp 
-                        (let ([nxp-annot (annotations-to-assoc nxp)])
-                          (map (lambda (v)
-                                 (cons v (cond [(assoc v nxp-annot)
-                                                => cdr]
-                                               [else '?])))
-                               '(line-number
-                                 column-number
-                                 source-file
-                                 proc-name))))
-                  stk)
-            stk))]))
+      (let ([nxp  (continuation-nxp k)]
+            [st   (continuation-stack-trace k)]
+            [stk  (continuation-stk k)])
+        (cons (if st
+                  (cons nxp st)
+                  nxp)
+              (apply stack-trace stk base)))]))
 
-(define (stack-trace-entry-has-data? entry)
-  (define (known? x)
-    (and (pair? x) (not (eq? (cdr x) '?))))
-  (let ([data (cdr entry)])
-    (or (known? (assoc 'source-file data))
-        (known? (assoc 'proc-name data)))))
-
-(define (format-stack-trace-entry entry)
-  (let ([expr (car entry)]
-        [data (cdr entry)])
-    (let ([line (cdr (assoc 'line-number data))]
-          [column (cdr (assoc 'column-number data))]
-          [sourcefile (cdr (assoc 'source-file data))]
-          [procname (if (eq? (cdr (assoc 'proc-name data)) '?)
-                        #f
-                        (cdr (assoc 'proc-name data)))])
-      (cond [procname
+(define (format-expression-location expr)
+  (define (source-annotations)
+    (apply values (map (lambda (v)
+                         (cond [(annotation expr v) => (lambda (x) x)]
+                               [else '?]))
+                       '(source-file
+                         line-number
+                         column-number
+                         proc-name))))
+  (call-with-values source-annotations
+    (lambda (sourcefile line column procname)
+      (cond [(not (eq? procname '?))
              (format "~a:~a:~a: <from call to ~a>"
                      sourcefile line column procname)]
             [(and (_fill-rib? expr)
@@ -252,35 +231,69 @@
             [else
              (format "~a:~a:~a: <indeterminate call>" 
                      sourcefile
-                     line column)])]))
+                     line column)]))))
+
+(define (format-k-stack l level)
+  (let ([prefix (apply string (map (lambda (x) '#\ ) (iota (* 2 level))))])
+    (apply string-append
+           (map (lambda (x)
+                  (string-append
+                   prefix
+                   (if (pair? x)
+                       (string-append
+                        (format "~a repetitions of ...\n" (car x))
+                        (format-k-stack (cdr x) (+ level 1)))
+                       (string-append
+                        (format-expression-location x)
+                        "\n"))))
+                l))))
+
+(define (format-stack-trace-entry entry)
+  (if (pair? entry)
+      (let ([expr       (car entry)]
+            [overflown? (cadr entry)]
+            [stack      (cddr entry)])
+        (string-append (format-k-stack stack 0)
+                       (if overflown? "...\n" "")))
+      (string-append (format-expression-location entry) "\n")))
+
+(define (stack-trace-entry-has-data? entry)
+  (if entry
+      (if (pair? entry)
+          (not (null? (cddr entry)))
+          #t)
+      #f))
 
 (define (print-stack-trace k . base)
   (define (print-single-entry entry count)
+    (if (> (max-stack-trace-depth) 0)
+        (display "---------------------------\n"))
     (display entry)
     (when (> count 1)
-      (display (format " [Repeated~a]"
+      (display (format "[previous ~a repeated~a]\n"
+                       (if (> (max-stack-trace-depth) 0)
+                           "entries"
+                           "entry")
                        (case count
                          ((1) " once")
                          ((2) " twice")
-                         (else (format " ~a times" count))))))
-    (newline))
-  ; Bunch up multiple lines and add a repeat count
-  (let ([entries (apply stack-trace k base)])
-    (unless (null? entries)
-      (let loop ([ls (cdr entries)]
-                 [last (format-stack-trace-entry (car entries))]
-                 [count 1]
-	         [any (stack-trace-entry-has-data? (car entries))])
-        (if (null? ls) 
-            ; Dont display a single line if it has no metadata
-            (if any (print-single-entry last count))
-            (let ([current (format-stack-trace-entry (car ls))])
-              (if (equal? last current)
-                  (loop (cdr ls) current (+ count 1) any)
-                  (begin
-                    (if any (print-single-entry last count))
-                    (loop (cdr ls) current 1 
-                          (or any (stack-trace-entry-has-data? (car ls))))))))))))
+                         (else (format " ~a times" count)))))))
+  ;;; Bunch up multiple lines and add a repeat count
+  (let loop ([entries (apply stack-trace k base)]
+             [last #f]
+             [count 1])
+    (if (null? entries)
+        (if last (print-single-entry last count))
+        (let ([current (car entries)]
+              [rest    (cdr entries)])
+          (if (stack-trace-entry-has-data? current)
+              (let ([print-rep (format-stack-trace-entry current)])
+                (if (equal? print-rep last)
+                    (loop rest last (+ count 1))
+                    (begin
+                      (if last (print-single-entry last count))
+                      (loop rest print-rep 1))))
+              (loop rest last count))))))
 
 (print-exception-stack-trace-hook
  'debug

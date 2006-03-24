@@ -64,14 +64,80 @@
           <para>
             Returns the stack trace for
             <parameter>continuation</parameter> in form of a
-            list. Each element in the list is a pair that represents
-            one level in the call stack, starting from the top. The
-            car of an element a is a &SISC; virtual machine
-            expression while the cdr is an association list identifying
-            the corresponding Scheme code source location using the
-            following keys: <literal>source-file</literal>,
+            list. The format of the list is
+            <informaltable frame="none">
+              <tgroup cols="3">
+                <tbody>
+                  <row>
+                    <entry>stack-trace</entry>
+                    <entry>:=</entry>
+                    <entry><literal>(</literal>call-frame ...<literal>)</literal></entry>
+                  </row>
+                  <row>
+                    <entry>call-frame</entry>
+                    <entry>:=</entry>
+                    <entry>sisc-expr | <literal>(</literal>sisc-expr overflown <literal>.</literal> stack<literal>)</literal></entry>
+                  </row>
+                  <row>
+                    <entry>overflown</entry>
+                    <entry>:=</entry>
+                    <entry>&num;t | &num;f</entry>
+                  </row>
+                  <row>
+                    <entry>stack</entry>
+                    <entry>:=</entry>
+                    <entry><literal>(</literal>stack-entry ...<literal>)</literal></entry>
+                  </row>
+                  <row>
+                    <entry>stack-entry</entry>
+                    <entry>:=</entry>
+                    <entry>sisc-expr | <literal>(</literal>repetitions <literal>.</literal> stack<literal>)</literal></entry>
+                  </row>
+                  <row>
+                    <entry>repetitions</entry>
+                    <entry>:=</entry>
+                    <entry>integer</entry>
+                  </row>
+                </tbody>
+              </tgroup>
+            </informaltable>
+          </para>
+          <para>
+            Each element in the list represents one level in the
+            &SISC; interpreter's call stack, starting from the
+            top. The element contains the &SISC; virtual machine
+            expression that would be executed next in that frame, and,
+            if available, a compact representation of a virtual stack
+            created by collecting information on tail calls carried
+            out in that frame.
+          </para>
+          <para>
+            The virtual stack is bounded in size by the value of the
+            see <envar>maxStackTraceDepth</envar> configuration
+            parameter (see <xref linkend="config-parameters"/>). If
+            old information was dropped due to the bound being
+            exceeded then the <parameter>overflown</parameter> flag is
+            set.
+          </para>
+          <para>
+            Each entry in the virtual stack contains either the &SISC;
+            virtual machine expression that was executed, or a
+            sub-stack annotated with a repetition count, indicating
+            that the entries in that sub-stack were repeated several
+            times.
+          </para>
+          <para>
+            &SISC; expressions are annotated with source locations if
+            the <envar>emitAnnotations</envar> parameter is set to
+            <literal>true</literal>. Additional annotations are
+            produced when <envar>emitDebuggingSymbols</envar> is set
+            to <literal>true</literal>. See <xref
+            linkend="config-parameters"/>. The annotations can be
+            retrieved using the <function>annotation</function>
+            function with the keys <literal>source-file</literal>,
             <literal>line-number</literal>,
-            <literal>column-number</literal>.
+            <literal>column-number</literal>, and
+            <literal>proc-name</literal>.
           </para>
         </blockquote>
       </para>
