@@ -42,9 +42,7 @@
    (lambda (m e)
      (let ([exception (make-exception m e)])
        (putprop 'last-exception '*debug* exception)
-       (print-exception exception 
-			(stack-trace-on-error) 
-			(stack-trace-base))))))
+       (print-exception exception (stack-trace-on-error))))))
 
 (define current-writer
   (make-parameter (lambda (v)
@@ -59,8 +57,8 @@
                           (write v)
                           (print-shared ps))))))
 
-(define stack-trace-base 
-  (make-parameter #f))
+(define stack-trace-stop-at-mark?
+  (make-parameter #t))
 
 (define repl-prompt
   (make-config-parameter "replPrompt" (lambda (repl-depth)
@@ -96,72 +94,72 @@
           handler))
       (lambda () #f)))
 
-(define repl
-  (letrec ([repl/read
-            (lambda ()
-              (let ([handler (and (permit-interrupts)
-                                  (make-interrupt-handler))])
-                ; Display the prompt
-                (let ([rp (repl-prompt)]
-                      [repl-depth (- (length (_exit-handler)) 1)])
-                  (display
-                   (if (procedure? rp)
-                       (rp repl-depth)
-                       rp)))
-                
-                ;;read
-                (let ([exp (read-code (current-input-port))])
-                  (if (eof-object? exp) 
-                      (if ((current-exit-handler) exp)
-                          (exit exp)
-                          (repl/read))
-                      (begin
-                        ;; Consume any whitespace
-                        (let loop ()
-                          (when (and (char-ready? (current-input-port))
-                                     (char-whitespace? (peek-char)))
-                            (read-char)
-                            (loop)))
-                        
-                        ;;eval                      
-                        (when handler (_signal-hook! "INT" handler))
-                        (with/fc
-                         (lambda (m e)
-                           (when handler (_signal-unhook! "INT" handler))
-                           (throw m e))
-                         (lambda () 
+(define (repl)
+  (define (repl/read)
+    (let ([handler (and (permit-interrupts)
+                        (make-interrupt-handler))])
+      (define (repl/eval exp)
+        (let ([compiled
+               (with/fc
+                   (lambda (m e) (with-stack-marker
+                                     (lambda () (throw m))))
+                 (lambda () (compile exp)))])
+          (when handler (_signal-hook! "INT" handler))
+          (with/fc
+              (lambda (m e)
+                (when handler (_signal-unhook! "INT" handler))
+                (throw m e))
+            (lambda () 
+              (let ([val (with-stack-marker compiled)])
+                (when handler (_signal-unhook! "INT" handler))
+                val)))))
 
-                           (let ([val 
-			   ; Set the stack trace base here, so that
-			   ; automatically printed stack traces needn't 
-			   ; include the REPL code
-				  (call/cc-unsafe
-				   (lambda (k)
-				     (stack-trace-base k)
-				     (eval exp (interaction-environment))))])
-                             (when handler (_signal-unhook! "INT" handler))
-                             (if (not (void? val))
-                                 (begin ((current-writer) val) (newline))))))
-                      (repl/read))))))])
-    (lambda ()
-      (let ([repl-start #f])
-        (repl-initialize)
-        (or ((current-exit-handler)
-             (call/cc
-               (lambda (k)
-                 (_exit-handler (cons k (_exit-handler)))
-                 (begin
-                   (call/cc (lambda (k) 
-                              (set! repl-start k)
-                              (putprop 'repl '*debug* k)))
-                   (let loop ()
-                     (with/fc (lambda (m e)
-                                ((current-default-error-handler) m e)
-                                (loop))
-                       (lambda ()
-                         (repl/read)
-                         (void))))))))
-            (repl-start))))))
+      ;; Display the prompt
+      (let ([rp (repl-prompt)]
+            [repl-depth (- (length (_exit-handler)) 1)])
+        (display (if (procedure? rp)
+                     (rp repl-depth)
+                     rp)))
+                
+      ;;read
+      (let ([exp (read-code (current-input-port))])
+        (if (eof-object? exp) 
+            (if ((current-exit-handler) exp)
+                (exit exp)
+                (repl/read))
+            (begin
+              ;; Consume any whitespace
+              (let loop ()
+                (when (and (char-ready? (current-input-port))
+                           (char-whitespace? (peek-char)))
+                  (read-char)
+                  (loop)))
+                        
+              ;;eval
+              (let ([val (repl/eval exp)])
+                ;;print
+                (if (not (void? val))
+                    (begin ((current-writer) val) (newline))))
+              ;;loop
+              (repl/read))))))
+  (let ([repl-start #f])
+    (repl-initialize)
+    (or ((current-exit-handler)
+         (call/cc
+          (lambda (k)
+            (_exit-handler (cons k (_exit-handler)))
+            (begin
+              (call/cc (lambda (k) 
+                         (set! repl-start k)
+                         (putprop 'repl '*debug* k)))
+              (let loop ()
+                (with/fc (lambda (m e)
+                           ((current-default-error-handler) m e)
+                           (loop))
+                  (lambda ()
+                    (repl/read)
+                    (void))))))))
+        (repl-start))))
 
 (define (sisc-cli)
   (display (format "SISC (~a)\n"

@@ -189,22 +189,19 @@
 
 ;;;;;;;;;;;;;; exception display ;;;;;;;;;;;;;;;;;;;;
           
-(define (stack-trace k . base)
+(define (stack-trace k)
   (cond
-    [(or (not k)
-	 (and (not (null? base))
-	      (eq? k (car base))))
+    [(not k)
      '()]
-    [(annotation k 'unsafe-cont) => (lambda (nk)
-				      (apply stack-trace nk base))]
+    [(annotation k 'unsafe-cont) => stack-trace]
     [else
       (let ([nxp  (continuation-nxp k)]
             [st   (continuation-stack-trace k)]
             [stk  (continuation-stk k)])
-        (cons (if st
-                  (cons nxp st)
-                  nxp)
-              (apply stack-trace stk base)))]))
+        (if (or nxp (not (stack-trace-stop-at-mark?)))
+            (cons (if st (cons nxp st) nxp)
+                  (stack-trace stk))
+            '()))]))
 
 (define (format-expression-location expr)
   (define (source-annotations)
@@ -264,7 +261,7 @@
           #t)
       #f))
 
-(define (print-stack-trace k . base)
+(define (print-stack-trace k)
   (define (print-single-entry entry count)
     (if (> (max-stack-trace-depth) 0)
         (display "---------------------------\n"))
@@ -279,7 +276,7 @@
                          ((2) " twice")
                          (else (format " ~a times" count)))))))
   ;;; Bunch up multiple lines and add a repeat count
-  (let loop ([entries (apply stack-trace k base)]
+  (let loop ([entries (stack-trace k)]
              [last #f]
              [count 1])
     (if (null? entries)
@@ -297,8 +294,8 @@
 
 (print-exception-stack-trace-hook
  'debug
- (lambda (next e . base)
+ (lambda (next e)
    (if (exception? e)
-       (apply print-stack-trace (exception-continuation e) base)
+       (print-stack-trace (exception-continuation e))
        (next e))))
 

@@ -255,15 +255,14 @@
   (make-hook (lambda args
                (display "{warning: printing of stack trace not supported}\n"))))
 
-(define (print-exception-stack-trace e . base)
-  (apply invoke-hook print-exception-stack-trace-hook e base))
+(define (print-exception-stack-trace e)
+  (invoke-hook print-exception-stack-trace-hook e))
 
 (define (print-exception e . st)
   (let ([error (exception-error e)])
     (display-error error)
     (if (or (null? st) (car st))
-        (apply invoke-hook print-exception-stack-trace-hook e
-	       (if (null? st) '() (cdr st))))
+        (invoke-hook print-exception-stack-trace-hook e))
     (let ([p (and (pair? error) (error-parent error))])
       (if p 
           (begin (display "Caused by ")
