@@ -26,6 +26,8 @@ public class AppEval extends Expression {
            error(r, liMessage(SISCB, "evaluationinterrupted"));
         }
 
+        r.trace(this);
+
         r.acc.apply(r);
     }
 
