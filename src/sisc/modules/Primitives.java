@@ -121,7 +121,7 @@ public abstract class Primitives extends Util {
             define("call-with-failure-continuation", Complex.class, CALLFC);
             define("call-with-values", Complex.class, CALLWITHVALUES);
             define("compact-string-rep", Complex.class, COMPACTSTRINGREP);
-            define("_compile", Complex.class, COMPILE);
+            define("compile", Complex.class, COMPILE);
             define("current-wind", Complex.class, CURRENTWIND);
             define("eval", Complex.class, EVALUATE);
             define("gensym", Complex.class, GENSYM);

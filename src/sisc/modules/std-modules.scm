@@ -892,7 +892,6 @@
 (module debugging
     (show
      express
-     compile
      error-continuation-k
      annotated?
      trace-depth
@@ -920,7 +919,6 @@
   (import threading)
   (import hashtable)
   (import serial-io)
-  (import* debugging compile)
   (include "libraries.scm")
   (install))
 

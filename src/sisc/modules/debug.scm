@@ -1,12 +1,6 @@
 (define (annotated? obj)
   (not (null? (annotation-keys obj))))
 
-(define (compile x . env)
-  (apply _compile
-         (_analyze! ((current-optimizer) (sc-expand x))
-                    (if (null? env) (interaction-environment) (car env)))
-         env))
-
 (define-syntax show
   (lambda (e)
     (syntax-case e ()

@@ -34,35 +34,38 @@
 ;;turn on syntax expansion and optimization
 
 (define current-optimizer (_make-parameter (lambda (x) x)))
-  
+
+(set! compile
+  (let ([old-compile compile])
+    (lambda (x . env)
+      (let ([old-ie (apply interaction-environment env)]
+            [source #f])
+        (with-failure-continuation
+            (lambda (m e)
+              (interaction-environment old-ie)
+              (throw m e))
+          (lambda ()               
+            (set! source (sc-expand x '(e) '(e)))))
+        (interaction-environment old-ie)
+        (apply old-compile
+               (_analyze! ((current-optimizer) source)
+                          (if (null? env)
+                              (interaction-environment)
+                              (car env)))
+               env)))))
+
 (set! eval
-      (let ([old-eval eval]
-            [apply apply]
-            [_analyze! _analyze!]
-            [sc-expand sc-expand]
-            [interaction-environment interaction-environment])
-        (lambda (x . env)
-          (cond [(and (pair? x) (member (car x) '("noexpand" "analyzeonly")))
-                 (apply old-eval
-                        (if (equal? (car x) "analyzeonly")
-                            (_analyze! (cadr x)
-                                       (if (null? env)
-                                           (interaction-environment)
-                                           (car env)))
-                            (cadr x)) env)]
-                [(and (null? env) (strict-r5rs-compliance))
-                 (error 'eval "expected 2 arguments to procedure, got 1.")]
-                [else 
-                 (let ([optimizer (current-optimizer)]
-                       [old-ie (apply interaction-environment env)]
-                       [source #f])
-                   (with-failure-continuation
-                    (lambda (m e)
-                      (interaction-environment old-ie)
-                      (throw m e))
-                    (lambda ()               
-                      (set! source (_analyze!
-                                    (optimizer
-                                     (sc-expand x '(e) '(e)))
-                                    (interaction-environment old-ie)))))
-                   (apply old-eval source env))]))))
+  (let ([old-eval eval])
+    (lambda (x . env)
+      (cond [(and (pair? x) (member (car x) '("noexpand" "analyzeonly")))
+             (apply old-eval
+                    (if (equal? (car x) "analyzeonly")
+                        (_analyze! (cadr x)
+                                   (if (null? env)
+                                       (interaction-environment)
+                                       (car env)))
+                        (cadr x)) env)]
+            [(and (null? env) (strict-r5rs-compliance))
+             (error 'eval "expected 2 arguments to procedure, got 1.")]
+            [else
+              ((apply compile x env))]))))
