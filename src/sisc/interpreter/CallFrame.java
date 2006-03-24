@@ -17,10 +17,13 @@ public class CallFrame extends Procedure {
     public CallFrame             fk, parent;
     public SymbolicEnvironment   tpl; //The currently active top-level environment
     
+    public StackTracer           tracer;
+
     public CallFrame(Expression n, Value[] v,
                      boolean vk, Value[] l, Value[] e,
                      SymbolicEnvironment t,
-                     CallFrame f, CallFrame p) {
+                     CallFrame f, CallFrame p,
+                     StackTracer tr) {
         /*
           We really just want to call init(n,v,vk,l,e,t,f,p) here but
           that seems lose us 2% on gabriel benchmarks, at least on
@@ -34,12 +37,14 @@ public class CallFrame extends Procedure {
         tpl=t;
         fk=f;
         parent=p;
+        tracer=tr;
     }
 
     public final void init(Expression n, Value[] v,
                            boolean vk, Value[] l, Value[] e,
                            SymbolicEnvironment t,
-                           CallFrame f, CallFrame p) {
+                           CallFrame f, CallFrame p,
+                           StackTracer tr) {
         nxp=n;
         vlr=v;
         vlk=vk;
@@ -48,12 +53,14 @@ public class CallFrame extends Procedure {
         tpl=t;
         fk=f;
         parent=p;
+        tracer=tr;
     }
 
     public final void clear() {
         vlr=lcl=env=null;
         fk=parent=null;
         tpl=null;
+        tracer=null;
     }
 
     public final CallFrame capture(Interpreter r) {
@@ -105,6 +112,7 @@ public class CallFrame extends Procedure {
         s.writeExpression(nxp);
         s.writeExpression(fk);
         s.writeExpression(parent);
+        //TODO: we should serialize the stack tracer here
     }
 
     public CallFrame() {}
@@ -121,6 +129,10 @@ public class CallFrame extends Procedure {
         nxp=s.readExpression();
         fk=(CallFrame)s.readExpression();
         parent=(CallFrame)s.readExpression();
+        //TODO: we should deserialize the stack tracer here
+        tracer = (maxStackTraceDepth == 0) ?
+            null :
+            new StackTracer(maxStackTraceDepth);
     }
 }
 

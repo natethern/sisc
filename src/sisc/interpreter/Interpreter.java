@@ -82,10 +82,12 @@ public class Interpreter extends Util {
     public CallFrame             stk,    //Continuation (Stack)
                                   fk;    //Failure Continuation
     public SymbolicEnvironment   tpl;    //Top-level environment
-    
+
+    private StackTracer          tracer; //for stack tracking
+
     //Scheme->Java exception conversion FK
     static CallFrame top_fk = new CallFrame(new ThrowSchemeException(),
-                                            null, false, null, null, null, null, null);
+                                            null, false, null, null, null, null, null, null);
     static {
         top_fk.vlk = true;
         // This creates a loop in the stack, which will be a problem for
@@ -122,7 +124,8 @@ public class Interpreter extends Util {
     public Value interpret(Expression e) throws SchemeException {
         SymbolicEnvironment tpl=getCtx().toplevel_env;
         
-        stk=createFrame(null, null, false, null, null, tpl, top_fk, null);
+        stk=createFrame(null, null, false, null, null, tpl, top_fk, null, null);
+        tracer = makeStackTracer();
         nxp=e;
         this.tpl=tpl;
         interpret();
@@ -166,7 +169,12 @@ public class Interpreter extends Util {
     }
     
     public final void newVLR(Value[] vlr) {
-        vlk=false;
+        if (vlk) {
+            if (tracer != null) {
+                tracer = tracer.copy();
+            }
+            vlk=false;
+        }
         this.vlr=vlr;
     }
     
@@ -179,7 +187,14 @@ public class Interpreter extends Util {
         fk=c.fk;
         stk=c.parent;
         vlk=c.vlk;
+        tracer=c.tracer;
         returnFrame(c);
+    }
+
+    public final StackTracer makeStackTracer() {
+        return (maxStackTraceDepth == 0 ?
+                null :
+                new StackTracer(maxStackTraceDepth));
     }
 
     private final void makeSafe() {
@@ -196,6 +211,9 @@ public class Interpreter extends Util {
         System.arraycopy(vlr, 0, newvlr, 0, vlr.length);
         vlr = newvlr;
         vlk = false;
+        if (tracer != null) {
+            tracer = tracer.copy();
+        }
     }
 
     public final void setVLR(int pos, Value v) {
@@ -204,7 +222,18 @@ public class Interpreter extends Util {
     }
 
     public final void setFailureContinuation(Expression e) {
-        fk = createFrame(e, null, false, lcl, env, tpl, fk, stk);
+        StackTracer st = (tracer == null ? null : tracer.copy());
+        fk = createFrame(e, null, false, lcl, env, tpl, fk, stk, st);
+    }
+
+    public void trace(Expression e) {
+        if (tracer != null) {
+            if (vlk) {
+                if (vlr == null) vlr = ZV; //rare, but can happen
+                makeSafe();
+            }
+            tracer.add(e);
+        }
     }
 
     public void error(Pair error)  throws ContinuationException {
@@ -403,7 +432,8 @@ public class Interpreter extends Util {
                                         Value[] e,
                                         SymbolicEnvironment t,
                                         CallFrame f,
-                                        CallFrame p) {
+                                        CallFrame p,
+                                        StackTracer tr) {
         CallFrame rv;
         if (frameFreeList == null) {
             rv=new CallFrame();
@@ -412,12 +442,13 @@ public class Interpreter extends Util {
             frameFreeList=frameFreeList.parent;
             frameFreeListSize--;
         }
-        rv.init(n,v,vk,l,e,t,f,p);
+        rv.init(n,v,vk,l,e,t,f,p,tr);
         return rv;
     }
 
     public final void push(Expression n) {
-        stk = createFrame(n,vlr,vlk,lcl,env,tpl,fk,stk);
+        stk = createFrame(n,vlr,vlk,lcl,env,tpl,fk,stk,tracer);
+        tracer = makeStackTracer();
     }
     
     public final void returnFrame(CallFrame f) {
