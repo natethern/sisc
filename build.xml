@@ -363,7 +363,7 @@
       <arg value="-h"/>
       <arg value="${heap}"/>
       <arg value="-x"/>
-      <arg value="${bootdir}/bootstrap.scm"/>
+      <arg value="bootstrap.scm"/>
     </java>
   </target>
     
