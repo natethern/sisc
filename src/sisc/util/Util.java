@@ -48,7 +48,6 @@ public abstract class Util implements Version {
 
     protected static final Value[] ZV = new Value[0];
     protected static final Quantity FIVE = Quantity.valueOf(5);
-    protected static final Expression APPEVAL = new AppEval();
 
     public static EOFObject EOF = EOFObject.EOF;
     public static Syntax QUOTE = 
