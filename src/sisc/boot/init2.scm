@@ -635,6 +635,13 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
 (define call/ec call-with-escape-continuation)
 (define call/cc call-with-current-continuation)
 
+(define (with-environment env thunk)
+  (let ([old-env (interaction-environment env)])
+    (dynamic-wind
+        (lambda () (interaction-environment env))
+        (lambda () (_with-environment env thunk))
+        (lambda () (interaction-environment old-env)))))
+
 ;;;; "ratize.scm" Convert number to rational number (ported from SLIB)
 
 (define rationalize (void))

@@ -35,24 +35,22 @@
 
 (define current-optimizer (_make-parameter (lambda (x) x)))
 
+; Define the required environment manipulation, temporarily
+(define with-environment _with-environment)
+
 (set! compile
   (let ([old-compile compile])
     (lambda (x . env)
-      (let ([old-ie (apply interaction-environment env)]
-            [source #f])
-        (with-failure-continuation
-            (lambda (m e)
-              (interaction-environment old-ie)
-              (throw m e))
-          (lambda ()               
+      (let ([source #f]
+            [env (if (null? env) 
+                     (interaction-environment)
+                     (car env))])
+        (with-environment env
+          (lambda ()
             (set! source (sc-expand x '(e) '(e)))))
-        (interaction-environment old-ie)
-        (apply old-compile
-               (_analyze! ((current-optimizer) source)
-                          (if (null? env)
-                              (interaction-environment)
-                              (car env)))
-               env)))))
+        (old-compile
+          (_analyze! ((current-optimizer) source) env)
+          env)))))
 
 (set! eval
   (let ([old-eval eval])

@@ -1,97 +1,115 @@
 (#%program
-  ((|%%__y697jYqZ_x| . 1) (_make-parameter . 1))
+  ((|%%_LqfGLOgwr_x| . 1)
+   (_make-parameter . 1)
+   ($sc-put-cte . 1))
   ()
-  (_make-parameter)
-  (#%define current-optimizer
-    (_make-parameter
-      (#%lambda #t
-        (|%%__y697jYqZ_x|)
-        ()
-        |%%__y697jYqZ_x|))))
+  ($sc-put-cte _make-parameter)
+  (#%begin
+    ($sc-put-cte
+      'current-optimizer
+      (#%quote (global . current-optimizer)))
+    (#%annotate
+      (#%define current-optimizer
+        (#%annotate
+          (_make-parameter
+            (#%annotate
+              (#%lambda #t
+                (|%%_LqfGLOgwr_x|)
+                ()
+                |%%_LqfGLOgwr_x|)
+              ((line-number . 36)
+               (column-number . 44)
+               (source-file
+                 .
+                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
+          ((line-number . 36)
+           (column-number . 27)
+           (source-file
+             .
+             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
+      ((line-number . 36)
+       (column-number . 1)
+       (source-file
+         .
+         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))))
+(#%program
+  ((_with-environment . 1) ($sc-put-cte . 1))
+  ()
+  (_with-environment $sc-put-cte)
+  (#%begin
+    ($sc-put-cte
+      'with-environment
+      (#%quote (global . with-environment)))
+    (#%define with-environment _with-environment)))
 (#%program
   ((car . 1)
-   (|%%__yO13dZqZ_env| . 4)
+   (interaction-environment . 1)
+   (|%%_LqXyHIhwr_env| . 2)
    (null? . 1)
    (current-optimizer . 1)
    (_analyze! . 1)
-   (|%%__ys55MYqZ_old-compile| . 1)
-   (apply . 2)
-   (|%%__y8-0GZqZ_x| . 1)
+   (|%%_LqBCJfhwr_old-compile| . 1)
+   (|%%_LqhvF9iwr_x| . 1)
    (sc-expand . 1)
-   (|%%__yQSYz-qZ_source| . 2)
-   (|%%__ywLUt_qZ_e| . 1)
-   (|%%__yaPW0_qZ_m| . 1)
-   (throw . 1)
-   (|%%__yuW-6-qZ_old-ie| . 2)
-   (interaction-environment . 4)
-   (with-failure-continuation . 1)
+   (|%%_LqDrDCiwr_source| . 2)
+   (|%%_LqZnB3jwr_env| . 3)
+   (with-environment . 1)
    (compile . 2))
-  ((|%%__yQSYz-qZ_source| . 1) (compile . 1))
+  ((|%%_LqDrDCiwr_source| . 1) (compile . 1))
   (compile
-    apply
-    null?
-    car
     current-optimizer
     _analyze!
-    with-failure-continuation
+    with-environment
+    sc-expand
+    car
     interaction-environment
-    throw
-    sc-expand)
+    null?)
   (#%set! compile
     ((#%lambda #t
-       (|%%__ys55MYqZ_old-compile|)
+       (|%%_LqBCJfhwr_old-compile|)
        ()
        (#%lambda #t
-         (|%%__y8-0GZqZ_x| . |%%__yO13dZqZ_env|)
-         (|%%__ys55MYqZ_old-compile|)
+         (|%%_LqhvF9iwr_x| . |%%_LqXyHIhwr_env|)
+         (|%%_LqBCJfhwr_old-compile|)
          ((#%lambda #t
-            (|%%__yuW-6-qZ_old-ie| |%%__yQSYz-qZ_source|)
-            (|%%__yO13dZqZ_env|
-              |%%__y8-0GZqZ_x|
-              |%%__ys55MYqZ_old-compile|)
+            (|%%_LqDrDCiwr_source| |%%_LqZnB3jwr_env|)
+            (|%%_LqhvF9iwr_x| |%%_LqBCJfhwr_old-compile|)
             (#%begin
-              (with-failure-continuation
-                (#%lambda #t
-                  (|%%__yaPW0_qZ_m| |%%__ywLUt_qZ_e|)
-                  (|%%__yuW-6-qZ_old-ie|)
-                  (#%begin
-                    (interaction-environment |%%__yuW-6-qZ_old-ie|)
-                    (throw |%%__yaPW0_qZ_m| |%%__ywLUt_qZ_e|)))
+              (with-environment
+                |%%_LqZnB3jwr_env|
                 (#%lambda #t
                   ()
-                  (|%%__yQSYz-qZ_source| |%%__y8-0GZqZ_x|)
-                  (#%set! |%%__yQSYz-qZ_source|
+                  (|%%_LqDrDCiwr_source| |%%_LqhvF9iwr_x|)
+                  (#%set! |%%_LqDrDCiwr_source|
                     (sc-expand
-                      |%%__y8-0GZqZ_x|
+                      |%%_LqhvF9iwr_x|
                       (#%quote (e))
                       (#%quote (e))))))
-              (interaction-environment |%%__yuW-6-qZ_old-ie|)
-              (apply |%%__ys55MYqZ_old-compile|
-                     (_analyze!
-                       ((current-optimizer) |%%__yQSYz-qZ_source|)
-                       (#%if (null? |%%__yO13dZqZ_env|)
-                         (interaction-environment)
-                         (car |%%__yO13dZqZ_env|)))
-                     |%%__yO13dZqZ_env|)))
-          (apply interaction-environment
-                 |%%__yO13dZqZ_env|)
-          #f)))
+              (|%%_LqBCJfhwr_old-compile|
+                (_analyze!
+                  ((current-optimizer) |%%_LqDrDCiwr_source|)
+                  |%%_LqZnB3jwr_env|)
+                |%%_LqZnB3jwr_env|)))
+          #f
+          (#%if (null? |%%_LqXyHIhwr_env|)
+            (interaction-environment)
+            (car |%%_LqXyHIhwr_env|)))))
      compile)))
 (#%program
   ((compile . 1)
    (error . 1)
    (strict-r5rs-compliance . 1)
    (interaction-environment . 1)
-   (|%%__ycEQn0rZ_env| . 5)
+   (|%%_LqFgxZjwr_env| . 5)
    (null? . 2)
    (cadr . 2)
    (_analyze! . 1)
    (equal? . 1)
-   (|%%__ySHSW_qZ_old-eval| . 1)
+   (|%%_Lqjkzwjwr_old-eval| . 1)
    (apply . 2)
    (car . 3)
    (member . 1)
-   (|%%__yyAOQ0rZ_x| . 6)
+   (|%%_Lq_cvqkwr_x| . 6)
    (pair? . 1)
    (eval . 2))
   ((eval . 1))
@@ -109,31 +127,31 @@
         strict-r5rs-compliance)
   (#%set! eval
     ((#%lambda #t
-       (|%%__ySHSW_qZ_old-eval|)
+       (|%%_Lqjkzwjwr_old-eval|)
        ()
        (#%lambda #t
-         (|%%__yyAOQ0rZ_x| . |%%__ycEQn0rZ_env|)
-         (|%%__ySHSW_qZ_old-eval|)
-         (#%if (#%if (pair? |%%__yyAOQ0rZ_x|)
+         (|%%_Lq_cvqkwr_x| . |%%_LqFgxZjwr_env|)
+         (|%%_Lqjkzwjwr_old-eval|)
+         (#%if (#%if (pair? |%%_Lq_cvqkwr_x|)
                  (member
-                   (car |%%__yyAOQ0rZ_x|)
+                   (car |%%_Lq_cvqkwr_x|)
                    (#%quote ("noexpand" "analyzeonly")))
                  #f)
-           (apply |%%__ySHSW_qZ_old-eval|
-                  (#%if (equal? (car |%%__yyAOQ0rZ_x|) "analyzeonly")
+           (apply |%%_Lqjkzwjwr_old-eval|
+                  (#%if (equal? (car |%%_Lq_cvqkwr_x|) "analyzeonly")
                     (_analyze!
-                      (cadr |%%__yyAOQ0rZ_x|)
-                      (#%if (null? |%%__ycEQn0rZ_env|)
+                      (cadr |%%_Lq_cvqkwr_x|)
+                      (#%if (null? |%%_LqFgxZjwr_env|)
                         (interaction-environment)
-                        (car |%%__ycEQn0rZ_env|)))
-                    (cadr |%%__yyAOQ0rZ_x|))
-                  |%%__ycEQn0rZ_env|)
-           (#%if (#%if (null? |%%__ycEQn0rZ_env|)
+                        (car |%%_LqFgxZjwr_env|)))
+                    (cadr |%%_Lq_cvqkwr_x|))
+                  |%%_LqFgxZjwr_env|)
+           (#%if (#%if (null? |%%_LqFgxZjwr_env|)
                    (strict-r5rs-compliance)
                    #f)
              (error (#%quote eval)
                     "expected 2 arguments to procedure, got 1.")
              ((apply compile
-                     |%%__yyAOQ0rZ_x|
-                     |%%__ycEQn0rZ_env|))))))
+                     |%%_Lq_cvqkwr_x|
+                     |%%_LqFgxZjwr_env|))))))
      eval)))

@@ -168,6 +168,7 @@ public abstract class Primitives extends Util {
             define("vector-set!", Complex.class, VECTORSET);
             define("with-failure-continuation", Complex.class, WITHFC);
             define("with-stack-marker", Complex.class, WITHSTACKMARKER);
+            define("_with-environment", Complex.class, WITHENVIRONMENT);
             define("class-path-extension", Complex.class, CLASSPATHEXTENSION);
             define("class-path-extension-append!", Complex.class, CLASSPATHEXTENSIONAPPEND);
             
@@ -776,10 +777,6 @@ public abstract class Primitives extends Util {
                     int loc=r.tpl.getLoc(symbol(vlr[0]));
                     if (loc==-1) return FALSE;
                     else return r.tpl.lookup(loc); 
-                case INTERACTIONENVIRONMENT:
-                    Value env=r.getCtx().toplevel_env.asValue();
-                    r.getCtx().toplevel_env=env(vlr[0]);
-                    return env;
                 case STRING2NUMBER:
                     String st=string(vlr[0]);
                     try {
@@ -794,6 +791,10 @@ public abstract class Primitives extends Util {
                 case NLBINDINGNAMES:
                     Value[] va=nlib(vlr[0]).getLibraryBindingNames(r);
                     return valArrayToList(va,0,va.length);        
+                case INTERACTIONENVIRONMENT:
+                    Value last=(Value)r.getCtx().toplevel_env;
+                    r.getCtx().toplevel_env=env(vlr[0]);
+                    return last;
                 case REPORTENVIRONMENT:
                     if (FIVE.equals(num(vlr[0])))
                         try {
@@ -839,6 +840,12 @@ public abstract class Primitives extends Util {
                                        r.compile(vlr[0], env(vlr[1])),
                                        ZV,
                                        new int[0]);
+                case WITHENVIRONMENT:
+                    Procedure thunk=proc(vlr[1]);
+                    r.push(null);
+                    r.tpl=env(vlr[0]);
+                    r.setupTailCall(APPEVAL, ZV);
+                    return thunk;
                 case WITHFC:
                     Procedure proc=proc(vlr[1]);
                     Procedure ehandler=proc(vlr[0]);
@@ -1000,7 +1007,7 @@ public abstract class Primitives extends Util {
     }
 
 
-    // next: 147
+    // next: 148
     static final int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -1141,6 +1148,7 @@ public abstract class Primitives extends Util {
         VECTORREF = 96,
         VECTORSET = 112,
         VOIDQ = 33,
+        WITHENVIRONMENT = 147,
         WITHFC = 105,
         WITHSTACKMARKER = 146,
         _VOID = 5;
