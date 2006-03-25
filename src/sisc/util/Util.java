@@ -80,6 +80,9 @@ public abstract class Util implements Version {
         BACKQUOTE = Symbol.get("quasiquote"),
         UNQUOTE = Symbol.get("unquote"),
         UNQUOTE_SPLICING = Symbol.get("unquote-splicing"),
+        SOURCE_LINE = Symbol.get("line-number"),
+        SOURCE_COLUMN = Symbol.get("column-number"),
+        SOURCE_FILE = Symbol.get("source-file"),
         EVAL = Symbol.get("eval");
 
     public static String warn(String messageClass) {
@@ -781,9 +784,17 @@ public abstract class Util implements Version {
         return "<" + e.getClass().getName() + ">: "+ e.getMessage();
     }
 
+    public static Pair sourceAnnotations(String file,
+                                         int line,
+                                         int column) {
+        return list(new Pair(SOURCE_FILE, new SchemeString(file)),
+                    new Pair(SOURCE_LINE, Quantity.valueOf(line)),
+                    new Pair(SOURCE_COLUMN, Quantity.valueOf(column)));
+    }
+             
     public static Expression annotatedAppEval(Class clazz, String fn) {
         Expression e = new AppEval(true);
-        e.setAnnotation(Symbol.get("source-file"),
+        e.setAnnotation(SOURCE_FILE,
                         new SchemeString(clazz.getName() + "/" + fn));
         return e;
     }

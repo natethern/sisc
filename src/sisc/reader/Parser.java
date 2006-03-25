@@ -45,10 +45,7 @@ public class Parser extends Util implements Tokens {
         };
     
     static final Symbol SYNTAX=Symbol.get("syntax"),
-        ANNOTATION=Symbol.get("make-annotation"),
-        LINE=Symbol.get("line-number"),
-        COLUMN=Symbol.get("column-number"),
-        FILE=Symbol.get("source-file");
+        ANNOTATION=Symbol.get("make-annotation");
 
     static final HashMap chars=new HashMap (8);
     static {
@@ -210,10 +207,7 @@ public class Parser extends Util implements Tokens {
 
             if (annotate && produceAnnotations(flags) && line>=0) {
                 AnnotatedExpr aexp =
-                    new AnnotatedExpr(null, 
-                                      list(new Pair(LINE, Quantity.valueOf(line)),
-                                           new Pair(COLUMN, Quantity.valueOf(col)),
-                                           new Pair(FILE, new SchemeString(file))));
+                    new AnnotatedExpr(null, sourceAnnotations(file, line, col));
                 if (def != null) {
                     state.put(def, aexp);
                     def = null;

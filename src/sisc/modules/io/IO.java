@@ -401,12 +401,9 @@ public class IO extends IndexedProcedure {
                 inp = inport(f.vlr[0]);
                 if (inp instanceof SourceInputPort) {
                     SourceInputPort sinp = (SourceInputPort)inp;
-                    return list(new Pair(sym("source-file"),
-                                         new SchemeString(sinp.sourceFile)),
-                                new Pair(sym("line-number"),
-                                         Quantity.valueOf(sinp.line)),
-                                new Pair(sym("column-number"),
-                                         Quantity.valueOf(sinp.column)));
+                    return sourceAnnotations(sinp.sourceFile,
+                                             sinp.line,
+                                             sinp.column);
                 } else
                     return FALSE;
             case LOAD:
