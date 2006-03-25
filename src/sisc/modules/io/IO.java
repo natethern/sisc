@@ -439,9 +439,7 @@ public class IO extends IndexedProcedure {
                             try {
                                 r.eval(v, f.tpl);
                             } catch (SchemeException se) {
-                                annotateException(se, startLine, startColumn, p.sourceFile, 
-                                        Symbol.get("load"));
-                                throwNestedPrimException(se);
+                                throwNestedPrimException(liMessage(IOB, "evalat", p.sourceFile, startLine, startColumn), se);
                             }
                         }
                     } while (v!=EOF);
@@ -478,9 +476,7 @@ public class IO extends IndexedProcedure {
                                 Expression ev=r.compile(v);
                                 r.interpret(ev);
                             } catch (SchemeException se) {
-                                annotateException(se, startLine, startColumn, p.sourceFile, 
-                                        Symbol.get("load-expanded"));
-                                throwNestedPrimException(se);
+                                throwNestedPrimException(liMessage(IOB, "evalat", p.sourceFile, startLine, startColumn), se);
                             }
                         }
                     } while (v!=EOF);
@@ -648,28 +644,6 @@ public class IO extends IndexedProcedure {
         return VOID;
     }
 
-    private void annotateException(SchemeException se, int line, int column, String sourceFile, Symbol procName) {
-        CallFrame ek=null;
-        if (se.e instanceof CallFrame) {
-            ek=(CallFrame)se.e;
-        } else if (se.e instanceof ApplyParentFrame) {
-            ek=((ApplyParentFrame)se.e).c;
-        }
-        
-        if (se.e != null && ek!=null) {
-            CallFrame lastWithNXP=null;
-            while (ek.parent!=null) {
-                if (ek.nxp!=null) lastWithNXP=ek;
-                ek=ek.parent;
-            }
-            if (lastWithNXP!=null) {
-                lastWithNXP.nxp.setAnnotation(Symbol.get("line-number"), Quantity.valueOf(line));
-                lastWithNXP.nxp.setAnnotation(Symbol.get("column-number"), Quantity.valueOf(column));
-                lastWithNXP.nxp.setAnnotation(Symbol.get("source-file"), new SchemeString(sourceFile));
-                lastWithNXP.nxp.setAnnotation(Symbol.get("proc-name"), procName);
-            }
-        }
-    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public
