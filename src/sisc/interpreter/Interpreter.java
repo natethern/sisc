@@ -29,6 +29,13 @@ import sisc.util.Util;
  */
 public class Interpreter extends Util {
 
+    private final static Expression EVAL_APPEVAL
+        = annotatedAppEval("eval");
+
+    private static Expression annotatedAppEval(String fn) {
+        return annotatedAppEval(Interpreter.class, fn);
+    }
+
     public static class ThrowSchemeException extends Expression {
         
         public void eval(Interpreter r) 
@@ -319,7 +326,7 @@ public class Interpreter extends Util {
     public Value eval(Procedure p, Value[] args) throws SchemeException {
         acc = p;
         vlr = args;
-        return interpret(APPEVAL);
+        return interpret(EVAL_APPEVAL);
     }
 
     /**
