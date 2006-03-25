@@ -57,9 +57,6 @@
                           (write v)
                           (print-shared ps))))))
 
-(define stack-trace-stop-at-mark?
-  (make-parameter #t))
-
 (define repl-prompt
   (make-config-parameter "replPrompt" (lambda (repl-depth)
                                         (format "#;~a> "

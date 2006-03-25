@@ -905,6 +905,7 @@
      continue
      stack-trace
      print-stack-trace
+     stack-trace-stop-at-mark?
      unresolved-references)
   (import debugging-native)
   (import pretty-printing)

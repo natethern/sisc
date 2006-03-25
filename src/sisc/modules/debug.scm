@@ -189,6 +189,8 @@
 
 ;;;;;;;;;;;;;; exception display ;;;;;;;;;;;;;;;;;;;;
           
+(define stack-trace-stop-at-mark? (make-parameter #t))
+
 (define (stack-trace k)
   (cond
     [(not k)
