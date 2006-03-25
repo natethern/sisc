@@ -38,6 +38,8 @@ public abstract class Primitives extends Util {
         = annotatedAppEval("call-with-failure-continuation");
     private final static Expression WITHFC_APPEVAL
         = annotatedAppEval("with-failure-continuation");
+    private final static Expression WITHENV_APPEVAL
+        = annotatedAppEval("_with-environment");
     private final static Expression WITHSTACKMARKER_APPEVAL
         = annotatedAppEval("with-stack-marker");
     private final static Expression CALLWITHVALUES_APPEVAL
@@ -844,7 +846,7 @@ public abstract class Primitives extends Util {
                     Procedure thunk=proc(vlr[1]);
                     r.push(null);
                     r.tpl=env(vlr[0]);
-                    r.setupTailCall(APPEVAL, ZV);
+                    r.setupTailCall(WITHENV_APPEVAL, ZV);
                     return thunk;
                 case WITHFC:
                     Procedure proc=proc(vlr[1]);
