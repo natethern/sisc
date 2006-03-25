@@ -265,7 +265,7 @@
         (invoke-hook print-exception-stack-trace-hook e))
     (let ([p (and (pair? error) (error-parent error))])
       (if p 
-          (begin (display "Caused by ")
+          (begin (display "===========================\nCaused by ")
                  (apply print-exception p st))))))
 
 (define (print-error e k)
