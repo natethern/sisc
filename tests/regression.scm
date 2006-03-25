@@ -347,3 +347,14 @@
                           (begin (thread/holds-lock? (mutex/new) (mutex/new)) #t))))
 
 
+(define (foo) 3)
+
+(should-be 1457379 3
+      (let ([env (scheme-report-environment 5)])
+        (with-environment env
+          (lambda ()
+            (eval '(define-syntax foo
+                     (syntax-rules () 
+                       ((foo) 1)))
+                  env)
+            (foo)))))
