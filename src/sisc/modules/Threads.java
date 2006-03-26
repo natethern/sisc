@@ -389,6 +389,9 @@ public class Threads extends Util {
                     try {
                         c.thread.join();
                     } catch (InterruptedException ie) {}
+                    if (c.state==SchemeThread.RUNNING) 
+                        return FALSE;
+                    else return stateOf(c);
                 } else {
                     throwPrimException(liMessage(THREADB,"threadnotstarted"));
                 }

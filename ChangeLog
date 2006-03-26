@@ -3,6 +3,8 @@
 	* Removed the long-deprecated "s2j java objects are procedures"
 	  feature.
 
+	* Fixed arg count exception in |thread/join|. See bug 1458660.
+
 2006-03-25  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed how |compile| interacted with custom environments,
