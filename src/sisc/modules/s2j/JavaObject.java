@@ -14,7 +14,7 @@ import sisc.ser.Deserializer;
 import sisc.data.Expression;
 import sisc.util.ExpressionVisitor;
 
-public class JavaObject extends Procedure {
+public class JavaObject extends Value {
 
     protected Object obj;
 
@@ -176,6 +176,8 @@ public class JavaObject extends Procedure {
         return eqv(v) || (v instanceof JavaObject
                          && obj.equals(((JavaObject)v).get()));
     }
+
+    /*
 
     public void apply(Interpreter r)
         throws ContinuationException {
@@ -469,6 +471,8 @@ public class JavaObject extends Procedure {
             throw new RuntimeException(liMessage(Util.S2JB, "nosuchfield", fieldName, obj.toString()));
         }
     }
+
+    */
 }
 
    
