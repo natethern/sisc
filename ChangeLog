@@ -13,8 +13,8 @@
 	  
 2006-03-25  Matthias Radestock  <matthias@sorted.org>
 
-	* Improved error location reporting in |load|. See bugs 1458190
-	  and 1458194.
+	* Improved error location reporting in |load|. See bugs 1458190,
+	  1458194 and 1458196.
 
 2006-03-24  Matthias Radestock  <matthias@sorted.org>
 

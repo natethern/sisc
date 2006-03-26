@@ -8,6 +8,7 @@ import sisc.nativefun.*;
 import sisc.data.*;
 import sisc.io.*;
 import sisc.util.Util;
+import sisc.exprs.AnnotatedExpr;
 
 public class IO extends IndexedProcedure {
 
@@ -107,6 +108,25 @@ public class IO extends IndexedProcedure {
                error(f, message, list(new Pair(JEXCEPTION, javaWrap(e))));
             }
         }
+    }
+
+    private static void maybeThrowErrorWithExprLocation(SchemeException se, Value v) {
+        if (!(v instanceof AnnotatedExpr)) return;
+        AnnotatedExpr aexp = (AnnotatedExpr)v;
+        if (!(aexp.annotation instanceof Pair)) return;
+        Pair anns = (Pair)aexp.annotation;
+        Value sourceFile = assq(SOURCE_FILE, anns);
+        Value sourceLine = assq(SOURCE_LINE, anns);
+        Value sourceColumn = assq(SOURCE_COLUMN, anns);
+        if (sourceFile == FALSE ||
+            sourceLine == FALSE ||
+            sourceColumn == FALSE)
+            return;
+        throwNestedPrimException(liMessage(IOB, "evalat",
+                                           string(pair(sourceFile).cdr()),
+                                           num(pair(sourceLine).cdr()).intValue(),
+                                           num(pair(sourceColumn).cdr()).intValue()),
+                                 se);
     }
 
     private static Value readChar(Interpreter f, InputPort i) 
@@ -436,6 +456,7 @@ public class IO extends IndexedProcedure {
                             try {
                                 r.eval(v, f.tpl);
                             } catch (SchemeException se) {
+                                maybeThrowErrorWithExprLocation(se, v);
                                 throwNestedPrimException(liMessage(IOB, "evalat", p.sourceFile, startLine, startColumn), se);
                             }
                         }
@@ -473,6 +494,7 @@ public class IO extends IndexedProcedure {
                                 Expression ev=r.compile(v);
                                 r.interpret(ev);
                             } catch (SchemeException se) {
+                                maybeThrowErrorWithExprLocation(se, v);
                                 throwNestedPrimException(liMessage(IOB, "evalat", p.sourceFile, startLine, startColumn), se);
                             }
                         }
