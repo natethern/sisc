@@ -62,7 +62,7 @@
 ;;use of null
 (value-of (java-null <java.lang.string>) jnull) ;=> #<java java.lang.String null>
 (define aa (java-array-new <java.lang.string> '#(2 2 2)))
-(aa '#(0 0 0)) ;=> #<jnull java.lang.String>
+(java-array-ref aa '#(0 0 0)) ;=> #<jnull java.lang.String>
 (type-of (java-null <java.lang.string>)) ;=> #<java java.lang.Class java.lang.String>
 
 ;;equality on null
