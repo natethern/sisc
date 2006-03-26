@@ -1,3 +1,9 @@
+2006-03-25  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fixed how |compile| interacted with custom environments,
+	  and inadequacies in |interaction-environment|.  See
+	  bugs 1457379, 1457261, and 1457385.
+	  
 2006-03-25  Matthias Radestock  <matthias@sorted.org>
 
 	* Improved error location reporting in |load|. See bugs 1458190
