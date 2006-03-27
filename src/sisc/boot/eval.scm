@@ -40,14 +40,22 @@
 
 (set! compile
   (let ([old-compile compile])
-    (lambda (x . env)
+    (lambda (x . args)
       (let ([source #f]
-            [env (if (null? env) 
-                     (interaction-environment)
-                     (car env))])
+            [sc-expand-args (if (or (null? args) 
+                                    (environment? (car args)))
+                                '((l) (l))
+                                (car args))]
+            [env (cond [(null? args) 
+                        (interaction-environment)]
+                       [(environment? (car args))
+                        (car args)]
+                       [(not (null? (cdr args)))
+                        (cadr args)]
+                       [else (interaction-environment)])])
         (with-environment env
           (lambda ()
-            (set! source (sc-expand x '(e) '(e)))))
+            (set! source (apply sc-expand x sc-expand-args))))
         (old-compile
           (_analyze! ((current-optimizer) source) env)
           env)))))
@@ -66,4 +74,4 @@
             [(and (null? env) (strict-r5rs-compliance))
              (error 'eval "expected 2 arguments to procedure, got 1.")]
             [else
-              ((apply compile x env))]))))
+              ((apply compile x '((e) (e)) env))]))))
