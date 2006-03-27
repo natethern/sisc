@@ -355,4 +355,4 @@
                  (syntax-rules () 
                    ((foo) 1)))
               env)
-        (foo)))
+        (eval '(foo) (interaction-environment))))
