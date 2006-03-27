@@ -38,27 +38,23 @@
 ; Define the required environment manipulation, temporarily
 (define with-environment _with-environment)
 
-(set! compile
+(define compile-with-flags
   (let ([old-compile compile])
-    (lambda (x . args)
+    (lambda (expr flags . env)
       (let ([source #f]
-            [sc-expand-args (if (or (null? args) 
-                                    (environment? (car args)))
-                                '((l) (l))
-                                (car args))]
-            [env (cond [(null? args) 
-                        (interaction-environment)]
-                       [(environment? (car args))
-                        (car args)]
-                       [(not (null? (cdr args)))
-                        (cadr args)]
-                       [else (interaction-environment)])])
+            [env (if (null? env) 
+                     (interaction-environment)
+                     (car env))])
         (with-environment env
           (lambda ()
-            (set! source (apply sc-expand x sc-expand-args))))
+            (set! source (apply sc-expand expr flags))))
         (old-compile
           (_analyze! ((current-optimizer) source) env)
           env)))))
+  
+(set! compile
+  (lambda (expr . env)
+    (apply compile-with-flags expr '((l) (l)) env)))
 
 (set! eval
   (let ([old-eval eval])
@@ -74,4 +70,4 @@
             [(and (null? env) (strict-r5rs-compliance))
              (error 'eval "expected 2 arguments to procedure, got 1.")]
             [else
-              ((apply compile x '((e) (e)) env))]))))
+              ((apply compile-with-flags x '((e) (e)) env))]))))

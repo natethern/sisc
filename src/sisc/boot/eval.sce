@@ -1,5 +1,5 @@
 (#%program
-  ((|%%_VlwZqUK1x_x| . 1)
+  ((|%%_zkI_kk1Zk_x| . 1)
    (_make-parameter . 1)
    ($sc-put-cte . 1))
   ()
@@ -14,24 +14,24 @@
           (_make-parameter
             (#%annotate
               (#%lambda #t
-                (|%%_VlwZqUK1x_x|)
+                (|%%_zkI_kk1Zk_x|)
                 ()
-                |%%_VlwZqUK1x_x|)
-              ((line-number . 36)
-               (column-number . 44)
-               (source-file
+                |%%_zkI_kk1Zk_x|)
+              ((source-file
                  .
-                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-          ((line-number . 36)
-           (column-number . 27)
-           (source-file
+                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+               (line-number . 36)
+               (column-number . 44))))
+          ((source-file
              .
-             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-      ((line-number . 36)
-       (column-number . 1)
-       (source-file
+             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+           (line-number . 36)
+           (column-number . 27))))
+      ((source-file
          .
-         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))))
+         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+       (line-number . 36)
+       (column-number . 1)))))
 (#%program
   ((_with-environment . 1) ($sc-put-cte . 1))
   ()
@@ -42,256 +42,214 @@
       (#%quote (global . with-environment)))
     (#%annotate
       (#%define with-environment _with-environment)
-      ((line-number . 39)
-       (column-number . 1)
-       (source-file
+      ((source-file
          .
-         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))))
+         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+       (line-number . 39)
+       (column-number . 1)))))
 (#%program
-  ((cadr . 1)
-   (cdr . 1)
-   (not . 1)
-   (interaction-environment . 2)
-   (car . 4)
-   (environment? . 2)
-   (|%%_VlcSmOL1x_args| . 8)
-   (null? . 3)
+  ((compile . 1)
+   (car . 1)
+   (interaction-environment . 1)
+   (|%%_zkoUge2Zk_env| . 2)
+   (null? . 1)
    (current-optimizer . 1)
    (_analyze! . 1)
-   (|%%_VlSVolL1x_old-compile| . 1)
-   (|%%_VleHg9N1x_sc-expand-args| . 1)
-   (|%%_VlyOkfM1x_x| . 1)
+   (|%%_zk2YiN1Zk_old-compile| . 1)
+   (|%%_zkKQeH2Zk_flags| . 1)
+   (|%%_zk4Nc83Zk_expr| . 1)
    (sc-expand . 1)
    (apply . 1)
-   (|%%_VlUKiIM1x_source| . 2)
-   (|%%_VlADeCN1x_env| . 3)
+   (|%%_zkqJaB3Zk_source| . 2)
+   (|%%_zkMF824Zk_env| . 3)
    (with-environment . 1)
-   (compile . 2))
-  ((|%%_VlUKiIM1x_source| . 1) (compile . 1))
+   ($sc-put-cte . 1))
+  ((|%%_zkqJaB3Zk_source| . 1))
   (compile
+    $sc-put-cte
     current-optimizer
     _analyze!
     with-environment
     apply
     sc-expand
-    null?
     car
-    environment?
-    cadr
-    not
-    cdr
-    interaction-environment)
-  (#%annotate
-    (#%set! compile
-      ((#%lambda #t
-         (|%%_VlSVolL1x_old-compile|)
-         ()
-         (#%annotate
-           (#%lambda #t
-             (|%%_VlyOkfM1x_x| . |%%_VlcSmOL1x_args|)
-             (|%%_VlSVolL1x_old-compile|)
-             ((#%lambda #t
-                (|%%_VlUKiIM1x_source|
-                  |%%_VleHg9N1x_sc-expand-args|
-                  |%%_VlADeCN1x_env|)
-                (|%%_VlyOkfM1x_x| |%%_VlSVolL1x_old-compile|)
-                (#%begin
-                  (#%annotate
-                    (with-environment
-                      |%%_VlADeCN1x_env|
-                      (#%annotate
-                        (#%lambda #t
-                          ()
-                          (|%%_VleHg9N1x_sc-expand-args|
-                            |%%_VlUKiIM1x_source|
-                            |%%_VlyOkfM1x_x|)
-                          (#%annotate
-                            (#%set! |%%_VlUKiIM1x_source|
-                              (#%annotate
-                                (apply sc-expand
-                                       |%%_VlyOkfM1x_x|
-                                       |%%_VleHg9N1x_sc-expand-args|)
-                                ((line-number . 58)
-                                 (column-number . 26)
-                                 (source-file
-                                   .
-                                   "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                            ((line-number . 58)
-                             (column-number . 13)
-                             (source-file
-                               .
-                               "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                        ((line-number . 57)
-                         (column-number . 11)
-                         (source-file
-                           .
-                           "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                    ((line-number . 56)
-                     (column-number . 9)
-                     (source-file
-                       .
-                       "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-                  (#%annotate
-                    (|%%_VlSVolL1x_old-compile|
-                      (#%annotate
-                        (_analyze!
-                          (#%annotate
-                            ((#%annotate
-                               (current-optimizer)
-                               ((line-number . 60)
-                                (column-number . 23)
-                                (source-file
-                                  .
-                                  "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-                             |%%_VlUKiIM1x_source|)
-                            ((line-number . 60)
-                             (column-number . 22)
-                             (source-file
-                               .
-                               "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-                          |%%_VlADeCN1x_env|)
-                        ((line-number . 60)
-                         (column-number . 11)
-                         (source-file
-                           .
-                           "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-                      |%%_VlADeCN1x_env|)
-                    ((line-number . 59)
-                     (column-number . 9)
-                     (source-file
-                       .
-                       "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))))
-              #f
-              (#%annotate
-                (#%if (#%if (#%annotate
-                              (null? |%%_VlcSmOL1x_args|)
-                              ((line-number . 45)
-                               (column-number . 37)
-                               (source-file
-                                 .
-                                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-                        #t
-                        (#%annotate
-                          (environment?
-                            (#%annotate
-                              (car |%%_VlcSmOL1x_args|)
-                              ((line-number . 46)
-                               (column-number . 51)
-                               (source-file
-                                 .
-                                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                          ((line-number . 46)
-                           (column-number . 37)
-                           (source-file
-                             .
-                             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                  (#%quote ((l) (l)))
-                  (#%annotate
-                    (car |%%_VlcSmOL1x_args|)
-                    ((line-number . 48)
-                     (column-number . 33)
-                     (source-file
-                       .
-                       "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                ((line-number . 45)
-                 (column-number . 29)
-                 (source-file
-                   .
-                   "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-              (#%if (#%annotate
-                      (null? |%%_VlcSmOL1x_args|)
-                      ((line-number . 49)
-                       (column-number . 25)
-                       (source-file
-                         .
-                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-                (#%annotate
-                  (interaction-environment)
-                  ((line-number . 50)
-                   (column-number . 25)
-                   (source-file
-                     .
-                     "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-                (#%if (#%annotate
-                        (environment?
-                          (#%annotate
-                            (car |%%_VlcSmOL1x_args|)
-                            ((line-number . 51)
-                             (column-number . 39)
-                             (source-file
-                               .
-                               "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                        ((line-number . 51)
-                         (column-number . 25)
-                         (source-file
-                           .
-                           "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-                  (#%annotate
-                    (car |%%_VlcSmOL1x_args|)
-                    ((line-number . 52)
-                     (column-number . 25)
-                     (source-file
-                       .
-                       "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-                  (#%if (#%annotate
-                          (not (#%annotate
-                                 (null? (#%annotate
-                                          (cdr |%%_VlcSmOL1x_args|)
-                                          ((line-number . 53)
-                                           (column-number . 37)
-                                           (source-file
-                                             .
-                                             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                                 ((line-number . 53)
-                                  (column-number . 30)
-                                  (source-file
-                                    .
-                                    "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                          ((line-number . 53)
-                           (column-number . 25)
-                           (source-file
-                             .
-                             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+    interaction-environment
+    null?)
+  (#%begin
+    ($sc-put-cte
+      'compile-with-flags
+      (#%quote (global . compile-with-flags)))
+    (#%annotate
+      (#%define compile-with-flags
+        ((#%lambda #t
+           (|%%_zk2YiN1Zk_old-compile|)
+           ()
+           (#%annotate
+             (#%lambda #t
+               (|%%_zk4Nc83Zk_expr|
+                 |%%_zkKQeH2Zk_flags|
+                 .
+                 |%%_zkoUge2Zk_env|)
+               (|%%_zk2YiN1Zk_old-compile|)
+               ((#%lambda #t
+                  (|%%_zkqJaB3Zk_source| |%%_zkMF824Zk_env|)
+                  (|%%_zkKQeH2Zk_flags|
+                    |%%_zk4Nc83Zk_expr|
+                    |%%_zk2YiN1Zk_old-compile|)
+                  (#%begin
                     (#%annotate
-                      (cadr |%%_VlcSmOL1x_args|)
-                      ((line-number . 54)
-                       (column-number . 25)
-                       (source-file
+                      (with-environment
+                        |%%_zkMF824Zk_env|
+                        (#%annotate
+                          (#%lambda #t
+                            ()
+                            (|%%_zkqJaB3Zk_source|
+                              |%%_zkKQeH2Zk_flags|
+                              |%%_zk4Nc83Zk_expr|)
+                            (#%annotate
+                              (#%set! |%%_zkqJaB3Zk_source|
+                                (#%annotate
+                                  (apply sc-expand
+                                         |%%_zk4Nc83Zk_expr|
+                                         |%%_zkKQeH2Zk_flags|)
+                                  ((source-file
+                                     .
+                                     "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                                   (line-number . 50)
+                                   (column-number . 26))))
+                              ((source-file
+                                 .
+                                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                               (line-number . 50)
+                               (column-number . 13))))
+                          ((source-file
+                             .
+                             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                           (line-number . 49)
+                           (column-number . 11))))
+                      ((source-file
                          .
-                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                       (line-number . 48)
+                       (column-number . 9)))
+                    (#%annotate
+                      (|%%_zk2YiN1Zk_old-compile|
+                        (#%annotate
+                          (_analyze!
+                            (#%annotate
+                              ((#%annotate
+                                 (current-optimizer)
+                                 ((source-file
+                                    .
+                                    "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                                  (line-number . 52)
+                                  (column-number . 23)))
+                               |%%_zkqJaB3Zk_source|)
+                              ((source-file
+                                 .
+                                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                               (line-number . 52)
+                               (column-number . 22)))
+                            |%%_zkMF824Zk_env|)
+                          ((source-file
+                             .
+                             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                           (line-number . 52)
+                           (column-number . 11)))
+                        |%%_zkMF824Zk_env|)
+                      ((source-file
+                         .
+                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                       (line-number . 51)
+                       (column-number . 9)))))
+                #f
+                (#%annotate
+                  (#%if (#%annotate
+                          (null? |%%_zkoUge2Zk_env|)
+                          ((source-file
+                             .
+                             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                           (line-number . 45)
+                           (column-number . 22)))
                     (#%annotate
                       (interaction-environment)
-                      ((line-number . 55)
-                       (column-number . 30)
-                       (source-file
+                      ((source-file
                          .
-                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))))))
-           ((line-number . 43)
-            (column-number . 5)
-            (source-file
-              .
-              "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-       compile))
-    ((line-number . 41)
-     (column-number . 1)
-     (source-file
-       .
-       "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
+                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                       (line-number . 46)
+                       (column-number . 22)))
+                    (#%annotate
+                      (car |%%_zkoUge2Zk_env|)
+                      ((source-file
+                         .
+                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                       (line-number . 47)
+                       (column-number . 22))))
+                  ((source-file
+                     .
+                     "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                   (line-number . 45)
+                   (column-number . 18)))))
+             ((source-file
+                .
+                "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+              (line-number . 43)
+              (column-number . 5))))
+         compile))
+      ((source-file
+         .
+         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+       (line-number . 41)
+       (column-number . 1)))))
 (#%program
-  ((compile . 1)
+  ((|%%_zk6C6v4Zk_env| . 1)
+   (|%%_zksy4Y4Zk_expr| . 1)
+   (compile-with-flags . 1)
+   (apply . 1)
+   (compile . 1))
+  ((compile . 1))
+  (compile-with-flags apply)
+  (#%annotate
+    (#%set! compile
+      (#%annotate
+        (#%lambda #t
+          (|%%_zksy4Y4Zk_expr| . |%%_zk6C6v4Zk_env|)
+          ()
+          (#%annotate
+            (apply compile-with-flags
+                   |%%_zksy4Y4Zk_expr|
+                   (#%quote ((l) (l)))
+                   |%%_zk6C6v4Zk_env|)
+            ((source-file
+               .
+               "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+             (line-number . 57)
+             (column-number . 5))))
+        ((source-file
+           .
+           "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+         (line-number . 56)
+         (column-number . 3))))
+    ((source-file
+       .
+       "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+     (line-number . 55)
+     (column-number . 1))))
+(#%program
+  ((compile-with-flags . 1)
    (error . 1)
    (strict-r5rs-compliance . 1)
    (interaction-environment . 1)
-   (|%%_VlCs8ZO1x_env| . 5)
+   (|%%_zk8r0S5Zk_env| . 5)
    (null? . 2)
    (cadr . 2)
    (_analyze! . 1)
    (equal? . 1)
-   (|%%_VlgwawO1x_old-eval| . 1)
+   (|%%_zkOu2p5Zk_old-eval| . 1)
    (apply . 2)
    (car . 3)
    (member . 1)
-   (|%%_VlYo6qP1x_x| . 6)
+   (|%%_zkun-i6Zk_x| . 6)
    (pair? . 1)
    (eval . 2))
   ((eval . 1))
@@ -304,165 +262,165 @@
         cadr
         _analyze!
         apply
-        compile
+        compile-with-flags
         error
         strict-r5rs-compliance)
   (#%annotate
     (#%set! eval
       ((#%lambda #t
-         (|%%_VlgwawO1x_old-eval|)
+         (|%%_zkOu2p5Zk_old-eval|)
          ()
          (#%annotate
            (#%lambda #t
-             (|%%_VlYo6qP1x_x| . |%%_VlCs8ZO1x_env|)
-             (|%%_VlgwawO1x_old-eval|)
+             (|%%_zkun-i6Zk_x| . |%%_zk8r0S5Zk_env|)
+             (|%%_zkOu2p5Zk_old-eval|)
              (#%if (#%if (#%annotate
-                           (pair? |%%_VlYo6qP1x_x|)
-                           ((line-number . 66)
-                            (column-number . 19)
-                            (source-file
+                           (pair? |%%_zkun-i6Zk_x|)
+                           ((source-file
                               .
-                              "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                              "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                            (line-number . 62)
+                            (column-number . 19)))
                      (#%annotate
                        (member
                          (#%annotate
-                           (car |%%_VlYo6qP1x_x|)
-                           ((line-number . 66)
-                            (column-number . 37)
-                            (source-file
+                           (car |%%_zkun-i6Zk_x|)
+                           ((source-file
                               .
-                              "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                              "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                            (line-number . 62)
+                            (column-number . 37)))
                          (#%quote ("noexpand" "analyzeonly")))
-                       ((line-number . 66)
-                        (column-number . 29)
-                        (source-file
+                       ((source-file
                           .
-                          "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                          "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                        (line-number . 62)
+                        (column-number . 29)))
                      #f)
                (#%annotate
-                 (apply |%%_VlgwawO1x_old-eval|
+                 (apply |%%_zkOu2p5Zk_old-eval|
                         (#%annotate
                           (#%if (#%annotate
                                   (equal?
                                     (#%annotate
-                                      (car |%%_VlYo6qP1x_x|)
-                                      ((line-number . 68)
-                                       (column-number . 33)
-                                       (source-file
+                                      (car |%%_zkun-i6Zk_x|)
+                                      ((source-file
                                          .
-                                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                                       (line-number . 64)
+                                       (column-number . 33)))
                                     "analyzeonly")
-                                  ((line-number . 68)
-                                   (column-number . 25)
-                                   (source-file
+                                  ((source-file
                                      .
-                                     "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                                     "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                                   (line-number . 64)
+                                   (column-number . 25)))
                             (#%annotate
                               (_analyze!
                                 (#%annotate
-                                  (cadr |%%_VlYo6qP1x_x|)
-                                  ((line-number . 69)
-                                   (column-number . 36)
-                                   (source-file
+                                  (cadr |%%_zkun-i6Zk_x|)
+                                  ((source-file
                                      .
-                                     "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                                     "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                                   (line-number . 65)
+                                   (column-number . 36)))
                                 (#%annotate
                                   (#%if (#%annotate
-                                          (null? |%%_VlCs8ZO1x_env|)
-                                          ((line-number . 70)
-                                           (column-number . 40)
-                                           (source-file
+                                          (null? |%%_zk8r0S5Zk_env|)
+                                          ((source-file
                                              .
-                                             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                                             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                                           (line-number . 66)
+                                           (column-number . 40)))
                                     (#%annotate
                                       (interaction-environment)
-                                      ((line-number . 71)
-                                       (column-number . 40)
-                                       (source-file
+                                      ((source-file
                                          .
-                                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                                       (line-number . 67)
+                                       (column-number . 40)))
                                     (#%annotate
-                                      (car |%%_VlCs8ZO1x_env|)
-                                      ((line-number . 72)
-                                       (column-number . 40)
-                                       (source-file
+                                      (car |%%_zk8r0S5Zk_env|)
+                                      ((source-file
                                          .
-                                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                                  ((line-number . 70)
-                                   (column-number . 36)
-                                   (source-file
+                                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                                       (line-number . 68)
+                                       (column-number . 40))))
+                                  ((source-file
                                      .
-                                     "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                              ((line-number . 69)
-                               (column-number . 25)
-                               (source-file
+                                     "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                                   (line-number . 66)
+                                   (column-number . 36))))
+                              ((source-file
                                  .
-                                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                               (line-number . 65)
+                               (column-number . 25)))
                             (#%annotate
-                              (cadr |%%_VlYo6qP1x_x|)
-                              ((line-number . 73)
-                               (column-number . 25)
-                               (source-file
+                              (cadr |%%_zkun-i6Zk_x|)
+                              ((source-file
                                  .
-                                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                          ((line-number . 68)
-                           (column-number . 21)
-                           (source-file
+                                 "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                               (line-number . 69)
+                               (column-number . 25))))
+                          ((source-file
                              .
-                             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
-                        |%%_VlCs8ZO1x_env|)
-                 ((line-number . 67)
-                  (column-number . 14)
-                  (source-file
+                             "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                           (line-number . 64)
+                           (column-number . 21)))
+                        |%%_zk8r0S5Zk_env|)
+                 ((source-file
                     .
-                    "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                    "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                  (line-number . 63)
+                  (column-number . 14)))
                (#%if (#%if (#%annotate
-                             (null? |%%_VlCs8ZO1x_env|)
-                             ((line-number . 74)
-                              (column-number . 19)
-                              (source-file
+                             (null? |%%_zk8r0S5Zk_env|)
+                             ((source-file
                                 .
-                                "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                                "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                              (line-number . 70)
+                              (column-number . 19)))
                        (#%annotate
                          (strict-r5rs-compliance)
-                         ((line-number . 74)
-                          (column-number . 31)
-                          (source-file
+                         ((source-file
                             .
-                            "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                            "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                          (line-number . 70)
+                          (column-number . 31)))
                        #f)
                  (#%annotate
                    (error (#%quote eval)
                           "expected 2 arguments to procedure, got 1.")
-                   ((line-number . 75)
-                    (column-number . 14)
-                    (source-file
+                   ((source-file
                       .
-                      "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")))
+                      "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                    (line-number . 71)
+                    (column-number . 14)))
                  (#%annotate
                    ((#%annotate
-                      (apply compile
-                             |%%_VlYo6qP1x_x|
+                      (apply compile-with-flags
+                             |%%_zkun-i6Zk_x|
                              (#%quote ((e) (e)))
-                             |%%_VlCs8ZO1x_env|)
-                      ((line-number . 77)
-                       (column-number . 16)
-                       (source-file
+                             |%%_zk8r0S5Zk_env|)
+                      ((source-file
                          .
-                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
-                   ((line-number . 77)
-                    (column-number . 15)
-                    (source-file
+                         "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                       (line-number . 73)
+                       (column-number . 16))))
+                   ((source-file
                       .
-                      "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))))
-           ((line-number . 65)
-            (column-number . 5)
-            (source-file
+                      "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+                    (line-number . 73)
+                    (column-number . 15))))))
+           ((source-file
               .
-              "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
+              "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+            (line-number . 61)
+            (column-number . 5))))
        eval))
-    ((line-number . 63)
-     (column-number . 1)
-     (source-file
+    ((source-file
        .
-       "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm"))))
+       "file:/home/scgmille/eclipse/sisc/src/sisc/boot/eval.scm")
+     (line-number . 59)
+     (column-number . 1))))
