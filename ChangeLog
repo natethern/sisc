@@ -22,6 +22,8 @@
 
 	* Added proper stack tracing. See maxStackTraceDepth parameter.
 
+2006-03-23  SISC 1.13.1-rc Released
+
 2006-03-22  Scott G. Miller <sgmiller@gmail.com>
  
 	* Converted side-effecting primitives to non-fixable procedures,
