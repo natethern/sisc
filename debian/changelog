@@ -1,3 +1,9 @@
+sisc (1.13.3-rc-1) unstable; urgency=low
+
+  * New upstream version.
+	
+ -- Scott G. Miller <sgmiller@gmail.com>  Sat,  27 Mar 2005 14:42:10 -0500
+
 sisc (1.13.2-rc-1) unstable; urgency=low
 
   * New upstream version.
