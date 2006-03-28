@@ -144,7 +144,6 @@ public abstract class Primitives extends Util {
             define("compact-string-rep", Complex.class, COMPACTSTRINGREP);
             define("compile", Complex.class, COMPILE);
             define("current-wind", Complex.class, CURRENTWIND);
-            define("eval", Complex.class, EVALUATE);
             define("gensym", Complex.class, GENSYM);
             define("gensym?", GENSYMQ);
             define("getenv", Complex.class, GETENV);
@@ -743,10 +742,6 @@ public abstract class Primitives extends Util {
                 case GENSYM: 
                     long unv=r.tctx.nextUnique();
                     return Symbol.intern(GENSYM_MAGIC_PREFIX+base64encode(unv));
-                case EVALUATE:
-                    r.nxp=r.compile(vlr[0]);                
-                    r.env=null;
-                    return VOID;
                 case COMPILE:
                     return new Closure(false,
                                        (short)0, 
@@ -830,12 +825,6 @@ public abstract class Primitives extends Util {
                 switch (id) {
                 case NLBINDING:
                     return nlib(vlr[0]).getBindingValue(r, symbol(vlr[1]));
-                case EVALUATE:
-                    SymbolicEnvironment tpl=env(vlr[1]);
-                    r.tpl=tpl;
-                    r.nxp=r.compile(vlr[0], tpl);
-                    r.env=null;
-                    return VOID;
                 case COMPILE:
                     return new Closure(false,
                                        (short)0, 
@@ -1046,7 +1035,6 @@ public abstract class Primitives extends Util {
         EQ = 83,
         EQUAL = 86,
         EQV = 84,
-        EVALUATE = 81,
         EXACT2INEXACT = 46,
         EXACTQ = 38,
         EXP = 25,
