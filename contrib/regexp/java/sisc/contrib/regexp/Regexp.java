@@ -189,7 +189,7 @@ public class Regexp extends IndexedProcedure
 	   		return 1.0f;
 	 	}
 
-		public Value construct(int id) {
+		public Value construct(Object context, int id) {
 		 return new Regexp(id);
 		}
         
