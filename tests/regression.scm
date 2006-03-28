@@ -359,5 +359,5 @@
 
 (require-extension (srfi 11))
 (should-be 1460118 '(1 2 3)
-           (let-values ((a b c) (values 1 2 3))
+           (let-values ([(a b c) (values 1 2 3)])
              (list a b c)))
