@@ -40,34 +40,49 @@
 
 (define compile-with-flags
   (let ([old-compile compile])
-    (lambda (expr flags . env)
-      (let ([source #f]
-            [env (if (null? env) 
+    ;;we could use 'compose' from the 'misc' module here, but that
+    ;;requires moving it out of that module and into init.scm
+    (define (compose . fs)
+      (if (null? fs)
+          (lambda (x) x)
+          (let ([fn (car fs)]
+                [tail (apply compose (cdr fs))])
+            (lambda (x) (tail (fn x))))))
+    (define (select-phases start-phase phases)
+      (if (eq? (caar phases) start-phase)
+          (map cdr phases)
+          (select-phases start-phase (cdr phases))))
+    (lambda (expr start-phase flags . env)
+      (let ([env (if (null? env) 
                      (interaction-environment)
                      (car env))])
-        (with-environment env
-          (lambda ()
-            (set! source (apply sc-expand expr flags))))
-        (old-compile
-          (_analyze! ((current-optimizer) source) env)
-          env)))))
-  
+        (define (expand expr)
+          (with-environment env
+            (lambda () (apply sc-expand expr flags))))
+        (define (optimize expr)
+          ((current-optimizer) expr))
+        (define (analyze expr)
+          (_analyze! expr env))
+        (define (compile expr)
+          (old-compile expr env))
+        (let ([phases `((expand     . ,expand)
+                        (optimize   . ,optimize)
+                        (analyze    . ,analyze)
+                        (compile    . ,compile))])
+          ((apply compose (select-phases start-phase phases)) expr))))))
+
 (set! compile
   (lambda (expr . env)
-    (apply compile-with-flags expr '((l) (l)) env)))
+    (apply compile-with-flags expr 'expand '((l) (l)) env)))
 
-(set! eval
-  (let ([old-eval eval])
-    (lambda (x . env)
-      (cond [(and (pair? x) (member (car x) '("noexpand" "analyzeonly")))
-             (apply old-eval
-                    (if (equal? (car x) "analyzeonly")
-                        (_analyze! (cadr x)
-                                   (if (null? env)
-                                       (interaction-environment)
-                                       (car env)))
-                        (cadr x)) env)]
-            [(and (null? env) (strict-r5rs-compliance))
-             (error 'eval "expected 2 arguments to procedure, got 1.")]
-            [else
-              ((apply compile-with-flags x '((e) (e)) env))]))))
+(define (eval x . env)
+  (let ([phase 'expand])
+    (cond [(and (pair? x) (equal? (car x) "noexpand"))
+           (set! phase 'compile)
+           (set! x (cadr x))]
+          [(and (pair? x) (equal? (car x) "analyzeonly"))
+           (set! phase 'analyze)
+           (set! x (cadr x))]
+          [(and (null? env) (strict-r5rs-compliance))
+           (error 'eval "expected 2 arguments to procedure, got 1.")])
+    ((apply compile-with-flags x phase '((e) (e)) env))))
