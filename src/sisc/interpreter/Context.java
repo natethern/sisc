@@ -26,7 +26,7 @@ import sisc.util.Util;
  * </pre>
  * The provided SchemeCaller instance's execute method is invoked with
  * an Interpreter which is automatically obtained and then returned when
- * the call completes.  The return value of the ScheemCaller's execute
+ * the call completes.  The return value of the SchemeCaller's execute
  * method is returned from the Context method.
  *
  * @see SchemeCaller

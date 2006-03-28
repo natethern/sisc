@@ -11,6 +11,11 @@ public class MemoizedSymbol extends Symbol implements Singleton {
         super(symval);
     }
 
+    /**
+     * Interns the given symbol.
+     * @return the interned symbol, or null if the symbol was not
+     * previously defined
+     */
     public static Symbol intern(String str) {
         synchronized(memo) {
             WeakReference wr=(WeakReference)memo.get(str);

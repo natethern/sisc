@@ -10,7 +10,7 @@ import sisc.ser.Serializer;
 import sisc.util.Util;
 
 /**
- * <b>The SISC engine.</b>
+ * The SISC engine.
  * <p>
  * Interpreter is the SISC engine.  It contains the engine registers,
  * and the main loop responsible for repeatedly executing the

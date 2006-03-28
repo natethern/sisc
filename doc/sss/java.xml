@@ -15,7 +15,7 @@
       a simple process, but requires some initialization 
       before proceeding.  Depending on the use case of &SISC;,
       the initialization may be largely automatic.  
-      Any Scheme call first requires three resources:
+      Any Scheme call first requires four resources:
       <orderedlist>
         <listitem>
           <para>
@@ -321,7 +321,7 @@
           input and output ports) must be created.  The preferred
           method for an external call is called a <emphasis>managed
           external call</emphasis>, and uses the visitor pattern with
-          the following method in the <classname>Context</classname>
+          one of the following methods in the <classname>Context</classname>
           class:
         </para>
         <blockquote>
@@ -346,11 +346,38 @@
             <blockquote>
               <para>
                 Creates an Interpreter context for the application context
-                if provided, the current or default application
-                otherwise, and calls
-                <function>execute</function> in the caller with the
+                if provided, or the default application context
+                if <parameter>ctx</parameter> is null, and calls
+                <parameter>execute</parameter> in the caller with the new
                 Interpreter.  When the caller returns, the Interpreter
                 is freed, and the return value of the caller is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>execute</primary></indexterm>
+            <methodsynopsis language="java">
+              <modifier>public</modifier>
+              <modifier>static</modifier>
+              <type>Object</type>
+              <methodname>execute</methodname>
+              <methodparam>
+                <type>sisc.interpreter.SchemeCaller</type>
+                <parameter>caller</parameter>
+              </methodparam>
+              <exceptionname>sisc.interpreterSchemeException</exceptionname>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates an Interpreter context for the default
+                application context, loading the default heap if
+                necessary, and calls the <function>execute</function>
+                method of the <function>caller</function> object
+                with the new Interpreter (that is, it is equivalent to
+                <function>execute(null, caller)</function>).  This simple
+                interface is the one you should use if you do not have
+                a particular reason to use a non-default
+                application context.
               </para>
             </blockquote>
           </para>
@@ -383,19 +410,20 @@
           </para>
         </blockquote>
         <para>
-          Interpreters can also be obtained using the
+          As an alternative to this managed external call, a
+          call from Java to Scheme can be made by using the
           <function>enter</function> method of
-          <classname>Context</classname>, then several calls can
-          be made to the interpreter, then the interpreter released using
-          <function>exit</function>. This has some weaknesses, however.  
-          Because this pair of calls cannot enforce that
+          <classname>Context</classname> to obtain an interpreter,
+          then making several calls to the interpreter, then releasing
+          it using <function>exit</function>.  This has some
+          weaknesses, however.  Because this pair of calls cannot enforce that
           all intervening calls to the Interpreter run in the same thread,
           subtle issues can arrise if the Interpreter context is saved as a reference
           in a program and used by competing threads.  Other, more subtle
           issues exist, such as the association of a thread handle (as retrievable
           using SRFI-18) in Scheme with the Java thread which is making the call.
-          For this reason, it is preferred that the programmer use 
-          the managed external call form whenever possible.  
+          For this reason, the managed external call form is preferred
+          whenever possible.  
         </para>
         <blockquote>
           <para>

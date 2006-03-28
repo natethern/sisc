@@ -12,14 +12,30 @@ public class Symbol extends Value {
         return new Symbol(str);
     }
 
+    /**
+     * Interns the symbol with the given name.
+     * @return the value of the symbol, or null if it is not defined
+     */
     public static Symbol intern(String str) {
         return MemoizedSymbol.intern(str);
     }
 
+    /**
+     * Retrieves the value of the symbol with the given name.
+     * Equivalent to <code>get(str,false)</code>.
+     * @return the value of the symbol, or null if it is not defined
+     */
     public static Symbol get(String str) {
         return get(str, false);
     }
 
+    /**
+     * Retrieves the value of the symbol with the given name.
+     * @param str the name of the symbol
+     * @param caseSensitive true if the case of the symbol name
+     * is to be respected
+     * @return the value of the symbol, or null if it is not defined
+     */
     public static Symbol get(String str, boolean caseSensitive) {
         return intern(caseSensitive ? str : str.toLowerCase());
     }
