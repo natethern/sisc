@@ -890,7 +890,7 @@
   (include "../modules/pp.scm"))
 
 (module debugging
-    (show
+    ((show show-expr)
      express
      error-continuation-k
      annotated?
@@ -909,6 +909,7 @@
      unresolved-references)
   (import debugging-native)
   (import pretty-printing)
+  (import* misc define-simple-syntax)
   (include "debug.scm"))
 
 (module libraries
