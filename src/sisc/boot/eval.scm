@@ -38,38 +38,42 @@
 ; Define the required environment manipulation, temporarily
 (define with-environment _with-environment)
 
-(define compile-with-flags
+(define compilation-phases
   (let ([old-compile compile])
-    ;;we could use 'compose' from the 'misc' module here, but that
-    ;;requires moving it out of that module and into init.scm
-    (define (compose . fs)
-      (if (null? fs)
-          (lambda (x) x)
-          (let ([fn (car fs)]
-                [tail (apply compose (cdr fs))])
-            (lambda (x) (tail (fn x))))))
-    (define (select-phases start-phase phases)
-      (if (eq? (caar phases) start-phase)
-          (map cdr phases)
-          (select-phases start-phase (cdr phases))))
-    (lambda (expr start-phase flags . env)
-      (let ([env (if (null? env) 
-                     (interaction-environment)
-                     (car env))])
-        (define (expand expr)
-          (with-environment env
-            (lambda () (apply sc-expand expr flags))))
-        (define (optimize expr)
-          ((current-optimizer) expr))
-        (define (analyze expr)
-          (_analyze! expr env))
-        (define (compile expr)
-          (old-compile expr env))
-        (let ([phases `((expand     . ,expand)
-                        (optimize   . ,optimize)
-                        (analyze    . ,analyze)
-                        (compile    . ,compile))])
-          ((apply compose (select-phases start-phase phases)) expr))))))
+    (lambda (flags env)
+      (define (expand expr)
+        (with-environment env
+          (lambda () (apply sc-expand expr flags))))
+      (define (optimize expr)
+        ((current-optimizer) expr))
+      (define (analyze expr)
+        (_analyze! expr env))
+      (define (compile expr)
+        (old-compile expr env))
+      `((expand     . ,expand)
+        (optimize   . ,optimize)
+        (analyze    . ,analyze)
+        (compile    . ,compile)))))
+
+(define (compile-with-flags expr start-phase flags . env)
+  ;;we could use 'compose' from the 'misc' module here, but that
+  ;;requires moving it out of that module and into init.scm
+  (define (compose . fs)
+    (if (null? fs)
+        (lambda (x) x)
+        (let ([fn (car fs)]
+              [tail (apply compose (cdr fs))])
+          (lambda (x) (tail (fn x))))))
+  (define (select-phases start-phase phases)
+    (if (eq? (caar phases) start-phase)
+        (map cdr phases)
+        (select-phases start-phase (cdr phases))))
+  (let ([env (if (null? env) 
+                 (interaction-environment)
+                 (car env))])
+    ((apply compose (select-phases start-phase
+                                   (compilation-phases flags env)))
+     expr)))
 
 (set! compile
   (lambda (expr . env)
