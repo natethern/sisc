@@ -844,7 +844,7 @@ public abstract class Primitives extends Util {
                 case CALLWITHVALUES:
                     Procedure producer=proc(vlr[0]);
                     Procedure consumer=proc(vlr[1]);
-                    r.push(new ApplyValuesContEval(consumer));
+                    r.pushExpr(new ApplyValuesContEval(consumer));
                     r.setupTailCall(CALLWITHVALUES_APPEVAL, ZV);
                     return producer;
                 case GETPROP:

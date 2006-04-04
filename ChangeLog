@@ -1,3 +1,7 @@
+2006-03-31  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed a space leak in |call-with-values|. See bug 1461939.
+
 2006-03-27  SISC 1.13.2-rc Released
 
 2006-03-26  Matthias Radestock  <matthias@sorted.org>
