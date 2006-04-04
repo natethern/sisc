@@ -833,7 +833,6 @@ public abstract class Primitives extends Util {
                                        new int[0]);
                 case WITHENVIRONMENT:
                     Procedure thunk=proc(vlr[1]);
-                    r.push(null);
                     r.tpl=env(vlr[0]);
                     r.setupTailCall(WITHENV_APPEVAL, ZV);
                     return thunk;
