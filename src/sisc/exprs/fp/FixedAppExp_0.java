@@ -7,7 +7,6 @@ import sisc.interpreter.*;
 import sisc.exprs.AppExp;
 import sisc.exprs.FreeReferenceExp;
 import sisc.nativefun.FixableProcedure;
-import sisc.nativefun.NestedPrimRuntimeException;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
