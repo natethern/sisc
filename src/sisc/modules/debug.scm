@@ -21,7 +21,10 @@
               (newline)
               (display "=>")
               (newline)              
-              (let ([compiled (_compile analyzed)])
+              (let ([compiled (compile-with-flags analyzed
+                                                  'compile
+                                                  '((l) (l))
+                                                  (interaction-environment))])
                 (pretty-print (express compiled))
                 (newline)
                 (display "=>")
