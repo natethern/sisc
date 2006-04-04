@@ -80,7 +80,6 @@ public class Interpreter extends Util {
     //ACCOUNTING REGISTERS
     private boolean              vlk;      //vlk, when true, indicates the
                                            //frame was captured.
-    public Expression            lxp;      //Used for debugging
 
     //ACTIVITY REGISTERS
     public Value                 acc;    //Accumulator
@@ -186,7 +185,7 @@ public class Interpreter extends Util {
     }
     
     public final void pop(CallFrame c) {
-        nxp=lxp=c.nxp;
+        nxp=c.nxp;
         vlr=c.vlr;
         lcl=c.lcl;
         env=c.env;
@@ -275,11 +274,8 @@ public class Interpreter extends Util {
     }
 
     public void error(Pair error)  throws ContinuationException {
-        push(nxp == null ? lxp : nxp);
-        acc = new Values(new Value[] {
-                             error,
-                             new ApplyParentFrame(stk.capture(this))
-                         });
+        Procedure k = new ApplyParentFrame(createEmptyFrame(nxp, stk.capture(this), copyStackTracer()));
+        acc = new Values(new Value[] { error, k });
         throw new ContinuationException(fk);
     }
 

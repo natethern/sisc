@@ -20,7 +20,7 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
 
     public void apply(Interpreter r) throws ContinuationException {
         //long start=System.currentTimeMillis();
-        r.lxp = r.nxp;
+        Expression lxp = r.nxp;
         r.nxp = null;
         try {
             r.acc = doApply(r);
@@ -32,8 +32,10 @@ public abstract class NativeProcedure extends Procedure implements NamedValue {
                 liMessage(SISCB, "gotunexpectedvalue", cc.getMessage()),
   cc);
         } catch (NestedPrimRuntimeException npr) {
+            r.nxp = lxp; //for error location reporting
             error(r, getName(), npr);
         } catch (RuntimeException re) {
+            r.nxp = lxp; //for error location reporting
             //re.printStackTrace();
             String msg=null;
             
