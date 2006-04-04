@@ -100,7 +100,8 @@
                (with/fc
                    (lambda (m e) (with-stack-marker
                                      (lambda () (throw m))))
-                 (lambda () (compile exp)))])
+                 (lambda () (compile-with-flags exp 'expand '((e) (e))
+                                                (interaction-environment))))])
           (when handler (_signal-hook! "INT" handler))
           (with/fc
               (lambda (m e)
