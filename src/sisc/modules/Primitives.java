@@ -814,8 +814,7 @@ public abstract class Primitives extends Util {
                     }
                 case WITHSTACKMARKER:
                     Procedure proc = proc(vlr[0]);
-                    //marker frames are distinguished by a null nxp
-                    r.push(null);
+                    r.markStack();
                     r.setupTailCall(WITHSTACKMARKER_APPEVAL, ZV);
                     return proc;
                 default:

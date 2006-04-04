@@ -228,6 +228,18 @@ public class Interpreter extends Util {
         vlr[pos]=v;
     }
 
+    private final CallFrame createEmptyFrame(Expression e,
+                                             CallFrame p,
+                                             StackTracer t) {
+        return createFrame(e, null, false, null, null, null, null, p, t);
+    }
+
+    public final void markStack() {
+        //marker frames are distinguished by a null nxp
+        stk = createEmptyFrame(null, stk, tracer);
+        tracer = makeStackTracer();
+    }
+
     public final void setFailureContinuation(Expression e) {
         StackTracer st = (tracer == null ? null : tracer.copy());
         fk = createFrame(e, null, false, lcl, env, tpl, fk, stk, st);
