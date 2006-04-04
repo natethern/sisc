@@ -50,12 +50,7 @@ public class JavaNull extends JavaObject {
         //all java-nulls are equal?
         return (v instanceof JavaNull);
     }
-    /*
-    public void apply(Interpreter r)
-        throws ContinuationException {
-        error(r, liMessage(Util.S2JB, "cannotapplynull"));
-    }
-    */
+
 }
    
 /*
