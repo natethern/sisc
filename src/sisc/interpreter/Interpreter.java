@@ -116,7 +116,7 @@ public class Interpreter extends Util {
     }
 
     public Symbol getSymbol(String v) {
-    return Symbol.get(v, dynenv.caseSensitive);
+        return Symbol.get(v, dynenv.caseSensitive);
     }
 
     public Expression compile(Value v) throws ContinuationException {
