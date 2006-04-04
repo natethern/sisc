@@ -87,8 +87,8 @@ public class Interpreter extends Util {
     public Value[]               vlr,    //Value Rib
                                  lcl,    //Local Variables
                                  env;    //Lexical Variables
-    public CallFrame             stk,    //Continuation (Stack)
-                                  fk;    //Failure Continuation
+    private CallFrame            stk;    //Continuation (Stack)
+    public CallFrame             fk;     //Failure Continuation
     public SymbolicEnvironment   tpl;    //Top-level environment
 
     private StackTracer          tracer; //for stack tracking
