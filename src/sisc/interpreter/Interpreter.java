@@ -177,9 +177,7 @@ public class Interpreter extends Util {
     
     public final void newVLR(Value[] vlr) {
         if (vlk) {
-            if (tracer != null) {
-                tracer = tracer.copy();
-            }
+            tracer = copyStackTracer();
             vlk=false;
         }
         this.vlr=vlr;
@@ -204,6 +202,10 @@ public class Interpreter extends Util {
                 new StackTracer(maxStackTraceDepth));
     }
 
+    private final StackTracer copyStackTracer() {
+        return (tracer == null ? null : tracer.copy());
+    }
+
     private final void makeSafe() {
         /*
           The frame which contains the current vlr has been captured
@@ -218,9 +220,7 @@ public class Interpreter extends Util {
         System.arraycopy(vlr, 0, newvlr, 0, vlr.length);
         vlr = newvlr;
         vlk = false;
-        if (tracer != null) {
-            tracer = tracer.copy();
-        }
+        tracer = copyStackTracer();
     }
 
     public final void setVLR(int pos, Value v) {
