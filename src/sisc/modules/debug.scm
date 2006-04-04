@@ -2,23 +2,17 @@
   (not (null? (annotation-keys obj))))
 
 (define (show-expr expr)
-  (define (print expr)
+  (let loop ([expr expr]
+             [phases (map cdr
+                          (compilation-phases '((l) (l))
+                                              (interaction-environment)))])
     (pretty-print (if (procedure? expr) (express expr) expr))
     (newline)
     (display "=>")
-    (newline))
-  (let ([source (sc-expand expr)])
-    (print source)
-    (let ([optimized ((current-optimizer) source)])
-      (print optimized)
-      (let ([analyzed (_analyze! optimized (interaction-environment))])
-        (print analyzed)
-        (let ([compiled (compile-with-flags analyzed
-                                            'compile
-                                            '((l) (l))
-                                            (interaction-environment))])
-          (print compiled)
-          (compiled))))))
+    (newline)
+    (if (null? phases)
+        (expr)
+        (loop ((car phases) expr) (cdr phases)))))
 
 (define-simple-syntax (show expr) (show-expr (quote expr)))
   
