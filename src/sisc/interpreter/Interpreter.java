@@ -31,6 +31,8 @@ public class Interpreter extends Util {
 
     private final static Expression EVAL_APPEVAL
         = annotatedAppEval("eval");
+    private final static Expression CONTINUATION_APPEVAL
+        = annotatedAppEval("continuation");
 
     private static Expression annotatedAppEval(String fn) {
         return annotatedAppEval(Interpreter.class, fn);
@@ -241,8 +243,25 @@ public class Interpreter extends Util {
     }
 
     public final void setFailureContinuation(Expression e) {
-        StackTracer st = (tracer == null ? null : tracer.copy());
-        fk = createFrame(e, null, false, lcl, env, tpl, fk, stk, st);
+        fk = createFrame(e, null, false, null, null, tpl, fk, stk, copyStackTracer());
+    }
+
+    private final Procedure createContinuation(CallFrame p) {
+        //In order to produce accurate stack traces for ks we insert a
+        //dummy frame with a copy of the current frame's stack trace.
+        //The CONTINUATION_APPEVAL nxp of the dummy frame is only
+        //there in order to distinguish the frame from a marker frame,
+        //which has a null nxp. It is never evaluated.
+        if (tracer == null) return p;
+        else return new ApplyParentFrame(createEmptyFrame(CONTINUATION_APPEVAL, p, tracer.copy()));
+    }
+
+    public final Procedure captureContinuation() {
+        return createContinuation(stk.capture(this));
+    }
+
+    public final Procedure captureEscapingContinuation() {
+        return createContinuation(stk);
     }
 
     public void trace(Expression e) {

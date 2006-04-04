@@ -750,11 +750,11 @@ public abstract class Primitives extends Util {
                                        new int[0]);
                 case CALLEC:
                     Value kproc=vlr[0];
-                    r.setupTailCall(CALLEC_APPEVAL, r.stk);
+                    r.setupTailCall(CALLEC_APPEVAL, r.captureEscapingContinuation());
                     return kproc;
                 case CALLCC:
                     kproc=vlr[0];
-                    r.setupTailCall(CALLCC_APPEVAL, r.stk.capture(r));
+                    r.setupTailCall(CALLCC_APPEVAL, r.captureContinuation());
                     return kproc;
                 case CALLFC:
                     kproc=vlr[0];
