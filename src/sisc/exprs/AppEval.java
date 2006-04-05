@@ -22,11 +22,20 @@ public class AppEval extends Expression {
         /* To allow break of execution (turadg)
          */
         if (permitInterrupts && r.tctx.interrupt) {
-           r.push(this);
-           r.push(r.acc);
-           r.nxp=null;
-           r.tctx.interrupt = false;
-           error(r, liMessage(SISCB, "evaluationinterrupted"));
+            /*
+              We bring the stack into a state s.t. when it is captured
+              by error() below, and later resumed, it will continue
+              execution exactly where we left off. We push the current
+              AppEval, and the acc. When the error k is invoked, the
+              pushed acc will self-evaluate, thus placing itself back
+              in the acc. The following pop brings back the AppEval,
+              thus getting us exactly back to the point where
+              execution was interrupted.
+            */
+            r.push(this);
+            r.push(r.acc);
+            r.tctx.interrupt = false;
+            error(r, liMessage(SISCB, "evaluationinterrupted"));
         }
 
         r.acc.apply(r);
