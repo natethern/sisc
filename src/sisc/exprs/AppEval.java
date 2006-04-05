@@ -16,6 +16,9 @@ public class AppEval extends Expression {
     public AppEval() {}
 
     public final void eval(Interpreter r) throws ContinuationException {
+
+        r.trace(this);
+
         /* To allow break of execution (turadg)
          */
         if (permitInterrupts && r.tctx.interrupt) {
@@ -25,8 +28,6 @@ public class AppEval extends Expression {
            r.tctx.interrupt = false;
            error(r, liMessage(SISCB, "evaluationinterrupted"));
         }
-
-        r.trace(this);
 
         r.acc.apply(r);
     }
