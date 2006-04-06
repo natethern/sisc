@@ -147,9 +147,15 @@
           (lambda (k)
             (_exit-handler (cons k (_exit-handler)))
             (begin
-              (call/cc (lambda (k) 
-                         (set! repl-start k)
-                         (putprop 'repl '*debug* k)))
+              (let ([kret
+                     (call/cc (lambda (k) 
+                                (set! repl-start k)
+                                (putprop 'repl '*debug* k)))])
+                ; The repl-return continuation can optionally
+                ; be passed a thunk which is executed
+                ; *in this dynamic environment*
+                (if (procedure? kret)
+                    (kret)))
               (let loop ()
                 (with/fc (lambda (m e)
                            ((current-default-error-handler) m e)

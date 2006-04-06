@@ -134,14 +134,18 @@
 (define (set-breakpoint! function-id)
   (define (make-breakpoint proc)
     (lambda args
-      (call/cc (lambda (k)
-                 (display (format "{break: ~s~% ~a}~%" 
-                                  (cons function-id args)
-                                  (format-stack-trace-entry
-                                   (car (stack-trace k)))))
-                 (putprop 'continue-point '*debug* 
-                          (delay (k (apply proc args))))
-                 (((getprop 'repl '*debug*)))))))
+      ; Setup the return continuation
+      (call/cc
+       (lambda (k)
+         (putprop 'continue-point '*debug* k)
+         ; Now drop to the repl
+         (((getprop 'repl '*debug*)
+           (lambda ()
+             (display (format "{break: ~s~% ~a}~%" 
+                              (cons function-id args)
+                              (format-stack-trace-entry
+                               (car (stack-trace k))))))))))
+      (apply proc args)))
   (let* ([function-id (sc-expand function-id)]
          [breakpoints (cond [(getprop 'breakpoints '*debug*) => 
                             (lambda (x) x)]
