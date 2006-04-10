@@ -497,6 +497,7 @@
     <mkdir dir="${dist}/full/sisc-${specver}"/>
     <mkdir dir="${dist}/full/doc"/>
     <mkdir dir="${dist}/full/doc/man"/>
+    <mkdir dir="${dist}/full/doc/javadoc"/>
     <mkdir dir="${dist}/full/sisc-${specver}/scheme-src"/>
     <mkdir dir="${dist}/full/sisc-${specver}/scheme-src/srfi-22"/>
 
