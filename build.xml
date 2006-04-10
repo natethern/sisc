@@ -512,7 +512,7 @@
         <include name="*.css"/>
       </fileset>
     </copy>
-    <copy todir="${dist}/full/sisc-${specver}/doc">
+    <copy todir="${dist}/full/sisc-${specver}/doc/javadoc">
       <fileset dir="${gendocdir}/javadoc">
         <include name="**/*"/>
       </fileset>
