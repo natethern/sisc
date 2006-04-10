@@ -66,14 +66,14 @@
 (define (char-set-ref cset cursor)
   (if (end-of-char-set? cursor)
       (error 'char-set-ref "cursor already reached end of character set.")
-      (integer->char (lowest-bit-set cset cursor))))
+      (integer->char (lowest-bit-set cset cursor char-set-ref))))
 
 (define (generate-n-bits n)
   (- (ash 1 n) 1))
 
 (define (char-set-cursor-next cset cursor)
   ; Unset the lowest bit and shift left, this shrinks the mask
-  (let ([lbs (lowest-bit-set cset cursor)]
+  (let ([lbs (lowest-bit-set cset cursor char-set-cursor-next)]
         [mask (char-set-cursor-mask cursor)])
     ; This could be done faster
     (char-set-cursor-mask! cursor
