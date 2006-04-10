@@ -336,7 +336,7 @@
       <arg value="-out"/>
       <arg value="${heap}"/>
       <arg value="-files"/>
-      <arg value="file:lite.scm"/>
+      <arg value="file:lite.sce"/>
       <arg value="file:init.sce"/>
       <arg value="file:compat.sce"/>
       <arg value="file:psyntax.sce"/>
@@ -439,7 +439,7 @@
   <target name="docs" depends="javadocs,manual"
           description="Generate Documentation" unless="lite"/>
 
-  <target name="all"
+  <target name="all" depends="prepare"
     description="Build SISC, its heap, docs, and the standard library">
     <antcall target="heap-jar"/>
     <antcall target="sisc-lib"/>
@@ -511,6 +511,11 @@
         <include name="*.css"/>
       </fileset>
     </copy>
+    <copy todir="${dist}/full/sisc-${specver}/doc">
+      <fileset dir="${gendocdir}/javadoc">
+        <include name="**/*"/>
+      </fileset>
+    </copy>    
     <copy todir="${dist}/full/sisc-${specver}/doc/man">
       <fileset dir="${docdir}/man">
         <include name="*.*"/>
