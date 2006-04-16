@@ -127,6 +127,7 @@
        procs)))
 
 (define *BREAKPOINTS* (make-hashtable eq?))
+(define *CURRENT-BREAKPOINT* #f)
 
 (define (set-breakpoint! function-id)
   (define (make-breakpoint proc)
@@ -134,7 +135,7 @@
       ; Setup the return continuation
       (call/cc
        (lambda (k)
-         (putprop 'continue-point '*debug* k)
+         (set! *CURRENT-BREAKPOINT* k)
          ; Now drop to the repl
          (((getprop 'repl '*debug*)
            (lambda ()
@@ -161,11 +162,12 @@
                function-id))))
 
 (define (continue)
-  (cond [(getprop 'continue-point '*debug*) =>
-         (lambda (c)
-           (putprop 'continue-point '*debug* #f)
-           (c))]
-        [else (error 'continue "nowhere to continue to.")]))
+  (let ([c *CURRENT-BREAKPOINT*])
+    (if c
+        (begin (set! *CURRENT-BREAKPOINT* #f)
+               (c))
+        (error 'continue "nowhere to continue to."))))
+
 
 ;;;;;;;;;;;;;; exception display ;;;;;;;;;;;;;;;;;;;;
           
