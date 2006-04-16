@@ -329,13 +329,14 @@
                 being traced.
               </para>
               <para>
-                If a traced procedure is redefined, it will not 
-                retain the instrumenting installed by
+                If a traced procedure is redefined, it will not retain
+                the instrumenting installed by
                 <function>trace</function>, until
-                <function>trace</function> is called again (with any 
-                arguments).  At that time, the traced procedures are 
-                reinspected and instrumenting reinstalled on 
-                redefined procedures.
+                <function>trace</function> or
+                <function>untrace</function> is called again (with any
+                arguments).  At that time, the traced procedures are
+                reinspected and instrumenting reinstalled on redefined
+                procedures.
               </para>
             </blockquote>
           </para>
@@ -346,9 +347,6 @@
             <methodsynopsis language="scheme">
               <type>undefined</type>
               <methodname>untrace</methodname>
-              <methodparam>
-                <parameter>symbol</parameter>
-              </methodparam>
               <methodparam choice="opt" rep="repeat">
                 <parameter>symbol</parameter>
               </methodparam>
@@ -357,6 +355,11 @@
               <para>
                 Stops tracing the top-level procedures named by the
                 symbols given.
+              </para>
+              <para>
+                If no procedures are given, a message is displayed
+                indicating the names of top-level procedures currently
+                being traced.
               </para>
             </blockquote>
           </para>

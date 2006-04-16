@@ -71,65 +71,60 @@
     (trace-call (lambda () (cons procedure-name args))
                 (lambda () (apply procedure args)))))
 
-(define (verify-traced! proclist)
-  (let loop ((x proclist))
-    (if (null? x) 
-        '()
-        (let ([traced-procedure (car x)])
-          (if (eq? (caddr traced-procedure)
-                   (getprop (car traced-procedure)))
-              (cons traced-procedure (loop (cdr x)))
-              (let* ([real-ps (sc-expand (car traced-procedure))]
-                     [proc (getprop real-ps)]
-                     [traced-proc (make-traced real-ps proc)])
-                (putprop real-ps traced-proc)
-                (cons (list real-ps proc traced-proc) (loop (cdr x)))))))))
-              
+(define *TRACED-PROCEDURES* (make-hashtable eq?))
+
+(define (install-tracer real-ps proc)
+  (let ([traced-proc (make-traced real-ps proc)])
+    (putprop real-ps traced-proc)
+    (cons proc traced-proc)))
+
+; Check whether any of the traced procedures have changed. If so,
+; trace the new procedures.
+(define (verify-traced!)
+  (hashtable/for-each
+   (lambda (real-ps rest)
+     (if (not (eq? (cdr rest) (getprop real-ps)))
+         (let* ([real-ps (sc-expand real-ps)]
+                [proc (getprop real-ps)])
+           (if (procedure? proc)
+               (hashtable/put! *TRACED-PROCEDURES*
+                               real-ps
+                               (install-tracer real-ps proc))))))
+   *TRACED-PROCEDURES*))
+
 (define (trace . procs)
-  (let ([traced-procedures (verify-traced!
-                            (getprop 'traced-procedures '*debug* '()))])
-    (if (null? procs)
-        (display (format "{currently traced procedures: ~a}~%" 
-                         (map car traced-procedures)))
-        (begin
-          (for-each 
-           (lambda (procedure-symbol)
-             (let* ([real-ps (sc-expand procedure-symbol)]
-                    [proc (getprop real-ps)])
-               (cond [(not (procedure? proc))
-                      (error 'trace "'~s' is not bound to a procedure." 
-                             procedure-symbol)]
-                     [(not (assq real-ps traced-procedures))
-                      (let ([traced-proc (make-traced real-ps proc)])
-                        (set! traced-procedures 
-                              (cons (list real-ps proc traced-proc)
-                                    traced-procedures))
-                        (putprop real-ps traced-proc))])))
-           procs)))
-    (putprop 'traced-procedures '*debug* traced-procedures)))
+  (verify-traced!)
+  (if (null? procs)
+      (display (format "{currently traced procedures: ~a}~%" 
+                       (hashtable/keys *TRACED-PROCEDURES*)))
+      (for-each 
+       (lambda (procedure-symbol)
+         (let* ([real-ps (sc-expand procedure-symbol)]
+                [proc (getprop real-ps)])
+           (if (procedure? proc)
+               (hashtable/get! *TRACED-PROCEDURES*
+                               real-ps
+                               (lambda ()
+                                 (install-tracer real-ps proc)))
+               (error 'trace "'~s' is not bound to a procedure." 
+                      procedure-symbol))))
+       procs)))
 
-
-(define (remove-from-assoc procedure-name assoc)
-  (cond [(null? assoc) '()]
-        [(eq? (caar assoc) procedure-name)
-         (cdr assoc)]
-        [else (cons (car assoc) 
-                    (remove-from-assoc procedure-name (cdr assoc)))]))
-
-(define (untrace proc1 . procs)
-  (let ([traced-procedures (getprop 'traced-procedures '*debug* '())])
-    (for-each 
-     (lambda (procedure-symbol)
-       (let* ([real-ps (sc-expand procedure-symbol)]
-              [proc (assq real-ps traced-procedures)])
-         (if proc
-             (begin
-               (when (eq? (caddr proc) (getprop real-ps))
-                 (putprop real-ps (cadr proc)))
-               (set! traced-procedures 
-                 (remove-from-assoc real-ps traced-procedures))))))
-     (cons proc1 procs))
-    (putprop 'traced-procedures '*debug* traced-procedures)))
+(define (untrace . procs)
+  (verify-traced!)
+  (if (null? procs)
+      (display (format "{currently traced procedures: ~a}~%" 
+                       (hashtable/keys *TRACED-PROCEDURES*)))
+      (for-each 
+       (lambda (procedure-symbol)
+         (let* ([real-ps (sc-expand procedure-symbol)]
+                [proc (hashtable/remove! *TRACED-PROCEDURES* real-ps)])
+           (if proc
+               (when (eq? (cdr proc) (getprop real-ps))
+                 (putprop real-ps (car proc)))
+               (error 'untrace "~a is not bound to a traced procedure."
+                      procedure-symbol))))
+       procs)))
 
 (define *BREAKPOINTS* (make-hashtable eq?))
 
