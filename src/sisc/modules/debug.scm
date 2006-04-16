@@ -137,10 +137,10 @@
        (lambda (k)
          (set! *CURRENT-BREAKPOINT* k)
          ; Now drop to the repl
-         (((getprop 'repl '*debug*)
-           (lambda ()
-             (display (format "{break: ~s}~%" 
-                              (cons function-id args))))))))
+         ((getprop 'repl '*debug*)
+          (lambda ()
+            (display (format "{break: ~s}~%" 
+                             (cons function-id args)))))))
       (apply proc args)))
   (let* ([function-id (sc-expand function-id)]
          [function (getprop function-id)])
