@@ -147,12 +147,11 @@
          [function (getprop function-id)])
     (if (not function)
         (error 'set-breakpoint! "no such function: ~a" function-id))
-    (hashtable/get!
-     *BREAKPOINTS*
-     function-id
-     (lambda ()
-       (putprop function-id (make-breakpoint function))
-       function))))
+    (hashtable/get! *BREAKPOINTS*
+                    function-id
+                    (lambda ()
+                      (putprop function-id (make-breakpoint function))
+                      function))))
 
 (define (clear-breakpoint! function-id) 
   (let* ([function-id (sc-expand function-id)]
