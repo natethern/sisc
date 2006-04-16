@@ -828,7 +828,6 @@ r / 2<superscript>s</superscript>
               <methodname>hashtable/remove!</methodname>
               <methodparam><parameter>hashtable</parameter></methodparam>
               <methodparam><parameter>key</parameter></methodparam>
-              <methodparam><parameter>val</parameter></methodparam>
               <methodparam choice="opt">
                 <parameter>nobinding</parameter>
               </methodparam>
