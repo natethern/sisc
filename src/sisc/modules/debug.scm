@@ -258,6 +258,8 @@
 (define (full-stack-tracing-enabled?)
   (> (max-stack-trace-depth) 0))
 
+(define *STACK-TRACE-MESSAGE-PRINTED?* #f)
+
 (define (print-stack-trace k)
   (define (print-single-entry entry count)
     (if (full-stack-tracing-enabled?)
@@ -287,7 +289,16 @@
                     (begin
                       (if last (print-single-entry last count))
                       (loop rest print-rep 1))))
-              (loop rest last count))))))
+              (loop rest last count)))))
+  ;;; If detailed stack tracing is disabled, tell the user how to
+  ;;; enable it.
+  (if (not (or (full-stack-tracing-enabled?)
+               *STACK-TRACE-MESSAGE-PRINTED?*))
+      (begin
+        (display "---------------------------\n")
+        (display "To enable more detailed stack tracing, start SISC ")
+        (display "with the -Dsisc.maxStackTraceDepth=16 java option.\n")
+        (set! *STACK-TRACE-MESSAGE-PRINTED?* #t))))
 
 (print-exception-stack-trace-hook
  'debug
