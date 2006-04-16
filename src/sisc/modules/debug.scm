@@ -255,14 +255,17 @@
           #t)
       #f))
 
+(define (full-stack-tracing-enabled?)
+  (> (max-stack-trace-depth) 0))
+
 (define (print-stack-trace k)
   (define (print-single-entry entry count)
-    (if (> (max-stack-trace-depth) 0)
+    (if (full-stack-tracing-enabled?)
         (display "---------------------------\n"))
     (display entry)
     (when (> count 1)
       (display (format "[previous ~a repeated~a]\n"
-                       (if (> (max-stack-trace-depth) 0)
+                       (if (full-stack-tracing-enabled?)
                            "entries"
                            "entry")
                        (case count
