@@ -909,6 +909,7 @@
      unresolved-references)
   (import debugging-native)
   (import pretty-printing)
+  (import hashtable)
   (import* misc define-simple-syntax)
   (include "debug.scm"))
 

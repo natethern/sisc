@@ -131,6 +131,8 @@
      (cons proc1 procs))
     (putprop 'traced-procedures '*debug* traced-procedures)))
 
+(define *BREAKPOINTS* (make-hashtable eq?))
+
 (define (set-breakpoint! function-id)
   (define (make-breakpoint proc)
     (lambda args
@@ -147,30 +149,24 @@
                                (car (stack-trace k))))))))))
       (apply proc args)))
   (let* ([function-id (sc-expand function-id)]
-         [breakpoints (cond [(getprop 'breakpoints '*debug*) => 
-                            (lambda (x) x)]
-                           [else '()])])
-    (if (not (assq function-id breakpoints))
-        (let* ([function (getprop function-id)]
-               [breakpointed-function (make-breakpoint function)])
-          (if function 
-              (begin
-                (putprop 'breakpoints '*debug* 
-                         (cons (cons function-id function) breakpoints))
-                (putprop function-id breakpointed-function))
-              (error 'set-breakpoint! "no such function."))))))
+         [function (getprop function-id)])
+    (if (not function)
+        (error 'set-breakpoint! "no such function: ~a" function-id))
+    (hashtable/get!
+     *BREAKPOINTS*
+     function-id
+     (lambda ()
+       (putprop function-id (make-breakpoint function))
+       function))))
 
 (define (clear-breakpoint! function-id) 
   (let* ([function-id (sc-expand function-id)]
-         [breakpoints (cond [(getprop 'breakpoints '*debug*) => 
-                             (lambda (x) x)]
-                            [else '()])])
-    (cond [(assq function-id breakpoints) =>
-           (lambda (v)
-             (putprop function-id (cdr v))
-             (putprop 'breakpoints '*debug* 
-                      (remove-from-assoc function-id breakpoints)))]
-          [else (error 'clear-breakpoint! "no such function or function is not a breakpoint.")])))
+         [function (hashtable/remove! *BREAKPOINTS* function-id)])
+    (if function
+        (putprop function-id function)
+        (error 'clear-breakpoint!
+               "no such function ~a or function is not a breakpoint."
+               function-id))))
 
 (define (continue)
   (cond [(getprop 'continue-point '*debug*) =>
