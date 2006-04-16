@@ -902,6 +902,9 @@
      untrace
      set-breakpoint!
      clear-breakpoint!
+     current-breakpoint-continuation
+     current-breakpoint-args
+     set-current-breakpoint-args!
      continue
      stack-trace
      print-stack-trace

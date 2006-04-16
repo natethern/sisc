@@ -420,8 +420,8 @@
               <para>
                 Instruments the top-level procedure named by the given
                 symbol, such that when called, execution will halt and
-                return to the REPL and the location of and arguments to
-                the breakpointed function are displayed.
+                return to the REPL and the name of the breakpointed
+                function and its arguments are displayed.
               </para>
             </blockquote>
           </para>        
@@ -460,6 +460,77 @@
                 an error to call this procedure if a breakpoint has not 
                 been hit, or to call this procedure more than once for a 
                 given break.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>current-breakpoint-continuation</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>continuation</type>
+              <methodname>current-breakpoint-continuation</methodname>
+              <void/>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the continuation of the most recent
+                breakpoint, or &num;f if execution is not currently
+                interrupted at a breakpoint.
+              </para>
+              <para>
+                The continuation is useful for obtaining stack traces,
+                e.g. with <literal>(print-stack-trace
+                  (current-breakpoint-continuation))</literal>.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>current-breakpoint-args</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>list</type>
+              <methodname>current-breakpoint-args</methodname>
+              <void/>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns a list containing the current breakpoint's
+                continuation procedure and arguments that will be used
+                when execution is resumed with
+                <methodname>continue</methodname>, or &num;f if
+                execution is not currently interrupted at a breakpoint.
+              </para>
+              <para>
+                This procedure is useful for performing deep
+                inspection of the breakpointed procedure and its
+                arguments. The returned values are also handy for
+                constructing modified breakpoint continuations with
+                <methodname>set-current-breakpoint-args!</methodname>.
+              </para>
+            </blockquote>
+          </para>
+          <para>
+            <indexterm><primary>set-current-breakpoint-args!</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>set-current-breakpoint-args!</methodname>
+              <methodparam><parameter>procedure</parameter></methodparam>
+              <methodparam rep="repeat">
+                <parameter>value</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Sets the current breakpoint's continuation procedure
+                and arguments that will be used when execution is
+                resumed with <methodname>continue</methodname>.
+                If execution is not currently interrupted at a
+                breakpoint then invoking this procedure has no effect
+                and it returns &num;f. Otherwise it returns &num;t.
               </para>
             </blockquote>
           </para>

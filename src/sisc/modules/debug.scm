@@ -129,19 +129,34 @@
 (define *BREAKPOINTS* (make-hashtable eq?))
 (define *CURRENT-BREAKPOINT* #f)
 
+(define (current-breakpoint-continuation)
+  (and *CURRENT-BREAKPOINT*
+       (car *CURRENT-BREAKPOINT*)))
+(define (current-breakpoint-args)
+  (and *CURRENT-BREAKPOINT*
+       (cdr *CURRENT-BREAKPOINT*)))
+(define (set-current-breakpoint-args! proc . args)
+  (and *CURRENT-BREAKPOINT*
+       (begin (set-cdr! *CURRENT-BREAKPOINT* (cons proc args)) #t)))
+
 (define (set-breakpoint! function-id)
   (define (make-breakpoint proc)
     (lambda args
       ; Setup the return continuation
-      (call/cc
-       (lambda (k)
-         (set! *CURRENT-BREAKPOINT* k)
-         ; Now drop to the repl
-         ((getprop 'repl '*debug*)
+      (call-with-values
           (lambda ()
-            (display (format "{break: ~s}~%" 
-                             (cons function-id args)))))))
-      (apply proc args)))
+            (call/cc
+             (lambda (k)
+               (set! *CURRENT-BREAKPOINT* (cons k (cons proc args)))
+               ;; now drop to the repl
+               ((getprop 'repl '*debug*)
+                (lambda ()
+                  (display (format "{break: ~s}~%" 
+                                   (cons function-id args)))))
+               ;; normally we never get here, but just in case we do
+               ;; let's do something sensible
+               (values proc args))))
+        apply)))
   (let* ([function-id (sc-expand function-id)]
          [function (getprop function-id)])
     (if (not function)
@@ -165,7 +180,7 @@
   (let ([c *CURRENT-BREAKPOINT*])
     (if c
         (begin (set! *CURRENT-BREAKPOINT* #f)
-               (c))
+               ((car c) (cadr c) (cddr c)))
         (error 'continue "nowhere to continue to."))))
 
 
