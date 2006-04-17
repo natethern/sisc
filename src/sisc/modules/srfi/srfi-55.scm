@@ -1,46 +1,51 @@
 ; SISC implementation of SRFI 55: require-extension
-; Currently only supports srfis.  In the future it may support
-; SLIB as well
+
+(define-syntax require-srfi
+  (lambda (ctx)
+    (syntax-case ctx ()
+      [(_ id)
+       (let* ([srfi-name-symb
+               (string->symbol
+                (string-append "srfi-"
+                               (number->string
+                                (syntax-object->datum
+                                 (syntax id)))))]
+              [lib-name-symb
+               (string->symbol
+                (string-append "sisc/libs/srfi/"
+                               (symbol->string srfi-name-symb)))])
+         (with-syntax ([srfi-name
+                        (datum->syntax-object
+                         (syntax ctx) srfi-name-symb)]
+                       [lib-name
+                        (datum->syntax-object
+                         (syntax ctx) lib-name-symb)])
+           (require-library lib-name-symb)
+           (syntax (begin (require-library 'lib-name)
+                          (import srfi-name)))))])))
+
+(define-syntax require-lib
+  (lambda (ctx)
+    (syntax-case ctx ()
+      [(_ id)
+       (let ([lib-name-symb (syntax-object->datum (syntax id0))])
+         (with-syntax ([lib-name
+                        (datum->syntax-object
+                         (syntax ctx) lib-name-symb)])
+           (require-library lib-name-symb)
+           (syntax (begin (require-library 'lib-name)
+                          (import lib-name)))))])))
+
 
 (define-syntax require-extension
-  (syntax-rules ()
-    ((_)
-     #!void)
-    ((_ (identifier arguments ...) clauses ...)
-     (let ()
-       ((srfi-55-clause-handler (quote identifier))
-        (quote (arguments ...)))
-       (require-extension clauses ...)))))
-
-(define (srfi-55-clause-handler id)
-  (case id
-    ((srfi)
-     (lambda (nums)
-       (for-each (lambda (num)
-                   (let ((srfi (string-append "srfi-"
-                                              (number->string num))))
-                     (require-library (string->symbol
-                                       (string-append "sisc/libs/srfi/"
-                                                      srfi)))
-                     (eval `(import ,(string->symbol srfi))
-                           (interaction-environment))))
-                 nums)))
-    (else 
-      (lambda (libs)
-        (for-each (lambda (lib)
-                    (let ([full-lib-name (string->symbol
-                                          (format "~a/~a" id lib))])
-                      (require-library full-lib-name)
-                      (with/fc (lambda (m e)
-                                 (with/fc (lambda (m e)                                                   
-                                            (error 'require-extension
-                                                   "unknown extension identifier: ~a"
-                                                   id))
-                                          (lambda () 
-                                            (eval `(import ,full-lib-name)
-                                                  (interaction-environment)))))
-                               (lambda ()
-                                 (eval `(import ,lib)
-                                       (interaction-environment))))))
-                  libs)))))
-
+  (syntax-rules (srfi lib)
+    [(_)
+     #!void]
+    [(_ (srfi) clause ...)
+     (require-extension clause ...)]
+    [(_ (srfi id0 id ...) clause ...)
+     (begin (require-srfi id0)
+            (require-extension (srfi id ...) clause ...))]
+    [(_ (lib id0 id ...) clause ...)
+     (begin (require-lib id0)
+            (require-extension (lib id ...) clause ...))]))

@@ -1,3 +1,8 @@
+2006-04-17  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed srfi-55's |require-extension| to work in compiled
+	  code. See bug 1471254.
+
 2006-04-16  Matthias Radestock  <matthias@sorted.org>
 
 	* Added functions to inspect and modify breakpoint arguments, and

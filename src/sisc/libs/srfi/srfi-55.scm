@@ -1,4 +1,4 @@
 (module srfi-55
-  ((require-extension srfi-55-clause-handler))
+    ((require-extension require-srfi require-lib))
   (include "../../modules/srfi/srfi-55.scm")
   (add-feature 'srfi-55))
