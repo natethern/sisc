@@ -993,13 +993,11 @@
 
 ;;natively supported srfis
 (for-each require-library
-          '(sisc/libs/srfi/srfi-24
-            sisc/libs/srfi/srfi-28
+          '(sisc/libs/srfi/srfi-28
             sisc/libs/srfi/srfi-30
             sisc/libs/srfi/srfi-39
             sisc/libs/srfi/srfi-48
             sisc/libs/srfi/srfi-62))
-(import srfi-24)
 (import srfi-28)
 (import srfi-30)
 (import srfi-39)
