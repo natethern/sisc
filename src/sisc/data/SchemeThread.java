@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 import sisc.env.*;
 import sisc.interpreter.*;
 import sisc.io.ValueWriter;
+
 import java.io.IOException;
 
 public class SchemeThread extends Value implements Runnable, NamedValue {
@@ -34,8 +35,13 @@ public class SchemeThread extends Value implements Runnable, NamedValue {
         } else if (state == FINISHED) {
             return rv;
         } else {
-            r.acc=rv;
-            throw new ContinuationException(r.fk);
+            Values v=(Values)rv;
+            Procedure.throwNestedPrimException(new SchemeException(pair(v.values[0]), 
+                                                                   proc(v.values[1]),     
+                                                                   v.values.length>2 ? 
+                                                                   proc(v.values[2]) :
+                                                                   r.fk));
+            return VOID;
         }
     }
     
