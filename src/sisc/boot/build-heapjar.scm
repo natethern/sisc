@@ -1,8 +1,8 @@
 #! /usr/bin/env scheme-r5rs
 
 ; This is an SRFI-22 script which will build a SISC Heap jar
-; by locating the running heap, the Heap Anchor, and
-; emitting sisc-heap.jar, or another file if specified as a 
+; by locating the heap from the current directory, the Heap Anchor, 
+; and emitting sisc-heap.jar, or another file if specified as a 
 ; command-line argument
 
 
