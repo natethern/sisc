@@ -1,3 +1,7 @@
+2006-04-18  Matthias Radestock  <matthias@sorted.org>
+
+	* Added srfi-78.
+
 2006-04-17  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed srfi-55's |require-extension| to work in compiled

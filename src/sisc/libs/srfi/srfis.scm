@@ -43,4 +43,5 @@
     srfi-62
     srfi-67
     srfi-69
-    srfi-69-ext))
+    srfi-69-ext
+    srfi-78))
