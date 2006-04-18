@@ -55,7 +55,8 @@
 (define thread-specific-set! *-specific-set!)
 
 (define (thread-start! thread)
-  (thread/start thread))
+  (thread/start thread)
+  thread)
 
 (define thread-yield! thread/yield)
 (define (thread-sleep! t)
