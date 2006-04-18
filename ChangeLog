@@ -1,3 +1,11 @@
+2006-04-18  Scott G. Miller  <sgmiller@gmail.com>
+
+    * Fixed return-value inconsistencies in SRFI-18, fixing bug 
+      1472216.
+
+    * Modified thread/result to throw a nested exception rather
+      than replaying the original one.  See bug 1461906.
+      
 2006-04-18  Matthias Radestock  <matthias@sorted.org>
 
 	* Added srfi-78.
