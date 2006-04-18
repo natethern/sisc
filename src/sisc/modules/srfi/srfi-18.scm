@@ -165,7 +165,8 @@
                          #t))
               (begin
                 (mutex/unlock! mutex)
-                (finish-unlock mutex owner))))))))
+                (finish-unlock mutex owner)
+                #t)))))))
                 
 
 ; Condition Variables
