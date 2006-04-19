@@ -196,7 +196,8 @@
         <emphasis>heap anchor</emphasis>, and loading the heap file from the 
         same package.  To do this, the heap must be on the classpath in the
         same location as <literal>HeapAnchor.class</literal>.  A utility
-        script, executed as an SRFI-22 script, is included in the <literal>
+        script, <literal>build-heapjar.scm</literal>, 
+        executed as an SRFI-22 script, is included in the <literal>
         scheme-src</literal> directory of the full distribution.  It is 
         invoked from the directory containing the heap, and will by default
         emit <literal>sisc-heap.jar</literal> into the current directory.
