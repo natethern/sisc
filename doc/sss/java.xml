@@ -192,6 +192,18 @@
         </para>
       </blockquote>
       <para>
+        One of the locations searched is the classpath, by searching for a 
+        <emphasis>heap anchor</emphasis>, and loading the heap file from the 
+        same package.  To do this, the heap must be on the classpath in the
+        same location as <literal>HeapAnchor.class</literal>.  A utility
+        script, executed as an SRFI-22 script, is included in the <literal>
+        scheme-src</literal> directory of the full distribution.  It is 
+        invoked from the directory containing the heap, and will by default
+        emit <literal>sisc-heap.jar</literal> into the current directory.
+        If that jar file is on the classpath, <function>findHeap</function>
+        will locate it automatically.
+      </para>
+      <para>
         Once located, the heap is opened and registered with the
         <classname>AppContext</classname>, allowing the context
         to then be used for Scheme evaluation.  This is done
