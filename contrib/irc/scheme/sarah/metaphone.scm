@@ -22,7 +22,7 @@
             (lambda (sym e metaph size last)
               (case sym
                 ((#\b)
-                 (if (and (char=? last #\m) (not (has-next? (cdr e))))
+                 (if (and last (char=? last #\m) (not (has-next? (cdr e))))
                      metaph
                      (cons sym metaph)))
                 ((#\c)
