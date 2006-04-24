@@ -43,6 +43,8 @@
      #!void]
     [(_ (srfi) clause ...)
      (require-extension clause ...)]
+    [(_ (lib) clause ...)
+     (require-extension clause ...)]
     [(_ (srfi id0 id ...) clause ...)
      (begin (require-srfi id0)
             (require-extension (srfi id ...) clause ...))]

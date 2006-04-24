@@ -1,6 +1,6 @@
 2006-04-24  Matthias Radestock  <matthias@sorted.org>
 
-	* Fixed bug in srfi-55's handling of SISC-specific extension.
+	* Fixed two bugs in srfi-55's handling of SISC-specific extension.
 
 2006-04-18  Scott G. Miller  <sgmiller@gmail.com>
 
