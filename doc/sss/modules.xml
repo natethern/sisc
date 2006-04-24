@@ -282,12 +282,11 @@ com/foo/lib3/Class2.class
        <function>require-extension</function>.
      </para>
      <para>
-       At the time of this writing, &SISC; supports two extension identifier schemes,
-       the SRFI scheme as required by SRFI-55 itself, and a &SISC; specific
-       scheme for loading a &SISC; library.  To use the latter, use the
-       path name of the library as the <function>require-extension</function>
-       identifier, and the library file or files you wish to import
-       as the arguments.  Some examples:
+       At the time of this writing, &SISC; supports two extension
+       identifier schemes, the <literal>srfi</literal> scheme as
+       required by SRFI-55 itself, and a &SISC; specific
+       <literal>lib</literal> scheme for loading a &SISC; library.
+       Some examples:
      </para>
      <example>
        <title>Loading and importing with <function>require-extension</function></title>
@@ -296,17 +295,19 @@ com/foo/lib3/Class2.class
 (require-extension (srfi 1))
 
 ; Load and import SISC library com/foo/lib1
-(require-extension (com/foo lib1))
+(require-extension (lib com/foo/lib1))
 
-; Load and import SISC libraries com/foo/lib2 and com/foo/lib3
-(require-extension (com/foo lib2 lib3))
+; Load and import SRFIs 13 and 14,
+; and SISC libraries com/foo/lib2 and com/foo/lib3
+(require-extension (srfi 13 14) (lib com/foo/lib2 com/foo/lib3))
        </programlisting>
      </example>
      <para>
-       &SISC; modules loaded in this way must either use the library file
-       name as their module name, or the full path and file as the module name.
-       For example, in the above example, <literal>lib1</literal>'s module 
-       name must either be <literal>lib1</literal> or <literal>com/foo/lib1</literal>.
+       &SISC; modules loaded using the <literal>lib</literal>
+       extension scheme must use the full path and file as the module
+       name. For example, in the above example,
+       <literal>com/foo/lib1</literal>'s module name must be
+       <literal>com/foo/lib1</literal>.
      </para>
    </sect2>
   </sect1>
