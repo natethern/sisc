@@ -837,6 +837,7 @@
   (open-tcp-listener
    accept-tcp-socket
    open-tcp-socket
+   make-ssl-socket
    open-binary-socket-input-port
    open-binary-socket-output-port
    open-socket-input-port
@@ -861,6 +862,7 @@
            open-tcp-listener
            accept-tcp-socket
            open-tcp-socket
+           (_make-ssl-socket make-ssl-socket)
            (_open-binary-socket-input-port open-binary-socket-input-port)
            (_open-binary-socket-output-port open-binary-socket-output-port)
            (_open-socket-input-port open-socket-input-port)

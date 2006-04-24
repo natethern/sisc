@@ -2,6 +2,9 @@ package sisc.modules.io;
 
 import java.net.*;
 import java.io.*;
+
+import javax.net.ssl.SSLSocketFactory;
+
 import sisc.io.*;
 import sisc.data.*;
 import sisc.interpreter.*;
@@ -64,7 +67,8 @@ public class Networking extends IndexedProcedure {
         SET_SO_TIMEOUT = 17,
         OPEN_UDP_LISTEN_SOCKET = 18,
         SOCKETQ = 19,
-        SERVERSOCKETQ = 20;
+        SERVERSOCKETQ = 20,
+        MAKE_SSL_SOCKET = 21;
 
     interface Closable {
         void close() throws IOException;
@@ -169,7 +173,7 @@ public class Networking extends IndexedProcedure {
               autoflush);
         }
     }
-    
+
     public static class UDPInputStream extends InputStream {
         protected DatagramSocket ds;
         protected DatagramPacket p;
@@ -394,6 +398,7 @@ public class Networking extends IndexedProcedure {
             define("open-tcp-listener", OPEN_TCP_LISTENER);
             define("accept-tcp-socket", ACCEPT_TCP_SOCKET);
             define("open-tcp-socket", OPEN_TCP_SOCKET);
+            define("make-ssl-socket", MAKE_SSL_SOCKET);
             define("open-binary-socket-input-port", OPEN_BINARY_SOCKET_INPUT_PORT);
             define("open-binary-socket-output-port", OPEN_BINARY_SOCKET_OUTPUT_PORT);
             define("open-socket-input-port", OPEN_SOCKET_INPUT_PORT);
@@ -608,8 +613,14 @@ int dgramsize=num(f.vlr[2]).indexValue();
                 }
             case 4:
                 switch(id) {
+                case MAKE_SSL_SOCKET:
+                    SchemeTCPSocket original=(SchemeTCPSocket)sock(f.vlr[0]);
+                    String host=string(f.vlr[1]);
+                    int port=num(f.vlr[2]).indexValue();
+                    boolean autoClose=truth(f.vlr[3]);
+                    return new SchemeTCPSocket(((SSLSocketFactory)SSLSocketFactory.getDefault()).createSocket(original.s, host, port, autoClose));
                 case OPEN_MULTICAST_SOCKET:
-                    String host=string(f.vlr[0]);
+                    host=string(f.vlr[0]);
                     String iface=string(f.vlr[2]);
                     int dport=num(f.vlr[1]).indexValue();
                     int dgramsize=num(f.vlr[3]).indexValue();
