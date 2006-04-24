@@ -4,14 +4,14 @@
 
 2006-04-18  Scott G. Miller  <sgmiller@gmail.com>
 
-    * Fixed return-value inconsistencies in SRFI-18, fixing bug 
-      1472216.
+	* Fixed return-value inconsistencies in SRFI-18, fixing bug 
+	  1472216.
 
-    * Modified thread/result to throw a nested exception rather
-      than replaying the original one.  See bug 1461906.
+	* Modified thread/result to throw a nested exception rather
+	  than replaying the original one.  See bug 1461906.
       
-    * Added build-heapjar.scm, an SRFI-22 script which will
-      build sisc-heap.jar.  See FR 1469828.
+	* Added build-heapjar.scm, an SRFI-22 script which will
+	  build sisc-heap.jar.  See FR 1469828.
       
 2006-04-18  Matthias Radestock  <matthias@sorted.org>
 
