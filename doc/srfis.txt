@@ -78,7 +78,7 @@ This table indicates the current and planned support for SRFIs in SISC.
 75  "R6RS Unicode data"                                 draft
 76  "R6RS Records"                                      draft
 77  "Preliminary Proposal for R6RS Arithmetic"          draft
-78  "Lightweight testing"                               TODO
+78  "Lightweight testing"                               implemented
 79  "Primitive I/O"                                     draft
 80  "Stream I/O"                                        draft
 81  "Port I/O"                                          draft
