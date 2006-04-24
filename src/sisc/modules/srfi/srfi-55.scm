@@ -28,7 +28,7 @@
   (lambda (ctx)
     (syntax-case ctx ()
       [(_ id)
-       (let ([lib-name-symb (syntax-object->datum (syntax id0))])
+       (let ([lib-name-symb (syntax-object->datum (syntax id))])
          (with-syntax ([lib-name
                         (datum->syntax-object
                          (syntax ctx) lib-name-symb)])
