@@ -11,5 +11,6 @@
    u8vector-compare
    u8vector-copy!
    u8vector-copy)
+  (import buffers)
   (include "../../modules/srfi/srfi-66.scm")
   (add-feature 'srfi-66))

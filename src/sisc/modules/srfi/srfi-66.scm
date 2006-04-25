@@ -3,7 +3,6 @@
 ;;
 ;; 2006 Scott G. Miller
 
-(import buffers)
 (define u8vector? buffer?)
 (define make-u8vector make-buffer)
 (define u8vector buffer)
