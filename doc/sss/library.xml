@@ -1597,7 +1597,7 @@ com/foo/bar/baz/baz3.scm
           25, 26, 27, 28, 29, 30, 31, 34, 35, 37, 38, 39, 40, 42, 43, 
           45, 48, 51, 54, 55, 60, 61, 62, 67, 69 and 78.
           Once the SRFI module definitions have been loaded as
-          described above, an SRFI <parameter>n</parameter> can be
+          described above, a SRFI <parameter>n</parameter> can be
           imported using
           <programlisting>
 (import srfi-<parameter>n</parameter>)
