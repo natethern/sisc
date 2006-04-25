@@ -24,7 +24,8 @@ public class BinaryIO extends IndexedProcedure {
         BUFFERLENGTH=5, BUFFERREF=6, BUFFERSET=7, BUFFERCOPY=8,
         OPENBINARYINPUTFILE = 9, OPENBINARYOUTPUTFILE= 10,
         BINARYINPUTPORTQ = 11, BINARYOUTPUTPORTQ = 12, 
-        OPENINPUTBUFFER=13, OPENOUTPUTBUFFER=14, GETOUTPUTBUFFER=15;
+        OPENINPUTBUFFER=13, OPENOUTPUTBUFFER=14, GETOUTPUTBUFFER=15,
+        BUFFERCOMPARE=16;
 
 
     public static class Index extends IndexedLibraryAdapter {
@@ -38,6 +39,7 @@ public class BinaryIO extends IndexedProcedure {
             define("write-block",   BLOCKWRITE);
             define("make-buffer",   MAKEBUFFER);
             define("buffer?",       BUFFERQ);
+            define("buffer-compare", BUFFERCOMPARE);
             define("buffer-length", BUFFERLENGTH);
             define("buffer-ref",    BUFFERREF);
             define("buffer-set!",   BUFFERSET);
@@ -150,6 +152,17 @@ public class BinaryIO extends IndexedProcedure {
             }
         case 2:
             switch (id) {
+            case BUFFERCOMPARE:
+                Buffer b1=buffer(f.vlr[0]);
+                Buffer b2=buffer(f.vlr[1]);
+                int rv=b1.buf.length-b2.buf.length;
+                if (rv==0) {
+                    for (int i=0; i<b1.buf.length; i++) {
+                        rv=b1.buf[i]-b2.buf[i];
+                        if (rv!=0) break;
+                    }              
+                }
+                return Quantity.valueOf(rv);
             case MAKEBUFFER:
                 return new Buffer(num(f.vlr[0]).indexValue(),
                                   (byte)num(f.vlr[1]).indexValue());

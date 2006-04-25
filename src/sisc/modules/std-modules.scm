@@ -256,6 +256,7 @@
    <buffer>
    buffer
    buffer?
+   buffer-compare
    buffer-ref
    buffer-set!
    buffer-length

@@ -41,6 +41,7 @@
     srfi-55
     srfi-61
     srfi-62
+    srfi-66
     srfi-67
     srfi-69
     srfi-69-ext

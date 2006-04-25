@@ -1,3 +1,7 @@
+2006-04-24  Scott G. Miller  <sgmiller@gmail.com>
+
+    * Implement SRFI-66, including buffer-compare.  See FR 1475139.
+
 2006-04-24  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed two bugs in srfi-55's handling of SISC-specific extension.
