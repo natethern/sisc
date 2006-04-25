@@ -66,7 +66,7 @@ This table indicates the current and planned support for SRFIs in SISC.
 63  "Homogeneous and Heterogeneous Arrays"              won't implement
 64  "A Scheme API for test suites"                      draft
 65  "define-immutable"                                  withdrawn
-66  "Octet Vectors"                                     TODO
+66  "Octet Vectors"                                     implemented
 67  "Compare Procedures"                                implemented
 68  "Comprehensive I/O"                                 withdrawn
 69  "Basic hash tables"                                 implemented
