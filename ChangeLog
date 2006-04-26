@@ -1,3 +1,8 @@
+2006-04-26  Matthias Radestock  <matthias@sorted.org>
+
+	* Re-enabled support for old |require-extension| syntax, but issue
+	  a deprecation warning.
+
 2006-04-24  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Implement SRFI-66, including buffer-compare.  See FR 1475139.
