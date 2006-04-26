@@ -68,7 +68,20 @@ public class Networking extends IndexedProcedure {
         OPEN_UDP_LISTEN_SOCKET = 18,
         SOCKETQ = 19,
         SERVERSOCKETQ = 20,
-        MAKE_SSL_SOCKET = 21;
+        MAKE_SSL_SOCKET = 21,
+        OPEN_SSL_LISTENER = 22,
+        GET_ENABLED_CIPHER_SUITES = 23,
+        GET_ENABLED_PROTOCOLS = 24,
+        SET_ENABLED_CIPHER_SUITES = 31,
+        SET_ENABLED_PROTOCOLS = 32,
+        SESSION_CREATION_PERMITTEDQ = 25,
+        PERMIT_SESSION_CREATION = 26,
+        GET_CLIENT_MODE = 27,
+        SET_CLIENT_MODE = 28,
+        GET_CLIENT_AUTH = 29,
+        SET_CLIENT_AUTH = 30;
+        
+        
 
     interface Closable {
         void close() throws IOException;
