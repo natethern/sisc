@@ -1,6 +1,6 @@
 2006-04-24  Scott G. Miller  <sgmiller@gmail.com>
 
-    * Implement SRFI-66, including buffer-compare.  See FR 1475139.
+	* Implement SRFI-66, including buffer-compare.  See FR 1475139.
 
 2006-04-24  Matthias Radestock  <matthias@sorted.org>
 
