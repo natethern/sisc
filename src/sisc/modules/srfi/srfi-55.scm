@@ -14,13 +14,13 @@
                (string->symbol
                 (string-append "sisc/libs/srfi/"
                                (symbol->string srfi-name-symb)))])
+         (require-library lib-name-symb)
          (with-syntax ([srfi-name
                         (datum->syntax-object
                          (syntax ctx) srfi-name-symb)]
                        [lib-name
                         (datum->syntax-object
                          (syntax ctx) lib-name-symb)])
-           (require-library lib-name-symb)
            (syntax (begin (require-library 'lib-name)
                           (import srfi-name)))))])))
 
@@ -29,10 +29,10 @@
     (syntax-case ctx ()
       [(_ id)
        (let ([lib-name-symb (syntax-object->datum (syntax id))])
+         (require-library lib-name-symb)
          (with-syntax ([lib-name
                         (datum->syntax-object
                          (syntax ctx) lib-name-symb)])
-           (require-library lib-name-symb)
            (syntax (begin (require-library 'lib-name)
                           (import lib-name)))))])))
 
@@ -41,9 +41,7 @@
   (syntax-rules (srfi lib)
     [(_)
      #!void]
-    [(_ (srfi) clause ...)
-     (require-extension clause ...)]
-    [(_ (lib) clause ...)
+    [(_ (_) clause ...)
      (require-extension clause ...)]
     [(_ (srfi id0 id ...) clause ...)
      (begin (require-srfi id0)
