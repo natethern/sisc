@@ -178,8 +178,8 @@
 
 (define (copy-time time)
   (make-time (time-type time)
-             (time-second time)
-             (time-nanosecond time)))
+             (time-nanosecond time)
+             (time-second time)))
 
 
 ;;; current-time
