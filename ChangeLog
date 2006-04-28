@@ -1,3 +1,8 @@
+2006-04-28  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed two bugs in srfi-19, including bug 1477638, and added
+	  recent leap second. Thanks to Norman Gray for these changes.
+
 2006-04-26  Matthias Radestock  <matthias@sorted.org>
 
 	* Re-enabled support for old |require-extension| syntax, but issue
