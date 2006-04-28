@@ -614,7 +614,9 @@
 
 ;; again, time-monotonic is the same as time tai
 (define (time-monotonic->date time . tz-offset)
-  (tm:time->date time tz-offset time-monotonic))
+  (let ((copy-tai (copy-time time)))
+    (set-time-type! copy-tai time-tai)
+    (time-tai->date copy-tai (:optional tz-offset (tm:local-tz-offset)))))
 
 (define (date->time-utc date)
   (let ( (nanosecond (date-nanosecond date))
