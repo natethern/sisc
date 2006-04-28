@@ -11,6 +11,8 @@
 
 	* Fixed two bugs in srfi-55's handling of SISC-specific extension.
 
+2006-04-19  SISC 1.13.5 Released
+	
 2006-04-18  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed return-value inconsistencies in SRFI-18, fixing bug 
@@ -45,6 +47,8 @@
 2006-03-31  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a space leak in |call-with-values|. See bug 1461939.
+
+2006-03-28  SISC 1.13.3-rc Released
 
 2006-03-27  SISC 1.13.2-rc Released
 
