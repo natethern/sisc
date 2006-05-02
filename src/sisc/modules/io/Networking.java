@@ -73,7 +73,7 @@ public class Networking extends IndexedProcedure {
         OPEN_UDP_LISTEN_SOCKET = 18,
         SOCKETQ = 19,
         SERVERSOCKETQ = 20,
-        MAKE_SSL_SOCKET = 21,
+        OPEN_SSL_SOCKET = 21,
         OPEN_SSL_LISTENER = 22,
         GET_ENABLED_CIPHER_SUITES = 23,
         GET_ENABLED_PROTOCOLS = 24,
@@ -417,7 +417,7 @@ public class Networking extends IndexedProcedure {
             define("open-ssl-listener", OPEN_SSL_LISTENER);
             define("accept-tcp-socket", ACCEPT_TCP_SOCKET);
             define("open-tcp-socket", OPEN_TCP_SOCKET);
-            define("make-ssl-socket", MAKE_SSL_SOCKET);
+            define("open-ssl-socket", OPEN_SSL_SOCKET);
             define("open-binary-socket-input-port", OPEN_BINARY_SOCKET_INPUT_PORT);
             define("open-binary-socket-output-port", OPEN_BINARY_SOCKET_OUTPUT_PORT);
             define("open-socket-input-port", OPEN_SOCKET_INPUT_PORT);
@@ -441,7 +441,7 @@ public class Networking extends IndexedProcedure {
             define("set-enabled-protocols!",SET_ENABLED_PROTOCOLS);
             define("session-creation-permitted?",SESSION_CREATION_PERMITTEDQ);
             define("set-session-creation-permitted!",PERMIT_SESSION_CREATION);
-            define("get-client-mode",GET_CLIENT_MODE);
+            define("is-client-mode?",GET_CLIENT_MODE);
             define("set-client-mode!",SET_CLIENT_MODE);
             define("get-client-auth",GET_CLIENT_AUTH);
             define("set-client-auth!",SET_CLIENT_AUTH);
@@ -560,6 +560,10 @@ public class Networking extends IndexedProcedure {
                     String host=string( f.vlr[0]);
                     int port=num(f.vlr[1]).indexValue();
                     return new SchemeTCPSocket(new Socket(host, port));
+                case OPEN_TCP_LISTENER:
+                    port=num(f.vlr[0]).indexValue();
+                    String iaddr=string(f.vlr[1]);
+                    return new SchemeServerSocket(new ServerSocket(port, 0, InetAddress.getByName(iaddr)));
                 case OPEN_UDP_SOCKET:
                     host=string(f.vlr[0]);
                     port=num(f.vlr[1]).indexValue();
@@ -697,7 +701,7 @@ public class Networking extends IndexedProcedure {
                 }
             case 4:
                 switch(id) {
-                case MAKE_SSL_SOCKET:
+                case OPEN_SSL_SOCKET:
                     SchemeTCPSocket original=(SchemeTCPSocket)sock(f.vlr[0]);
                     String host=string(f.vlr[1]);
                     int port=num(f.vlr[2]).indexValue();

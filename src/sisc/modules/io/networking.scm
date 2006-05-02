@@ -21,5 +21,5 @@
   (make-wrapped-constructor <native-output-port>
                             _open-binary-socket-output-port))
 
-(define (make-ssl-socket sock host port . autoclose)
-  (_make-ssl-socket sock host port (or (null? autoclose) (car autoclose))))
+(define (open-ssl-socket sock host port . autoclose)
+  (_open-ssl-socket sock host port (or (null? autoclose) (car autoclose))))

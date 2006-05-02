@@ -865,7 +865,7 @@
    set-enabled-protocols!
    session-creation-permitted?
    set-session-creation-permitted!
-   get-client-mode
+   is-client-mode?
    set-client-mode!
    get-client-auth
    set-client-auth!
@@ -875,7 +875,7 @@
            open-ssl-listener
            accept-tcp-socket
            open-tcp-socket
-           (_make-ssl-socket make-ssl-socket)
+           (_open-ssl-socket open-ssl-socket)
            (_open-binary-socket-input-port open-binary-socket-input-port)
            (_open-binary-socket-output-port open-binary-socket-output-port)
            (_open-socket-input-port open-socket-input-port)
@@ -898,7 +898,7 @@
            set-enabled-protocols!
            session-creation-permitted?
            set-session-creation-permitted!
-           get-client-mode
+           is-client-mode?
            set-client-mode!
            get-client-auth
            set-client-auth!

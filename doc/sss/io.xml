@@ -2336,6 +2336,305 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
         </blockquote>
       </para>
     </sect2>
+    <sect2 id="SSL">
+      <title>TLS and SSL</title>
+      <para>
+        Sockets which are encrypted using the Secure Sockets Layer
+        (SSL) or Transport Security Layer (TLS) can be created an
+        accepted as well.  This functionality can heavily depend on
+        the underlying support in the JVM, including security
+        settings, restrictions, installed certificates, etc.  For 
+        information on the Java Secure Socket Extension (JSSE) and its
+        setup, refer to the 
+        <ulink url="http://java.sun.com/products/jsse/reference/docs/index.html">
+          <citetitle>JSSE documentation</citetitle>
+        </ulink> page at Sun.
+      </para>
+      <para>
+        The SSL functionality is built atop the sockets and server
+        sockets functionality as in TCP networking above.  A separate 
+        constructor for sockets (<function>open-ssl-socket</function>)
+        and listening sockets (<function>open-ssl-listener</function>)
+        exist, and produce sockets which are used identically to TCP
+        sockets as previously described.
+      </para>
+      <para>
+        <blockquote>
+          <para id="func-open-ssl-socket">
+            <indexterm><primary>open-ssl-socket</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>socket</type>
+              <methodname>open-ssl-socket</methodname>
+              <methodparam>
+                <parameter>host</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>port</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>auto-close</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Attempts to connect to the host at the given hostname or IP
+                address encoded as a string, at the given TCP port
+                specified as an integer, and establish an SSL
+                connection using the default cipher
+                suites and protocols available. 
+                An error is raised if the host cannot be found or the
+                connection fails.  
+                If successful, a socket is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-open-tcp-listener">
+            <indexterm><primary>open-ssl-listener</primary>
+            </indexterm>
+              &procedure;
+            <methodsynopsis language="scheme">
+              <type>server-socket</type>
+              <methodname>open-ssl-listener</methodname>
+              <methodparam>
+                <parameter>port</parameter>
+              </methodparam>
+              <methodparam choice="opt">
+                <parameter>interface-address</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates an SSL TCP server socket, which may only be used with
+                accept-tcp-socket, or closed.  The server socket will listen
+                on the integer port specified.  If provided, the
+                interface-address, a string specifies the address of a
+                local interface to bind to.  If not provided, the port
+                is bound on all available interfaces.  An error is
+                raised if the socket cannot be bound and set
+                listening.
+              </para>
+              <para>
+                The cipher suites, protocols, and modes which this server
+                socket will accept are set with the following
+                functions.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-get-enabled-cipher-suites">
+            <indexterm><primary>get-enabled-cipher-suites</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>list</type>
+              <methodname>get-enabled-cipher-suites</methodname>
+              <methodparam>
+                <parameter>ssl-server-socket</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>        
+                Returns a list of strings naming the cipher suites
+                which are enabled for this server socket. 
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-set-enabled-cipher-suites">
+            <indexterm><primary>set-enabled-cipher-suites!</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>list</type>
+              <methodname>set-enabled-cipher-suites!</methodname>
+              <methodparam>
+                <parameter>ssl-server-socket</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>suite-list</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>        
+                Accepts an ssl server socket and a list of strings
+                naming the cipher suites which should be available
+                for negotiation with the remote end.  The previous
+                list is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-get-enabled-protocols">
+            <indexterm><primary>get-enabled-protocols</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>list</type>
+              <methodname>get-enabled-protocols</methodname>
+              <methodparam>
+                <parameter>ssl-server-socket</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>        
+                Returns a list of strings naming the security protocols
+                which are enabled for this server socket. 
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-set-enabled-protocols">
+            <indexterm><primary>set-enabled-protocols!</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>list</type>
+              <methodname>set-enabled-protocols!</methodname>
+              <methodparam>
+                <parameter>ssl-server-socket</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>protocol-list</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>        
+                Accepts an ssl server socket and a list of strings
+                naming the protocols which should be available
+                for negotiation with the remote end.  The previous
+                list is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-session-creation-permitted">
+            <indexterm><primary>session-creation-permitted</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>boolean</type>
+              <methodname>session-creation-permitted?</methodname>
+              <methodparam>
+                <parameter>ssl-server-socket</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>        
+                Returns true if new SSL/TLS sessions can be created
+                by the sockets obtained from this server socket.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-set-session-creation-permitted">
+            <indexterm><primary>set-session-creation-permitted!</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>boolean</type>
+              <methodname>set-session-creation-permitted!</methodname>
+              <methodparam>
+                <parameter>ssl-server-socket</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>boolean</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>        
+                Sets whether new SSL/TLS sessions can be created
+                by the sockets obtained from this server socket.
+                The previous value is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-is-client-mode">
+            <indexterm><primary>is-client-mode?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>boolean</type>
+              <methodname>is-client-mode?</methodname>
+              <methodparam>
+                <parameter>ssl-server-socket</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>        
+                Returns true if the SSL server socket will be in
+                the rare client mode after accepting the connection,
+                rather than the more common server mode.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-set-client-mode">
+            <indexterm><primary>set-client-mode!</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>boolean</type>
+              <methodname>set-client-mode!</methodname>
+              <methodparam>
+                <parameter>ssl-server-socket</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>boolean</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>        
+                Sets whether the SSL server socket will be in
+                client mode when accepting new connections.  The 
+                previousvalue is returned.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-get-client-auth">
+            <indexterm><primary>get-client-auth</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>symbol or &num;f</type>
+              <methodname>get-client-auth</methodname>
+              <methodparam>
+                <parameter>ssl-server-socket</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>        
+                Returns the necessity of the remote client to
+                authenticate to this server socket.  The returned values
+                are either <literal>needed</literal>, indicating the
+                remote must authenticate, <literal>wanted</literal>,
+                indicating the remote will be requiested to authenticate
+                but is not required to, or
+                <literal>&num;f</literal>, indicating the remote will
+                not be requested to authenticate.
+              </para>
+            </blockquote>
+          </para>
+          <para id="func-set-client-auth">
+            <indexterm><primary>set-client-auth!</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>symbol or &num;f</type>
+              <methodname>set-client-auth!</methodname>
+              <methodparam>
+                <parameter>ssl-server-socket</parameter>
+              </methodparam>
+              <methodparam>
+                <parameter>client-auth-mode</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>        
+                Sets the client authentication requirements, as described
+                in <function>get-client-auth</function> above.  One
+                of the above values must be specified.  The previous
+                value is returned.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
     <sect2 id="UDP">
       <title>UDP</title>
       <para>
