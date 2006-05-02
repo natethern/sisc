@@ -836,6 +836,7 @@
 
 (module networking
   (open-tcp-listener
+   open-ssl-listener
    accept-tcp-socket
    open-tcp-socket
    make-ssl-socket
@@ -858,9 +859,20 @@
    <tcp-socket>
    <udp-socket>
    socket?
+   get-enabled-cipher-suites
+   get-enabled-protocols
+   set-enabled-cipher-suites!
+   set-enabled-protocols!
+   session-creation-permitted?
+   set-session-creation-permitted!
+   get-client-mode
+   set-client-mode!
+   get-client-auth
+   set-client-auth!
    server-socket?)
   (import* networking-native
            open-tcp-listener
+           open-ssl-listener
            accept-tcp-socket
            open-tcp-socket
            (_make-ssl-socket make-ssl-socket)
@@ -879,7 +891,17 @@
            leave-multicast-group
            set-multicast-ttl!
            set-so-timeout!
-           socket?
+           socket?           
+           get-enabled-cipher-suites
+           get-enabled-protocols
+           set-enabled-cipher-suites!
+           set-enabled-protocols!
+           session-creation-permitted?
+           set-session-creation-permitted!
+           get-client-mode
+           set-client-mode!
+           get-client-auth
+           set-client-auth!
            server-socket?)
   (import type-system)
   (import generic-io)

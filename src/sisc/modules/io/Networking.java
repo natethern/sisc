@@ -3,6 +3,8 @@ package sisc.modules.io;
 import java.net.*;
 import java.io.*;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 
 import sisc.io.*;
@@ -46,7 +48,10 @@ import sisc.util.Util;
 
 public class Networking extends IndexedProcedure {
 
-    static final Symbol SNETB = Symbol.intern("sisc.modules.io.Messages");
+    static final Symbol 
+       SNETB = Symbol.intern("sisc.modules.io.Messages"),
+       NEEDED = Symbol.get("needed"),      
+       WANTED = Symbol.get("wanted");     
 
     protected static final int GET_LOCAL_HOST = 0,
         GET_HOST_NAME_BY_IP = 1,
@@ -409,6 +414,7 @@ public class Networking extends IndexedProcedure {
 
         public Index() {
             define("open-tcp-listener", OPEN_TCP_LISTENER);
+            define("open-ssl-listener", OPEN_SSL_LISTENER);
             define("accept-tcp-socket", ACCEPT_TCP_SOCKET);
             define("open-tcp-socket", OPEN_TCP_SOCKET);
             define("make-ssl-socket", MAKE_SSL_SOCKET);
@@ -429,6 +435,16 @@ public class Networking extends IndexedProcedure {
             define("set-so-timeout!", SET_SO_TIMEOUT);
             define("socket?", SOCKETQ);
             define("server-socket?", SERVERSOCKETQ);
+            define("get-enabled-cipher-suites", GET_ENABLED_CIPHER_SUITES);
+            define("get-enabled-protocols", GET_ENABLED_PROTOCOLS);
+            define("set-enabled-cipher-suites!", SET_ENABLED_CIPHER_SUITES);
+            define("set-enabled-protocols!",SET_ENABLED_PROTOCOLS);
+            define("session-creation-permitted?",SESSION_CREATION_PERMITTEDQ);
+            define("set-session-creation-permitted!",PERMIT_SESSION_CREATION);
+            define("get-client-mode",GET_CLIENT_MODE);
+            define("set-client-mode!",SET_CLIENT_MODE);
+            define("get-client-auth",GET_CLIENT_AUTH);
+            define("set-client-auth!",SET_CLIENT_AUTH);
         }
     }
     
@@ -502,6 +518,9 @@ public class Networking extends IndexedProcedure {
                 case OPEN_TCP_LISTENER:
                     int port=num(f.vlr[0]).indexValue();
                     return new SchemeServerSocket(new ServerSocket(port));
+                case OPEN_SSL_LISTENER:
+                    port=num(f.vlr[0]).indexValue();
+                    return new SchemeServerSocket(SSLServerSocketFactory.getDefault().createServerSocket(port));
                 case ACCEPT_TCP_SOCKET:
                     Socket sock=serversock(f.vlr[0]).s.accept();
                     return new SchemeTCPSocket(sock);
@@ -515,6 +534,23 @@ public class Networking extends IndexedProcedure {
                     s=new SchemeMulticastUDPSocket(new MulticastSocket(port));
                     s.setMode(LISTEN);
                     return s;
+                case GET_ENABLED_CIPHER_SUITES:
+                    SSLServerSocket sslssock=(SSLServerSocket)serversock(f.vlr[0]).s;
+                    return stringArrayToList(sslssock.getEnabledCipherSuites());
+                case GET_ENABLED_PROTOCOLS:
+                    sslssock=(SSLServerSocket)serversock(f.vlr[0]).s;
+                    return stringArrayToList(sslssock.getEnabledProtocols());
+                case SESSION_CREATION_PERMITTEDQ:
+                    sslssock=(SSLServerSocket)serversock(f.vlr[0]).s;
+                    return truth(sslssock.getEnableSessionCreation());
+                case GET_CLIENT_MODE:
+                    sslssock=(SSLServerSocket)serversock(f.vlr[0]).s;
+                    return truth(sslssock.getUseClientMode());
+                case GET_CLIENT_AUTH:
+                    sslssock=(SSLServerSocket)serversock(f.vlr[0]).s;
+                    if (sslssock.getNeedClientAuth()) return NEEDED;
+                    else if (sslssock.getWantClientAuth()) return WANTED;
+                    else return FALSE;
                 default:
                     throwArgSizeException();
                 }
@@ -594,6 +630,41 @@ public class Networking extends IndexedProcedure {
                         servsock.setSoTimeout(num(f.vlr[1]).intValue());
                     }
                     return VOID;
+                case SET_ENABLED_CIPHER_SUITES:
+                    SSLServerSocket sslssock=(SSLServerSocket)serversock(f.vlr[0]).s;
+                    Value previous=stringArrayToList(sslssock.getEnabledCipherSuites());
+                    sslssock.setEnabledCipherSuites(listToStringArray(pair(f.vlr[1])));
+                    return previous;
+                case SET_ENABLED_PROTOCOLS:
+                    sslssock=(SSLServerSocket)serversock(f.vlr[0]).s;
+                    previous=stringArrayToList(sslssock.getEnabledProtocols());
+                    sslssock.setEnabledProtocols(listToStringArray(pair(f.vlr[1])));
+                    return previous;
+                case PERMIT_SESSION_CREATION:
+                    sslssock=(SSLServerSocket)serversock(f.vlr[0]).s;
+                    previous=truth(sslssock.getEnableSessionCreation());
+                    sslssock.setEnableSessionCreation(truth(f.vlr[1]));
+                    return previous;
+                case SET_CLIENT_MODE:
+                    sslssock=(SSLServerSocket)serversock(f.vlr[0]).s;
+                    previous=truth(sslssock.getUseClientMode());
+                    sslssock.setUseClientMode(truth(f.vlr[1]));
+                    return previous;
+                case SET_CLIENT_AUTH:
+                    sslssock=(SSLServerSocket)serversock(f.vlr[0]).s;
+                    if (sslssock.getNeedClientAuth()) previous=NEEDED;
+                    else if (sslssock.getWantClientAuth()) previous=WANTED;
+                    else previous=FALSE;
+                    if (f.vlr[1]==NEEDED) 
+                        sslssock.setNeedClientAuth(true);
+                    else if (f.vlr[1]==WANTED) {
+                        sslssock.setNeedClientAuth(false);
+                        sslssock.setWantClientAuth(true);
+                    } else {
+                        sslssock.setNeedClientAuth(false);
+                        sslssock.setWantClientAuth(false);
+                    }
+                    return previous;
                 default:
                     throwArgSizeException();
                 }
@@ -611,7 +682,7 @@ public class Networking extends IndexedProcedure {
                     host=string(f.vlr[0]);
                     dport=num(f.vlr[1]).indexValue();
                     
-int dgramsize=num(f.vlr[2]).indexValue();
+                    int dgramsize=num(f.vlr[2]).indexValue();
                     s=new SchemeMulticastUDPSocket(new MulticastSocket(dport), host, dgramsize);
                     s.setMode(SEND | LISTEN);
                     return s; 
@@ -651,6 +722,23 @@ int dgramsize=num(f.vlr[2]).indexValue();
             IO.throwIOException(f, e.getMessage(), e);
         }
         return VOID;
+    }
+
+    private static String[] listToStringArray(Pair pair) {
+        String[] rv=new String[length(pair)];
+        for (int i=0; i<rv.length; i++) {
+            rv[i]=str(pair.car()).asString();
+            pair=(Pair)pair.cdr();
+        }
+        return rv;
+    }
+
+    private static Pair stringArrayToList(String[] sarray) {
+        Pair p=EMPTYLIST;
+        for (int i=sarray.length-1; i>=0; i--) {
+            p=new Pair(new SchemeString(sarray[i]), p);
+        }
+        return p;
     }
 }
 /*
