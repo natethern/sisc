@@ -26,8 +26,6 @@
 (include "channels.scm")
 (include "parsing.scm")
 (include "bots/anna.scm")
-(include "bots/infobot.scm")
-(include "bots/logbot.scm")
 (include "plugins/info.scm")
 (include "plugins/locate.scm")
 (include "plugins/seen.scm")
@@ -37,6 +35,8 @@
 (include "plugins/zippy.scm")
 (include "plugins/schemechan.scm")
 (include "plugins/logging.scm")
+(include "bots/infobot.scm")
+(include "bots/logbot.scm")
 
 (random-source-randomize! default-random-source)
 

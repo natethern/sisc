@@ -104,6 +104,9 @@
      #f)
    (lambda ()
      (connect bot (->jstring ircserver))
+     (if nickserv-password
+         (send-message bot (->jstring nickserv-user) 
+                       (->jstring (string-append "identify " nickserv-password))))
      #t)))
 
 (define (request-part channel message ignore term)

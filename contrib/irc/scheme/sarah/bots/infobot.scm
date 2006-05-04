@@ -54,6 +54,8 @@
    ("who is "
     "\"Who is <someone>\" asks for information about someone."
     (*-is? 'what))
+   ("forget " "\"forget <something>\" asks me to forget what I know about something."
+    forget)
    ("seen " "\"seen <someone>\" asks for the last time I saw someone speak."
     seen)
    ("be quiet" "Asks me to only speak when spoken to" be-quiet)
@@ -74,6 +76,7 @@
    ("dictionary" "\"dictionary <word>\" tells me to look up a word in Webster's dictionary." (dict "web1913"))
    ("weather" "\"weather <city>\" asks me for the current weather in a city" get-weather)
    ("yow" "A bit of randomness from Zippy the Pinhead." yow)
+   ("bart" "Bart Simpson chalkboard punishments" bart)
    ("join " "\"join <channel-name>\" asks me to join the channel as an infobot"
     join-chan)
    ("scheme-channel " "\"scheme-channel <channel-name>\" creates a scheme channel with the given name" make-schemechan)
@@ -81,8 +84,6 @@
    ("pasted " "" (lambda args (random-elem paste-responses)))
    ("locate " "\"locate <someone>\" asks me to tell you where I see someone."
     locate)
-   ("forget " "\"forget <something>\" asks me to forget what I know about something."
-    forget)
    (" is also " "\"<fact> is also <something>\" tells me that the first term which I already know can also be named by the second." learn-aka)
    (" is aka " "\"<fact> is also <something>\" tells me that the first term which I already know can also be named by the second." learn-aka)
    (" is at " "\"<something> is at <somewhere>\" defines the location of a term for later recollection by \"where is\"."

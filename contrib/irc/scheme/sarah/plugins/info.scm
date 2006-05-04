@@ -1,3 +1,5 @@
+(import debugging)
+
 ; basic infobot plugins
 (define (*-is? type)
   (lambda (channel message ignore term)
@@ -40,6 +42,7 @@
           (random-elem knewthat-responses))))
 
 (define (forget channel message ignore term)
+  (display term) (newline)
   (remove-items dbcon term)
   (random-elem forget-responses))
 
@@ -87,6 +90,7 @@
     (set-string pstmt (->jint 1) (->jstring key))
     (with/fc (lambda (m e) #f) (lambda () (jdbc/execute pstmt)))))
 
+(trace 'remove-items)
 (define whatis-preludes
   '("I've heard " 
     "Someone once said "

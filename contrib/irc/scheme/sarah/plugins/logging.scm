@@ -12,9 +12,11 @@
                                (date->string (current-date) "~Y-~m-~d") i)])
                     (if (file-exists? fname)
                         (loop (+ i 1))
-                        fname))) #t)))]
+                        fname))) #t)))
+          "Okay"]
         [(equal? state "off")
          (let ([oldlog (channel-log-file channeL)])
            (if oldlog (close-output-port oldlog))
-           (set-channel-log-file! channel #f))])
-  "Okay.")
+           (set-channel-log-file! channel #f))
+         "Okay."]
+        [else 'continue]))

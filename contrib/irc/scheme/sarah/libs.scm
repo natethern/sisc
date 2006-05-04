@@ -13,4 +13,4 @@
 (putprop 'slib '*config-parameters* "/usr/share/slib")
 (putprop 'sisc.slib '*config-parameters* "/usr/share/slib")
 
-(current-class-path '("../../lib/pircbot.jar" "../../sisc-pirc.jar"))
+(class-path-extension-append! '("../../lib/pircbot.jar" "../../sisc-pirc.jar"))

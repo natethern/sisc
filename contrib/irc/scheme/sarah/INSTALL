@@ -2,7 +2,7 @@ Installing Sarahbot
 -------------------
 
 1. Obtain SISC 1.9.x or higher.  Copy all the .jar and .shp file(s)
-   into the libs/ subdirectory.
+   into the sisc/ subdirectory.
 
 2. Install PostgreSQL, create a database to hold sarahbot's memory,
    and feed schema.sql to it.

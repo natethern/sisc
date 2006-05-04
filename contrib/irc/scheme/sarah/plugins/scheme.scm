@@ -91,7 +91,10 @@
                 (lambda ()
                   (with-input-from-string term
                     (lambda ()
-                      (set! expr (read-code))
+                      (with/fc (lambda (m e)
+                                 (print-exception (make-exception m e) #f))
+                               (lambda ()
+                                 (set! expr (read-code))))
                       (do ([c (read-char) (read-char)]
                            [ls '() (cons c ls)])
                           [(eof-object? c)
