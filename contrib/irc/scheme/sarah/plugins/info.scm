@@ -29,7 +29,7 @@
     (if (not term)
         'continue
         (let ([tt (tokenize term)])
-          (or (and (ignorable? tt definition) 'continue)
+          (or (and (not (eq? type 'where)) (ignorable? tt definition) 'continue)
             (if (store-item dbcon type term definition)
                 (random-elem learn-responses) 
                 (random-elem knewthat-responses)))))))
