@@ -1,3 +1,8 @@
+2006-05-05  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Implemented programmer creation of chained environments.  
+	  See FR 1470820.
+	  
 2006-05-02  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Implemented SSL/TLS support in the networking module.  See FR 1469396.

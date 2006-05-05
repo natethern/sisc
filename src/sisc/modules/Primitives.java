@@ -148,6 +148,7 @@ public abstract class Primitives extends Util {
             define("gensym?", GENSYMQ);
             define("getenv", Complex.class, GETENV);
             define("getprop", Complex.class, GETPROP);
+            define("get-parent-environment", Complex.class, GETPARENTENVIRONMENT);
             define("get-sidecar-environment", Complex.class, GETSIDECAR);
             define("get-symbolic-environment", Complex.class, GETENVIRONMENT);
             define("set-symbolic-environment!", Complex.class, SETENVIRONMENT);
@@ -229,6 +230,7 @@ public abstract class Primitives extends Util {
             define("_make-parameter", MAKEPARAM);
             define("_make-native-parameter", MAKENATIVEPARAM);
             define("_make-config-parameter", MAKECONFIGPARAM);
+            define("make-child-environment", MAKECHILDENVIRONMENT); 
             define("make-rectangular", MAKERECTANGULAR);
             define("make-string", MAKESTRING);
             define("make-vector", MAKEVECTOR);
@@ -407,10 +409,15 @@ public abstract class Primitives extends Util {
             case IMAGPART: return num(v1).imagpart();
             case STRING2UNINTERNEDSYMBOL:
                 return Symbol.getUnique(string(v1));
+            case MAKECHILDENVIRONMENT:
+                SymbolicEnvironment env=env(v1);
+                MemorySymEnv ae = new MemorySymEnv(env);
+                sisc.compiler.Compiler.addSpecialForms(ae);
+                return ae;
             case NULLENVIRONMENT:
                 switch (num(v1).indexValue()) {
                 case 5:
-                    MemorySymEnv ae = new MemorySymEnv();
+                    ae = new MemorySymEnv();
                     sisc.compiler.Compiler.addSpecialForms(ae);
                     return ae;
                 case 0:
@@ -730,6 +737,15 @@ public abstract class Primitives extends Util {
                         throwPrimException(liMessage(SISCB, "noenv", vlr[0].synopsis()));
                         return VOID;
                     }
+                case GETPARENTENVIRONMENT:
+                    SymbolicEnvironment env=env(vlr[0]);
+                    SymbolicEnvironment parent=env.getParent();
+                    if (parent == r.lookupContextEnv(Util.SISC_SPECIFIC) ||
+                        parent == r.lookupContextEnv(Util.REPORT)) {
+                        throwPrimException(liMessage(SISCB, "sysenvrestricted"));
+                    } else {                      
+                        return (Value)parent;
+                    }
                 case GETSIDECAR:
                     return r.tpl.getSidecarEnvironment(symbol(vlr[0])).asValue();
                 case GETENV:
@@ -996,7 +1012,7 @@ public abstract class Primitives extends Util {
     }
 
 
-    // next: 148
+    // next: 150
     static final int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -1042,6 +1058,7 @@ public abstract class Primitives extends Util {
         GENSYM = 0,
         GENSYMQ = 137,
         GETSIDECAR = 124,
+        GETPARENTENVIRONMENT=149,
         GETENV = 123,
         GETENVIRONMENT = 18,
         GETPROP = 109,
@@ -1063,6 +1080,7 @@ public abstract class Primitives extends Util {
         LOADNL = 77,
         LOG = 24,
         LT = 117,
+        MAKECHILDENVIRONMENT = 148,       
         MAKEPARAM = 63,
         MAKENATIVEPARAM = 12,
         MAKECONFIGPARAM = 122,
