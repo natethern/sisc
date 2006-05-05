@@ -1,55 +1,27 @@
+/*
+ * $Id$
+ */
 package sisc.data;
 
-import java.io.*;
+import java.io.IOException;
+
 import sisc.io.ValueWriter;
-import sisc.ser.Deserializer;
-import sisc.ser.Serializer;
-import sisc.util.ExpressionVisitor;
 
-public class EmptyList extends Pair implements Singleton {
-    public static EmptyList EMPTYLIST=new EmptyList();
-    public static Nothing NOTHING=new Nothing();
+/**
+ * A value, unlike "void", which is not equal to anything
+ */
+public class Nothing extends Value {
+
+    public boolean eqv(Object v) {
+        return false;
+    }
     
-    static {
-        EMPTYLIST.setCar(NOTHING);
-        EMPTYLIST.setCdr(NOTHING);
-    }
-
-    public EmptyList() {}
-
+    @Override
     public void display(ValueWriter w) throws IOException {
-        w.append("()");
+        w.append("#<nothing>"); 
     }
 
-    public boolean valueEqual(Value o) {
-        return o instanceof EmptyList;
-    }
-
-    public int valueHashCode() {
-        return 0x9abcdef0;
-    }
-
-    public int hashCode() {
-        return 0x9abcdef0;
-    }
-
-    public void serialize(Serializer s) throws IOException {
-    }
-
-    public void deserialize(Deserializer s) throws IOException {
-    }
-
-    public Value singletonValue() {
-        return EMPTYLIST;
-    }
-
-    public boolean visit(ExpressionVisitor v) {
-        return true;
-    }
 }
-
-
-
 /*
  * The contents of this file are subject to the Mozilla Public
  * License Version 1.1 (the "License"); you may not use this file
