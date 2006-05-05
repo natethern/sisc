@@ -839,7 +839,7 @@
    open-ssl-listener
    accept-tcp-socket
    open-tcp-socket
-   make-ssl-socket
+   open-ssl-socket
    open-binary-socket-input-port
    open-binary-socket-output-port
    open-socket-input-port
