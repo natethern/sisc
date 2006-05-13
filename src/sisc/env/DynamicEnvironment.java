@@ -17,6 +17,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public Value in, out;
     
+    public Pair sourceAnnotations = EMPTYLIST;
+
     public Charset characterSet         = Util.getDefaultCharacterSet();
     public boolean caseSensitive        = Defaults.CASE_SENSITIVE;
     public boolean printShared          = Defaults.PRINT_SHARED;
@@ -25,7 +27,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public boolean permissiveParsing    = Defaults.PERMISSIVE_PARSING;
     public boolean hedgedInlining       = Defaults.HEDGED_INLINING;
     public boolean internalDebugging    = Defaults.INTERNAL_DEBUGGING;
-    
+
     private static String defaultCharacterSet =
         Util.getDefaultCharacterSet().displayName();
     private static String defaultCaseSensitive = 
@@ -187,6 +189,14 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public void setOutputPort(Value v) {
         out = v;
+    }
+
+    public Value getSourceAnnotations() {
+        return sourceAnnotations;
+    }
+
+    public void setSourceAnnotations(Value v) {
+        sourceAnnotations = pair(v);
     }
 
     public Value getCharacterSet() {

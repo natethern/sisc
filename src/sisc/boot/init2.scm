@@ -99,6 +99,7 @@
 (define character-set           (make-native-parameter "characterSet"))
 (define permissive-parsing      (make-native-parameter "permissiveParsing"))
 (define internal-debugging      (make-native-parameter "internalDebugging"))
+(define source-annotations      (make-native-parameter "sourceAnnotations"))
 
 ; Enable inlining and optimizer assumptions while expanding libraries
  
