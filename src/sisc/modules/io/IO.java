@@ -375,13 +375,7 @@ public class IO extends IndexedProcedure {
                 return readCode(f, inport);
             case OPENSOURCEINPUTFILE:
                 URL url = url(f.vlr[0]);
-                try {
-                    return new SourceInputPort(new BufferedReader(f.dynenv.characterSet.newInputStreamReader(getURLInputStream(url))), 
-                                               url.toString());
-                } catch (IOException e) {
-                    throwIOException(f, liMessage(IOB, "erroropening", 
-                                                  url.toString()), e);
-                }
+                return openCharInFile(f, url, f.dynenv.characterSet);
             case OPENINPUTFILE:
                 url = url(f.vlr[0]);
                 return openCharInFile(f, url, f.dynenv.characterSet);
