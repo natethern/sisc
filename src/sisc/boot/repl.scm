@@ -187,6 +187,7 @@
 
 (on-repl-start
  (lambda ()
+   (source-annotations '((source-kind . user)))
    (current-url
     (string-append
      "file:"
