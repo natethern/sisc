@@ -24,8 +24,7 @@ public class BinaryIO extends IndexedProcedure {
         BUFFERLENGTH=5, BUFFERREF=6, BUFFERSET=7, BUFFERCOPY=8,
         OPENBINARYINPUTFILE = 9, OPENBINARYOUTPUTFILE= 10,
         BINARYINPUTPORTQ = 11, BINARYOUTPUTPORTQ = 12, 
-        OPENINPUTBUFFER=13, OPENOUTPUTBUFFER=14, GETOUTPUTBUFFER=15,
-        BUFFERCOMPARE=16;
+        BUFFERCOMPARE=13;
 
 
     public static class Index extends IndexedLibraryAdapter {
@@ -44,11 +43,8 @@ public class BinaryIO extends IndexedProcedure {
             define("buffer-ref",    BUFFERREF);
             define("buffer-set!",   BUFFERSET);
             define("buffer-copy!",  BUFFERCOPY);
-            define("get-output-buffer", GETOUTPUTBUFFER);
             define("open-binary-input-file",  OPENBINARYINPUTFILE);
             define("open-binary-output-file", OPENBINARYOUTPUTFILE);
-            define("open-input-buffer", OPENINPUTBUFFER);
-            define("open-output-buffer", OPENOUTPUTBUFFER);
             define("binary-input-port?",  BINARYINPUTPORTQ);
             define("binary-output-port?", BINARYOUTPUTPORTQ);
         }   
@@ -107,13 +103,6 @@ public class BinaryIO extends IndexedProcedure {
 
     public Value doApply(Interpreter f) throws ContinuationException {
         switch (f.vlr.length) {
-        case 0:
-            switch (id) {
-            case OPENOUTPUTBUFFER:
-                return new StreamOutputPort(new ByteArrayOutputStream(), false);
-            default:
-                throwArgSizeException();
-            }
         case 1:
             switch (id) {
             case MAKEBUFFER:
@@ -122,27 +111,10 @@ public class BinaryIO extends IndexedProcedure {
                 return Quantity.valueOf(buffer(f.vlr[0]).buf.length);
             case BUFFERQ:
                 return truth(f.vlr[0] instanceof Buffer);
-            case GETOUTPUTBUFFER:
-                StreamOutputPort sop=(StreamOutputPort)f.vlr[0];
-                ByteArrayOutputStream bos=(ByteArrayOutputStream)sop.out;
-                try {
-                    sop.flush();
-                } catch (IOException e) {
-                    throwPrimException(liMessage(BINARYB, "errorflushing", 
-                                           sop.toString(),
-                                           e.getMessage()));
-                }
-                Buffer rv=new Buffer(bos.toByteArray());
-                bos.reset();
-                return rv;
             case OPENBINARYINPUTFILE:
                 return openBinInFile(f, url(f.vlr[0]));
             case OPENBINARYOUTPUTFILE:
                 return openBinOutFile(f, url(f.vlr[0]), false);
-            case OPENINPUTBUFFER:
-                return new StreamInputPort(new ByteArrayInputStream(buffer(f.vlr[0]).buf));
-            case OPENOUTPUTBUFFER:
-                return new StreamOutputPort(new ByteArrayOutputStream(num(f.vlr[0]).indexValue()), false);
             case BINARYINPUTPORTQ:
                 return truth(f.vlr[0] instanceof BinaryInputPort);
             case BINARYOUTPUTPORTQ:
