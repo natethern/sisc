@@ -167,7 +167,7 @@ public class IO extends IndexedProcedure {
                     ((Value)i).synopsis()));
         }
         try {
-            return r.dynenv.parser.nextExpression(i, flags);
+            return r.dynenv.parser.nextExpression(i, flags, r.dynenv.sourceAnnotations);
         } catch (EOFException e) {
             return EOF;
         } catch (IOException e2) {
@@ -464,7 +464,8 @@ public class IO extends IndexedProcedure {
                     SourceInputPort sinp = (SourceInputPort)inp;
                     return sourceAnnotations(sinp.sourceFile,
                                              sinp.line,
-                                             sinp.column);
+                                             sinp.column,
+                                             f.dynenv.sourceAnnotations);
                 } else
                     return FALSE;
             case LOAD:

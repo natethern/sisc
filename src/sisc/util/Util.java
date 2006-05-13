@@ -786,12 +786,15 @@ public abstract class Util implements Version {
 
     public static Pair sourceAnnotations(String file,
                                          int line,
-                                         int column) {
-        return list(new Pair(SOURCE_FILE, new SchemeString(file)),
-                    new Pair(SOURCE_LINE, Quantity.valueOf(line)),
-                    new Pair(SOURCE_COLUMN, Quantity.valueOf(column)));
+                                         int column,
+                                         Pair anns) {
+        return
+            new Pair(new Pair(SOURCE_FILE, new SchemeString(file)),
+                     new Pair(new Pair(SOURCE_LINE, Quantity.valueOf(line)),
+                              new Pair(new Pair(SOURCE_COLUMN, Quantity.valueOf(column)),
+                                       anns)));
     }
-             
+
     public static Expression annotatedAppEval(Class clazz, String fn) {
         Expression e = new AppEval(true);
         e.setAnnotation(SOURCE_FILE,

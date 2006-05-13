@@ -72,18 +72,66 @@ public class Parser extends Util implements Tokens {
         }    
     }
     
-    public final Value nextExpression(InputPort is, int flags) throws IOException {
-        return nextExpression(is, 10, flags);
-    }
-
-    public final Value nextExpression(InputPort is) throws IOException {
-        return nextExpression(is, 10, PRODUCE_IMMUTABLES);
-    }
-
-    protected final Value nextExpression(InputPort is, HashMap state, 
-                                         int flags) 
+    public final Value nextExpression(InputPort is)
         throws IOException {
-        return (Value)_nextExpression(is, state, null, flags);
+
+        return nextExpression(is, PRODUCE_IMMUTABLES, EMPTYLIST);
+    }
+
+    public final Value nextExpression(InputPort is,
+                                      int flags,
+                                      Pair anns)
+        throws IOException {
+
+        return nextExpression(is, 10, flags, anns);
+    }
+
+    public final Value nextExpression(InputPort is,
+                                      int radix,
+                                      int flags)
+        throws IOException {
+
+        return nextExpression(is, radix, flags, EMPTYLIST);
+    }
+
+    /**
+     * Reads an s-expression from the given input port.
+     *
+     * @param is InputPort from which to read
+     * @param radix Specifies the radix of any numbers that are read
+     * @param flags Specifies attributes for the returned values (PRODUCE_IMMUTABLES, PRODUCE_ANNOTATIONS, STRICT_R5RS)
+     * @param anns additional annotations
+     * @return the read expression
+     * @exception IOException if an error occurs
+     */
+    public Value nextExpression(InputPort is,
+                                int radix,
+                                int flags,
+                                Pair anns)
+        throws IOException {
+
+        Object n=VOID;
+
+        try {
+            n=_nextExpression(is, new HashMap (), null, radix, flags, anns);
+            return (Value)n;
+        } catch (ClassCastException ce) {
+            if (n==ENDPAIR) {
+                potentialError(flags, "orphanedparen", is);
+                return nextExpression(is, radix, flags, anns);
+            } else if (n==DOT)
+                throw new IOException(liMessage(SISCB, "unexpecteddot"));
+        }
+        return (Value)n;
+    }
+
+    protected final Value nextExpression(InputPort is,
+                                         HashMap state, 
+                                         int flags,
+                                         Pair anns) 
+        throws IOException {
+
+        return (Value)_nextExpression(is, state, null, flags, anns);
     }
 
     protected void potentialError(int flags, String message, InputPort is) throws IOException {
@@ -106,35 +154,14 @@ public class Parser extends Util implements Tokens {
         return (Value)(l instanceof Integer ? state.get(l) : l);
     }
 
-    /**
-     * Reads an s-expression from the given input port.
-     *
-     * @param is InputPort from which to read
-     * @param radix Specifies the radix of any numbers that are read
-     * @param flags Specifies attributes for the returned values (PRODUCE_IMMUTABLES, PRODUCE_ANNOTATIONS, STRICT_R5RS)
-     * @return the read expression
-     * @exception IOException if an error occurs
-     */
-    public Value nextExpression(InputPort is, int radix,
-                                int flags) throws IOException {
-        Object n=VOID;
+    protected Object _nextExpression(InputPort is,
+                                     HashMap state, 
+                                     Integer def,
+                                     int flags,
+                                     Pair anns)
+        throws IOException {
 
-        try {
-            n=_nextExpression(is, new HashMap (), null, radix, flags);
-            return (Value)n;
-        } catch (ClassCastException ce) {
-            if (n==ENDPAIR) {
-                potentialError(flags, "orphanedparen", is);
-                return nextExpression(is, radix, flags);
-            } else if (n==DOT)
-                throw new IOException(liMessage(SISCB, "unexpecteddot"));
-        }
-        return (Value)n;
-    }
-
-    protected Object _nextExpression(InputPort is, HashMap state, 
-                                     Integer def, int flags) throws IOException {
-        return _nextExpression(is, state, def, 10, flags);
+        return _nextExpression(is, state, def, 10, flags, anns);
     }
 
     protected Quantity numberCheck(Object o, InputPort is, int flags) throws IOException {
@@ -146,9 +173,14 @@ public class Parser extends Util implements Tokens {
         }
     }
 
-    protected Object listSpecial(Symbol car, InputPort is,
-                                 HashMap state, Integer def, 
-                                 int flags) throws IOException {
+    protected Object listSpecial(Symbol car,
+                                 InputPort is,
+                                 HashMap state,
+                                 Integer def, 
+                                 int flags,
+                                 Pair anns)
+        throws IOException {
+
         boolean produceImmutables = produceImmutables(flags);
         Pair t = (produceImmutables ?
                   new ImmutablePair(EMPTYLIST, EMPTYLIST, false) :
@@ -158,15 +190,21 @@ public class Parser extends Util implements Tokens {
                   new Pair(car, t));
         if (def!=null)
             state.put(def, p);
-        t.setCar(nextExpression(is, state, flags));
+        t.setCar(nextExpression(is, state, flags, anns));
         if (produceImmutables) {
             ((ImmutablePair)t).makeImmutable();
         }
         return p;
     }
 
-    protected Object _nextExpression(InputPort is, HashMap state, Integer def, int radix, int flags)
+    protected Object _nextExpression(InputPort is,
+                                     HashMap state,
+                                     Integer def,
+                                     int radix,
+                                     int flags,
+                                     Pair anns)
     throws IOException {
+
         int line=-1, col=-1;
         String file=null;
         
@@ -179,16 +217,16 @@ public class Parser extends Util implements Tokens {
             o=DOT;
             break;
         case TT_UNQUOTE:
-            o=listSpecial(UNQUOTE, is, state, def, flags);
+            o=listSpecial(UNQUOTE, is, state, def, flags, anns);
             break;
         case TT_UNQUOTE_SPLICING:
-            o=listSpecial(UNQUOTE_SPLICING, is, state, def, flags);
+            o=listSpecial(UNQUOTE_SPLICING, is, state, def, flags, anns);
             break;
         case TT_QUOTE:
-            o=listSpecial(QUOTESYM, is, state, def, flags&(~PRODUCE_ANNOTATIONS));
+            o=listSpecial(QUOTESYM, is, state, def, flags&(~PRODUCE_ANNOTATIONS), anns);
             break;
         case TT_BACKQUOTE:
-            o=listSpecial(BACKQUOTE, is, state, def, flags);
+            o=listSpecial(BACKQUOTE, is, state, def, flags, anns);
             break;
         case TT_NUMBER:
             o=lexer.nval;
@@ -207,15 +245,15 @@ public class Parser extends Util implements Tokens {
 
             if (annotate && produceAnnotations(flags) && line>=0) {
                 AnnotatedExpr aexp =
-                    new AnnotatedExpr(null, sourceAnnotations(file, line, col));
+                    new AnnotatedExpr(null, sourceAnnotations(file, line, col, anns));
                 if (def != null) {
                     state.put(def, aexp);
                     def = null;
                 }
-                aexp.expr=readList(is, state, def, flags);
+                aexp.expr=readList(is, state, def, flags, anns);
                 return aexp;
             } else {
-                return readList(is, state, def, flags);
+                return readList(is, state, def, flags, anns);
             }
         case TT_ENDPAIR:
             o=ENDPAIR;
@@ -247,7 +285,7 @@ public class Parser extends Util implements Tokens {
                 //SISC supports s-expression commenting
             case ';':
                 nextExpression(is);
-                o=_nextExpression(is, state, def, flags);
+                o=_nextExpression(is, state, def, flags, anns);
                 break;
             case '\\':
                 c=is.read();
@@ -275,27 +313,27 @@ public class Parser extends Util implements Tokens {
                 }
                 break;
             case 'b':
-                o=numberCheck(_nextExpression(is, state, null, 2, flags), is, flags);
+                o=numberCheck(_nextExpression(is, state, null, 2, flags, anns), is, flags);
                 break;
             case 'o':
-                o=numberCheck(_nextExpression(is, state, null, 8, flags), is, flags);
+                o=numberCheck(_nextExpression(is, state, null, 8, flags, anns), is, flags);
                 break;
             case 'x':
-                o=numberCheck(_nextExpression(is, state, null, 16, flags), is, flags);
+                o=numberCheck(_nextExpression(is, state, null, 16, flags, anns), is, flags);
                 break;
             case 'd':
-                o=numberCheck(_nextExpression(is, state, null, flags), is, flags);
+                o=numberCheck(_nextExpression(is, state, null, flags, anns), is, flags);
                 break;
             case '&':
                 o=new Box();
                 if (def!=null) state.put(def, o);
-                ((Box)o).val=(Value)_nextExpression(is, state, null, flags);
+                ((Box)o).val=(Value)_nextExpression(is, state, null, flags, anns);
                 break;
             case 'i':
-                o=numberCheck(_nextExpression(is, state, null, radix, flags), is, flags).toInexact();
+                o=numberCheck(_nextExpression(is, state, null, radix, flags, anns), is, flags).toInexact();
                 break;
             case 'e':
-                o=numberCheck(_nextExpression(is, state, null, radix, flags), is, flags).toExact();
+                o=numberCheck(_nextExpression(is, state, null, radix, flags, anns), is, flags).toExact();
                 break;
             case '!':
                 String bv=lexer.readToBreak(is, Lexer.special, false, false);
@@ -325,18 +363,18 @@ public class Parser extends Util implements Tokens {
                 o=s;
                 break;
             case '\'':
-                o=listSpecial(SYNTAX, is, state, def, flags);
+                o=listSpecial(SYNTAX, is, state, def, flags, anns);
                 break;
             case '@': 
                 //Annotation
-                Pair p=(Pair)nextExpression(is, state, flags);
+                Pair p=(Pair)nextExpression(is, state, flags, anns);
                 o=new AnnotatedExpr(p.cdr(), p.car());
                 break;
             case '|': 
                 //InputPort is, HashMap state, Integer def, int radix, int flags
                 //Nested multiline comment
                 lexer.skipMultilineComment(is);
-                return _nextExpression(is, state, def, radix, flags); 
+                return _nextExpression(is, state, def, radix, flags, anns);
             default:
                 Value[] v=null;
                 is.pushback(c);
@@ -351,7 +389,7 @@ public class Parser extends Util implements Tokens {
 
                     c=is.read();
                     if (c=='=') {
-                        o=_nextExpression(is, state, ref, flags);
+                        o=_nextExpression(is, state, ref, flags, anns);
                         break;
                     } else if (c=='#') {
                         o=state.get(ref);
@@ -373,7 +411,7 @@ public class Parser extends Util implements Tokens {
                 if (def!=null) state.put(def, iv);
                 def=null;
 
-                Object expr=_nextExpression(is, state, def, flags | READING_VECTOR);
+                Object expr=_nextExpression(is, state, def, flags | READING_VECTOR, anns);
                 if (expr instanceof AnnotatedExpr) {
                     o=new AnnotatedExpr(iv, ((AnnotatedExpr)expr).annotation);
                     expr=((AnnotatedExpr)expr).expr;
@@ -415,9 +453,13 @@ public class Parser extends Util implements Tokens {
         return o;
     }
 
-    private Value readAfterDot(InputPort is, HashMap state, int flags)
+    private Value readAfterDot(InputPort is,
+                               HashMap state,
+                               int flags,
+                               Pair anns)
         throws IOException {
-        Object l = _nextExpression(is, state, null, flags);
+
+        Object l = _nextExpression(is, state, null, flags, anns);
         Value v = VOID;
         try {
             v = lastValue(state, l);
@@ -425,17 +467,20 @@ public class Parser extends Util implements Tokens {
             potentialError(flags, "expectedexprincdr", is);
             if (l == ENDPAIR) return EMPTYLIST;
         }
-        if (_nextExpression(is, state, null, flags) == ENDPAIR)
+        if (_nextExpression(is, state, null, flags, anns) == ENDPAIR)
             return v;
         potentialError(flags, "toomanyafterdot", is);
         //recover by skipping to end of list
-        while (_nextExpression(is, state, null, flags) !=
+        while (_nextExpression(is, state, null, flags, anns) !=
                ENDPAIR) {}
         return v;
     }
 
-    public Value readList(InputPort is, HashMap state, Integer def,
-                          int flags)
+    public Value readList(InputPort is,
+                          HashMap state,
+                          Integer def,
+                          int flags,
+                          Pair anns)
         throws IOException {
             
         Pair h=null;
@@ -445,7 +490,7 @@ public class Parser extends Util implements Tokens {
         flags &= ~READING_VECTOR;
 
         try {
-            Object l = _nextExpression(is, state, null, flags);
+            Object l = _nextExpression(is, state, null, flags, anns);
             if (l == ENDPAIR) {
                 return EMPTYLIST;
             }
@@ -461,14 +506,14 @@ public class Parser extends Util implements Tokens {
             if (def!=null) state.put(def, p);
 
             while (true) {
-                l = _nextExpression(is, state, null, flags);
+                l = _nextExpression(is, state, null, flags, anns);
                 if (l == ENDPAIR) {
                     break;
                 } else if (l == DOT) {
                     if (readingVector) {
                         potentialError(flags, "dotwhenreadingvector", is);
                     }
-                    p.setCdr(readAfterDot(is, state, flags));
+                    p.setCdr(readAfterDot(is, state, flags, anns));
                     if (produceImmutables) {
                         ((ImmutablePair)p).makeImmutable();
                     }
@@ -528,7 +573,7 @@ public class Parser extends Util implements Tokens {
         Parser p=new Parser(new Lexer());
         InputPort is=new sisc.io.StreamInputPort(System.in);
         Expression e;
-        while (EOF != (e=p.nextExpression(is, PERMISSIVE_PARSING))) {
+        while (EOF != (e=p.nextExpression(is, PERMISSIVE_PARSING, EMPTYLIST))) {
             System.err.println(e);
         }
     }
