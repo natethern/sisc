@@ -7,7 +7,8 @@
 	  
 2006-05-02  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Implemented SSL/TLS support in the networking module.  See FR 1469396.
+	* Implemented SSL/TLS support in the networking module.
+	  See FR 1469396.
 
 2006-04-29  SISC 1.13.6 Released
 
