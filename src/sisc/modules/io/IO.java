@@ -292,6 +292,53 @@ public class IO extends IndexedProcedure {
         return conn.getOutputStream();
     }
         
+    public static void load(Interpreter f, URL u, boolean expanded)
+        throws ContinuationException {
+
+        SourceInputPort p = null;
+
+        try {
+            URLConnection conn = u.openConnection();
+            conn.setDoInput(true);
+            conn.setDoOutput(false);
+            // XXX possibly use conn.guessContentTypeFromStream(),
+            // to get the stream's content-encoding
+            p = new SourceInputPort(conn.getInputStream(),
+                                    Util.charsetFromString
+                                    (conn.getContentEncoding()),
+                                    u.toString());
+        } catch (IOException e) {
+            throwIOException(f, liMessage(IOB, "erroropening",
+                                          u.toString()),
+                             e);
+        }
+
+        Interpreter r = Context.enter(f.dynenv);
+
+        try {
+            Value v = null;
+            do {
+                int startLine = p.line;
+                int startColumn = p.column;
+                v = readCode(f, p);
+
+                if (v != EOF) {
+                    try {
+                        if (expanded) {
+                            r.interpret(r.compile(v));
+                        } else {
+                            r.eval(v, f.tpl);
+                        }
+                    } catch (SchemeException se) {
+                        maybeThrowErrorWithExprLocation(se, v);
+                        throwNestedPrimException(liMessage(IOB, "evalat", p.sourceFile, startLine, startColumn), se);
+                    }
+                }
+            } while (v != EOF);
+        } finally {
+            Context.exit();
+        }
+    }
 
     public Value doApply(Interpreter f)
         throws ContinuationException {
@@ -421,81 +468,10 @@ public class IO extends IndexedProcedure {
                 } else
                     return FALSE;
             case LOAD:
-                SourceInputPort p=null;
-                url = url(f.vlr[0]);
-                try {
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(false);
-                    // XXX possibly use conn.guessContentTypeFromStream(),
-                    // to get the stream's content-encoding
-                    p=new SourceInputPort(conn.getInputStream(),
-                                          Util.charsetFromString
-                                              (conn.getContentEncoding()),
-                                          url.toString());
-                } catch (IOException e) {
-                    throwIOException(f, liMessage(IOB, "erroropening",
-                                                  url.toString()),
-                                     e);
-                }
-                Interpreter r = Context.enter(f.dynenv);
-                try {
-                    v=null;
-                    do {
-                        int startLine=p.line;
-                        int startColumn=p.column;
-                        v=readCode(f, p);
-
-                        if (v!=EOF) {
-                            try {
-                                r.eval(v, f.tpl);
-                            } catch (SchemeException se) {
-                                maybeThrowErrorWithExprLocation(se, v);
-                                throwNestedPrimException(liMessage(IOB, "evalat", p.sourceFile, startLine, startColumn), se);
-                            }
-                        }
-                    } while (v!=EOF);
-                } finally {
-                    Context.exit();
-                }
+                load(f, url(f.vlr[0]), false);
                 return VOID;
             case LOADEXPANDED:
-                p=null;
-                url = url(f.vlr[0]);
-                try {
-                    URLConnection conn = url.openConnection();
-                    conn.setDoInput(true);
-                    conn.setDoOutput(false);
-                    p=new SourceInputPort(conn.getInputStream(),
-                                          Util.charsetFromString
-                                            (conn.getContentEncoding()),
-                                          url.toString());
-                } catch (IOException e) {
-                    throwIOException(f, liMessage(IOB, "erroropening",
-                                                  url.toString()),
-                                     e);
-                }
-                r = Context.enter(f.dynenv);
-                try {
-                    v=null;
-                    do {
-                        int startLine=p.line;
-                        int startColumn=p.column;
-                        v=readCode(f, p);
-
-                        if (v!=EOF) {
-                            try {
-                                Expression ev=r.compile(v);
-                                r.interpret(ev);
-                            } catch (SchemeException se) {
-                                maybeThrowErrorWithExprLocation(se, v);
-                                throwNestedPrimException(liMessage(IOB, "evalat", p.sourceFile, startLine, startColumn), se);
-                            }
-                        }
-                    } while (v!=EOF);
-                } finally {
-                    Context.exit();
-                }
+                load(f, url(f.vlr[0]), true);
                 return VOID;
             case WRITECHAR:
                 try {
