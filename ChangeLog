@@ -1,3 +1,8 @@
+2006-05-13  Matthias Radestock  <matthias@sorted.org>
+
+	* Improved readability of stack traces by optionally suppressing
+	  entries for SISC-internal calls.
+
 2006-05-05  SISC 1.14.0-alpha Released
 
 2006-05-05  Scott G. Miller  <sgmiller@gmail.com>
