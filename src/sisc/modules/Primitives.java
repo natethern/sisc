@@ -40,8 +40,6 @@ public abstract class Primitives extends Util {
         = annotatedAppEval("with-failure-continuation");
     private final static Expression WITHENV_APPEVAL
         = annotatedAppEval("_with-environment");
-    private final static Expression WITHSTACKMARKER_APPEVAL
-        = annotatedAppEval("with-stack-marker");
     private final static Expression CALLWITHVALUES_APPEVAL
         = annotatedAppEval("call-with-values");
     private final static Expression APPLY_APPEVAL
@@ -169,7 +167,6 @@ public abstract class Primitives extends Util {
             define("vector-fill!", Complex.class, VECTORFILL);
             define("vector-set!", Complex.class, VECTORSET);
             define("with-failure-continuation", Complex.class, WITHFC);
-            define("with-stack-marker", Complex.class, WITHSTACKMARKER);
             define("_with-environment", Complex.class, WITHENVIRONMENT);
             define("class-path-extension", Complex.class, CLASSPATHEXTENSION);
             define("class-path-extension-append!", Complex.class, CLASSPATHEXTENSIONAPPEND);
@@ -828,11 +825,6 @@ public abstract class Primitives extends Util {
                         throwPrimException(liMessage(SISCB, "unsupportedstandardver"));
                         return VOID;
                     }
-                case WITHSTACKMARKER:
-                    Procedure proc = proc(vlr[0]);
-                    r.markStack();
-                    r.setupTailCall(WITHSTACKMARKER_APPEVAL, ZV);
-                    return proc;
                 default:
                     break SIZESWITCH;
                 }
@@ -1012,7 +1004,7 @@ public abstract class Primitives extends Util {
     }
 
 
-    // next: 150
+    // next: 149
     static final int ACOS = 23,
         ADD = 114,
         APPLY = 121,
@@ -1058,7 +1050,7 @@ public abstract class Primitives extends Util {
         GENSYM = 0,
         GENSYMQ = 137,
         GETSIDECAR = 124,
-        GETPARENTENVIRONMENT=149,
+        GETPARENTENVIRONMENT=148,
         GETENV = 123,
         GETENVIRONMENT = 18,
         GETPROP = 109,
@@ -1080,7 +1072,7 @@ public abstract class Primitives extends Util {
         LOADNL = 77,
         LOG = 24,
         LT = 117,
-        MAKECHILDENVIRONMENT = 148,       
+        MAKECHILDENVIRONMENT = 147,       
         MAKEPARAM = 63,
         MAKENATIVEPARAM = 12,
         MAKECONFIGPARAM = 122,
@@ -1154,9 +1146,8 @@ public abstract class Primitives extends Util {
         VECTORREF = 96,
         VECTORSET = 112,
         VOIDQ = 33,
-        WITHENVIRONMENT = 147,
+        WITHENVIRONMENT = 146,
         WITHFC = 105,
-        WITHSTACKMARKER = 146,
         _VOID = 5;
 }
 /*

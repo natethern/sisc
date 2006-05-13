@@ -96,19 +96,15 @@
     (let ([handler (and (permit-interrupts)
                         (make-interrupt-handler))])
       (define (repl/eval exp)
-        (let ([compiled
-               (with/fc
-                   (lambda (m e) (with-stack-marker
-                                     (lambda () (throw m))))
-                 (lambda () (compile-with-flags exp 'expand '((e) (e))
-                                                (interaction-environment))))])
+        (let ([compiled (compile-with-flags exp 'expand '((e) (e))
+                                            (interaction-environment))])
           (when handler (_signal-hook! "INT" handler))
           (with/fc
               (lambda (m e)
                 (when handler (_signal-unhook! "INT" handler))
                 (throw m e))
             (lambda () 
-              (let ([val (with-stack-marker compiled)])
+              (let ([val (compiled)])
                 (when handler (_signal-unhook! "INT" handler))
                 val)))))
 

@@ -186,8 +186,6 @@
 
 ;;;;;;;;;;;;;; exception display ;;;;;;;;;;;;;;;;;;;;
           
-(define stack-trace-stop-at-mark? (make-parameter #t))
-
 (define suppressed-stack-trace-source-kinds (make-parameter '(#f)))
 
 (define (filter-expr? exp)

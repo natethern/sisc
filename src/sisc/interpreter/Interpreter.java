@@ -241,12 +241,6 @@ public class Interpreter extends Util {
         return createFrame(e, null, false, null, null, tpl, fk, p, t);
     }
 
-    public final void markStack() {
-        //marker frames are distinguished by a null nxp
-        stk = createEmptyFrame(null, stk, tracer);
-        tracer = makeStackTracer();
-    }
-
     public final void pushExpr(Expression e) {
         stk = createNearlyEmptyFrame(e, stk, tracer);
         tracer = makeStackTracer();
@@ -260,8 +254,8 @@ public class Interpreter extends Util {
         //In order to produce accurate stack traces for ks we insert a
         //dummy frame with a copy of the current frame's stack trace.
         //The CONTINUATION_APPEVAL nxp of the dummy frame is only
-        //there in order to distinguish the frame from a marker frame,
-        //which has a null nxp. It is never evaluated.
+        //there in order to avoid a harmless, but ugly, null nxp.
+        //It is never evaluated.
         if (tracer == null) return p;
         else return new ApplyParentFrame(createEmptyFrame(CONTINUATION_APPEVAL, p, tracer.copy()));
     }
