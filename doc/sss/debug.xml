@@ -136,8 +136,71 @@
             retrieved using the <function>annotation</function>
             function with the keys <literal>source-file</literal>,
             <literal>line-number</literal>,
-            <literal>column-number</literal>, and
+            <literal>column-number</literal>,
+            <literal>source-kind</literal>, and
             <literal>proc-name</literal>.
+          </para>
+          <para>
+            Stack trace entries for expressions with a
+            <literal>source-kind</literal> mentioned on
+            <function>suppressed-stack-trace-source-kinds</function>
+            are suppressed.
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        <indexterm><primary>suppressed-stack-trace-source-kinds</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>list</type>
+          <methodname>suppressed-stack-trace-source-kinds</methodname>
+          <methodparam choice="opt"><parameter>list</parameter></methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Retrieves or sets the list of source kinds to suppress in
+            stack traces returned by
+            <function>stack-trace</function>. This is a dynamic
+            parameter.
+          </para>
+          <para>
+            The default value is <literal>(#f)</literal> which causes
+            all stack trace entries for expressions with no specified
+            source kind to be suppressed.
+          </para>
+          <para>
+            The annotation of expressions with source kinds and other
+            information is controlled by the
+            <function>source-annotations</function> parameter.
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        <indexterm><primary>source-annotations</primary>
+        </indexterm>
+        &procedure;
+        <methodsynopsis language="scheme">
+          <type>alist</type>
+          <methodname>source-annotations</methodname>
+          <methodparam choice="opt"><parameter>alist</parameter></methodparam>
+        </methodsynopsis>
+        <blockquote>
+          <para>
+            Retrieves or sets the association list of additional
+            annotations for expressions that are being read. This is a
+            dynamic parameter.
+          </para>
+          <para>
+            All system and core library code is loaded with this
+            parameter set to <literal>()</literal>, resulting in no
+            additional annotations being produced. However, on entry
+            to the REPL, the parameter is set to
+            <literal>((source-kind . user))</literal>. In combination
+            with the default settings for
+            <function>suppressed-stack-trace-source-kinds</function>
+            this results in system code being omitted from stack
+            traces.
           </para>
         </blockquote>
       </para>
