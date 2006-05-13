@@ -934,6 +934,7 @@
      stack-trace
      print-stack-trace
      stack-trace-stop-at-mark?
+     suppressed-stack-trace-source-kinds
      unresolved-references)
   (import debugging-native)
   (import pretty-printing)

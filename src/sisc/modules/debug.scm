@@ -188,6 +188,26 @@
           
 (define stack-trace-stop-at-mark? (make-parameter #t))
 
+(define suppressed-stack-trace-source-kinds (make-parameter '(#f)))
+
+(define (filter-expr? exp)
+  (memq (annotation exp 'source-kind)
+        (suppressed-stack-trace-source-kinds)))
+
+(define (filter-stack stack)
+  (if (null? stack)
+      '()
+      (let ([entry (car stack)]
+            [tail (filter-stack (cdr stack))])
+        (if (pair? entry)
+            (let ([sub-stack (filter-stack (cdr entry))])
+              (if (null? sub-stack)
+                  tail
+                  (cons (cons (car entry) sub-stack) tail)))
+            (if (filter-expr? entry)
+                tail
+                (cons entry tail))))))
+
 (define (stack-trace k)
   (cond
     [(not k)
@@ -197,10 +217,15 @@
       (let ([nxp  (continuation-nxp k)]
             [st   (continuation-stack-trace k)]
             [stk  (continuation-stk k)])
-        (if (or nxp (not (stack-trace-stop-at-mark?)))
-            (cons (if st (cons nxp st) nxp)
-                  (stack-trace stk))
-            '()))]))
+        (let ([tail (stack-trace stk)])
+          (if st
+              (let ([filtered (filter-stack (cdr st))])
+                (if (null? filtered)
+                    tail
+                    (cons (cons nxp (cons (car st) filtered)) tail)))
+              (if (filter-expr? nxp)
+                  tail
+                  (cons nxp tail)))))]))
 
 (define (format-expression-location expr)
   (define (source-annotations)
@@ -222,8 +247,7 @@
              (format "~a:~a:~a: <from call to/argument of ~a>" 
                      sourcefile
                      line column
-                     (_free-reference-symbol
-                      (_fill-rib-exp expr)))]
+                     (_free-reference-symbol (_fill-rib-exp expr)))]
             [else
              (format "~a:~a:~a: <indeterminate call>" 
                      sourcefile
