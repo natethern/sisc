@@ -288,6 +288,7 @@
   (> (max-stack-trace-depth) 0))
 
 (define *STACK-TRACE-MESSAGE-PRINTED?* #f)
+(define *SUPPRESSED-MESSAGE-PRINTED?* #f)
 
 (define (print-stack-trace k)
   (define (print-single-entry entry count)
@@ -319,15 +320,31 @@
                       (if last (print-single-entry last count))
                       (loop rest print-rep 1))))
               (loop rest last count)))))
-  ;;; If detailed stack tracing is disabled, tell the user how to
-  ;;; enable it.
-  (if (not (or (full-stack-tracing-enabled?)
-               *STACK-TRACE-MESSAGE-PRINTED?*))
-      (begin
-        (display "---------------------------\n")
-        (display "To enable more detailed stack tracing, start SISC ")
-        (display "with the -Dsisc.maxStackTraceDepth=16 java option.\n")
-        (set! *STACK-TRACE-MESSAGE-PRINTED?* #t))))
+  ;;; If detailed stack tracing was never enabled, tell the user how
+  ;;; to enable it.
+  (if (full-stack-tracing-enabled?)
+      (set! *STACK-TRACE-MESSAGE-PRINTED?* #t)
+      (if (not *STACK-TRACE-MESSAGE-PRINTED?*)
+          (begin
+            (display 
+             (string-append
+              "---------------------------\n"
+              "To enable more detailed stack tracing, start SISC "
+              "with the -Dsisc.maxStackTraceDepth=16 java option.\n"))
+            (set! *STACK-TRACE-MESSAGE-PRINTED?* #t))))
+  ;;; If the user has never seen a full stack trace, them them how to
+  ;;; get one.
+  (if (null? (suppressed-stack-trace-source-kinds))
+      (set! *SUPPRESSED-MESSAGE-PRINTED?* #t)
+      (if (not *SUPPRESSED-MESSAGE-PRINTED?*)
+          (begin
+            (display
+             (string-append
+              "---------------------------\n"
+              "Some stack trace entries may have been suppressed. "
+              "To see all entries set the dynamic parameter "
+              "suppressed-stack-trace-source-kinds to '().\n"))
+             (set! *SUPPRESSED-MESSAGE-PRINTED?* #t)))))
 
 (print-exception-stack-trace-hook
  'debug
