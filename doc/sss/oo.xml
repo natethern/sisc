@@ -1554,6 +1554,13 @@
       </emphasis>
     </para>
     <para>
+      Programming in the &SISC; object system usually entailse the
+      definition of generic procedures, so typically one also has to
+      <emphasis role="bold">
+        (import <emphasis>generic-procedures</emphasis>)
+      </emphasis>.
+    </para>
+    <para>
       The key features of the object system are:
       <itemizedlist>
         <listitem>
