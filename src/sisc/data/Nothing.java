@@ -18,7 +18,6 @@ public class Nothing extends Value implements Singleton {
         return false;
     }
     
-    @Override
     public void display(ValueWriter w) throws IOException {
         w.append("#<nothing>"); 
     }
