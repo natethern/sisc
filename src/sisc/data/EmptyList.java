@@ -8,11 +8,9 @@ import sisc.util.ExpressionVisitor;
 
 public class EmptyList extends Pair implements Singleton {
     public static EmptyList EMPTYLIST=new EmptyList();
-    public static Nothing NOTHING=new Nothing();
-    
     static {
-        EMPTYLIST.setCar(NOTHING);
-        EMPTYLIST.setCdr(NOTHING);
+        EMPTYLIST.setCar(Nothing.NOTHING);
+        EMPTYLIST.setCdr(Nothing.NOTHING);
     }
 
     public EmptyList() {}

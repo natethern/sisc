@@ -10,7 +10,9 @@ import sisc.io.ValueWriter;
 /**
  * A value, unlike "void", which is not equal to anything
  */
-public class Nothing extends Value {
+public class Nothing extends Value implements Singleton {
+
+    public static Nothing NOTHING=new Nothing();
 
     public boolean eqv(Object v) {
         return false;
@@ -19,6 +21,10 @@ public class Nothing extends Value {
     @Override
     public void display(ValueWriter w) throws IOException {
         w.append("#<nothing>"); 
+    }
+
+    public Value singletonValue() {
+        return NOTHING;
     }
 
 }
