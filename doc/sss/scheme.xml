@@ -1949,6 +1949,65 @@
         binding and set it to the new value.
       </para>
     </sect2>
+    <sect2 id="ChainedEnvironments">
+      <title>Chained Symbolic Environments</title>
+      <para>
+        &SISC; contains a mechanism for creating a symbolic environment
+        which is <emphasis>chained</emphasis> to another environment, such
+        that new and modified bindings are created in the new, child environment, 
+        but bindings may also be resolved from the parent if not present in the
+        child.  &SISC; uses this functionality to protect the contents of the
+        &R5RS; and &SISC; initial environments from modification.  One can
+        use it in a similar way, protecting the bindings in the parent for
+        sandboxing or other purposes.  
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>make-child-environment</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme" id="make-child-environment">
+              <type>environment</type>
+              <methodname>make-child-environment</methodname>
+              <methodparam>
+                <parameter>parent-environment</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Creates a new environment, initially empty of its own bindings,
+                but which chains to the provided <parameter>parent-environment</parameter>
+                when resolving a binding.  
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>parent-environment</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme" id="parent-environment">
+              <type>environment</type>
+              <methodname>parent-environment</methodname>
+              <methodparam>
+                <parameter>environment</parameter>
+              </methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Obtains the parent environment of a symbolic environment.
+                If the given environment has no parent (e.g. is not chained),
+                <literal>&num;f</literal> is returned.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
+    </sect2>
   </sect1>
   <sect1 id="MiscellaneousFunctions">
     <title>
