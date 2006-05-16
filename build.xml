@@ -397,6 +397,7 @@
           description="Generate javadocs" unless="lite">
     <mkdir dir="${gendocdir}/javadoc"/>
     <javadoc packagenames="${packagename}.*"
+             use="yes"
              sourcepath="${srcdir}"
              destdir="${gendocdir}/javadoc">
       <excludepackage name="${packagename}/tests"/>
