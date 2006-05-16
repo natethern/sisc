@@ -146,7 +146,6 @@ public abstract class Primitives extends Util {
             define("gensym?", GENSYMQ);
             define("getenv", Complex.class, GETENV);
             define("getprop", Complex.class, GETPROP);
-            define("get-parent-environment", Complex.class, GETPARENTENVIRONMENT);
             define("get-sidecar-environment", Complex.class, GETSIDECAR);
             define("get-symbolic-environment", Complex.class, GETENVIRONMENT);
             define("set-symbolic-environment!", Complex.class, SETENVIRONMENT);
@@ -155,6 +154,7 @@ public abstract class Primitives extends Util {
             define("native-library-binding", Complex.class, NLBINDING);
             define("native-library-binding-names", Complex.class, NLBINDINGNAMES);
             define("number->string", Complex.class, NUMBER2STRING);
+            define("parent-environment", Complex.class, PARENTENVIRONMENT);
             define("putprop", Complex.class, PUTPROP);
             define("remprop", Complex.class, REMPROP);
             define("scheme-report-environment", Complex.class, REPORTENVIRONMENT);
@@ -734,15 +734,11 @@ public abstract class Primitives extends Util {
                         throwPrimException(liMessage(SISCB, "noenv", vlr[0].synopsis()));
                         return VOID;
                     }
-                case GETPARENTENVIRONMENT:
+                case PARENTENVIRONMENT:
                     SymbolicEnvironment env=env(vlr[0]);
                     SymbolicEnvironment parent=env.getParent();
-                    if (parent == r.lookupContextEnv(Util.SISC_SPECIFIC) ||
-                        parent == r.lookupContextEnv(Util.REPORT)) {
-                        throwPrimException(liMessage(SISCB, "sysenvrestricted"));
-                    } else {                      
-                        return (Value)parent;
-                    }
+                    if (parent == null) return FALSE;
+                    else return (Value)parent;
                 case GETSIDECAR:
                     return r.tpl.getSidecarEnvironment(symbol(vlr[0])).asValue();
                 case GETENV:
@@ -1050,7 +1046,7 @@ public abstract class Primitives extends Util {
         GENSYM = 0,
         GENSYMQ = 137,
         GETSIDECAR = 124,
-        GETPARENTENVIRONMENT=148,
+        PARENTENVIRONMENT=148,
         GETENV = 123,
         GETENVIRONMENT = 18,
         GETPROP = 109,
