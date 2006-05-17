@@ -624,6 +624,22 @@ Error in nested call from &lt;error-location&gt;: &lt;description&gt;
                  
                 <row>
                   <entry>
+                    <indexterm><primary>synopsis-length</primary></indexterm>
+
+                    <envar>synopsisLength</envar></entry>
+                  <entry><function>synopsis-length</function></entry>
+                  <entry>30</entry>
+                  <entry>
+                    Limit on the length (in characters) of the
+                    external representation of data structures in
+                    error messages and warnings. When the limit is
+                    reached, an ellipsis (<literal>...</literal>) is
+                    appended to the curtailed external representation.
+                  </entry>
+                </row>
+
+                <row>
+                  <entry>
                     <indexterm><primary>vector-length-prefixing</primary></indexterm>
                     <envar>vectorLengthPrefixing</envar></entry>
                   <entry><function>vector-length-prefixing</function></entry>

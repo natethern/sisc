@@ -21,7 +21,10 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     public String synopsis() {        
-        return synopsis(Defaults.SYNOPSIS_LENGTH);
+        Interpreter r = Context.currentInterpreter();
+        return synopsis(r == null ?
+                        Defaults.SYNOPSIS_LENGTH :
+                        r.dynenv.synopsisLength);
     }
 
     /**

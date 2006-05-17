@@ -27,6 +27,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public boolean permissiveParsing    = Defaults.PERMISSIVE_PARSING;
     public boolean hedgedInlining       = Defaults.HEDGED_INLINING;
     public boolean internalDebugging    = Defaults.INTERNAL_DEBUGGING;
+    public int     synopsisLength       = Defaults.SYNOPSIS_LENGTH;
 
     private static String defaultCharacterSet =
         Util.getDefaultCharacterSet().displayName();
@@ -44,11 +45,13 @@ public class DynamicEnvironment extends Util implements Cloneable {
         new Boolean(Defaults.HEDGED_INLINING).toString();
     private static String defaultInternalDebugging =
         new Boolean(Defaults.INTERNAL_DEBUGGING).toString();
+    private static String defaultSynopsisLength =
+        new Integer(Defaults.SYNOPSIS_LENGTH).toString();
     private static String defaultEmitAnnotations =
         new Boolean(Defaults.EMIT_ANNOTATIONS).toString();
     private static String defaultStrictR5RS =
         new Boolean(Defaults.STRICT_R5RS).toString();
-    
+
     public Value wind = FALSE; //top of wind stack
 
     //the lexer is stateful
@@ -98,6 +101,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
             ctx.getProperty("sisc.hedgedInlining", defaultHedgedInlining).equals("true");
         this.internalDebugging = 
             ctx.getProperty("sisc.internalDebugging", defaultInternalDebugging).equals("true");
+        this.synopsisLength = 
+            Integer.parseInt(ctx.getProperty("sisc.synopsisLength", defaultSynopsisLength));
         this.parser.annotate =
             ctx.getProperty("sisc.emitAnnotations", defaultEmitAnnotations).equals("true");
         this.parser.lexer.strictR5RS =
@@ -261,6 +266,14 @@ public class DynamicEnvironment extends Util implements Cloneable {
 
     public void setInternalDebugging(Value v) {
         internalDebugging=truth(v);
+    }
+
+    public Value getSynopsisLength() {
+        return Quantity.valueOf(synopsisLength);
+    }
+
+    public void setSynopsisLength(Value v) {
+        synopsisLength = num(v).intValue();
     }
 
     public Value getEmitAnnotations() {

@@ -1,3 +1,8 @@
+2006-05-17  Matthias Radestock  <matthias@sorted.org>
+
+	* Made the synopsis-length (used in error messages an warnings)
+	  adjustable. See bug 1477687.
+
 2006-05-15  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Fixed bug in equals? with respect to nested empty lists.
