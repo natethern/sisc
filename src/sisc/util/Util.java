@@ -697,6 +697,10 @@ public abstract class Util implements Version {
         return p;
     }
 
+    public static final Pair valArrayToList(Value[] r) {
+        return valArrayToList(r, r.length, 0);
+    }
+
     public static Value memq(Value v, Pair p) {
         while (p!=EMPTYLIST) {
             if (p.car() == v) {
