@@ -681,6 +681,14 @@ public abstract class Util implements Version {
         return new Pair(o1, list(o2, o3));
     }
 
+    public static final Pair list(Value o1, Value o2, Value o3, Value o4) {
+        return new Pair(o1, list(o2, o3, o4));
+    }
+
+    public static final Pair list(Value o1, Value o2, Value o3, Value o4, Value o5) {
+        return new Pair(o1, list(o2, o3, o4, o5));
+    }
+
     public static final Pair valArrayToList(Value[] r, int offset, int len) {
         Pair p = EMPTYLIST;
         for (int i = (offset + len) - 1; i >= offset; i--) {
