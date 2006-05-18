@@ -36,14 +36,15 @@ public class LambdaExp extends Expression implements Immediate {
     }
 
     public Value express() {
-        Pair lccps=LexicalUtils.intArrayToList(localIndices);
-        Pair lxcps=LexicalUtils.intArrayToList(lexicalIndices);
-        Pair boxs=LexicalUtils.intArrayToList(boxes);
-        Value rv=list(body.express());
-        if (boxs!=EMPTYLIST) rv=new Pair(new Pair(sym("box:"), boxs), rv);
-        if (lxcps!=EMPTYLIST) rv=new Pair(new Pair(sym("cenv:"), lxcps), rv);
-        if (lccps!=EMPTYLIST) rv=new Pair(new Pair(sym("clcl:"), lccps), rv);
-        return new Pair(sym("Lambda-exp"),  new Pair(Quantity.valueOf(fcount), rv));
+        Pair lccps = LexicalUtils.intArrayToList(localIndices);
+        Pair lxcps = LexicalUtils.intArrayToList(lexicalIndices);
+        Pair boxs  = LexicalUtils.intArrayToList(boxes);
+        return list(sym("lambda"),
+                    new Pair(truth(infiniteArity),
+                             new Pair(Quantity.valueOf(fcount),
+                                      boxs)),
+                    list(lccps, lxcps),
+                    body.express());
     }
 
     public void serialize(Serializer s) throws IOException {

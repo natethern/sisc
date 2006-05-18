@@ -115,7 +115,13 @@ public class Closure extends Procedure implements NamedValue {
     }
 
     public Value express() {
-        return new Pair(sym("closure"), list(truth(arity), Quantity.valueOf(fcount), body.express()));
+        Pair boxs = LexicalUtils.intArrayToList(boxes);
+        return list(sym("closure"),
+                    new Pair(truth(arity),
+                             new Pair(Quantity.valueOf(fcount),
+                                      boxs)),
+                    valArrayToList(env, 0, env.length),
+                    body.express());
     }
 
     public Closure() {}

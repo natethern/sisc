@@ -53,8 +53,15 @@ public class EvalExp extends Expression implements OptimisticHost {
      }
     }
 
+    private Value expressHelper() {
+        return new Pair(pre.express(),
+                        ((post instanceof EvalExp) ?
+                         ((EvalExp)post).expressHelper() :
+                         list(post.express())));
+    }
+
     public Value express() {
-        return list(sym("Eval-exp"), pre.express(), post.express());
+        return new Pair(sym("begin"), expressHelper());
     }
 
     public void serialize(Serializer s) throws IOException {

@@ -36,7 +36,7 @@ public class IfEval extends Expression implements OptimisticHost {
     }
 
     public Value express() {
-        return list(sym("If-eval"), conseq.express(), altern.express());
+        return list(sym("if"), conseq.express(), altern.express());
     }
 
     public void serialize(Serializer s) throws IOException {

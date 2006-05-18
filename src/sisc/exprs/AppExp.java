@@ -84,10 +84,12 @@ public class AppExp extends Expression implements OptimisticHost {
     public Value express() {
         Pair args=EMPTYLIST;
         for (int i=rands.length-1; i>=0; i--) {
-            args=new Pair(((rands[i]==null) ? FALSE : rands[i].express()), args);
+            args=new Pair(((rands[i]==null) ? VOID : rands[i].express()), args);
         }
-        args = new Pair(exp.express(), new Pair(nxp.express(), args));
-        return new Pair(sym("App-exp"), args);
+        return list(sym("app"),
+                    args,
+                    exp.express(),
+                    nxp.express());
     }
 
     public void serialize(Serializer s) throws IOException {

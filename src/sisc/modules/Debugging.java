@@ -101,9 +101,7 @@ public class Debugging extends IndexedProcedure {
                 if (f.vlr[0] instanceof ExpressionValue) {
                     return expr(f.vlr[0]).express();
                 } else {
-                    Closure c=(Closure)f.vlr[0];
-                    return list(c.arity ? sym("infinite") : sym("finite"),
-                                Quantity.valueOf(c.fcount), c.body.express());
+                    return f.vlr[0].express();
                 }
             case ERROR_CONT_K:
                 return getCont(f.vlr[0]);

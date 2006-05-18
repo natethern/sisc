@@ -7,8 +7,6 @@ import sisc.interpreter.*;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
-import sisc.exprs.fp.OptimisticExpression;
-import sisc.exprs.fp.OptimisticHost;
 import sisc.util.ExpressionVisitor;
 import sisc.util.FreeReference;
 import sisc.util.UndefinedVarException;
@@ -16,8 +14,6 @@ import sisc.util.UndefinedVarException;
 public class FreeReferenceExp extends Expression implements Immediate {
 
     private FreeReference ref;
-    private OptimisticHost host;
-    private int uexpPosition;
 
     public FreeReferenceExp(FreeReference ref) {
         this.ref = ref;
@@ -50,7 +46,7 @@ public class FreeReferenceExp extends Expression implements Immediate {
     }
 
     public Value express() {
-        return list(sym("FreeReference-exp"), ref.getName());
+        return list(sym("ref"), ref.getName());
     }
 
     public void deserialize(Deserializer s) throws IOException {

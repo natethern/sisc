@@ -123,7 +123,7 @@ public abstract class Value extends Expression implements Immediate {
     }
 
     public Value express() {
-        return this;
+        return list(sym("val"), this);
     }
 
     /**

@@ -100,7 +100,7 @@ public class FixedAppExp_0 extends Expression
     }
 
     public Value express() {
-        return list(sym("FixedAppExp"), ref.getName());
+        return list(sym("fapp"), ref.getName());
     }
 
     public void serialize(Serializer s) throws IOException {

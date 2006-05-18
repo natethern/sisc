@@ -32,9 +32,9 @@ public class FixedAppExp_2 extends FixedAppExp_1 {
     }
 
     public Value express() {
-        return new Pair(sym("FixedAppExp"), 
-                        list(ref.getName(), ((Expression)op0).express(),
-                             ((Expression)op1).express()));            
+        return list(sym("fapp"), ref.getName(),
+                    ((Expression)op0).express(),
+                    ((Expression)op1).express());
     }
 
     public void serialize(Serializer s) throws IOException {

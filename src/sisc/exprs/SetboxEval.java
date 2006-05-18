@@ -20,7 +20,7 @@ public class SetboxEval extends Expression {
     }
 
     public Value express() {
-        return list(sym("setbox"), ((Expression)ref).express());
+        return list(sym("set!"), ((Expression)ref).express());
     }
 
     public void serialize(Serializer s) throws IOException {

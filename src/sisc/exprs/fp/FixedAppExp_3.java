@@ -33,10 +33,10 @@ public class FixedAppExp_3 extends FixedAppExp_2 {
     }
 
     public Value express() {
-        return new Pair(sym("FixedAppExp"), new Pair(ref.getName(), 
-                                                     list(((Expression)op0).express(),
-                                                          ((Expression)op1).express(),
-                                                          ((Expression)op1).express())));
+        return list(sym("fapp"), ref.getName(), 
+                    ((Expression)op0).express(),
+                    ((Expression)op1).express(),
+                    ((Expression)op2).express());
     }
 
     public void serialize(Serializer s) throws IOException {

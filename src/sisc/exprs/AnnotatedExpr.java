@@ -39,7 +39,7 @@ public class AnnotatedExpr extends Value implements OptimisticHost {
     }
 
     public Value express() {
-        return list(sym("Annotated-expr"), annotation, expr.express());
+        return list(sym("annotated"), annotation, expr.express());
     }
 
     public AnnotatedExpr() {}

@@ -34,7 +34,7 @@ public class LetrecEval extends Expression implements OptimisticHost {
     }
 
     public Value express() {
-        return list(sym("Letrec-Eval"), body.express());
+        return list(sym("letrec-eval"), body.express());
     }
 
     public LetrecEval() {}

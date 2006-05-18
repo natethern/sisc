@@ -40,7 +40,7 @@ public class FixedAppExp_1 extends FixedAppExp_0 implements OptimisticHost {
     }
 
     public Value express() {
-        return list(sym("FixedAppExp"), ref.getName(), 
+        return list(sym("fapp"), ref.getName(),
                     ((Expression)op0).express());
     }
 

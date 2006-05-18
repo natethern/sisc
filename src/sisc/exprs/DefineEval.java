@@ -26,7 +26,7 @@ public class DefineEval extends Expression {
     }
 
     public Value express() {
-        return list(sym("Define-eval"), lhs);
+        return list(sym("define"), lhs);
     }
 
     public void serialize(Serializer s) throws IOException {

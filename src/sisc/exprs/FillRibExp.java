@@ -54,7 +54,10 @@ public class FillRibExp extends Expression implements OptimisticHost {
     }
 
     public Value express() {
-        return new Pair(sym("FillRib-exp"), new Pair(exp.express(), nxp.express()));
+        return list(sym("arg"),
+                    Quantity.valueOf(pos),
+                    exp.express(),
+                    nxp.express());
     }
 
     public void serialize(Serializer s) throws IOException {

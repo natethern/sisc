@@ -32,10 +32,13 @@ public class LetrecExp extends AppExp {
         Pair lxcps=LexicalUtils.intArrayToList(lexicalIndices);
         Pair args=EMPTYLIST;
         for (int i=rands.length-1; i>=0; i--) {
-            args=new Pair(((rands[i]==null) ? FALSE : rands[i].express()), args);
+            args=new Pair(((rands[i]==null) ? VOID : rands[i].express()), args);
         }
-        args = new Pair(lccps, new Pair(lxcps, new Pair(nxp.express(), args)));
-        return new Pair(sym("Letrec-exp"), args);
+        return list(sym("letrec"),
+                    list(lccps, lxcps),
+                    args,
+                    exp.express(),
+                    nxp.express());
     }
 
     public LetrecExp() {}
