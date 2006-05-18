@@ -517,6 +517,7 @@
      ->vector
      ->list
      jnull
+     initialize-s2j-exception-handling
      display-java-stack-trace)
   (import* type-system
            make-type
@@ -543,8 +544,7 @@
   (include "s2j/misc.scm")
   (type-of-hook       'java java-type-of-hook)
   (type<=-hook        'java java-type<=-hook)
-  (compare-types-hook 'java java-compare-types-hook)
-  (initialize-exception-handling))
+  (compare-types-hook 'java java-compare-types-hook))
 
 (module oo
     (<slot>
@@ -1051,5 +1051,6 @@
 ;;Final initialization
 (let ()
   (import s2j)
+  (initialize-s2j-exception-handling)
   (s2j/clear-reflection-cache!))
 

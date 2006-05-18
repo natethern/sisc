@@ -103,8 +103,8 @@
 
 (define display-java-stack-trace)
 
-;;(define (initialize-exception-handling) (void))
-(define (initialize-exception-handling)
+;;(define (initialize-s2j-exception-handling) (void))
+(define (initialize-s2j-exception-handling)
   (define-generic-java-methods
     print-stack-trace
     to-string

@@ -1,3 +1,7 @@
+2006-05-18  Matthias Radestock  <matthias@sorted.org>
+
+	* Fixed automatic printing of stack traces for Java exceptions.
+
 2006-05-17  Matthias Radestock  <matthias@sorted.org>
 
 	* Made the synopsis-length (used in error messages an warnings)
