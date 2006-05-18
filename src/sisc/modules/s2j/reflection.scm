@@ -266,12 +266,18 @@
   (apply (java-constructor-for-class jclass) args))
 
 (define (java-proxy-dispatcher handlers)
-  (define (return-error method-name p)
-    (error "no handler for method ~a on proxy ~s" method-name p))
-  (let ([<java.lang.object-class> (java/class '|java.lang.Object|)])
+  (let ([<java.lang.object-class> (java/class '|java.lang.Object|)]
+        [<java.lang.unsupported-operation-exception>
+         (java/class '|java.lang.UnsupportedOperationException|)])
     (define (handler p m a)
       (let* ([method-name (java/name m)]
              [res (assq method-name handlers)])
+        (define (return-error)
+          (error
+           (java-new <java.lang.unsupported-operation-exception>
+                     (->jstring
+                      (format "no handler for method ~a on proxy ~s"
+                              method-name p)))))
         (if res
             (apply (cdr res) p a)
             ;;intercept hashCode, equals and toString in order to
@@ -283,8 +289,8 @@
                   [(|hashCode|) (->jint (hash-code handler))]
                   [(|equals|) (->jboolean (eqv? p (car a)))]
                   [(|toString|) (->jstring "proxy")]
-                  [else (return-error method-name p)])
-                (return-error method-name p)))))
+                  [else (return-error)])
+                (return-error)))))
     (java/invocation-handler handler)))
 
 (define-syntax java-proxy-method-handler
