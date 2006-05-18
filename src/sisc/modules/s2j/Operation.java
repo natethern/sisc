@@ -45,6 +45,18 @@ public class Operation extends IndexedProcedure {
             define("java/invoke-method", JAVA_INVOKE_METHOD);
         }
     }
+    
+    private static void processTargetException(Interpreter f,
+                                               Throwable e)
+        throws ContinuationException {
+
+        if (e instanceof Util.SchemeInvocationException) {
+            throwNestedPrimException(liMessage(Util.S2JB, "invocationtargetex"),
+                                     ((Util.SchemeInvocationException)e).schemeException);
+        } else {
+            error(f, Util.makeJObj(e, Throwable.class));
+        }
+    }
 
     public Operation(int id) {
         super(id);
@@ -89,7 +101,7 @@ public class Operation extends IndexedProcedure {
                     return Util.makeJObj(invokeConstructor(jc, Util.pairToObjects(pair(f.vlr[1]))),
                                          jc.getDeclaringClass());
                 } catch (InvocationTargetException e) {
-                    error(f, Util.makeJObj(e.getTargetException(), Throwable.class));
+                    processTargetException(f, e.getTargetException());
                 }
             default: break SIZESWITCH;
             }
@@ -101,7 +113,7 @@ public class Operation extends IndexedProcedure {
                     return Util.makeJObj(invokeMethod(jm, Util.jobj(f.vlr[1]), Util.pairToObjects(pair(f.vlr[2]))),
                                          jm.getReturnType());
                 } catch (InvocationTargetException e) {
-                    error(f, Util.makeJObj(e.getTargetException(), Throwable.class));
+                    processTargetException(f, e.getTargetException());
                 }
             default: break SIZESWITCH;
             }

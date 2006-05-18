@@ -181,6 +181,43 @@
 (with/fc print-error
   (lambda () (remove i)))
 
+;;nice handling of scheme exceptions thrown by a proxy
+(define-java-class <java.lang.runnable>)
+(define-generic-java-method run)
+(define-java-proxy (runnable thunk)
+  (<java.lang.runnable>)
+  (define run
+    (lambda ()
+      (thunk)
+      (void))))
+(run (runnable (lambda () 1)))
+;;the above should report something like
+;;Error in java/invoke-method: Scheme invocation target exception
+;;---------------------------
+;;console:16:1: <from call to run>
+;;===========================
+;;Caused by Error: expected 0 argument(s) to #<procedure>, got 1.
+(define-java-proxy (runnable thunk)
+  (<java.lang.runnable>)
+  (define run
+    (lambda (x)
+      (thunk)
+      (void))))
+(run (runnable (lambda () (/ 1 0))))
+;;the above should report something like
+;;Error in java/invoke-method: Scheme invocation target exception
+;;---------------------------
+;;console:25:1: <from call to run>
+;;===========================
+;;Caused by Error in /: <java.lang.ArithmeticException>: division by zero.
+;;---------------------------
+;;console:25:27: <from call to />
+;;console:22:7: <indeterminate call>
+(define-java-proxy (runnable thunk)
+  (<java.lang.runnable>))
+(run (runnable (lambda () 1)))
+;;the above should throw a *java* UnsupportedOperationException.
+
 ;garbage collection
 (let loop ([count 100])
   (if (> count 0)

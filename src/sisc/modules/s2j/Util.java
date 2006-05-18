@@ -19,9 +19,17 @@ public abstract class Util extends IndexedFixableProcedure {
     public Util(int id) {
         super(id);
     }
-    
+
+    public static class SchemeInvocationException extends RuntimeException {
+
+        public SchemeException schemeException;
+
+        public SchemeInvocationException(SchemeException se) {
+            this.schemeException = se;
+        }
+    }
+
     public static Throwable javaException(SchemeException e) {
-        Throwable ex = e;
         Value message = null;
         for (Pair l = e.m; l != EMPTYLIST; l = (Pair)l.cdr()) {
             if (l.car() instanceof Pair) {
@@ -36,9 +44,10 @@ public abstract class Util extends IndexedFixableProcedure {
         if (message != null && message instanceof JavaObject) {
             Object eo = ((JavaObject)message).get();
             if (eo instanceof Throwable)
-                ex = (Throwable)eo;
+                return (Throwable)eo;
         }
-        return ex;
+
+        return new SchemeInvocationException(e);
     }
 
     public static final int jtype(Value o) {

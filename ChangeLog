@@ -2,6 +2,8 @@
 
 	* Fixed automatic printing of stack traces for Java exceptions.
 
+	* Improved exception reporting for java proxies
+
 2006-05-17  Matthias Radestock  <matthias@sorted.org>
 
 	* Made the synopsis-length (used in error messages an warnings)
