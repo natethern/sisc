@@ -264,7 +264,7 @@
   (let ([error (exception-error e)])
     (display-error error)
     (if (or (null? st) (car st))
-        (invoke-hook print-exception-stack-trace-hook e))
+        (print-exception-stack-trace e))
     (let ([p (and (pair? error) (error-parent error))])
       (if p 
           (begin (display "===========================\nCaused by ")
