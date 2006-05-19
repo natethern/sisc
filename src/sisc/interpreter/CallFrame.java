@@ -98,6 +98,17 @@ public class CallFrame extends Procedure {
         r.pop(this);
     }
 
+    public Value express() {
+        return list(sym("frame"),
+                    list(truth(vlk),
+                         valArrayToList(vlr),
+                         valArrayToList(lcl),
+                         valArrayToList(env)),
+                    (parent == null ? (Value)FALSE : parent),
+                    (fk == null ? (Value)FALSE : fk),
+                    (nxp == null ? VOID : nxp.express()));
+    }
+
     public void serialize(Serializer s) throws IOException {
         s.writeBoolean(vlk);
         if (vlr==null)
