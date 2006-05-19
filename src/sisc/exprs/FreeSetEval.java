@@ -37,7 +37,7 @@ public class FreeSetEval extends Expression {
     }
 
     public Value express() {
-        return list(sym("ref!"), ref.getName());
+        return new Pair(sym("ref!"), ref.express());
     }
 
     public void deserialize(Deserializer s) throws IOException {

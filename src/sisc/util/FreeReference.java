@@ -59,6 +59,10 @@ public class FreeReference implements ExpressionVisitee {
         Util.updateName(v, sym);
     }
 
+    public Value express() {
+        return Util.list(sym, (Value)senv);
+    }
+
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(sym);
         s.writeSymbolicEnvironment(senv);
