@@ -819,7 +819,7 @@ public abstract class Util implements Version {
     }
 
     public static Expression annotatedAppEval(Class clazz, String fn) {
-        Expression e = new AppEval(true);
+        Expression e = new AppEval();
         e.setAnnotation(SOURCE_FILE,
                         new SchemeString(clazz.getName() + "/" + fn));
         return e;

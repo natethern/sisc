@@ -7,12 +7,6 @@ import java.io.IOException;
 
 public class AppEval extends Expression {
     
-    private boolean tail;
-
-    public AppEval(boolean tail) {
-        this.tail=tail;
-    }
-
     public AppEval() {}
 
     public final void eval(Interpreter r) throws ContinuationException {
@@ -59,11 +53,9 @@ public class AppEval extends Expression {
     }
 
     public void serialize(Serializer s) throws IOException {
-        s.writeBoolean(tail);
     }
 
     public void deserialize(Deserializer s) throws IOException {
-        tail=s.readBoolean();
     }
 }
 /*

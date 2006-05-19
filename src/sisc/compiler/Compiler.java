@@ -389,7 +389,7 @@ public class Compiler extends CompilerConstants {
             !(rator instanceof AnnotatedExpr)) {
             System.err.println(warn("nonprocappdetected",((Value)rator).synopsis()));
         }
-        Expression nxp = new AppEval((context & REALTAIL) != 0);
+        Expression nxp = new AppEval();
         
         if (annotation!=null)
             setAnnotations(nxp, annotation);
