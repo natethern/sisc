@@ -1,6 +1,3 @@
-/*
- * $Id$
- */
 package sisc.nativefun;
 
 import sisc.data.Value;

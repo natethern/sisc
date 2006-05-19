@@ -4,8 +4,6 @@
 <style-specification>
 <style-specification-body>
 
-;; $Id$
-;;
 ;; This file is part of the Modular DocBook Stylesheet distribution.
 ;; See ../README or http://nwalsh.com/docbook/dsssl/
 ;;

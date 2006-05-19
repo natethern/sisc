@@ -1,6 +1,3 @@
-/*
- * $Id$
- */
 package sisc.modules.s2j;
 
 import java.lang.reflect.Constructor;

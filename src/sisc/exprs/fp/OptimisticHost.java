@@ -1,6 +1,3 @@
-/*
- * $Id$
- */
 package sisc.exprs.fp;
 
 import sisc.data.Expression;
