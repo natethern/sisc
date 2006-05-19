@@ -7,52 +7,52 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;
 import sisc.util.ExpressionVisitor;
+import sisc.util.FreeReference;
 
 public class DefineEval extends Expression {
-    public Symbol lhs;
-    public SymbolicEnvironment env;
 
-    public DefineEval(Symbol lhs, SymbolicEnvironment env) {
-        this.lhs=lhs;
-        this.env=env;
+    private FreeReference ref;
+
+    public DefineEval(Symbol sym, SymbolicEnvironment senv) {
+        ref = new FreeReference(sym, senv);
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        Value rhs=r.acc;
-        updateName(rhs, lhs);
-        env.define(lhs, rhs);
+        ref.define(r.acc);
         r.acc=VOID;
         r.nxp=null;
     }
 
     public Value express() {
-        return list(sym("define"), lhs);
+        return list(sym("define"), ref.getName());
     }
 
     public void serialize(Serializer s) throws IOException {
-        s.writeExpression(lhs);
-        s.writeSymbolicEnvironment(env);
+        ref.serialize(s);
     }
 
-    public DefineEval() {}
-
     public void deserialize(Deserializer s) throws IOException {
-        lhs=(Symbol)s.readExpression();
-        env=s.readSymbolicEnvironment();
+        ref.deserialize(s);
+    }
+
+    public DefineEval() {
+        ref = new FreeReference();
     }
 
     public boolean equals(Object o) {
-        return (o instanceof DefineEval) &&
-            lhs.equals(((DefineEval)o).lhs);
+        if (!(o instanceof DefineEval))
+            return false;
+        return ref.equals(((DefineEval)o).ref);
     }
 
     public int hashCode() {
-        return lhs.hashCode() ^ env.hashCode();
+        return ref.hashCode();
     }
 
     public boolean visit(ExpressionVisitor v) {
-        return v.visit(lhs) && v.visit(env);
+        return ref.visit(v);
     }
+
 }
 
 /*
