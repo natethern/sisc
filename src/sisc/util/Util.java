@@ -56,6 +56,8 @@ public abstract class Util implements Version {
     public static SchemeVoid VOID = SchemeVoid.VOID;
     public static SchemeBoolean TRUE = SchemeBoolean.TRUE,
         FALSE = SchemeBoolean.FALSE;
+    public static SchemeVector EMPTYVEC = 
+        new SchemeVector(new Value[]{});
 
     public static Symbol BEGIN = Symbol.get("begin"),
         ERRORK = Symbol.get("error-continuation"),
@@ -699,6 +701,15 @@ public abstract class Util implements Version {
 
     public static final Pair valArrayToList(Value[] r) {
         return (r == null ? EMPTYLIST : valArrayToList(r, 0, r.length));
+    }
+
+    public static final SchemeVector valArrayToVec(Value[] r) {
+        if (r == null) return EMPTYVEC;
+        //replace nulls with VOID - this mutation is always safe
+        for (int i = 0; i < r.length; i++) {
+            if (r[i] == null) r[i] = VOID;
+        }
+        return new SchemeVector(r);
     }
 
     public static Value memq(Value v, Pair p) {
