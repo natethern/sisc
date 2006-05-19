@@ -20,11 +20,11 @@ public class ApplyParentFrame extends Procedure {
     }
 
     public void display(ValueWriter w) throws IOException {
-        displayNamedOpaque(w, liMessage(SISCB, "errorcontinuation"));
+        displayNamedOpaque(w, liMessage(SISCB, "continuation"));
     }
 
     public Value express() {
-        return list(sym("error-k"), c);
+        return list(sym("cont"), c);
     }
 
     public void serialize(Serializer s) throws IOException {
