@@ -23,6 +23,10 @@ public class ApplyParentFrame extends Procedure {
         displayNamedOpaque(w, liMessage(SISCB, "errorcontinuation"));
     }
 
+    public Value express() {
+        return list(sym("error-k"), c);
+    }
+
     public void serialize(Serializer s) throws IOException {
         s.writeExpression(c);
     }
