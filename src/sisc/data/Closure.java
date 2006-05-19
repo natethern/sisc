@@ -120,7 +120,7 @@ public class Closure extends Procedure implements NamedValue {
                     new Pair(truth(arity),
                              new Pair(Quantity.valueOf(fcount),
                                       boxs)),
-                    valArrayToList(env, 0, env.length),
+                    valArrayToVec(env),
                     body.express());
     }
 

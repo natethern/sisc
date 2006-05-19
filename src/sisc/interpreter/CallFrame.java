@@ -101,9 +101,9 @@ public class CallFrame extends Procedure {
     public Value express() {
         return list(sym("frame"),
                     list(truth(vlk),
-                         valArrayToList(vlr),
-                         valArrayToList(lcl),
-                         valArrayToList(env)),
+                         valArrayToVec(vlr),
+                         valArrayToVec(lcl),
+                         valArrayToVec(env)),
                     (parent == null ? (Value)FALSE : parent),
                     (fk == null ? (Value)FALSE : fk),
                     (nxp == null ? VOID : nxp.express()));
