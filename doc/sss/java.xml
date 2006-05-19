@@ -2362,7 +2362,24 @@ Object res = fooObj.barBaz(a, b, c)
             </row>
             <row>
               <entry namest="java" nameend="scheme" align="center">
-                <emphasis>access field</emphasis>
+                <emphasis>invoke method on class</emphasis>
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <programlisting>
+Object res = foo.Bar.baz(a, b, c)
+                </programlisting>
+              </entry>
+              <entry>
+                <programlisting>
+(define res (baz (java-null &lt;foo.bar&gt;) a b c))
+                </programlisting>
+              </entry>
+            </row>
+            <row>
+              <entry namest="java" nameend="scheme" align="center">
+                <emphasis>access instance field</emphasis>
               </entry>
             </row>
             <row>
@@ -2379,7 +2396,24 @@ Object res = fooObj.bar;
             </row>
             <row>
               <entry namest="java" nameend="scheme" align="center">
-                <emphasis>modify field</emphasis>
+                <emphasis>access class field</emphasis>
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <programlisting>
+Object res = foo.Bar.baz;
+                </programlisting>
+              </entry>
+              <entry>
+                <programlisting>
+(define res (:bar (java-null &lt;foo.bar&gt;)))
+                </programlisting>
+              </entry>
+            </row>
+            <row>
+              <entry namest="java" nameend="scheme" align="center">
+                <emphasis>modify instance field</emphasis>
               </entry>
             </row>
             <row>
@@ -2391,6 +2425,23 @@ fooObj.bar = val;
               <entry>
                 <programlisting>
 (:bar! foo-obj val)
+                </programlisting>
+              </entry>
+            </row>
+            <row>
+              <entry namest="java" nameend="scheme" align="center">
+                <emphasis>modify class field</emphasis>
+              </entry>
+            </row>
+            <row>
+              <entry>
+                <programlisting>
+foo.Bar.baz = val;
+                </programlisting>
+              </entry>
+              <entry>
+                <programlisting>
+(:bar! (java-null &lt;foo.bar&gt;) val)
                 </programlisting>
               </entry>
             </row>
