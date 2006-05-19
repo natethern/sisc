@@ -42,7 +42,7 @@ public class AppEval extends Expression {
     }
 
     public Value express() {
-        return list(sym((tail ? "tapp-eval" : "app-eval")));
+        return list(sym("appl"));
     }
 
     public boolean equals(Object o) {
