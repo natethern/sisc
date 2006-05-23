@@ -14,6 +14,9 @@
 ;;import SISC record support, to stop SLIB using its own
 (import record)
 
+;;import vicinity support
+(require-extension (srfi 59))
+
 ;;
 (define (current-time) (quotient (system-time) 1000))
 
@@ -50,100 +53,11 @@
 (define (scheme-implementation-version)
   (getprop 'version (get-symbolic-environment '*sisc*)))
 
-;;@ (implementation-vicinity) should be defined to be the pathname of
-;;; the directory where any auxillary files to your Scheme
-;;; implementation reside.
-(define implementation-vicinity
-  (let ((library-path (string-append
-                       (or (getenv "sisc.home")
-                           (error "You must define the sisc.home property"))
-                       "/")))
-    (lambda () library-path)))
-
-;;@ (library-vicinity) should be defined to be the pathname of the
-;;; directory where files of Scheme library functions reside.
-(define library-vicinity
-  (let ((library-path (string-append
-                       (or (getenv "sisc.slib")
-                           (error "You must define the sisc.slib property"))
-                       "/")))
-    (lambda () library-path)))
-
-;;@ (home-vicinity) should return the vicinity of the user's HOME
-;;; directory, the directory which typically contains files which
-;;; customize a computer environment for a user.
-(define home-vicinity
-  (let ((home-path (string-append (getenv "user.home") "/")))
-    (lambda () home-path)))
-
 ;@
-(define in-vicinity string-append)
-;@
-(define (user-vicinity)
-  (case (software-type)
-    ((VMS)	"[.]")
-    (else	"")))
-
-(define *load-pathname* #f)
-;@
-(define vicinity:suffix?
-  (let ((suffi
-	 (case (software-type)
-	   ((AMIGA)				'(#\: #\/))
-	   ((MACOS THINKC)			'(#\:))
-	   ((MS-DOS WINDOWS ATARIST OS/2)	'(#\\ #\/))
-	   ((NOSVE)				'(#\: #\.))
-	   ((UNIX COHERENT PLAN9)		'(#\/))
-	   ((VMS)				'(#\: #\]))
-	   (else
-	    (slib:warn "require.scm" 'unknown 'software-type (software-type))
-	    "/"))))
-    (lambda (chr) (and (memv chr suffi) #t))))
-;@
-(define (pathname->vicinity pathname)
-  (let loop ((i (- (string-length pathname) 1)))
-    (cond ((negative? i) "")
-	  ((vicinity:suffix? (string-ref pathname i))
-	   (substring pathname 0 (+ i 1)))
-	  (else (loop (- i 1))))))
-(define (program-vicinity)
-  (if *load-pathname*
-      (pathname->vicinity *load-pathname*)
-      (slib:error 'program-vicinity " called; use slib:load to load")))
-;@
-(define sub-vicinity
-  (case (software-type)
-    ((VMS) (lambda
-	       (vic name)
-	     (let ((l (string-length vic)))
-	       (if (or (zero? (string-length vic))
-		       (not (char=? #\] (string-ref vic (- l 1)))))
-		   (string-append vic "[" name "]")
-		   (string-append (substring vic 0 (- l 1))
-				  "." name "]")))))
-    (else (let ((*vicinity-suffix*
-		 (case (software-type)
-		   ((NOSVE) ".")
-		   ((MACOS THINKC) ":")
-		   ((MS-DOS WINDOWS ATARIST OS/2) "\\")
-		   ((UNIX COHERENT PLAN9 AMIGA) "/"))))
-	    (lambda (vic name)
-	      (string-append vic name *vicinity-suffix*))))))
-;@
-(define (make-vicinity <pathname>) <pathname>)
-;@
-(define with-load-pathname
-  (let ((exchange
-	 (lambda (new)
-	   (let ((old *load-pathname*))
-	     (set! *load-pathname* new)
-	     old))))
-    (lambda (path thunk)
-      (let ((old #f))
-	(dynamic-wind
-	    (lambda () (set! old (exchange path)))
-	    thunk
-	    (lambda () (exchange old)))))))
+(define (with-load-pathname path thunk)
+  (parameterize
+   ([current-url path])
+   (thunk)))
 
 ;;@ *FEATURES* is a list of symbols naming the (SLIB) features
 ;;; initially supported by this implementation.
