@@ -59,7 +59,7 @@ This table indicates the current and planned support for SRFIs in SISC.
 56  "Binary I/O"                                        withdrawn
 57  "Records"                                           won't implement
 58  "Array Notation"                                    won't implement
-59  "Vicinity"                                          TODO
+59  "Vicinity"                                          implemented
 60  "Integers as Bits"                                  implemented
 61  "A more general cond clause"                        implemented
 62  "S-expression comments"                             implemented

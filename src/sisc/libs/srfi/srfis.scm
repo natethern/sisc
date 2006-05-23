@@ -39,6 +39,7 @@
     srfi-51
     srfi-54
     srfi-55
+    srfi-59
     srfi-61
     srfi-62
     srfi-66
