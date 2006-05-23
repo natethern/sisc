@@ -1,3 +1,7 @@
+2006-05-23  Matthias Radestock  <matthias@sorted.org>
+
+	* Added |hashtable/contains?|. See FR 1493069.
+
 2006-05-18  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed automatic printing of stack traces for Java exceptions.

@@ -1,3 +1,5 @@
+(define *VOID-MARKER* (list #f))
+
 (define *HASH-PROCS* `((,eq?         . ,hash-by-eq)
                        (,eqv?        . ,hash-by-eqv)
                        (,equal?      . ,hash-by-equal)
@@ -57,6 +59,9 @@
        ht
        helper)
       (helper)))
+
+(define (hashtable/contains? ht key)
+  (not (eq? (hashtable/get ht key *VOID-MARKER*) *VOID-MARKER*)))
 
 ;;The following are quite inefficient. To get around that we'd have
 ;;to expose java collection iterators.

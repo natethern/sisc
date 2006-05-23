@@ -819,6 +819,24 @@ r / 2<superscript>s</superscript>
               </para>
             </blockquote>
           </para>
+          <para>    
+            <indexterm><primary>hashtable/contains?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme">
+              <type>&num;t/&num;f</type>
+              <methodname>hashtable/contains?</methodname>
+              <methodparam><parameter>hashtable</parameter></methodparam>
+              <methodparam><parameter>key</parameter></methodparam>
+            </methodsynopsis>
+            <blockquote>
+              <para>
+                Returns the &num;t if <parameter>hashtable</parameter>
+                contains an entry for <parameter>key</parameter>,
+                &num;f otherwise.
+              </para>
+            </blockquote>
+          </para>
           <para>
             <indexterm><primary>hashtable/remove!</primary>
             </indexterm>

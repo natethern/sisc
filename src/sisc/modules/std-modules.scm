@@ -333,6 +333,7 @@
      hashtable/remove!
      hashtable/clear!
      hashtable/size
+     hashtable/contains?
      hashtable->alist
      alist->hashtable
      hashtable/keys

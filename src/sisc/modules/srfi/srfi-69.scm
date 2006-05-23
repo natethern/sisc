@@ -42,8 +42,7 @@
 (define (hash-table-delete! ht key)
   (hashtable/remove! ht key))
 
-(define (hash-table-exists? ht key)
-  (not (eq? (hashtable/get ht key *VOID-MARKER*) *VOID-MARKER*)))
+(define hash-table-exists? hashtable/contains?)
 
 (define (hash-table-update! ht key fn . rest)
   (define (helper)
