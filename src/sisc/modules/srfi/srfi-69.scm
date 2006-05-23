@@ -1,4 +1,4 @@
-(define *VOID-MARKER*)
+(define *VOID-MARKER* (list #f))
 
 (define make-hash-table make-hashtable)
 
@@ -96,5 +96,3 @@
 (define string-ci-hash hash-by-string-ci=)
 
 (define hash-by-identity hash-by-eq)
-
-(set! *VOID-MARKER* (list #f))
