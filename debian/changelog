@@ -1,3 +1,9 @@
+sisc (1.15.0-beta-1) unstable; urgency=medium
+
+  * New upstream beta.
+	
+ -- Scott G. Miller <sgmiller@gmail.com>  Tue,  30 May 2006 10:56:42 -0500
+
 sisc (1.14.0-alpha-1) unstable; urgency=medium
 
   * New upstream alpha.
