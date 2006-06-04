@@ -67,7 +67,7 @@
      (define-syntax name
        (syntax-rules ()
          ((name . args)
-          body ...))))))
+          (begin body ...)))))))
 
 ;; function composition
 ;; This version handles multi-value returns and is optimized for
