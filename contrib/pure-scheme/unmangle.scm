@@ -32,12 +32,12 @@
   
   (define (java-unmangle-method-name str)
     (let* ([len (string-length str)]
-           [append-q (and (> len 2)
-                          (string=? (string-take str 2)
-                                    "is"))]
+           [append-q (and (> len 3)
+                          (string-prefix? "is" str)
+                          (char-upper-case? (string-ref str 2)))]
            [unmangled-field (java-unmangle-field-name str)])
       (if append-q
-          (string-append unmangled-field "?")
+          (string-append (string-drop unmangled-field 3) "?")
           unmangled-field)))
   
   (define (tokenize-between-dots str)
