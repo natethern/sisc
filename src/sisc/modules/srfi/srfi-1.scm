@@ -273,6 +273,7 @@
   (receive (start step)
       (case (length maybe-start+step)
         ((0) (values 0 1))
+        ((1) (values (car maybe-start+step) 1))
         ((2) (values (car maybe-start+step)
                      (cadr maybe-start+step)))
         (else
