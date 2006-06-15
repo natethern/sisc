@@ -100,22 +100,6 @@ public class LibraryAE extends MemorySymEnv {
         }
     }
 
-    public Set bindingKeys() {
-        if (base==null)
-            return super.bindingKeys();
-        else {
-            java.util.Set res = super.bindingKeys();
-            synchronized(symbolMap) {
-                res.addAll(addressMap.keySet());
-            }
-            
-            if (getParent() != null) {
-                res.addAll(getParent().bindingKeys());
-            }
-            return res;
-        }
-    }
-
     public int getLoc(Symbol s) {
         synchronized(symbolMap) {
             //already loaded?

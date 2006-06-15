@@ -14,8 +14,6 @@ public interface SymbolicEnvironment extends ExpressionVisitee {
     
     sisc.data.Value asValue();
 
-    java.util.Set bindingKeys();
-    
     void set(int envLoc, Value v);
     int define(Symbol s, Value v);
     void undefine(Symbol s);

@@ -46,17 +46,6 @@ public class MemorySymEnv extends Value
         return this;
     }
 
-    public java.util.Set bindingKeys() {
-        java.util.Set res=new HashSet();
-        synchronized(symbolMap) {
-            res.addAll(symbolMap.keySet());
-        }
-        if (getParent() != null) {
-            res.addAll(getParent().bindingKeys());
-        }
-        return res;
-    }
-
     //The following two methods are for internal use only, despite
     //their public modifiers
 
