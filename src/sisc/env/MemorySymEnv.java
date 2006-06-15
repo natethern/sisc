@@ -60,10 +60,6 @@ public class MemorySymEnv extends Value
     //The following two methods are for internal use only, despite
     //their public modifiers
 
-    public Map getSymbolMap() {
-        return symbolMap;
-    }
-
     public SymbolicEnvironment getSidecarEnvironment(Symbol name) {
         synchronized(sidecars) {
             SymbolicEnvironment sc=(SymbolicEnvironment)sidecars.get(name);

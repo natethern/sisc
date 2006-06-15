@@ -49,10 +49,6 @@ public class DelegatingSymEnv extends Value
         return getEnv().bindingKeys();
     }
 
-    public java.util.Map getSymbolMap() {
-        return getEnv().getSymbolMap();
-    }
-
     public void set(int envLoc, Value v) {
         getEnv().set(envLoc, v);
     }
