@@ -169,10 +169,6 @@ public class MemorySymEnv extends Value
         displayNamedOpaque(w, "environment");
     }
 
-    public Iterator keys() {
-        return symbolMap.keySet().iterator();
-    }
-
     public void serialize(Serializer s) throws IOException {
         s.writeInt(symbolMap.size());
         for (Iterator i=symbolMap.keySet().iterator(); i.hasNext();) {

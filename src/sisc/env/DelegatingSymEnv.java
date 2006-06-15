@@ -45,10 +45,6 @@ public class DelegatingSymEnv extends Value
         return getEnv().asValue();
     }
 
-    public java.util.Iterator keys() {
-        return getEnv().keys();
-    }
-
     public java.util.Set bindingKeys() {
         return getEnv().bindingKeys();
     }
