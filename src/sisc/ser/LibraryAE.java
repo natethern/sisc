@@ -151,10 +151,8 @@ public class LibraryAE extends MemorySymEnv {
      * @return index of binding
      */
     public int store(Symbol s, Value v) {
-        int rv=super.store(s, v);
-        if (bindWatch!=null)
-            bindWatch.add(s);
-        return rv;
+        if (bindWatch != null) bindWatch.add(s);
+        return super.store(s, v);
     }
 
     public LibraryAE() {}
