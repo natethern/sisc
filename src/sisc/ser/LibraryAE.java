@@ -85,9 +85,9 @@ public class LibraryAE extends MemorySymEnv {
         addressMap.put(sym, new LibraryBinding(lib, ep));
     }
 
-    public void ignore(Symbol s) {
-        if (bindWatch != null)
-            bindWatch.remove(s);
+    public void undefine(Symbol s) {
+        if (bindWatch != null) bindWatch.remove(s);
+        super.undefine(s);
     }
 
     private void loadParent() {

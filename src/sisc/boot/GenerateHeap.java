@@ -35,16 +35,10 @@ public class GenerateHeap {
             } else {
                 r5rs.put(key, v);
                 rv[0].define(key, v);
+                base.undefine(key);
             }
         }
 
-        for (Iterator i=r5rs.keySet().iterator(); i.hasNext();) {
-            Symbol n=(Symbol)i.next();
-            base.undefine(n);
-            if (base instanceof LibraryAE) {
-                ((LibraryAE)base).ignore(n);
-            }
-        }
         return rv;
     }
 
