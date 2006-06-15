@@ -94,11 +94,9 @@ public class GenerateHeap {
             }
         }
 
-        
-        Map baseMap=base.getSymbolMap();
         for (Iterator i=r5rs.keySet().iterator(); i.hasNext();) {
             Symbol n=(Symbol)i.next();
-            baseMap.remove(n);
+            base.undefine(n);
             if (base instanceof LibraryAE) {
                 ((LibraryAE)base).ignore(n);
             }
