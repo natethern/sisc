@@ -65,7 +65,7 @@ public class GenerateHeap {
     static {
         r5rs_bindings=new HashSet(bindingNames.length);
         for (int i=0; i<bindingNames.length; i++)
-            r5rs_bindings.add(bindingNames[i]);
+            r5rs_bindings.add(Symbol.get(bindingNames[i]));
     }
 
     static SymbolicEnvironment[] classify(SymbolicEnvironment base, 
@@ -83,10 +83,12 @@ public class GenerateHeap {
 
         //Note the  R5RS bindings so we can transfer them to the
         //bottommost env.
-        for (Iterator i=base.keys(); i.hasNext();) {
-            Symbol key=(Symbol)i.next();
-            if (r5rs_bindings.contains(key.symval)) {
-                Value v=base.lookup(key);
+        for (Iterator i = r5rs_bindings.iterator(); i.hasNext();) {
+            Symbol key = (Symbol)i.next();
+            Value v = base.lookup(key);
+            if (v == null) {
+                System.out.println("WARNING: no binding for R5RS symbol " + key.symval);
+            } else {
                 r5rs.put(key, v);
                 rv[0].define(key, v);
             }
