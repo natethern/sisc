@@ -738,7 +738,7 @@ public abstract class Primitives extends Util {
                     SymbolicEnvironment env=env(vlr[0]);
                     SymbolicEnvironment parent=env.getParent();
                     if (parent == null) return FALSE;
-                    else return (Value)parent;
+                    else return parent.asValue();
                 case GETSIDECAR:
                     return r.tpl.getSidecarEnvironment(symbol(vlr[0])).asValue();
                 case GETENV:
@@ -798,7 +798,7 @@ public abstract class Primitives extends Util {
                     Value[] va=nlib(vlr[0]).getLibraryBindingNames(r);
                     return valArrayToList(va,0,va.length);        
                 case INTERACTIONENVIRONMENT:
-                    Value last=(Value)r.getCtx().toplevel_env;
+                    Value last = r.getCtx().toplevel_env.asValue();
                     r.getCtx().toplevel_env=env(vlr[0]);
                     return last;
                 case REPORTENVIRONMENT:
