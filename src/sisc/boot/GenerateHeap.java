@@ -8,65 +8,9 @@ import sisc.data.*;
 import sisc.env.*;
 import sisc.util.Util;
 import sisc.util.Defaults;
+import sisc.modules.R5RS;
 
 public class GenerateHeap {
-
-    static HashSet r5rs_bindings;
-
-    static String[] bindingNames = new String[] {
-        //core forms
-        "lambda", "quote", "letrec", "if", "begin", "set!", "define",
-
-        //procedures
-        "*", "+", "-", "/", "<", "<=", "=", ">", ">=", "abs", "acos", "angle",
-        "append", "apply", "asin", "assoc", "assq", "assv", "atan", "boolean?",
-        "call-with-current-continuation", "call-with-input-file",
-        "call-with-output-file", "call-with-values", "car", "cdr", "caar",
-        "cadr", "cdar", "cddr", "caaar", "caadr", "cadar", "caddr", "cdaar",
-        "cdadr", "cddar", "cdddr", "caaaar", "caaadr", "caadar", "caaddr",
-        "cadaar", "cadadr", "caddar", "cadddr", "cdaaar", "cdaadr", "cdadar",
-        "cdaddr", "cddaar", "cddadr", "cdddar", "cddddr", "ceiling",
-        "char->integer", "char-alphabetic?", "char-ci<=?", "char-ci<?",
-        "char-ci=?", "char-ci>=?", "char-ci>?", "char-downcase",
-        "char-lower-case?", "char-numeric?", "char-ready?", "char-upcase",
-        "char-upper-case?", "char-whitespace?", "char<=?", "char<?", "char=?",
-        "char>=?", "char>?", "char?", "close-input-port", "close-output-port",
-        "complex?", "cons", "cos", "current-input-port", "current-output-port",
-        "denominator", "display", "dynamic-wind", "eof-object?", "eq?", "equal?",
-        "eqv?", "eval", "even?", "exact->inexact", "exact?", "exp", "expt",
-        "floor", "for-each", "force", "gcd", "imag-part", "inexact->exact",
-        "inexact?", "input-port?", "integer->char", "integer?",
-        "interaction-environment", "lcm", "length", "list", "list->string",
-        "list->vector", "list-ref", "list-tail", "list?", "load", "log",        
-        "magnitude", "make-polar", "make-rectangular", "make-string",
-        "make-vector", "map", "max", "member", "memq", "memv", "min", "modulo",
-        "negative?", "newline", "not", "null-environment", "null?",
-        "number->string", "number?", "numerator", "odd?", "open-input-file",
-        "open-output-file", "output-port?", "pair?", "peek-char", "positive?",
-        "procedure?", "quotient", "rational?", "rationalize", "read",
-        "read-char", "real-part", "real?", "remainder", "reverse", "round",
-        "scheme-report-environment", "set-car!", "set-cdr!", "sin", "sqrt",
-        "string", "string->list", "string->number", "string->symbol",
-        "string-append", "string-ci<=?", "string-ci<?", "string-ci=?",
-        "string-ci>=?", "string-ci>?", "string-copy", "string-fill!",
-        "string-length", "string-ref", "string-set!", "string<=?", "string<?",
-        "string=?", "string>=?", "string>?", "string?", "substring",
-        "symbol->string", "symbol?", "tan", "truncate", "values", "vector",
-        "vector->list", "vector-fill!", "vector-length", "vector-ref",
-        "vector-set!", "vector?", 
-        "with-input-from-file", "with-output-to-file",
-        "write", "write-char", "zero?",
-
-        //Yes, I know, these shouldn't be here, but we have problems without them
-        "make-promise", "$syntax-dispatch", "$sc-put-cte", "syntax-error"
-        
-        };
-
-    static {
-        r5rs_bindings=new HashSet(bindingNames.length);
-        for (int i=0; i<bindingNames.length; i++)
-            r5rs_bindings.add(Symbol.get(bindingNames[i]));
-    }
 
     static SymbolicEnvironment[] classify(SymbolicEnvironment base, 
                                           LibraryBuilder lb) {
@@ -83,8 +27,8 @@ public class GenerateHeap {
 
         //Note the  R5RS bindings so we can transfer them to the
         //bottommost env.
-        for (Iterator i = r5rs_bindings.iterator(); i.hasNext();) {
-            Symbol key = (Symbol)i.next();
+        for (int i = 0; i < R5RS.bindingNames.length; i++) {
+            Symbol key = R5RS.bindingNames[i];
             Value v = base.lookup(key);
             if (v == null) {
                 System.out.println("WARNING: no binding for R5RS symbol " + key.symval);
