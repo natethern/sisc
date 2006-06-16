@@ -125,10 +125,11 @@ public class MemorySymEnv extends Value
         synchronized(symbolMap) {
             Integer i=(Integer)symbolMap.get(s);
             if (i!=null) return i.intValue();
-            if (getParent() == null) return -1;
-            int pi=getParent().getLoc(s);
-            if (pi==-1) return -1;
-            return store(s, getParent().lookup(pi));
+            SymbolicEnvironment p = getParent();
+            if (p == null) return -1;
+            Value v = p.lookup(s);
+            if (v == null) return -1;
+            return store(s, v);
         }
     }
 

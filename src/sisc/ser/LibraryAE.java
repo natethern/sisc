@@ -121,9 +121,9 @@ public class LibraryAE extends MemorySymEnv {
             }
             //try parent
             if (parent == null) return -1;
-            int pi=parent.getLoc(s);
-            if (pi==-1) return -1;
-            return store(s, parent.lookup(pi));
+            Value v = parent.lookup(s);
+            if (v == null) return -1;
+            return store(s, v);
         }
     }
     
