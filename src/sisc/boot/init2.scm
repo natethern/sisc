@@ -132,16 +132,16 @@
     (set-hook-items! hook items)
     hook))
 
-(define invoke-hook 
-  (letrec ([loop (lambda (all-items items args)
-                   (if (null? items)
-                       (apply (car all-items) args)
-                       (apply (cdar items)
-                              (lambda args (loop all-items (cdr items) args))
-                              args)))])
-    (lambda (hook . args)
-      (let ([all-items (hook-items hook)])
-        (loop all-items (cdr all-items) args)))))
+(define (invoke-hook hook . args)
+  (let* ([all-items (hook-items hook)]
+         [def (car all-items)])
+    (let loop ([items (cdr all-items)]
+               [args  args])
+      (if (null? items)
+          (apply def args)
+          (apply (cdar items)
+                 (lambda args (loop (cdr items) args))
+                 args)))))
 
 ;;;;;;;;;;;;;;;; error handling ;;;;;;;;;;;;;;;
 
