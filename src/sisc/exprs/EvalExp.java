@@ -40,17 +40,21 @@ public class EvalExp extends Expression implements OptimisticHost {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-     try {
-            if (preImmediate) {
-                r.acc = pre.getValue(r);
-                r.next(post);
-            } else {
-                r.push(post);
-                r.next(pre);
-            }      
-     } catch (OptimismUnwarrantedException uwe) {
-         r.nxp=this;
-     }
+        boolean retry;
+        do {
+            try {
+                if (preImmediate) {
+                    r.acc = pre.getValue(r);
+                    r.next(post);
+                } else {
+                    r.push(post);
+                    r.next(pre);
+                }      
+                retry = false;
+            } catch (OptimismUnwarrantedException uwe) {
+                retry = true;
+            }
+        } while (retry);
     }
 
     private Value expressHelper() {

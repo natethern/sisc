@@ -1,3 +1,7 @@
+2006-06-21  Matthias Radestock  <matthias@sorted.org>
+
+    * Fixed fatal error in de-optimisation of letrec. See bug 1509504.
+
 2006-05-30  SISC 1.15.0-beta Released
 
 2006-05-23  Matthias Radestock  <matthias@sorted.org>

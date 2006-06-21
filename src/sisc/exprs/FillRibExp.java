@@ -39,18 +39,24 @@ public class FillRibExp extends Expression implements OptimisticHost {
     }
     
     public void eval(Interpreter r) throws ContinuationException {
-        try {
-            r.setVLR(pos, r.acc);
-            if (lastAndRatorImmediate) {
-                r.acc=exp.getValue(r);
-                r.next(nxp);
-            } else {
-                r.push(nxp);
-                r.next(exp);
-            }      
-        } catch (OptimismUnwarrantedException uwe) {
-            r.nxp = this;
-        } 
+
+        r.setVLR(pos, r.acc);
+
+        boolean retry;
+        do {
+            try {
+                if (lastAndRatorImmediate) {
+                    r.acc=exp.getValue(r);
+                    r.next(nxp);
+                } else {
+                    r.push(nxp);
+                    r.next(exp);
+                }
+                retry = false;
+            } catch (OptimismUnwarrantedException uwe) {
+                retry = true;
+            }
+        } while (retry);
     }
 
     public Value express() {

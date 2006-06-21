@@ -55,30 +55,35 @@ public class AppExp extends Expression implements OptimisticHost {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        try {
-            r.newVLR(l);
-            
-            if (allImmediate) {
-                r.acc=exp.getValue(r);
-                // Load the immediates from right to left
-                for (int i = l-1; i>=0; i--) {
-                    r.vlr[i] = rands[i].getValue(r);
-                }
-                r.next(nxp);
-            } else {
-                // Load the immediates from right to left
-                Expression ex;
-                for (int i = l-1; i>=0; i--) {
-                    ex=rands[i];
-                    if (ex != null)
-                        r.vlr[i] = ex.getValue(r);
-                }
-                r.push(nxp);
-                r.next(exp);
-            }         
-        } catch (OptimismUnwarrantedException uwe) {
-            r.nxp=this;
-        }
+
+        r.newVLR(l);
+
+        boolean retry;
+        do {
+            try {
+                if (allImmediate) {
+                    r.acc=exp.getValue(r);
+                    // Load the immediates from right to left
+                    for (int i = l-1; i>=0; i--) {
+                        r.vlr[i] = rands[i].getValue(r);
+                    }
+                    r.next(nxp);
+                } else {
+                    // Load the immediates from right to left
+                    Expression ex;
+                    for (int i = l-1; i>=0; i--) {
+                        ex=rands[i];
+                        if (ex != null)
+                            r.vlr[i] = ex.getValue(r);
+                    }
+                    r.push(nxp);
+                    r.next(exp);
+                }         
+                retry = false;
+            } catch (OptimismUnwarrantedException uwe) {
+                retry = true;
+            }
+        } while (retry);
     }
 
     public Value express() {

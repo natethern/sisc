@@ -28,11 +28,15 @@ public class IfEval extends Expression implements OptimisticHost {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
-        try {
-            r.next(truth(r.acc) ? conseq : altern);
-        } catch (OptimismUnwarrantedException uwe) {
-            r.nxp=this;
-        }
+        boolean retry;
+        do {
+            try {
+                r.next(truth(r.acc) ? conseq : altern);
+                retry = false;
+            } catch (OptimismUnwarrantedException uwe) {
+                retry = true;
+            }
+        } while (retry);
     }
 
     public Value express() {

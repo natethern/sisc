@@ -31,11 +31,12 @@ public class AnnotatedExpr extends Value implements OptimisticHost {
     }
     
     public final Value getValue(Interpreter r) throws ContinuationException {
-        try {
-            return expr.getValue(r);
-        } catch (OptimismUnwarrantedException uwe) {
-            return getValue(r);
-        }
+        do {
+            try {
+                return expr.getValue(r);
+            } catch (OptimismUnwarrantedException uwe) {
+            }
+        } while (true);
     }
 
     public Value express() {

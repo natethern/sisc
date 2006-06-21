@@ -363,3 +363,14 @@
              (list a b c)))
 
 (should-be 1482221 #f (equal? '(((()))) '(())))
+
+;;this used to die
+(should-be 1509504 0
+           (begin
+             (eval '(define my-length length))
+             (eval '(begin
+                      (define (letrec-opt-bug v p)
+                        (letrec ([l (my-length v)])
+                          (p l)))
+                      (set! my-length (lambda (x) (length x)))
+                      (letrec-opt-bug '() values)))))

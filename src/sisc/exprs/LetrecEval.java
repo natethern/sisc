@@ -23,14 +23,20 @@ public class LetrecEval extends Expression implements OptimisticHost {
     }
 
     public void eval(Interpreter r) throws ContinuationException {
+
         for (int i=r.vlr.length-1; i>=0; i--) {
             ((Box)r.lcl[i]).val=r.vlr[i];
         }
-        try {
-            r.next(body);
-        } catch (OptimismUnwarrantedException uwe) {
-            r.nxp = this;
-        }
+
+        boolean retry;
+        do {
+            try {
+                r.next(body);
+                retry = false;
+            } catch (OptimismUnwarrantedException uwe) {
+                retry = true;
+            }
+        } while (retry);
     }
 
     public Value express() {
