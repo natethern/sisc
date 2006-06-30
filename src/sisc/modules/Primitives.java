@@ -1158,7 +1158,7 @@ public abstract class Primitives extends Util {
  * The Original Code is the Second Interpreter of Scheme Code (SISC).
  * 
  * The Initial Developer of the Original Code is Scott G. Miller. Portions
- * created by Scott G. Miller are Copyright (C) 2000-2001 Scott G. Miller. All
+ * created by Scott G. Miller are Copyright (C) 2000-2006 Scott G. Miller. All
  * Rights Reserved.
  * 
  * Contributor(s): Matthias Radestock
