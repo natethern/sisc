@@ -2,6 +2,8 @@
 
     * Fixed fatal error in de-optimisation of letrec. See bug 1509504.
 
+2006-05-30  SISC 1.13.7 Released
+
 2006-05-30  SISC 1.15.0-beta Released
 
 2006-05-23  Matthias Radestock  <matthias@sorted.org>
