@@ -1,16 +1,29 @@
-package sisc.data;
+package sisc.io;
 
+import java.io.FilterInputStream;
 import java.io.IOException;
-import sisc.data.NamedValue;
-import sisc.io.InputPort;
-import sisc.io.ValueWriter;
+import java.io.InputStream;
 
-public abstract class SchemeInputPort extends Value
-    implements InputPort, NamedValue {
+import sisc.data.Value;
+import sisc.interpreter.AppContext;
+import sisc.ser.StreamDeserializer;
 
-    public void display(ValueWriter w) throws IOException {
-        displayNamedOpaque(w, "native-input-port");
+public class DeserializerStream
+    extends FilterInputStream implements SerialInputStream {
+
+    public StreamDeserializer deserializer;
+    
+    public DeserializerStream(AppContext ctx, InputStream in)
+        throws IOException {
+
+        super(in);
+        deserializer=new StreamDeserializer(ctx, in);
     }
+
+    public Value readSer() throws IOException {
+        return (Value)deserializer.deser();
+    }
+
 }
 /*
  * The contents of this file are subject to the Mozilla Public

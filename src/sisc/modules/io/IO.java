@@ -7,16 +7,17 @@ import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.data.*;
 import sisc.io.*;
+import sisc.reader.SourceReader;
 import sisc.util.Util;
 import sisc.exprs.AnnotatedExpr;
 
 public class IO extends IndexedProcedure {
 
-    static Symbol IOB =
+    public static Symbol IOB =
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
-        //NEXT = 31,
+        //NEXT = 34,
 
         ABSPATHQ            = 0,
         CHARREADY           = 3,
@@ -33,6 +34,9 @@ public class IO extends IndexedProcedure {
         LOADEXPANDED        = 24,
         MAKEPATH            = 15,
         NORMALIZEURL        = 16,
+        OPENBUFFEREDCHARINPORT = 32,
+        OPENBUFFEREDCHAROUTPORT = 33,
+        OPENCHARINPUTPORT   = 31,
         OPENINPUTFILE       = 17,
         OPENOUTPUTFILE      = 19,
         OPENSOURCEINPUTFILE = 20,
@@ -72,6 +76,9 @@ public class IO extends IndexedProcedure {
             define("load"               , LOAD);
             define("load-expanded"               , LOADEXPANDED);
             define("normalize-url"      , NORMALIZEURL);
+            define("open-buffered-character-input-port", OPENBUFFEREDCHARINPORT);
+            define("open-buffered-character-output-port", OPENBUFFEREDCHAROUTPORT);
+            define("open-character-input-port", OPENCHARINPUTPORT);
             define("open-input-file"    , OPENINPUTFILE);
             define("open-output-file"   , OPENOUTPUTFILE);
             define("open-source-input-file", OPENSOURCEINPUTFILE);
@@ -97,7 +104,7 @@ public class IO extends IndexedProcedure {
     
     public IO() {}
     
-    static void throwIOException(Interpreter f, String message, IOException e) 
+    public static void throwIOException(Interpreter f, String message, IOException e) 
         throws ContinuationException {
         if (f.acc == null) {
             error(f, message, list(new Pair(JEXCEPTION, javaWrap(e))));
@@ -129,17 +136,12 @@ public class IO extends IndexedProcedure {
                                  se);
     }
 
-    private static Value readChar(Interpreter f, InputPort i) 
+    private static Value readChar(Interpreter f, SchemeCharacterInputPort i) 
         throws ContinuationException {
-        if (i instanceof BinaryInputPort) {
-            System.err.println(Util.warn("charoponbinport", 
-                    ((Value)i).synopsis()));
-        }
         try {
-            int c=i.read();
+            int c=i.getReader().read();
+            if (c==-1) return EOF;
             return new SchemeCharacter((char)c);
-        } catch (EOFException e) {
-            return EOF;
         } catch (IOException e2) {
             throwIOException(f, liMessage(IOB, "errorreading", i.toString(),
                                           e2.getMessage()), e2);
@@ -147,38 +149,79 @@ public class IO extends IndexedProcedure {
         return null; //Should never happen
     }
 
-    private static Value readByte(Interpreter f, InputPort i) throws ContinuationException {
+    private static Value peekChar(Interpreter f, SchemeCharacterInputPort i) 
+    	throws ContinuationException {
+    	try {
+    		PushbackReader pbr=(PushbackReader)i.getReader();
+
+    		Value v=readChar(f, i);
+    		if (v instanceof SchemeCharacter) {
+    			try {                    
+    				pbr.unread(((SchemeCharacter)v).c);
+    			} catch (IOException e) {
+    				throwIOException(f, liMessage(IOB, "errorreading", 
+    						i.toString()), e);
+    			}	
+    		}
+
+            return v;
+    	} catch (ClassCastException cce) {
+        	throwPrimException(liMessage(IOB, "peeknotsupported",
+                     i.toString()));
+        	return VOID;
+    	}
+    }
+    
+    private static Value readByte(Interpreter f, SchemeBinaryInputPort i) throws ContinuationException {
         try {
-            int c=i.read();
+            int c=i.getInputStream().read();
+            if (c==-1) return EOF;
             return Quantity.valueOf(c);
-        } catch (EOFException e) {
-            return EOF;
         } catch (IOException e2) {
             throwIOException(f, liMessage(IOB, "errorreading", i.toString(),
                                           e2.getMessage()), e2);
         }
         return null; //Should never happen
     }
-
-    private static Value read(Interpreter r, InputPort i, int flags) 
-        throws ContinuationException {
-        if (i instanceof BinaryInputPort) {
-            System.err.println(Util.warn("charoponbinport", 
-                    ((Value)i).synopsis()));
+    
+    private static Value peekByte(Interpreter f, SchemeBinaryInputPort i) throws ContinuationException {
+    	try {
+    		PushbackInputStream pbi=(PushbackInputStream)i.getInputStream();
+            Value v=readByte(f, i);
+            if (v instanceof Quantity) {
+                try {
+                    pbi.unread(((Quantity)v).indexValue());
+                } catch (IOException e) {
+                    throwIOException(f, liMessage(IOB, "errorreading", 
+                                                  i.toString()), e);
+                }
+            }
+            return v;
+        } catch (ClassCastException cce) {
+        	throwPrimException(liMessage(IOB, "peeknotsupported",
+        			                     i.toString()));
+        	return VOID;
         }
+    }
+
+    private static Value read(Interpreter r, SchemeCharacterInputPort i, int flags) 
+        throws ContinuationException {
         try {
-            return r.dynenv.parser.nextExpression(i, flags, r.dynenv.sourceAnnotations);
+            return r.dynenv.parser.nextExpression((PushbackReader)i.getReader(), flags, r.dynenv.sourceAnnotations);
         } catch (EOFException e) {
             return EOF;
         } catch (IOException e2) {
             throwIOException(r, liMessage(IOB, "errorreading", i.toString(),
                                           e2.getMessage()), e2);
+        } catch (ClassCastException cce) {
+        	throwPrimException(liMessage(IOB, "peeknotsupported",
+                    i.toString()));        	
         }
         return null; //Should never happen
 
     }
     
-    public static Value read(Interpreter r, InputPort i) 
+    public static Value read(Interpreter r, SchemeCharacterInputPort i) 
         throws ContinuationException {
         return read(r, i,
                     (r.dynenv.caseSensitive ? 
@@ -187,7 +230,7 @@ public class IO extends IndexedProcedure {
                      sisc.reader.Parser.PERMISSIVE_PARSING : 0));
     }
 
-    public static Value readCode(Interpreter r, InputPort i) 
+    public static Value readCode(Interpreter r, SchemeCharacterInputPort i) 
         throws ContinuationException {
         return read(r, i,
                     sisc.reader.Parser.PRODUCE_ANNOTATIONS |
@@ -199,15 +242,15 @@ public class IO extends IndexedProcedure {
     }
 
     public Value displayOrWrite(Interpreter r,
-                                OutputPort port,
+                                SchemeCharacterOutputPort port,
                                 Value v,
                                 boolean display) 
         throws ContinuationException {
         try {
             ValueWriter w = r.dynenv.printShared ?
-                new SharedValueWriter(port, r.dynenv.vectorLengthPrefixing,
+                new SharedValueWriter(port.getWriter(), r.dynenv.vectorLengthPrefixing,
                                       r.dynenv.caseSensitive):
-                new PortValueWriter(port, r.dynenv.vectorLengthPrefixing,
+                new PortValueWriter(port.getWriter(), r.dynenv.vectorLengthPrefixing,
                                     r.dynenv.caseSensitive);
             if (display) w.display(v);
             else w.write(v);
@@ -244,13 +287,14 @@ public class IO extends IndexedProcedure {
         return u;
     }
 
-    public static SchemeInputPort openCharInFile(Interpreter f,
+    public static SchemeCharacterInputPort openCharInFile(Interpreter f,
                                                  URL u,
                                                  Charset encoding) 
         throws ContinuationException {    
         try {
-            return new SourceInputPort(new BufferedReader(encoding.newInputStreamReader(getURLInputStream(u))),
-                                       u.toString());
+            return new SchemeCharacterInputPort(
+                    new SourceReader(new BufferedReader(encoding.newInputStreamReader(getURLInputStream(u))),
+                                       u.toString()));
         } catch (IOException e) {
             throwIOException(f, liMessage(IOB, "erroropening", 
                                           u.toString()), e);
@@ -258,14 +302,18 @@ public class IO extends IndexedProcedure {
         return null;
     }
 
-    public static SchemeOutputPort openCharOutFile(Interpreter f, 
+    public static SchemeCharacterOutputPort openCharOutFile(Interpreter f, 
                                                    URL url,
                                                    Charset encoding,
                                                    boolean aflush) 
         throws ContinuationException {
         try {
-            return new WriterOutputPort(getURLOutputStream(url),
-                                        encoding, aflush);
+            Writer w=new OutputStreamWriter(getURLOutputStream(url), encoding.getName());           
+            if (aflush) {
+            	warn("autoflushdeprecated");
+            	w=new AutoflushWriter(w);
+            }
+            return new SchemeCharacterOutputPort(w);
         } catch (IOException e) {
             e.printStackTrace();
             throwIOException(f, liMessage(IOB, "erroropening",
@@ -295,18 +343,18 @@ public class IO extends IndexedProcedure {
     public static void load(Interpreter f, URL u, boolean expanded)
         throws ContinuationException {
 
-        SourceInputPort p = null;
-
+        SchemeCharacterInputPort p = null;
+        SourceReader sr = null;
         try {
             URLConnection conn = u.openConnection();
             conn.setDoInput(true);
             conn.setDoOutput(false);
             // XXX possibly use conn.guessContentTypeFromStream(),
             // to get the stream's content-encoding
-            p = new SourceInputPort(conn.getInputStream(),
-                                    Util.charsetFromString
-                                    (conn.getContentEncoding()),
-                                    u.toString());
+            sr=new SourceReader(new InputStreamReader(conn.getInputStream(),
+                    Util.charsetFromString
+                    (conn.getContentEncoding()).getName()), u.toString());
+            p = new SchemeCharacterInputPort(sr);
         } catch (IOException e) {
             throwIOException(f, liMessage(IOB, "erroropening",
                                           u.toString()),
@@ -318,8 +366,8 @@ public class IO extends IndexedProcedure {
         try {
             Value v = null;
             do {
-                int startLine = p.line;
-                int startColumn = p.column;
+                int startLine = sr.line;
+                int startColumn = sr.column;
                 v = readCode(f, p);
 
                 if (v != EOF) {
@@ -331,7 +379,7 @@ public class IO extends IndexedProcedure {
                         }
                     } catch (SchemeException se) {
                         maybeThrowErrorWithExprLocation(se, v);
-                        throwNestedPrimException(liMessage(IOB, "evalat", p.sourceFile, startLine, startColumn), se);
+                        throwNestedPrimException(liMessage(IOB, "evalat", sr.sourceFile, startLine, startColumn), se);
                     }
                 }
             } while (v != EOF);
@@ -347,36 +395,30 @@ public class IO extends IndexedProcedure {
             switch (id) {
             case CHARREADY:
                 try {
-                    return truth(f.dynenv.getCurrentInPort().ready());
+                    return truth(f.dynenv.getCurrentInReader().ready());
                 } catch (IOException e) {
                     return FALSE;
                 }
             case FLUSHOUTPUTPORT:
                 try {
-                    f.dynenv.getCurrentOutPort().flush();
+                    f.dynenv.getCurrentOutWriter().flush();
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "errorflushing", 
                                                   f.dynenv.out.toString()), e);
                 }
                 return VOID;
             case PEEKCHAR:
-                Value v=readChar(f, f.dynenv.getCurrentInPort());
-                if (v instanceof SchemeCharacter)
-                    f.dynenv.getCurrentInPort().pushback(((SchemeCharacter)v).c);
-                return v;
+            	return peekChar(f, charinport(f.dynenv.getCurrentInPort()));
             case PEEKBYTE:
-                v=readByte(f, f.dynenv.getCurrentInPort());
-                if (v instanceof Quantity)
-                    f.dynenv.getCurrentInPort().pushback(((Quantity)v).indexValue());
-                return v;
+            	return peekByte(f, bininport(f.dynenv.getCurrentInPort()));
             case READ:
-                return read(f, f.dynenv.getCurrentInPort());
+                return read(f, charinport(f.dynenv.getCurrentInPort()));
             case READBYTE:
-                return readByte(f, f.dynenv.getCurrentInPort());
+                return readByte(f, bininport(f.dynenv.getCurrentInPort()));
             case READCHAR:
-                return readChar(f, f.dynenv.getCurrentInPort());
+                return readChar(f, charinport(f.dynenv.getCurrentInPort()));
             case READCODE:
-                return readCode(f, f.dynenv.getCurrentInPort());
+                return readCode(f, charinport(f.dynenv.getCurrentInPort()));
             default:
                 throwArgSizeException();
             }
@@ -386,40 +428,35 @@ public class IO extends IndexedProcedure {
             case INPORTQ: return truth(f.vlr[0] instanceof InputPort);
             case OUTPORTQ: return truth(f.vlr[0] instanceof OutputPort);
             case CHARREADY:
-                InputPort inport=inport(f.vlr[0]);
+                InputPort inport=charinport(f.vlr[0]);
                 try {
                     return truth(inport.ready());
                 } catch (IOException e) {
                     return FALSE;
                 }
             case DISPLAY:
-                return displayOrWrite(f, f.dynenv.getCurrentOutPort(), f.vlr[0], true);
+                return displayOrWrite(f, charoutport(f.dynenv.getCurrentOutPort()), f.vlr[0], true);
             case WRITE:
-                return displayOrWrite(f, f.dynenv.getCurrentOutPort(), f.vlr[0], false);
+                return displayOrWrite(f, charoutport(f.dynenv.getCurrentOutPort()), f.vlr[0], false);
             case PEEKBYTE:
-                inport=inport(f.vlr[0]);
-                Value v=readByte(f, inport);
-                if (v instanceof Quantity)
-                    inport.pushback(((Quantity)v).indexValue());
-                return v;
+                return peekByte(f, bininport(f.vlr[0]));
             case PEEKCHAR:
-                inport=inport(f.vlr[0]);
-                v=readChar(f, inport);
-                if (v instanceof SchemeCharacter)
-                    inport.pushback(((SchemeCharacter)v).c);
-                return v;
+            	return peekChar(f, charinport(f.vlr[0]));
             case READ:
-                inport=inport(f.vlr[0]);
-                return read(f, inport);
+                SchemeCharacterInputPort cinport=charinport(f.vlr[0]);
+                return read(f, cinport);
             case READBYTE:
-                inport=inport(f.vlr[0]);
-                return readByte(f, inport);
+                SchemeBinaryInputPort binport=bininport(f.vlr[0]);
+                return readByte(f, binport);
             case READCHAR:
-                inport=inport(f.vlr[0]);
-                return readChar(f, inport);
+                cinport=charinport(f.vlr[0]);
+                return readChar(f, cinport);
             case READCODE:
-                inport=inport(f.vlr[0]);
-                return readCode(f, inport);
+                cinport=charinport(f.vlr[0]);
+                return readCode(f, cinport);
+            case OPENCHARINPUTPORT:
+            	return new SchemeCharacterInputPort(new BufferedReader(
+            			f.dynenv.getDefaultCharacterSet().newInputStreamReader(bininstream(f.vlr[0]))));
             case OPENSOURCEINPUTFILE:
                 URL url = url(f.vlr[0]);
                 return openCharInFile(f, url, f.dynenv.characterSet);
@@ -429,6 +466,10 @@ public class IO extends IndexedProcedure {
             case OPENOUTPUTFILE:
                 url = url(f.vlr[0]);
                 return openCharOutFile(f, url, f.dynenv.characterSet, false);
+            case OPENBUFFEREDCHARINPORT: 
+            	return new SchemeCharacterInputPort(new BufferedReader(charinreader(f.vlr[0])));
+            case OPENBUFFEREDCHAROUTPORT: 
+            	return new SchemeCharacterOutputPort(new BufferedWriter(charoutwriter(f.vlr[0])));
             case FLUSHOUTPUTPORT:
                 OutputPort op=outport(f.vlr[0]);
                 try {
@@ -449,19 +490,19 @@ public class IO extends IndexedProcedure {
                 }
                 return VOID;
             case CLOSEOUTPUTPORT:
-                op=outport(f.vlr[0]);
+                OutputPort outp=outport(f.vlr[0]);
                 try {
-                    if (op!=f.dynenv.out) op.close();
+                    if (outp!=f.dynenv.out) outp.close();
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "errorclosing",
-                                                  op.toString()),
+                                                  outp.toString()),
                                      e);
                 }
                 return VOID;
             case INPORTLOCATION:
-                inp = inport(f.vlr[0]);
-                if (inp instanceof SourceInputPort) {
-                    SourceInputPort sinp = (SourceInputPort)inp;
+                Reader in = charinreader(f.vlr[0]);
+                if (in instanceof SourceReader) {
+                    SourceReader sinp = (SourceReader)in;
                     return sourceAnnotations(sinp.sourceFile,
                                              sinp.line,
                                              sinp.column,
@@ -476,7 +517,7 @@ public class IO extends IndexedProcedure {
                 return VOID;
             case WRITECHAR:
                 try {
-                    f.dynenv.getCurrentOutPort().write(character(f.vlr[0]));
+                    f.dynenv.getCurrentOutWriter().write(character(f.vlr[0]));
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "errorwriting",
                                                   f.dynenv.out.toString(),
@@ -485,7 +526,7 @@ public class IO extends IndexedProcedure {
                 return VOID;
             case WRITEBYTE:
                 try {
-                    ((BinaryOutputPort)f.dynenv.getCurrentOutPort()).write(num(f.vlr[0]).indexValue());
+                   binoutstream(f.dynenv.getCurrentOutPort()).write(num(f.vlr[0]).indexValue());
                 } catch (IOException e) {
                     throwIOException(f, liMessage(IOB, "errorwriting",
                                                   f.dynenv.out.toString(),
@@ -535,7 +576,7 @@ public class IO extends IndexedProcedure {
         case 2:
             switch (id) {
             case WRITECHAR:
-                OutputPort port=outport(f.vlr[1]);
+                Writer port=charoutwriter(f.vlr[1]);
                 try {
                     port.write(character(f.vlr[0]));
                 } catch (IOException e) {
@@ -545,7 +586,7 @@ public class IO extends IndexedProcedure {
                 }
                 return VOID;
             case WRITEBYTE:
-                BinaryOutputPort bport=(BinaryOutputPort)outport(f.vlr[1]);
+                OutputStream bport=binoutstream(f.vlr[1]);
                 try {
                     bport.write(num(f.vlr[0]).indexValue());
                 } catch (IOException e) {
@@ -555,9 +596,16 @@ public class IO extends IndexedProcedure {
                 }
                 return VOID;
             case DISPLAY:
-                return displayOrWrite(f, outport(f.vlr[1]), f.vlr[0], true);
+                return displayOrWrite(f, charoutport(f.vlr[1]), f.vlr[0], true);
             case WRITE:
-                return displayOrWrite(f, outport(f.vlr[1]), f.vlr[0], false);
+                return displayOrWrite(f, charoutport(f.vlr[1]), f.vlr[0], false);
+            case OPENCHARINPUTPORT:
+            	try {
+            		return new SchemeCharacterInputPort(new BufferedReader(
+            				Charset.forName(string(f.vlr[1])).newInputStreamReader(bininstream(f.vlr[0]))));
+            	} catch (UnsupportedEncodingException use) {
+            		throwIOException(f, use.getMessage(), new IOException(use.getMessage())); 
+            	}
             case OPENINPUTFILE:
                 URL url = url(f.vlr[0]);
                 return openCharInFile(f, url,
@@ -571,6 +619,12 @@ public class IO extends IndexedProcedure {
                 else
                     aflush=truth(f.vlr[1]);
                 return openCharOutFile(f, url, encoding, aflush);
+            case OPENBUFFEREDCHARINPORT: 
+            	return new SchemeCharacterInputPort(new BufferedReader(charinreader(f.vlr[0]),
+            			num(f.vlr[1]).indexValue()));
+            case OPENBUFFEREDCHAROUTPORT: 
+            	return new SchemeCharacterOutputPort(new BufferedWriter(charoutwriter(f.vlr[0]),
+            			num(f.vlr[1]).indexValue()));
             case NORMALIZEURL:
                 return new SchemeString(urlClean(url(f.vlr[0], 
                                                      f.vlr[1])).toString());
@@ -581,7 +635,7 @@ public class IO extends IndexedProcedure {
             switch (id) {
             case READSTRING:
                 try {
-                    return Quantity.valueOf(str(f.vlr[0]).readFromReader(((ReaderInputPort)f.dynenv.in).getReader(),
+                    return Quantity.valueOf(str(f.vlr[0]).readFromReader(f.dynenv.getCurrentInReader(),
                                                                          num(f.vlr[1]).intValue(),
                                                                          num(f.vlr[2]).intValue()));
                 } catch (IOException e) {
@@ -590,7 +644,7 @@ public class IO extends IndexedProcedure {
                 return VOID;
             case WRITESTRING:
                 try {
-                    str(f.vlr[0]).writeToWriter(((WriterOutputPort)f.dynenv.out).getWriter(),
+                    str(f.vlr[0]).writeToWriter(f.dynenv.getCurrentOutWriter(),
                                                 num(f.vlr[1]).intValue(),
                                                 num(f.vlr[2]).intValue());
                 } catch (IOException e) {
@@ -609,7 +663,7 @@ public class IO extends IndexedProcedure {
             switch (id) {
             case READSTRING:
                 try {
-                    return Quantity.valueOf(str(f.vlr[0]).readFromReader(((ReaderInputPort)f.vlr[3]).getReader(),
+                    return Quantity.valueOf(str(f.vlr[0]).readFromReader(charinreader(f.vlr[3]),
                                                                          num(f.vlr[1]).intValue(),
                                                                          num(f.vlr[2]).intValue()));
                 } catch (IOException e) {
@@ -618,7 +672,7 @@ public class IO extends IndexedProcedure {
                 return VOID;
             case WRITESTRING:
                 try {
-                    str(f.vlr[0]).writeToWriter(((WriterOutputPort)f.vlr[3]).getWriter(),
+                    str(f.vlr[0]).writeToWriter(charoutwriter(f.vlr[3]),
                                                 num(f.vlr[1]).intValue(),
                                                 num(f.vlr[2]).intValue());
                 } catch (IOException e) {

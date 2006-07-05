@@ -113,6 +113,7 @@
 (native-module record-native     "sisc.modules.record.Primitives$Index")
 (native-module binary-io-native  "sisc.modules.io.BinaryIO$Index")
 (native-module buffer-io-native  "sisc.modules.io.BufferIO$Index")
+(native-module custom-io-native  "sisc.modules.io.CustomIO$Index")
 (native-module string-io-native  "sisc.modules.io.StringIO$Index")
 (native-module serial-io-native  "sisc.modules.io.SerialIO$Index")
 (native-module file-manipulation-native "sisc.modules.io.FileManipulation$Index")
@@ -196,6 +197,10 @@
      <char>
      <string>
      <vector>
+     <binary-input-port>
+     <binary-output-port>
+     <character-input-port>
+     <character-output-port>
      type-of-hook
      type<=-hook
      compare-types-hook)
@@ -596,96 +601,19 @@
   (type<=-hook        'oo oo-type<=-hook)
   (compare-types-hook 'oo oo-compare-types-hook))
 
-
-(include "io/generic-io-types.scm")
-(module generic-io-types
-  (<port> <input-port> <output-port>
-          <character-input-port> <character-output-port>
-          <filter-input-port> <filter-output-port>
-          <native-input-port> <native-output-port>
-          <native-character-input-port> <native-character-output-port>)
-  (import gio/basetype)
-  (import gio/porttypes)
-  (import gio/charporttypes)
-  (import gio/filterporttypes)
-  (import gio/nativeporttypes)
-  (import gio/nativecharporttypes))
-
-(module generic-io
-  (char-ready?
-   peek-byte
-   peek-char
-   read
-   read-byte
-   read-char
-   read-block
-   read-string
-   read-code
-   write
-   write-byte
-   write-char
-   write-block
-   write-string
-   display
-   flush-output-port
-   open-input-file
-   open-output-file
-   open-binary-input-file
-   open-binary-output-file
-   open-character-input-port
-   open-character-output-port
-   close-input-port
-   close-output-port
-   port?
-   input-port?
-   output-port?
-   character-input-port?
-   character-output-port?
-   binary-input-port?
-   binary-output-port?
-   make-wrapped-constructor
-   unwrap-native-input-port
-   unwrap-native-output-port
-   input-port-location
-   gio/char-ready?
-   gio/peek-byte
-   gio/peek-char
-   gio/read
-   gio/read-byte
-   gio/read-char
-   gio/read-block
-   gio/read-string
-   gio/read-code
-   gio/write
-   gio/write-byte
-   gio/write-char
-   gio/write-block
-   gio/write-string
-   gio/display
-   gio/flush-output-port
-   gio/input-port-location
-   gio/close
-   <port> <input-port> <output-port>
-   <character-input-port> <character-output-port>
-   <filter-input-port> <filter-output-port>
-   <native-input-port> <native-output-port>
-   <native-character-input-port> <native-character-output-port>)
-  (import generic-io-types)
-  (import generic-procedures)
-  (import oo)
-  (import type-system)
+(module custom-io
+  (make-custom-character-input-port
+   make-custom-binary-input-port
+   make-custom-character-output-port
+   make-custom-binary-output-port
+   port-local
+   set-port-local!
+   custom-port-procedures
+   custom-port?)
   (import s2j)
-  (import* binary-io-native
-           (native-read-block read-block)
-           (native-write-block write-block)
-           (native-open-binary-input-file open-binary-input-file)
-           (native-open-binary-output-file open-binary-output-file))
-  (import gio/filtergenerics)
-  (include "io/generic-io.scm")
-  (set! unwrap-native-output-port :out)
-  (set! unwrap-native-input-port :in)
-  (set! close-input-port gio/close)
-  (set! close-output-port gio/close))
+  (import custom-io-native)
+  (import* type-system instance-of?)
+  (include "io/custom-io.scm"))
 
 (module binary-io
   (read-block
@@ -706,16 +634,16 @@
    binary-input-port?
    binary-output-port?)
   (import buffers)
-  (import* generic-io
+  (import* binary-io-native
            read-block
            write-block
            open-binary-input-file
            open-binary-output-file
-           close-input-port
-           close-output-port
            binary-input-port?
            binary-output-port?)
   (include "io/binary-io.scm"))
+
+(import binary-io)
 
 (module buffer-io
   (open-input-buffer
@@ -725,12 +653,9 @@
    call-with-output-buffer
    with-input-from-buffer
    with-output-to-buffer
-   <buffer-input-port>
-   <buffer-output-port>
    buffer-input-port?
    buffer-output-port?)
   (import oo)
-  (import generic-io)
   (import buffer-io-native)
   (import* type-system instance-of?)
   (include "io/buffer-io.scm"))
@@ -747,12 +672,9 @@
    string-output-port?
    open-source-input-string)
   (import oo)
-  (import generic-io)
   (import* type-system instance-of?)
   (import string-io-native)
   (include "io/string-io.scm"))
-
-(import generic-io)
 
 ; Good Lord what a hack!
 (for-each
@@ -781,18 +703,6 @@
    input-port?
    output-port?))
 
-(let ()
-  (import type-system)
-  (import oo)
-  (on-repl-start
-   (lambda ()
-     (let ([curin (current-input-port)]
-           [curout (current-output-port)])
-       (unless (instance-of? curin <native-input-port>)
-         (current-input-port (make <native-input-port> curin)))
-       (unless (instance-of? curout <native-output-port>)
-         (current-output-port (make <native-output-port> curout)))))))
-
 (module serial-io
   (serialize
    deserialize
@@ -811,10 +721,11 @@
   (import* serial-io-native
            (_serialize serialize)
            (_deserialize deserialize)
-           (_open-serial-input-port open-serial-input-port)
-           (_open-serial-output-port open-serial-output-port))
+           open-serial-input-port 
+           open-serial-output-port
+           serial-input-port?
+           serial-output-port?)
   (import oo)
-  (import generic-io)
   (import* binary-io call-with-binary-input-file call-with-binary-output-file)
   (import* type-system instance-of?)
   (include "io/serial-io.scm"))
@@ -829,8 +740,6 @@
   (import generic-procedures)
   (import type-system)
   (import oo)
-
-  (import gio/filtergenerics)
 
   (include "io/java-io.scm"))
 
@@ -876,11 +785,11 @@
            open-ssl-listener
            accept-tcp-socket
            open-tcp-socket
-           (_open-ssl-socket open-ssl-socket)
-           (_open-binary-socket-input-port open-binary-socket-input-port)
-           (_open-binary-socket-output-port open-binary-socket-output-port)
-           (_open-socket-input-port open-socket-input-port)
-           (_open-socket-output-port open-socket-output-port)
+           open-ssl-socket
+           open-binary-socket-input-port
+           open-binary-socket-output-port
+           open-socket-input-port
+           open-socket-output-port
            close-socket
            get-host-ip-by-name
            get-host-name-by-ip
@@ -905,7 +814,6 @@
            set-client-auth!
            server-socket?)
   (import type-system)
-  (import generic-io)
   (import oo)
   (include "io/networking.scm"))
 
@@ -988,7 +896,6 @@
    garbage-collect)
   (import s2j)
   (import* oo make)
-  (import* generic-io-types <native-input-port> <native-output-port>)
   (import* type-system instance-of?)
   (include "os/process.scm")
   (include "os/system.scm")

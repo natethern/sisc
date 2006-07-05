@@ -1,10 +1,31 @@
+/*
+ * $Id$
+ */
 package sisc.io;
 
+import java.io.FilterOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
-public interface BinaryInputPort extends InputPort {
+public class AutoflushOutputStream extends FilterOutputStream {
 
-    int read(byte[] buff, int offs, int count) throws IOException;
+    public AutoflushOutputStream(OutputStream out) {
+        super(out);
+    }
+
+    public void write(byte[] b) throws IOException {
+        write(b, 0, b.length);
+    }
+
+    public void write(byte[] b, int offset, int length) throws IOException {
+        super.write(b, offset, length);
+        flush();
+    }
+    
+    public void write(int b) throws IOException {
+        super.write(b);
+        flush();
+    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

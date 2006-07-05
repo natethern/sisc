@@ -1,47 +1,78 @@
-package sisc.io;
+/*
+ * $Id$
+ */
+package sisc.reader;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PushbackReader;
+import java.io.Reader;
 
-import sisc.io.Charset;
+public class SourceReader extends PushbackReader {
 
-public class SourceInputPort extends ReaderInputPort {
-
-    public int line, column;
-    public String sourceFile;
-
-    /**
-     * Creates a new input port from the given input stream.
-     * @param in an input stream
-     * @param charset the character encoding of the input stream
-     * @param file the name/URL to be associated with this stream
-     */
-    public SourceInputPort(InputStream in, Charset charset, String file) {
-        this(new BufferedReader(charset.newInputStreamReader(in)), file);
-    }
-
-    /**
-     * Creates a new input port from a reader.
-     * @param reader the source of characters
-     * @param file the name/URL to be associated with this reader
-     */
-    public SourceInputPort(Reader reader, String file) {
-        super(reader);
-        
+    public SourceReader(Reader in, String file) {
+        super(in);
         line=1;
         column=1;
         sourceFile=file;
     }
-    
-    public int readHelper() throws IOException {
-        int c=super.readHelper();
+
+    public int line, column;
+    public String sourceFile;
+   
+    protected void maintainLineColumn(int c) {
         if (c=='\n') {
             line++;
             column=1;
         } else if (c=='\t') 
             column+=8;
         else column++;
+    }
+    
+    //Does this even work?
+    protected void unmaintainLineColumn(int c) {
+        if (c=='\n') {
+            line--;
+            column=-1;
+        } else if (c=='\t') 
+            column-=8;
+        else column--;
+    }
+    
+    public int read() throws IOException {
+        int c=super.read();
+        maintainLineColumn(c);
         return c;
     }
+ 
+    public int read(char[] buffer) throws IOException {
+        return read(buffer, 0, buffer.length);
+    }
+    
+    //TODO: Could be made more efficient by not doing character by character scan
+    public int read(char[] buffer, int offset, int length) throws IOException {
+        int count=super.read(buffer, offset, length);
+        for (int i=offset; i<count; i++) {
+            maintainLineColumn(buffer[i]);
+        }
+        return count;
+    }
+    
+    public void unread(int c) throws IOException {
+        super.unread(c);
+        unmaintainLineColumn(c);
+    }
+
+    public void unread(char[] buffer) throws IOException {
+        unread(buffer, 0, buffer.length);
+    }
+    
+    public void unread(char[] buffer, int offset, int length) throws IOException {
+        super.unread(buffer, offset, length);
+        for (int i=offset; i<length; i++) {
+            unmaintainLineColumn(buffer[i]);
+        }
+    }
+    
 }
 /*
  * The contents of this file are subject to the Mozilla Public

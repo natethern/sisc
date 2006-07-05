@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import sisc.data.Value;
 
-public interface SerialOutputPort extends BinaryOutputPort {
+public interface SerialInputStream {
 
-    void writeSer(Value v) throws IOException;
+    Value readSer() throws IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public

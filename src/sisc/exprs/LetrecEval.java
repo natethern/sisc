@@ -7,7 +7,6 @@ import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 import sisc.exprs.fp.OptimismUnwarrantedException;
-import sisc.exprs.fp.OptimisticExpression;
 import sisc.exprs.fp.OptimisticHost;
 import sisc.exprs.fp.Utils;
 

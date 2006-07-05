@@ -4,6 +4,7 @@ import java.io.*;
 
 import sisc.interpreter.*;
 import sisc.nativefun.*;
+import sisc.reader.SourceReader;
 import sisc.data.*;
 import sisc.io.*;
 
@@ -29,12 +30,12 @@ public class StringIO extends IndexedFixableProcedure {
         }
         
         public Index() {
-            define("_get-output-string"  , GETOUTPUTSTRING);
-            define("_open-input-string"  , OPENINPUTSTRING);
-            define("_open-output-string" , OPENOUTPUTSTRING);
-            define("_open-source-input-string", OPENSOURCEINPUTSTRING);
-            define("_string-input-port?" , STRINGINPORTQ);
-            define("_string-output-port?", STRINGOUTPORTQ);
+            define("get-output-string"  , GETOUTPUTSTRING);
+            define("open-input-string"  , OPENINPUTSTRING);
+            define("open-output-string" , OPENOUTPUTSTRING);
+            define("open-source-input-string", OPENSOURCEINPUTSTRING);
+            define("string-input-port?" , STRINGINPORTQ);
+            define("string-output-port?", STRINGOUTPORTQ);
         }
     }
     
@@ -47,7 +48,7 @@ public class StringIO extends IndexedFixableProcedure {
     public Value apply() throws ContinuationException {
         switch (id) {
         case OPENOUTPUTSTRING:
-            return new WriterOutputPort(new StringWriter(), false);
+            return new SchemeCharacterOutputPort(new StringWriter());
         default:
             throwArgSizeException();
         }
@@ -57,30 +58,31 @@ public class StringIO extends IndexedFixableProcedure {
     public Value apply(Value v1) throws ContinuationException {
         switch (id) {
         case STRINGINPORTQ:
-            return truth((v1 instanceof ReaderInputPort) &&
-                         (((ReaderInputPort)v1).getReader() instanceof StringReader));
+            //FIXME: This doesn't really do it
+            return truth((v1 instanceof SchemeCharacterInputPort) &&
+                         (((SchemeCharacterInputPort)v1).getReader() instanceof StringReader));
 
         case STRINGOUTPORTQ:
-            return truth((v1 instanceof WriterOutputPort) &&
-                         (((WriterOutputPort)v1).getWriter() instanceof StringWriter));
+            return truth((v1 instanceof SchemeCharacterOutputPort) &&
+                         (((SchemeCharacterOutputPort)v1).getWriter() instanceof StringWriter));
         case GETOUTPUTSTRING:
             OutputPort port=outport(v1);
-            if (!(port instanceof WriterOutputPort) ||
-                !(((WriterOutputPort)port).getWriter() 
+            if (!(port instanceof SchemeCharacterOutputPort) ||
+                !(((SchemeCharacterOutputPort)port).getWriter() 
                   instanceof StringWriter))
                 throwPrimException( liMessage(IOB, "outputnotastringport"));
             try {
                 port.flush();
             } catch (IOException e) {}
 
-            StringWriter sw=(StringWriter)((WriterOutputPort)port).getWriter();
+            StringWriter sw=(StringWriter)((SchemeCharacterOutputPort)port).getWriter();
             SchemeString s=new SchemeString(sw.getBuffer().toString());
             sw.getBuffer().setLength(0);
             return s;
         case OPENINPUTSTRING:
-            return new ReaderInputPort(new StringReader(string(v1)));
+            return new SchemeCharacterInputPort(new PushbackReader(new StringReader(string(v1))));
         case OPENSOURCEINPUTSTRING:
-            return new SourceInputPort(new StringReader(string(v1)), "<string>");
+            return new SchemeCharacterInputPort(new SourceReader(new StringReader(string(v1)), "<string>"));
         default:
             throwArgSizeException();
         }

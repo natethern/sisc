@@ -2,7 +2,7 @@ package sisc.reader;
 
 import java.io.*;
 import sisc.util.Util;
-import sisc.io.InputPort;
+
 import java.util.Hashtable;
 import sisc.data.SchemeCharacter;
 
@@ -69,7 +69,7 @@ public abstract class CharUtil {
         }
     }
     
-    public static int escapeSequenceToChar(InputPort is) throws IOException {
+    public static int escapeSequenceToChar(PushbackReader is) throws IOException {
         int c=is.read();
         if (c=='u') {
             char[] hexChars=new char[4];

@@ -34,6 +34,7 @@
 package sisc.tests;
 
 import java.io.StringReader;
+import java.io.PushbackReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -41,12 +42,13 @@ import junit.framework.TestCase;
 
 import sisc.REPL;
 import sisc.data.Procedure;
+
 import sisc.data.Value;
+import sisc.data.SchemeCharacterInputPort;
 import sisc.interpreter.AppContext;
 import sisc.interpreter.Context;
 import sisc.interpreter.Interpreter;
 import sisc.interpreter.SchemeException;
-import sisc.io.ReaderInputPort;
 
 public class TestR5RS
     extends TestCase
@@ -81,8 +83,8 @@ public class TestR5RS
             dynenv.
             parser.
             nextExpression(
-                new ReaderInputPort(
-                    new BufferedReader(
+            		new PushbackReader(
+            		new BufferedReader(
                         new StringReader(
                             expression
                         )

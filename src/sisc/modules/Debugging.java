@@ -1,6 +1,5 @@
 package sisc.modules;
 
-import sisc.io.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;

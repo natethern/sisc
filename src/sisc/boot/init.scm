@@ -117,15 +117,15 @@
 (define member (void))
 
 (letrec ([assN
-	  (lambda (N obj alist)
-	    (cond [(null? alist) #f]
-		  [(N (caar alist) obj) (car alist)]
-		  [else (assN N obj (cdr alist))]))]
-	 [memN
-	  (lambda (N obj list)
-	    (cond [(null? list) #f]
-		  [(N (car list) obj) list]
-		  [else (memN N obj (cdr list))]))])
+      (lambda (N obj alist)
+        (cond [(null? alist) #f]
+    	  [(N (caar alist) obj) (car alist)]
+    	  [else (assN N obj (cdr alist))]))]
+     [memN
+      (lambda (N obj list)
+        (cond [(null? list) #f]
+    	  [(N (car list) obj) list]
+    	  [else (memN N obj (cdr list))]))])
   (set! assq (lambda (obj alist) (assN eq? obj alist)))
   (set! assv (lambda (obj alist) (assN eqv? obj alist)))
   (set! assoc (lambda (obj alist) (assN equal? obj alist)))
@@ -166,7 +166,7 @@
 (define append2 
   (lambda (ls1 ls2)
     (if (null? ls1) ls2
-	(cons (car ls1) (append2 (cdr ls1) ls2)))))
+    (cons (car ls1) (append2 (cdr ls1) ls2)))))
 (define append append2)
 
 (define (_make-left-pairwise-nary proc base-case)
@@ -272,10 +272,10 @@
 
 (define (load-module str)
   (let* ([nl (load-native-library str)]
-	 [binding-names (native-library-binding-names nl)])
+     [binding-names (native-library-binding-names nl)])
     (for-each (lambda (name)
-		(putprop name (native-library-binding nl name)))
-	      binding-names)))
+    	(putprop name (native-library-binding nl name)))
+          binding-names)))
     
 ;;;;;;;;;;;;; Optimized functions
 
@@ -311,15 +311,15 @@
 ;;;;;;;;;;;;;; Math functions/constants
 (define expt 
   (letrec ([general-expt
-	    (lambda (base exponent)
-	      (exp (* exponent (log base))))]
+        (lambda (base exponent)
+          (exp (* exponent (log base))))]
            [rational-expt
             (lambda (base-numerator base-denominator exponent)
               (/ (expt base-numerator exponent)
                  (expt base-denominator exponent)))]
-	   [integer-expt 
-	    (lambda (base exponent)
-	      (if (and (exact? base) (= base 2))
+       [integer-expt 
+        (lambda (base exponent)
+          (if (and (exact? base) (= base 2))
                   (if (negative? exponent)
                       (/ (ashl 1 (abs exponent)))
                       (ashl 1 exponent))
@@ -345,17 +345,17 @@
        ((and (exact? base) (rational? base) (not (integer? base)))
         (rational-expt (numerator base) (denominator base) exponent))
        ((and (exact? exponent) (integer? exponent))
-	(integer-expt base exponent))
+    (integer-expt base exponent))
        (else (general-expt base exponent))))))
   
 (define (modpow x y N)
   (if (= y 1) 
       (modulo x N)
       (if (even? y)
-	  (let ([tmp (modpow x (/ y 2) N)])
-	    (modulo (* tmp tmp) N))
-	  (let ([tmp (modpow x (/ (- y 1) 2) N)])
-	    (modulo (* x (modulo (* tmp tmp) N)) N)))))
+      (let ([tmp (modpow x (/ y 2) N)])
+        (modulo (* tmp tmp) N))
+      (let ([tmp (modpow x (/ (- y 1) 2) N)])
+        (modulo (* x (modulo (* tmp tmp) N)) N)))))
 
 (define integer?
   (lambda (n)
@@ -374,32 +374,32 @@
 (define (abs num) 
   (if (not (real? num))
       (let ([a (real-part num)]
-	    [b (imag-part num)])
-	(sqrt (+ (* a a) (* b b))))
+        [b (imag-part num)])
+    (sqrt (+ (* a a) (* b b))))
       (if (< num 0) (- num) num)))
 
 (define min (void))
 (define max (void))
 (letrec ([_min_max 
-	  (lambda (proc mv args inexact)
-	    (cond [(null? args) 
-		   (if (and inexact (exact? mv)) 
-		       (exact->inexact mv)
-		       mv)]
-		  [(proc (car args) mv) 
-		   (_min_max proc (car args) (cdr args)
-			     (boolean-or inexact (inexact? (car args))))]
-		  [else (_min_max proc mv (cdr args) inexact)]))])
+      (lambda (proc mv args inexact)
+        (cond [(null? args) 
+    	   (if (and inexact (exact? mv)) 
+    	       (exact->inexact mv)
+    	       mv)]
+    	  [(proc (car args) mv) 
+    	   (_min_max proc (car args) (cdr args)
+    		     (boolean-or inexact (inexact? (car args))))]
+    	  [else (_min_max proc mv (cdr args) inexact)]))])
   (set! min (lambda (x1 . args)
-	      (if (null? args) 
+          (if (null? args) 
                   x1
-		  (_min_max < x1 args
-			    (inexact? x1)))))
+    	  (_min_max < x1 args
+    		    (inexact? x1)))))
   (set! max (lambda (x1 . args)
-	      (if (null? args) 
+          (if (null? args) 
                   x1
-		  (_min_max > x1 args
-			    (inexact? x1))))))
+    	  (_min_max > x1 args
+    		    (inexact? x1))))))
 
 (define (negative? n) (< n 0))
 (define (positive? n) (> n 0))
@@ -413,12 +413,12 @@
 (define <= (void))
 (let ([_comp_help
       (lambda (comparator chainer endstate)
-	(lambda args
-	  (let loop ([x args])
-	    (cond [(null? x) endstate]
-		  [(null? (cdr x)) endstate]
-		  [else (chainer (comparator (car x) (cadr x))
-				 (loop (cdr x)))]))))]
+    (lambda args
+      (let loop ([x args])
+        (cond [(null? x) endstate]
+    	  [(null? (cdr x)) endstate]
+    	  [else (chainer (comparator (car x) (cadr x))
+    			 (loop (cdr x)))]))))]
       [_and2 (lambda (x y) (and x y))])
   
   (set! <= (_comp_help (lambda (a b) (boolean-or (< a b) (= a b))) _and2 #t))
@@ -426,23 +426,23 @@
 
 
 (let ([_?= (lambda (comparator chainer)
-	     (lambda args
-	       (boolean-or (null? args) 
-		   (null? (cdr args))
-		   (and (or (= (car args) (cadr args))
-			    (comparator (car args) (cadr args)))
-			(apply chainer (cdr args))))))])
+         (lambda args
+           (boolean-or (null? args) 
+    	   (null? (cdr args))
+    	   (and (or (= (car args) (cadr args))
+    		    (comparator (car args) (cadr args)))
+    		(apply chainer (cdr args))))))])
   (set! >= (_?= > >=))
   (set! <= (_?= < <=)))
 
 (define (gcd . args)
    (cond [(null? args) 0]
-	 [(null? (cdr args)) (car args)]
+     [(null? (cdr args)) (car args)]
          [else (_gcd (car args) (cadr args))]))
 
 (define (lcm . args)
    (cond [(null? args) 1]
-	 [(null? (cdr args)) (car args)]
+     [(null? (cdr args)) (car args)]
          [else (_lcm (car args) (cadr args))]))
 
 (define modulo
@@ -505,44 +505,44 @@
 (define string-downcase (void))
 (define string-upcase (void))
 (letrec ([string-map
-	  (lambda (strsrc strdst proc n l)
-	    (if (< n l)
-		(begin 
-		  (string-set! strdst n (proc (string-ref strsrc n))) 
-		  (string-map strsrc strdst proc (+ n 1) l))
-		strdst))])
+      (lambda (strsrc strdst proc n l)
+        (if (< n l)
+    	(begin 
+    	  (string-set! strdst n (proc (string-ref strsrc n))) 
+    	  (string-map strsrc strdst proc (+ n 1) l))
+    	strdst))])
   (set! string-downcase 
-	(lambda (str)
-	  (let ([newstr (make-string (string-length str))])
-	    (string-map str newstr char-downcase 0 
-			(string-length str)))))
+    (lambda (str)
+      (let ([newstr (make-string (string-length str))])
+        (string-map str newstr char-downcase 0 
+    		(string-length str)))))
   (set! string-upcase 
-	(lambda (str)
-	  (let ([newstr (make-string (string-length str))])
-	    (string-map str newstr char-upcase 0 
-			(string-length str))))))
+    (lambda (str)
+      (let ([newstr (make-string (string-length str))])
+        (string-map str newstr char-upcase 0 
+    		(string-length str))))))
 
 (define string<?
   (letrec ([s<? (lambda (s1 s2)
-		  (cond [(null? s1) (not (null? s2))]
-			[(null? s2) #f]
-			[else (let ([c1 (car s1)]
-				    [c2 (car s2)])
-				(cond [(char<? c1 c2) #t]
-				      [(char>? c1 c2) #f]
-				      [else (s<? (cdr s1) (cdr s2))]))]))])
+    	  (cond [(null? s1) (not (null? s2))]
+    		[(null? s2) #f]
+    		[else (let ([c1 (car s1)]
+    			    [c2 (car s2)])
+    			(cond [(char<? c1 c2) #t]
+    			      [(char>? c1 c2) #f]
+    			      [else (s<? (cdr s1) (cdr s2))]))]))])
     (lambda (s1 s2)
       (s<? (string->list s1) (string->list s2)))))
 
 (define string>?
   (letrec ([s>? (lambda (s1 s2)
-		  (cond [(null? s2) (not (null? s1))]
-			[(null? s1) #f]
-			[else (let ([c1 (car s1)]
-				    [c2 (car s2)])
-				(cond [(char>? c1 c2) #t]
-				      [(char<? c1 c2) #f]
-				      [else (s>? (cdr s1) (cdr s2))]))]))])
+    	  (cond [(null? s2) (not (null? s1))]
+    		[(null? s1) #f]
+    		[else (let ([c1 (car s1)]
+    			    [c2 (car s2)])
+    			(cond [(char>? c1 c2) #t]
+    			      [(char<? c1 c2) #f]
+    			      [else (s>? (cdr s1) (cdr s2))]))]))])
     (lambda (s1 s2)
       (s>? (string->list s1) (string->list s2)))))
 
@@ -561,15 +561,15 @@
 
 (define substring
   (letrec ([fill-string
-	    (lambda (sstr dstr n s e)
-	      (if (< s e)
-		  (begin
-		    (string-set! dstr n (string-ref sstr s))
-		    (fill-string sstr dstr (+ n 1) (+ s 1) e))))])
+        (lambda (sstr dstr n s e)
+          (if (< s e)
+    	  (begin
+    	    (string-set! dstr n (string-ref sstr s))
+    	    (fill-string sstr dstr (+ n 1) (+ s 1) e))))])
     (lambda (str start end)
       (let ([newstr (make-string (- end start))])
-	(fill-string str newstr 0 start end)
-	newstr))))
+    (fill-string str newstr 0 start end)
+    newstr))))
 
 ;;;;;;;;;;;;; Miscellaneous
 

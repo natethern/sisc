@@ -32,13 +32,13 @@
 (define (rotate-bit-field n count start end)
   (let ((width (- end start)))
     (let ((count (modulo count width))
-	  (mask (lognot (arithmetic-shift -1 width))))
+      (mask (lognot (arithmetic-shift -1 width))))
       (let ((zn (logand mask (arithmetic-shift n (- start)))))
-	(logior (arithmetic-shift
-		 (logior (logand mask (arithmetic-shift zn count))
-			 (arithmetic-shift zn (- count width)))
-		 start)
-		(logand (lognot (arithmetic-shift mask start)) n))))))
+    (logior (arithmetic-shift
+    	 (logior (logand mask (arithmetic-shift zn count))
+    		 (arithmetic-shift zn (- count width)))
+    	 start)
+    	(logand (lognot (arithmetic-shift mask start)) n))))))
 
 ;@
 (define integer-length

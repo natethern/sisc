@@ -3,7 +3,6 @@ package sisc.exprs;
 import java.io.*;
 import sisc.data.*;
 import sisc.exprs.fp.OptimismUnwarrantedException;
-import sisc.exprs.fp.OptimisticExpression;
 import sisc.exprs.fp.OptimisticHost;
 import sisc.exprs.fp.Utils;
 import sisc.interpreter.*;

@@ -7,12 +7,12 @@
   (call-with-input-file source-file
     (lambda (in)
       (do ((c (read-char in) (read-char in)))
-	  ((or (eqv? c #\newline)
-	       (eof-object? c))))
+      ((or (eqv? c #\newline)
+           (eof-object? c))))
       (let loop ((e (read-code in)))
-	(unless (eof-object? e)
-	  (eval e)
-	  (loop (read-code in)))))))
+    (unless (eof-object? e)
+      (eval e)
+      (loop (read-code in)))))))
 
 (define (main-hook . args)
   ((eval 'main (get-symbolic-environment '*toplevel*)) args))
@@ -20,4 +20,4 @@
 ;; Default main, so ordinary "whole bunch 'o scheme code" scripts
 ;; will work
 (define (main args) 0)
-	
+    

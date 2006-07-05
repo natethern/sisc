@@ -1,31 +1,56 @@
-package sisc.io;
+package sisc.io.custom;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import sisc.data.Pair;
+import sisc.data.Procedure;
+import sisc.data.Quantity;
 import sisc.data.Value;
-import sisc.interpreter.AppContext;
-import sisc.ser.StreamDeserializer;
+import sisc.modules.io.Buffer;
+import sisc.util.Util;
 
-public class DeserializerPort
-    extends StreamInputPort
-    implements SerialInputPort {
+public class SchemeInputStream extends InputStream implements CustomPortProxy {
 
-    public StreamDeserializer deserializer;
+    Procedure read, readBlock, available, close;
     
-    public DeserializerPort(AppContext ctx, InputStream in)
-        throws IOException {
-
-        super(in);
-        deserializer=new StreamDeserializer(ctx, in);
+    public SchemeInputStream(Procedure read, Procedure readBlock, Procedure available, Procedure close) {
+        this.read=read;
+        this.readBlock=readBlock;
+        this.available=available;
+        this.close=close;
     }
 
-    public Value readSer() throws IOException {
-        return readSerHelper();
+    public int read() throws IOException {
+        return Util.num(IOUtils.bridge(read, getHost())).intValue();
+    }
+    
+    public int read(byte[] b, int offset, int length) throws IOException {
+        return Util.num(IOUtils.bridge(readBlock, 
+                new Value[] {getHost(), new Buffer(b), Quantity.valueOf(offset), Quantity.valueOf(length)})) 
+                .intValue();        
+    }
+    
+    public int available() throws IOException {
+        return Util.num(IOUtils.bridge(available, getHost())).intValue();        
     }
 
-    protected Value readSerHelper() throws IOException {
-        return (Value)deserializer.deser();
+    public void close() throws IOException {
+        IOUtils.bridge(close, getHost());
+    }
+
+    public Pair getProcs() {
+    	return Util.list(read, readBlock, available, close);
+    }
+
+    Value host;
+
+    public Value getHost() {
+    	return host;
+    }
+
+    public void setHost(Value host) {
+    	this.host = host;
     }
 }
 /*

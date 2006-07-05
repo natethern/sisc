@@ -18,7 +18,7 @@ public class Charset {
     private String name;
 
     public static Charset forName(String name) throws UnsupportedEncodingException {
-        InputStreamReader rd=new InputStreamReader(new ByteArrayInputStream(new byte[0]), name);
+        new InputStreamReader(new ByteArrayInputStream(new byte[0]), name);
         Charset cs=new Charset();
         cs.name=name;
         return cs;

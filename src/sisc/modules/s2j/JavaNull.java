@@ -1,7 +1,6 @@
 package sisc.modules.s2j;
 
 import sisc.data.*;
-import sisc.interpreter.*;
 
 import java.io.IOException;
 

@@ -5,7 +5,6 @@ import java.io.*;
 import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Iterator;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.env.SymbolicEnvironment;

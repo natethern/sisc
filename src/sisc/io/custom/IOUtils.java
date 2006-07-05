@@ -1,41 +1,34 @@
-package sisc.io;
+/*
+ * $Id$
+ */
+package sisc.io.custom;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
+import sisc.data.Procedure;
 import sisc.data.Value;
-import sisc.interpreter.AppContext;
-import sisc.ser.StreamSerializer;
+import sisc.interpreter.Context;
+import sisc.interpreter.Interpreter;
+import sisc.interpreter.SchemeException;
+import sisc.modules.io.IO;
+import sisc.util.Util;
 
-public class SerializerPort
-    extends StreamOutputPort
-    implements SerialOutputPort {
+public abstract class IOUtils {
 
-    public StreamSerializer serializer;
-    
-    public SerializerPort(AppContext ctx, OutputStream out, boolean aflush)
-        throws IOException {
-        super(out, aflush);
-        serializer=new StreamSerializer(ctx, out);
+    public static Value bridge(Procedure proc, Value[] args) throws IOException {
+        Interpreter r=Context.enter();
+        try {
+            return r.eval(proc, args);
+        } catch (SchemeException e) {
+        	Procedure.throwNestedPrimException(Util.liMessage(IO.IOB, "customporterror", e.getMessageText()), e);
+        	return Util.VOID;
+        } finally {
+            Context.exit();
+        }
     }
 
-    public void writeSer(Value v) throws IOException {
-        writeSerHelper(v);
-        if (autoflush) flush();
-    }
-
-    protected void writeSerHelper(Value v) throws IOException {
-        serializer.serialize(v);
-    }
-    
-    public void flush() throws IOException {
-        serializer.flush();
-        super.flush();
-    }
-
-    public void close() throws IOException {
-        serializer.close();
-        super.close();
+    public static Value bridge(Procedure proc, Value v) throws IOException {
+    	return bridge(proc, new Value[] {v});
     }
 }
 /*

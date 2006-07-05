@@ -11,7 +11,7 @@
 (define (%char-set:s/check cs proc)
   (let lp ((cs cs))
     (if (char-set? cs) (char-set:s cs)
-	(lp (error "Not a char-set:" proc cs)))))
+    (lp (error "Not a char-set:" proc cs)))))
 
 ;;; Parse, type-check & default a final optional BASE-CS parameter from
 ;;; a rest argument. Return a *fresh copy* of the underlying string.
@@ -22,12 +22,12 @@
   (if (pair? maybe-base)
       (let ((bcs  (car maybe-base))
             (tail (cdr maybe-base)))
-	(if (null? tail)
-	    (if (char-set? bcs)
+    (if (null? tail)
+        (if (char-set? bcs)
                   (char-set-copy bcs)
                   (error "BASE-CS parameter not a char-set" proc bcs))
-	    (error "Expected final base char set -- too many parameters"
-		   proc maybe-base)))
+        (error "Expected final base char set -- too many parameters"
+    	   proc maybe-base)))
       (char-set-copy char-set:empty)))
 
 (define (char-set-copy c1)
@@ -109,8 +109,8 @@
   (check-arg procedure? g proc)
   (let lp ((seed seed))
     (cond ((not (p seed))			; P says we are done.
-	   (%set1! s (%char->code-point (f seed)))	; Add (F SEED) to set.
-	   (lp (g seed))))))			; Loop on (G SEED).
+       (%set1! s (%char->code-point (f seed)))	; Add (F SEED) to set.
+       (lp (g seed))))))			; Loop on (G SEED).
 
 (define (char-set-unfold p f g seed . maybe-base)
   (let ((bs (%default-base maybe-base char-set-unfold)))
@@ -119,8 +119,8 @@
 
 (define (char-set-unfold! p f g seed base-cset)
   (%char-set-unfold! char-set-unfold! p f g
-		     (%char-set:s/check base-cset char-set-unfold!)
-		     seed)
+    	     (%char-set:s/check base-cset char-set-unfold!)
+    	     seed)
   base-cset)
 
 ;;; -- for-each map fold unfold every any

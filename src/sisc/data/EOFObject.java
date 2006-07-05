@@ -1,6 +1,7 @@
 package sisc.data;
 
 import java.io.*;
+
 import sisc.io.ValueWriter;
 
 public class EOFObject extends Value implements Singleton {

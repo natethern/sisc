@@ -1,26 +1,13 @@
+/*
+ * $Id$
+ */
 package sisc.io;
 
 import java.io.IOException;
 
 public interface InputPort extends Port {
 
-    /**
-     * Returns one byte from the port.  This function must
-     * return the pushback byte if available.
-     */
-    int read() throws IOException;
-
-    /**
-     * Pushes one byte back onto the stream.  An input port is
-     * required to support only one such byte.
-     */
-    void pushback(int c);
-
-    /**
-     * Returns true if a byte is available for reading
-     */
-    boolean ready() throws IOException;
-
+    public boolean ready() throws IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public

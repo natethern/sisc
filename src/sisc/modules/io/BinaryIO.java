@@ -1,18 +1,15 @@
 package sisc.modules.io;
 
 import sisc.interpreter.*;
+import sisc.io.AutoflushOutputStream;
 import sisc.nativefun.*;
 import sisc.data.*;
+
 import java.io.IOException;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.net.URL;
-import sisc.io.StreamOutputPort;
-import sisc.io.StreamInputPort;
-import sisc.io.BinaryOutputPort;
-import sisc.io.BinaryInputPort;
 
 public class BinaryIO extends IndexedProcedure {
 
@@ -20,11 +17,15 @@ public class BinaryIO extends IndexedProcedure {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
+    	//Next: 16
         BLOCKREAD=1, BLOCKWRITE=2, MAKEBUFFER=3, BUFFERQ=4,
         BUFFERLENGTH=5, BUFFERREF=6, BUFFERSET=7, BUFFERCOPY=8,
         OPENBINARYINPUTFILE = 9, OPENBINARYOUTPUTFILE= 10,
         BINARYINPUTPORTQ = 11, BINARYOUTPUTPORTQ = 12, 
-        BUFFERCOMPARE=13;
+        BUFFERCOMPARE=13,
+        OPENBUFFEREDBININPORT = 14,
+        OPENBUFFEREDBINOUTPORT = 15;
+
 
 
     public static class Index extends IndexedLibraryAdapter {
@@ -45,29 +46,17 @@ public class BinaryIO extends IndexedProcedure {
             define("buffer-copy!",  BUFFERCOPY);
             define("open-binary-input-file",  OPENBINARYINPUTFILE);
             define("open-binary-output-file", OPENBINARYOUTPUTFILE);
+            define("open-buffered-binary-input-port", OPENBUFFEREDBININPORT);
+            define("open-buffered-binary-output-port", OPENBUFFEREDBINOUTPORT);            
             define("binary-input-port?",  BINARYINPUTPORTQ);
             define("binary-output-port?", BINARYOUTPUTPORTQ);
         }   
     }
-    
-    public static final BinaryInputPort binport(Value o) {
-        try {
-            return (BinaryInputPort)o;
-        } catch (ClassCastException e) { typeError(BINARYB, "binput-port", o); }
-        return null;
-    }
 
-    public static final BinaryOutputPort boutport(Value o) {
-        try {
-            return (BinaryOutputPort)o;
-        } catch (ClassCastException e) { typeError(BINARYB, "boutput-port", o); }
-        return null;
-    }
-
-    private static StreamInputPort openBinInFile(Interpreter f, URL url)
+    private static SchemeBinaryInputPort openBinInFile(Interpreter f, URL url)
         throws ContinuationException {
         try {
-            return new StreamInputPort(new BufferedInputStream(IO.getURLInputStream(url))); 
+            return new SchemeBinaryInputPort(new BufferedInputStream(IO.getURLInputStream(url))); 
         } catch (IOException e) {
             IO.throwIOException(f, liMessage(IO.IOB, "erroropening", 
                                              url.toString()), e);
@@ -75,12 +64,16 @@ public class BinaryIO extends IndexedProcedure {
         return null;
     }
 
-    private static StreamOutputPort openBinOutFile(Interpreter f,  URL url,
+    private static SchemeBinaryOutputPort openBinOutFile(Interpreter f,  URL url,
                                                    boolean aflush) 
         throws ContinuationException {
-        try {          
-            return new StreamOutputPort(new BufferedOutputStream(IO.getURLOutputStream(url)),
-                                        aflush);
+        try {
+            OutputStream out=new BufferedOutputStream(IO.getURLOutputStream(url));
+            if (aflush) {
+            	warn("autoflushdeprecated");
+                out=new AutoflushOutputStream(out);
+            }
+            return new SchemeBinaryOutputPort(out);
         } catch (IOException e) {
             IO.throwIOException(f, liMessage(IO.IOB, "erroropening",
                                              url.toString()), e);
@@ -116,9 +109,13 @@ public class BinaryIO extends IndexedProcedure {
             case OPENBINARYOUTPUTFILE:
                 return openBinOutFile(f, url(f.vlr[0]), false);
             case BINARYINPUTPORTQ:
-                return truth(f.vlr[0] instanceof BinaryInputPort);
+                return truth(f.vlr[0] instanceof SchemeBinaryInputPort);
             case BINARYOUTPUTPORTQ:
-                return truth(f.vlr[0] instanceof BinaryOutputPort);
+                return truth(f.vlr[0] instanceof SchemeBinaryOutputPort);
+            case OPENBUFFEREDBININPORT: 
+            	return new SchemeBinaryInputPort(new BufferedInputStream(bininport(f.vlr[0]).getInputStream()));
+            case OPENBUFFEREDBINOUTPORT: 
+            	return new SchemeBinaryOutputPort(new BufferedOutputStream(binoutport(f.vlr[0]).getOutputStream()));
             default:
                 throwArgSizeException();
             }
@@ -150,6 +147,12 @@ public class BinaryIO extends IndexedProcedure {
                 }
             case OPENBINARYOUTPUTFILE:
                 return openBinOutFile(f, url(f.vlr[0]), truth(f.vlr[1]));
+            case OPENBUFFEREDBININPORT: 
+            	return new SchemeBinaryInputPort(new BufferedInputStream(bininport(f.vlr[0]).getInputStream(),
+            			num(f.vlr[1]).indexValue()));
+            case OPENBUFFEREDBINOUTPORT: 
+            	return new SchemeBinaryOutputPort(new BufferedOutputStream(binoutport(f.vlr[0]).getOutputStream(),
+            			num(f.vlr[1]).indexValue()));
             default:
                 throwArgSizeException();
             }
@@ -175,10 +178,10 @@ public class BinaryIO extends IndexedProcedure {
             case BLOCKREAD:
                 int count=num(f.vlr[2]).indexValue();
                 int offset=num(f.vlr[1]).indexValue();
-                BinaryInputPort inport=binport(f.vlr[3]);
+                SchemeBinaryInputPort inport=bininport(f.vlr[3]);
                 byte[] buf=buffer(f.vlr[0]).buf;
                 try {
-                    int rv=inport.read(buf, offset, Math.min(buf.length-offset, count));
+                    int rv=inport.getInputStream().read(buf, offset, Math.min(buf.length-offset, count));
                     if (rv==-1) return EOF;
                     else return Quantity.valueOf(rv);
                 } catch (IOException e) {
@@ -190,10 +193,10 @@ public class BinaryIO extends IndexedProcedure {
             case BLOCKWRITE:
                 count=num(f.vlr[2]).indexValue();
                 offset=num(f.vlr[1]).indexValue();
-                BinaryOutputPort outport=boutport(f.vlr[3]);
+                SchemeBinaryOutputPort outport=binoutport(f.vlr[3]);
                 buf=buffer(f.vlr[0]).buf;
                 try {
-                    outport.write(buf, 0, count);
+                    outport.getOutputStream().write(buf, 0, count);
                 } catch (IOException e) {
                     error(f, liMessage(BINARYB, "errorwriting",
                                        outport.toString(),

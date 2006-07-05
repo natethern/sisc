@@ -1,30 +1,33 @@
-package sisc.io;
+package sisc.io.custom;
 
-import sisc.data.SchemeOutputPort;
-import java.io.IOException;
+import java.io.Writer;
 
-public abstract class AutoflushOutputPort extends SchemeOutputPort {
+import sisc.data.SchemeCharacterOutputPort;
+import sisc.data.Value;
 
-    protected boolean autoflush;
+public class CustomCharacterOutputPort extends SchemeCharacterOutputPort implements CustomPort {
 
-    public AutoflushOutputPort(boolean a) {
-        autoflush=a;
+    protected SchemeWriter schemeWriter;
+    
+    public CustomCharacterOutputPort(Writer w, SchemeWriter schemeWriter) {
+        super(w);
+        this.schemeWriter=schemeWriter;
+        schemeWriter.setHost(this);
     }
-
-    public void write(char v) throws IOException {
-        writeHelper(v);
-        if (autoflush) flush();
+    
+    protected Value portLocal=VOID;
+    
+    public void setPortLocal(Value local) {    	
+    	portLocal=local;    	
     }
+    
+    public Value getPortLocal() {
+    	return portLocal;
+    }    
 
-    public void write(String s) throws IOException {
-        writeHelper(s);
-        if (autoflush) flush();
+    public CustomPortProxy getProxy() {
+    	return schemeWriter;
     }
-
-    public abstract void flush() throws IOException;
-
-    protected abstract void writeHelper(char v) throws IOException;
-    protected abstract void writeHelper(String v) throws IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public

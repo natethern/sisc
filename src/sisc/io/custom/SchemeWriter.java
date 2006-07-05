@@ -1,34 +1,63 @@
-package sisc.io;
+/*
+ * $Id$
+ */
+package sisc.io.custom;
 
-import java.io.*;
-import sisc.data.SchemeInputPort;
+import java.io.IOException;
+import java.io.Writer;
 
-public abstract class PushbackInputPort extends SchemeInputPort {
+import sisc.data.Pair;
+import sisc.data.Procedure;
+import sisc.data.Quantity;
+import sisc.data.SchemeCharacter;
+import sisc.data.SchemeString;
+import sisc.data.Value;
+import sisc.util.Util;
 
-    protected int pushback = -1;
+public class SchemeWriter extends Writer implements CustomPortProxy {
 
-    public PushbackInputPort() {
+    Procedure write, writeString, flush, close;
+    
+    public SchemeWriter(Procedure write, Procedure writeBlock, Procedure flush, Procedure close) {
+        this.write=write;
+        this.writeString=writeBlock;
+        this.flush=flush;
+        this.close=close;
+    }
+    
+    Value host;
+
+    public Value getHost() {
+    	return host;
     }
 
-    public int read() throws IOException {
-        int c=pushback;
-        if (pushback!=-1)
-            pushback=-1;
-        else 
-            c=readHelper();
-
-        if (c==-1)
-            throw new EOFException();
-
-        return c;
+    public void setHost(Value host) {
+    	this.host = host;
     }
 
-    protected abstract int readHelper() throws IOException;
-
-    public void pushback(int c) {
-        pushback=c;
+    public Pair getProcs() {
+    	return Util.list(write, writeString, flush, close);
     }
 
+    public void write(int c) throws IOException {
+        IOUtils.bridge(write, new Value[] {
+        		getHost(),
+        		new SchemeCharacter((char)c)});
+    }
+    
+    public void write(char[] b, int offset, int length) throws IOException {
+        IOUtils.bridge(writeString, new Value[] {
+        		getHost(),
+               new SchemeString(new String(b)), Quantity.valueOf(offset), Quantity.valueOf(length)});         
+    }
+    
+    public void flush() throws IOException {
+        IOUtils.bridge(flush, getHost());
+    }
+
+    public void close() throws IOException {
+        IOUtils.bridge(close, getHost());
+    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

@@ -1,16 +1,15 @@
 package sisc.compiler;
 
+import java.io.InputStreamReader;
 import java.util.*;
 import sisc.data.*;
 import sisc.exprs.*;
 import sisc.exprs.fp.*;
-import sisc.env.SymbolicEnvironment;
 import sisc.env.*;
 import sisc.nativefun.FixableProcedure;
 import sisc.interpreter.Context;
 import sisc.interpreter.ContinuationException;
 import sisc.interpreter.Interpreter;
-import sisc.io.*;
 import sisc.reader.*;
 import sisc.util.FreeReference;
 
@@ -550,7 +549,7 @@ public class Compiler extends CompilerConstants {
     public static void main(String[] args) throws Exception {
         Interpreter r=Context.enter();
         Parser p=new Parser(new Lexer());
-        InputPort in=new StreamInputPort(System.in);
+        SourceReader in=new SourceReader(new InputStreamReader(System.in), "stdin");
         SymbolicEnvironment env=new MemorySymEnv();
         Compiler.addSpecialForms(env);
         new sisc.modules.Primitives.Index().bindAll(r, env);        

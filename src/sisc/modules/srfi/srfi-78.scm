@@ -165,8 +165,8 @@
                   (check:add-correct!))
            (begin (check:report-failed expected-result)
                   (check:add-failed! expression 
-				     actual-result 
-				     expected-result)))))
+    			     actual-result 
+    			     expected-result)))))
     (else (error "unrecognized check:mode" check:mode)))
   (if #f #f))
 
@@ -176,7 +176,7 @@
      (check expr (=> equal?) expected))
     ((check expr (=> equal) expected)
      (if (>= check:mode 1)
-	 (check:proc 'expr (lambda () expr) equal expected)))))
+     (check:proc 'expr (lambda () expr) equal expected)))))
 
 ; -- parametric checks --
 
@@ -185,7 +185,7 @@
         (expression (cadr w))
         (actual-result (caddr w))
         (expected-result (cadddr w))
-	(cases (car (cddddr w))))
+    (cases (car (cddddr w))))
     (if correct?
         (begin (if (>= check:mode 100)
                    (begin (check:report-expression expression)
@@ -197,38 +197,38 @@
                           (check:report-actual-result actual-result)
                           (check:report-failed expected-result)))
                (check:add-failed! expression 
-				  actual-result 
-				  expected-result)))))
+    			  actual-result 
+    			  expected-result)))))
 
 (define-syntax check-ec:make
   (syntax-rules (=>)
     ((check-ec:make qualifiers expr (=> equal) expected (arg ...))
      (if (>= check:mode 1)
          (check:proc-ec
-	  (let ((cases 0))
-	    (let ((w (first-ec 
-		      #f
-		      qualifiers
-		      (:let equal-pred equal)
-		      (:let expected-result expected)
-		      (:let actual-result
+      (let ((cases 0))
+        (let ((w (first-ec 
+    	      #f
+    	      qualifiers
+    	      (:let equal-pred equal)
+    	      (:let expected-result expected)
+    	      (:let actual-result
                             (let ((arg arg) ...) ; (*)
                               expr))
-		      (begin (set! cases (+ cases 1)))
-		      (if (not (equal-pred actual-result expected-result)))
-		      (list (list 'let (list (list 'arg arg) ...) 'expr)
-			    actual-result
-			    expected-result
-			    cases))))
-	      (if w
-		  (cons #f w)
-		  (list #t 
-			'(check-ec qualifiers 
-				   expr (=> equal) 
-				   expected (arg ...))
-			(if #f #f)
-		        (if #f #f)
-			cases)))))))))
+    	      (begin (set! cases (+ cases 1)))
+    	      (if (not (equal-pred actual-result expected-result)))
+    	      (list (list 'let (list (list 'arg arg) ...) 'expr)
+    		    actual-result
+    		    expected-result
+    		    cases))))
+          (if w
+    	  (cons #f w)
+    	  (list #t 
+    		'(check-ec qualifiers 
+    			   expr (=> equal) 
+    			   expected (arg ...))
+    		(if #f #f)
+    	        (if #f #f)
+    		cases)))))))))
 
 ; (*) is a compile-time check that (arg ...) is a list
 ; of pairwise disjoint bound variables at this point.

@@ -1,7 +1,7 @@
 package sisc.interpreter;
 
 import java.io.*;
-import sisc.io.*;
+
 import sisc.compiler.Compiler;
 import sisc.data.*;
 import sisc.env.*;
@@ -294,7 +294,7 @@ public class Interpreter extends Util {
      * @exception SchemeException Raised if the evaluation of  
      *      an expression results in an error
      */
-    public Value evalInput(InputPort port) throws IOException, SchemeException {
+    public Value evalInput(PushbackReader port) throws IOException, SchemeException {
         Value rv=VOID;
         do {
             try {
@@ -316,7 +316,7 @@ public class Interpreter extends Util {
      *      an expression results in an error
      */
     public Value eval(String expr) throws IOException, SchemeException {
-        return evalInput(new ReaderInputPort(new BufferedReader(new StringReader(expr))));
+        return evalInput(new PushbackReader(new BufferedReader(new StringReader(expr))));
     }   
 
     /**

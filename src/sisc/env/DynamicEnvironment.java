@@ -3,6 +3,7 @@ package sisc.env;
 import java.io.*;
 import sisc.data.*;
 import sisc.io.*;
+
 import java.util.WeakHashMap;
 import java.net.URLClassLoader;
 import java.net.URL;
@@ -84,8 +85,13 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public DynamicEnvironment(AppContext ctx, InputStream in, OutputStream out) {
         this.ctx = ctx;
         this.characterSet = Util.charsetFromString(ctx.getProperty("sisc.characterSet", defaultCharacterSet));
-        this.in  = new SourceInputPort(in, this.characterSet, liMessage(SISCB, "console"));
-        this.out = new WriterOutputPort(out, this.characterSet, true);
+        try {
+            this.in  = new SchemeCharacterInputPort(new SourceReader(new InputStreamReader(in, this.characterSet.getName()), liMessage(SISCB, "console")));
+            this.out = new SchemeCharacterOutputPort(new AutoflushWriter(new OutputStreamWriter(out, this.characterSet.getName())));
+        } catch (UnsupportedEncodingException use) {
+            //Hack?
+            throw new RuntimeException(use.getMessage());
+        }
 
         this.caseSensitive =
             ctx.getProperty("sisc.caseSensitive", defaultCaseSensitive).equals("true");
@@ -111,12 +117,20 @@ public class DynamicEnvironment extends Util implements Cloneable {
         initialClassPathExtension = new URL[]{};
     }
 
-    public SchemeInputPort getCurrentInPort() {
-        return inport(in);
+    public Value getCurrentInPort() {
+        return in;
     }
 
-    public SchemeOutputPort getCurrentOutPort() {
-        return outport(out);
+    public Reader getCurrentInReader() {
+        return charinreader(in);
+    }
+    
+    public Value getCurrentOutPort() {
+        return out;
+    }
+    
+    public Writer getCurrentOutWriter() {
+        return charoutwriter(out);
     }
 
     public Object clone() throws CloneNotSupportedException {

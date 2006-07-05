@@ -323,14 +323,14 @@
 
 (define (opt:names d n)
    (do      ((ns '() (cons (string-append n (number->string k)) ns))
-	     (k d (- k 1)))
-	 ((= k 0)
-	  (map string->symbol (cons (string-append n "0") ns)))))
+         (k d (- k 1)))
+     ((= k 0)
+      (map string->symbol (cons (string-append n "0") ns)))))
 
 (define (opt:make-giant-case d cs rvs ms ns)
    (if (pair? ms)
        `(case ,(car ms)
-	  ,@(map (lambda (v)
+      ,@(map (lambda (v)
                    `(,(if (number? v)
                           (list v)
                           'else)
@@ -356,7 +356,7 @@
 
 (define (opt:case-name d vs sx)
    (do      ((s (symbol->string (opt:lib (number->string d)))
-		(string-append
+    	(string-append
                  s
                  (if (and (number? (car ns))
                           (negative? (car ns)))
@@ -365,9 +365,9 @@
                   (if (number? (car ns))
                       (number->string (car ns))
                       "n")))
-	     (ns vs (cdr ns)))
-	 ((null? ns)
-	  (string->symbol (string-append s sx)))))
+         (ns vs (cdr ns)))
+     ((null? ns)
+      (string->symbol (string-append s sx)))))
 
 ;;; At end of known constants cs the unknown constant marker ().
 
@@ -387,30 +387,30 @@
    (if (null? lists)
       '(())
       (apply append
-	 (map (lambda (pre)
-		 (map (lambda (suf)
-			 (cons pre suf))
-		    (apply opt:cross (cdr lists))))
-	    (car lists)))))
+     (map (lambda (pre)
+    	 (map (lambda (suf)
+    		 (cons pre suf))
+    	    (apply opt:cross (cdr lists))))
+        (car lists)))))
 
 (define (opt:make-little-case d ns vs ks)
    (let ((exp `(+ ,(if (number? (car vs))
                        (car vs)
                        (car ns))
-		  ,@(map (lambda (n v k)
-			   `(* ,(if (number? v) v n) ,k))
-			 (cdr ns)
-			 (cdr vs)
-			 (cdr ks))))
+    	  ,@(map (lambda (n v k)
+    		   `(* ,(if (number? v) v n) ,k))
+    		 (cdr ns)
+    		 (cdr vs)
+    		 (cdr ks))))
          (rgs (append
-		     (if (number? (car vs))
-			'()
-			`(,(car ns)))
-		     (apply append
-			(map (lambda (n v)
-				(if (number? v) '() (list n)))
-			   (cdr ns)
-			   (cdr vs))))))
+    	     (if (number? (car vs))
+    		'()
+    		`(,(car ns)))
+    	     (apply append
+    		(map (lambda (n v)
+    			(if (number? v) '() (list n)))
+    		   (cdr ns)
+    		   (cdr vs))))))
      `((define (,(opt:case-name d vs "") ,@rgs)
          ,(case type
             ((mbda)

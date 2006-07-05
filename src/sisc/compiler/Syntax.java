@@ -5,7 +5,8 @@ import sisc.data.*;
 import sisc.ser.*;
 import sisc.interpreter.ContinuationException;
 import sisc.interpreter.Interpreter;
-import sisc.io.*;
+import sisc.io.ValueWriter;
+
 import java.io.IOException;
 
 public class Syntax extends Value implements NamedValue, Singleton {

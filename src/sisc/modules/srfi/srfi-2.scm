@@ -63,25 +63,25 @@
     ((and-let* ((var val) more ...) . body)
      (let ((var val))
        (if var
-	   (and-let* (more ...) . body)
-	   #f)))
+       (and-let* (more ...) . body)
+       #f)))
 
     ; Error check to catch illegal (A B ...) clauses.
     ((and-let* ((exp junk . more-junk) more ...) . body)
      (error "syntax error"
-	    '(and-let* ((exp junk . more-junk) more ...) . body)))
+        '(and-let* ((exp junk . more-junk) more ...) . body)))
 
     ; (EXP) and VAR - just check the value for #F.
     ; There is no way for us to check that VAR is an identifier and not a
     ; constant
     ((and-let* ((exp) more ...) . body)
      (if exp
-	 (and-let* (more ...) . body)
-	 #f))
+     (and-let* (more ...) . body)
+     #f))
     ((and-let* (var more ...) . body)
      (if var
-	 (and-let* (more ...) . body)
-	 #f))))
+     (and-let* (more ...) . body)
+     #f))))
 
 ;(define-syntax expect
 ;  (syntax-rules ()

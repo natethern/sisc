@@ -2,9 +2,8 @@ package sisc.data;
 
 import java.io.*;
 import sisc.interpreter.*;
-import sisc.io.ValueWriter;
-import sisc.io.WriterOutputPort;
 import sisc.io.SharedValueWriter;
+import sisc.io.ValueWriter;
 import sisc.util.Defaults;
 import sisc.util.InternedValue;
 
@@ -89,11 +88,10 @@ public abstract class Value extends Expression implements Immediate {
 
     public String toString() {
         StringWriter sw = new StringWriter();
-        WriterOutputPort p = new WriterOutputPort(sw, false);
-        ValueWriter w = new SharedValueWriter(p, false, false);
+        ValueWriter w = new SharedValueWriter(sw, false, false);
         try {
             w.write(this);
-            p.close();
+            sw.close();
         } catch (IOException e) {
             //shouldn't happen since we are writing to string
         }

@@ -1,11 +1,13 @@
+/*
+ * $Id$
+ */
 package sisc.io;
 
 import java.io.IOException;
 
-public interface Port { 
+public interface Port {
 
-    void close() throws IOException;
-
+    public void close() throws IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public
@@ -39,4 +41,3 @@ public interface Port {
  * may use your version of this file under either the MPL or the
  * GPL.
  */
-

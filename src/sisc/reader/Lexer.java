@@ -2,7 +2,6 @@ package sisc.reader;
 
 import java.io.*;
 import sisc.data.*;
-import sisc.io.InputPort;
 import sisc.util.Util;
 import sisc.util.Defaults;
 
@@ -69,7 +68,7 @@ public class Lexer implements Tokens {
     public Quantity nval;
     public Pair prval;
 
-    public int readIgnoringWhitespace(InputPort is)
+    public int readIgnoringWhitespace(PushbackReader is)
     throws IOException {
         char c=0;
 
@@ -80,12 +79,12 @@ public class Lexer implements Tokens {
         return c;
     }
 
-    public int nextToken(InputPort is, int radix) throws IOException {
+    public int nextToken(PushbackReader is, int radix) throws IOException {
         int nt=_nextToken(is, radix);
         return nt;
     }
 
-    public int _nextToken(InputPort is, int radix)
+    public int _nextToken(PushbackReader is, int radix)
     throws IOException {
 
         synchronized(is) {
@@ -117,10 +116,10 @@ public class Lexer implements Tokens {
                 if (sc==UNQUOTE_SPLICING)
                     return TT_UNQUOTE_SPLICING;
                 else
-                    is.pushback(sc);
+                    is.unread(sc);
                 return TT_UNQUOTE;
             default:
-                is.pushback(c);
+                is.unread(c);
                 String v=readToBreak(is, special, true, false);
 
                 if (c=='\\') 
@@ -152,19 +151,19 @@ public class Lexer implements Tokens {
         }
     }
 
-    public int readChar(InputPort is) throws IOException {
+    public int readChar(PushbackReader is) throws IOException {
         return readChar(is, true, false, true); 
     }
 
-    public int readPureChar(InputPort is) throws IOException {
+    public int readPureChar(PushbackReader is) throws IOException {
         return readChar(is, true, false, false); 
     }
 
-    public int readChar(InputPort is, boolean handleEscapes, 
+    public int readChar(PushbackReader is, boolean handleEscapes, 
                         boolean invertEscaped, boolean respectReserved) 
         throws IOException {
         int c=is.read();
-
+        if (c==-1) throw new EOFException();
         if (strictR5RS && respectReserved && in((char)c, reserved)) 
             throw new IOException(Util.liMessage(Util.SISCB, "reservedchar", 
                                                  new String(new char[] {
@@ -176,7 +175,7 @@ public class Lexer implements Tokens {
         return (invertEscaped ? -rv : rv);
     }
 
-    public String readToEndOfString(InputPort is)
+    public String readToEndOfString(PushbackReader is)
     throws IOException {
         StringBuffer b=new StringBuffer();
         int x;
@@ -185,7 +184,7 @@ public class Lexer implements Tokens {
         return b.toString();
     }
 
-    public String readToBreak(InputPort is, char[] stops, 
+    public String readToBreak(PushbackReader is, char[] stops, 
                               boolean handleEscapes, boolean ignoreEscapedBreaks)
     throws IOException {
         StringBuffer b=new StringBuffer();
@@ -203,7 +202,7 @@ public class Lexer implements Tokens {
                     break;
                 b.append(c);
             } while (true);
-            is.pushback(c);
+            is.unread(c);
         } catch (EOFException e) {
         }
         return b.toString();
@@ -227,7 +226,7 @@ public class Lexer implements Tokens {
             if (in(c.charAt(i), set)) return true;
         return false;
     }
-    public void skipMultilineComment(InputPort in) 
+    public void skipMultilineComment(PushbackReader in) 
         throws IOException {
         boolean seenSharp=false, seenPipe=false;
         int depth=0;

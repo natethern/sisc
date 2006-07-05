@@ -3,8 +3,6 @@
   <java.lang.process>
   <java.io.file>
   <java.lang.string*>
-  <sisc.io.stream-input-port>
-  <sisc.io.stream-output-port>
   <java.lang.string>)
   
 (define-generic-java-methods
@@ -38,48 +36,48 @@
 (define (get-process-stdout process)
   (make <native-input-port>
     (java-unwrap 
-      (java-new <sisc.io.stream-input-port> 
+      (java-new <character-input-port> 
                 (get-input-stream process)))))
 
 (define (get-process-stderr process)
   (make <native-input-port>
     (java-unwrap 
-      (java-new <sisc.io.stream-input-port> 
+      (java-new <character-input-port> 
               (get-error-stream process)))))
 
 (define (get-process-stdin process . aflush)
   (make <native-output-port>
     (java-unwrap 
-      (java-new <sisc.io.stream-output-port> 
+      (java-new <character-output-port> 
                 (get-output-stream process)
-	       (->jboolean (if (null? aflush) #f (car aflush)))))))
-	    
+           (->jboolean (if (null? aflush) #f (car aflush)))))))
+        
 (define (spawn-process progname . arglist)
   (let ([runtime (get-runtime)])
     (if (null? arglist)
         (exec runtime (->jstring progname))
         (exec runtime 
-	     (->jarray (map ->jstring (cons progname (car arglist)))
-		       <java.lang.string>)))))
+         (->jarray (map ->jstring (cons progname (car arglist)))
+    	       <java.lang.string>)))))
 
 (define (assoc->envp assoc)
   (->jarray (map (lambda (binding)
-		   (->jstring 
+    	   (->jstring 
                        (format "~a=~a" (car binding) (cdr binding))))
-	        assoc)
-	   <java.lang.string>))
+            assoc)
+       <java.lang.string>))
 
 (define (spawn-process-with-environment progname arglist env . working-dir)
   (let ([runtime (get-runtime)])
     (exec runtime 
-	  (->jarray (map ->jstring (cons progname arglist))
-		   <java.lang.string>)
-	  (if env (assoc->envp env) (java-null <java.lang.string*>))
-	  (java-new <java.io.file> 
-		   (->jstring 
-		    (if (null? working-dir)
-			(current-directory)
-			(normalize-url (car working-dir))))))))
+      (->jarray (map ->jstring (cons progname arglist))
+    	   <java.lang.string>)
+      (if env (assoc->envp env) (java-null <java.lang.string*>))
+      (java-new <java.io.file> 
+    	   (->jstring 
+    	    (if (null? working-dir)
+    		(current-directory)
+    		(normalize-url (car working-dir))))))))
 
 ;; 
 ;; The contents of this file are subject to the Mozilla Public

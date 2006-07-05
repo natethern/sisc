@@ -1,12 +1,64 @@
-package sisc.io;
+/*
+ * $Id$
+ */
+package sisc.io.custom;
 
 import java.io.IOException;
+import java.io.Reader;
 
+import sisc.data.Pair;
+import sisc.data.Procedure;
+import sisc.data.Quantity;
+import sisc.data.SchemeString;
 import sisc.data.Value;
+import sisc.util.Util;
 
-public interface SerialInputPort extends BinaryInputPort {
+public class SchemeReader extends Reader implements CustomPortProxy {
 
-    Value readSer() throws IOException;
+    Procedure read, readString, ready, close;
+    
+    public SchemeReader(Procedure read, Procedure readString, Procedure ready, Procedure close) {
+        this.read=read;
+        this.readString=readString;
+        this.ready=ready;
+        this.close=close;
+    }
+
+    Value host;
+
+    public Value getHost() {
+    	return host;
+    }
+
+    public void setHost(Value host) {
+    	this.host = host;
+    }
+
+    public Pair getProcs() {
+    	return Util.list(read, readString, ready, close);
+    }
+
+    public int read() throws IOException {
+        return Util.num(IOUtils.bridge(read, getHost())).intValue();
+    }
+    
+    public int read(char[] buffer, int offset, int length) throws IOException {
+        return Util.num(IOUtils.bridge(readString,  
+                new Value[] {
+        			getHost(), 
+        			new SchemeString(buffer), 
+        			Quantity.valueOf(offset), 
+        			Quantity.valueOf(length)})) 
+                .intValue();        
+    }
+    
+    public boolean ready() throws IOException {
+        return Util.truth(IOUtils.bridge(ready, getHost()));        
+    }
+
+    public void close() throws IOException {
+        IOUtils.bridge(close, getHost());
+    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

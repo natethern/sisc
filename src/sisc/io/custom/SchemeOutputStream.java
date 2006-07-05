@@ -1,11 +1,59 @@
-package sisc.io;
+/*
+ * $Id$
+ */
+package sisc.io.custom;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
-public interface BinaryOutputPort extends OutputPort {
+import sisc.data.Pair;
+import sisc.data.Procedure;
+import sisc.data.Quantity;
+import sisc.data.Value;
+import sisc.modules.io.Buffer;
+import sisc.util.Util;
 
-    void write(int b) throws IOException;
-    void write(byte[] b, int offset, int length) throws IOException;
+public class SchemeOutputStream extends OutputStream implements CustomPortProxy {
+
+    Procedure write, writeBlock, flush, close;
+    
+    public SchemeOutputStream(Procedure write, Procedure writeBlock, Procedure flush, Procedure close) {
+        this.write=write;
+        this.writeBlock=writeBlock;
+        this.flush=flush;
+        this.close=close;
+    }
+
+    Value host;
+
+    public Value getHost() {
+    	return host;
+    }
+
+    public void setHost(Value host) {
+    	this.host = host;
+    }
+
+    public Pair getProcs() {
+    	return Util.list(write, writeBlock, flush, close);
+    }
+
+    public void write(int c) throws IOException {
+        IOUtils.bridge(write, new Value[] {getHost(), Quantity.valueOf(c)});        
+    }
+    
+    public void write(byte[] b, int offset, int length) throws IOException {
+        IOUtils.bridge(writeBlock, new Value[] { getHost(),
+                new Buffer(b), Quantity.valueOf(offset), Quantity.valueOf(length)});         
+    }
+    
+    public void flush() throws IOException {
+        IOUtils.bridge(flush, getHost());
+    }
+
+    public void close() throws IOException {
+        IOUtils.bridge(close, getHost());
+    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

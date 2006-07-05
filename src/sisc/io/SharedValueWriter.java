@@ -1,6 +1,7 @@
 package sisc.io;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -15,7 +16,7 @@ public class SharedValueWriter extends PortValueWriter {
     private List visited;
     private int count;
 
-    public SharedValueWriter(OutputPort port,
+    public SharedValueWriter(Writer port, 
                              boolean vectorLengthPrefixing,
         boolean caseSensitive) {
         super(port, vectorLengthPrefixing, caseSensitive);

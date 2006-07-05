@@ -2,9 +2,9 @@
 
 (define (fold kons knil lis)
   (let lp ((lis lis) (ans knil))
-	(if (null? lis)
+    (if (null? lis)
         ans
-	    (lp (cdr lis) (kons (car lis) ans)))))
+        (lp (cdr lis) (kons (car lis) ans)))))
 
 
 ;;;;;;;;;; REFLECTION PASS-THROUGH ;;;;;;;;;;

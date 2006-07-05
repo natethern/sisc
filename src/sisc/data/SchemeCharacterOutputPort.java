@@ -1,39 +1,35 @@
-package sisc.io;
+package sisc.data;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Writer;
 
-public class ReaderInputPort extends PushbackInputPort {
-    protected Reader r;
+import sisc.data.NamedValue;
+import sisc.io.OutputPort;
+import sisc.io.ValueWriter;
 
-    public ReaderInputPort(InputStream in, Charset encoding) {
-        this(new BufferedReader(encoding.newInputStreamReader(in)));
+public class SchemeCharacterOutputPort extends Value 
+    implements OutputPort, NamedValue {
+
+    protected Writer writer;
+    
+    public SchemeCharacterOutputPort(Writer w) {
+        writer=w;
     }
     
-    public ReaderInputPort(Reader in) {
-        this.r=in;
+    public Writer getWriter() {
+        return writer;
+    }
+    
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, "character-output-port");
     }
 
-    public Reader getReader() {
-        return r;
+    public void flush() throws IOException {
+        writer.flush();        
     }
-
-    public int readHelper() throws IOException {
-        return r.read();
-    }
-
-    public boolean ready() throws IOException {
-        return r.ready();
-    }
-
-    /*
-    public int readHelper(byte[] buff, int offs, 
-                          int count) throws IOException {
-        throw new IOException(liMessage(SISCB, "binaryreadunsup"));
-    }
-    */
 
     public void close() throws IOException {
-        r.close();
+        writer.close();
     }
 }
 /*

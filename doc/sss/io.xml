@@ -140,28 +140,92 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     <sect2>
       <title>Buffered I/O</title>
       <para>
-          &SISC; extends the &R5RS; standard's port-creation functions
-        in order to provide buffered output ports.  All &SISC; output
-        ports are buffered, and a programmer may choose whether a
-        given port should automatically flush after each write
-        operation.  By default ports do <emphasis>not</emphasis>
-        automatically flush
-        <footnote>
-          <para>
-            The console output port is an exception, as it is
-            an auto-flush port.
-          </para>
-        </footnote>.  Enabling auto-flush can be done when the
-        port is created per the specifications of the output port
-        constructors in following sections.  A port that
-        does not automatically flush can be flushed at any time by
-        calling <computeroutput>flush-output-port</computeroutput>.
-        Finally, an output-port that does not automatically flush will
-        be flushed when the port is closed with
-        <computeroutput>close-output-port</computeroutput>, but may
-        not be flushed if the Scheme system is exited without closing
-        the port.
-      </para>
+		Buffered ports are provided in &SISC; to layer over any existing
+		port, and read or write in larger, more efficient chunks.
+	    Buffered ports are created with the following constructors, which
+	    accept the underlying port and an optional size, indicating the number
+	    of bytes or characters to buffer before making an underlying read or write.
+	  </para>
+      <blockquote>
+        <para>
+          <indexterm><primary>open-buffered-binary-input-port</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>binary-input-port</type>
+            <methodname>open-buffered-binary-input-port</methodname>
+            <methodparam>
+              <parameter>binary-input-port</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Creates a binary-input-port which is buffered, and
+              reads its bytes from the provided port.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>open-buffered-binary-output-port</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>binary-output-port</type>
+            <methodname>open-buffered-binary-output-port</methodname>
+            <methodparam>
+              <parameter>binary-output-port</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Creates a binary-output-port which is buffered, and
+              writes its bytes to the provided port.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>open-buffered-character-input-port</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>character-input-port</type>
+            <methodname>open-buffered-character-input-port</methodname>
+            <methodparam>
+              <parameter>character-input-port</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Creates a character-input-port which is buffered, and
+              reads its characters from the provided port.
+            </para>
+          </blockquote>
+        </para>
+        <para>
+          <indexterm><primary>open-buffered-character-output-port</primary>
+          </indexterm>
+          &procedure;
+          <methodsynopsis language="scheme">
+            <type>character-output-port</type>
+            <methodname>open-buffered-character-output-port</methodname>
+            <methodparam>
+              <parameter>character-output-port</parameter>
+            </methodparam>
+          </methodsynopsis>
+          <blockquote>
+            <para>
+              Creates a character-output-port which is buffered, and
+              writes its characters to the provided port.
+            </para>
+          </blockquote>
+        </para>
+      </blockquote>
+      <para>
+        With buffered output ports, individual writes may not actually 
+		reach the eventual output source, so the programmer must explicitly
+		flush the port when it the output data <emphasis>must</emphasis>
+		reach its destination.  
+      </para>	        
       <blockquote>
         <para>
           <indexterm><primary>flush-output-port</primary>
@@ -178,10 +242,9 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             <para>
               Causes the specified
               <parameter>output-port</parameter>'s buffered data to be
-              written immediately.  This operation is allowed on both
-              auto-flush and non-auto-flush output ports, though it
-              has no effect on the
-              former. <parameter>output-port</parameter> defaults to
+              written immediately.  This operation is allowed on any
+              output port, but may have no affect on some.
+              <parameter>output-port</parameter> defaults to
               <literal>current-output-port</literal>.
             </para>
           </blockquote>
@@ -2953,328 +3016,566 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
     <para>
         &requires;
       <emphasis role="bold">
-        (import <emphasis>generic-io</emphasis>)
+        (import <emphasis>custom-io</emphasis>)
       </emphasis>
     </para>
     <para>
       &SISC; provides the ability to create new I/O port types from
-      within Scheme.  The &SISC; I/O facilities are built atop the
-      generic procedures library described in <xref
-      linkend="GenericProcedures"/>, and the object system
-      from <xref linkend="ObjectSystem"/>.  To add a new port type, the
-      programmer simply creates a new port class which extends from
-      any existing port class, and then defines methods to implement
-      the basic functionality of the port.  The classes and required
-      methods are described in the following sections.
+      within Scheme.  To add a new port type, one invokes a 
+      custom port constructors described below, passing 
+      procedures (Scheme or otherwise) which implement the operations
+      required by that port.  Each custom port constructor returns 
+      a Scheme port which may be used with any of the &SISC; or &R5RS;
+      I/O functions.  Port implementors may also use an associated
+      <emphasis>port-local</emphasis> value to coordinate state
+      for some specialized ports.
     </para>
-    <sect2 id="GIOPortTypes">
-      <title>Built-in Type Hierarchy</title>
-      <para>
-        &SISC; provides a number of fundamental and utility port
-        types which may be subclassed to create new port types.  The
-        following class definitions describe them:
-      </para>
-<programlisting>
+    <para>
+      <blockquote>
+	<para>
+	  <indexterm><primary>set-port-local!</primary>
+	  </indexterm>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>value</type>
+	    <methodname>set-port-local!</methodname>
+	    <methodparam>
+	      <parameter>custom-port</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>value</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Sets the port-local value of the given custom port.
+	    </para>
+	  </blockquote>
+	</para>
+	<para>
+	  <indexterm><primary>port-local</primary>
+	  </indexterm>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>value</type>
+	    <methodname>port-local</methodname>
+	    <methodparam>
+	      <parameter>wrapper-stream</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Gets the port-local value of the given custom port.
+	    </para>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </para>
+    <para>
+      <blockquote>
+	<para>
+	  <indexterm><primary>make-custom-character-input-port</primary>
+	  </indexterm>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>character-input-port</type>
+	    <methodname>make-custom-character-input-port</methodname>
+	    <methodparam>
+	      <parameter>read</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>read-string</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>ready?</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>close</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Creates a character-input-port whose functionality is
+	      implemented by the four provided fundamental procedures.
+	    </para>
+	    <para>
+	      The fundamental procedures required are as follows:
+	    </para>
+	    <methodsynopsis language="scheme">
+	      <type>integer</type>
+	      <methodname>read</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Return a character as an integer value, or -1 if the end of 
+		stream has been reached.  
+		<parameter>port</parameter> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>integer</type>
+	      <methodname>read-string</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>mutable-string</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>offset</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>count</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Reads up to <parameter>count</parameter> characters 
+		into the given mutable string at position 
+		<parameter>offset</parameter>.  The number of
+		actual characters read are returned as an integer
+		value, or -1 if the end of stream has been reached.  
+		<parameter>port</parameter> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>boolean</type>
+	      <methodname>ready?</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Returns a non-false value if one or more characters
+		are available for reading, false otherwise.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>close</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Closes the port.
+	      </para>
+	    </blockquote>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </para>
+    <para>
+      <blockquote>
+	<para>
+	  <indexterm><primary>make-custom-binary-input-port</primary>
+	  </indexterm>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>binary-input-port</type>
+	    <methodname>make-custom-binary-input-port</methodname>
+	    <methodparam>
+	      <parameter>read</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>read-block</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>available</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>close</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Creates a binary-input-port whose functionality is
+	      implemented by the four provided fundamental procedures.
+	    </para>
+	    <para>
+	      The fundamental procedures required are as follows:
+	    </para>
+	    <methodsynopsis language="scheme">
+	      <type>integer</type>
+	      <methodname>read</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Return a byte as an integer value, or -1 if the end of 
+		stream has been reached. 
+		<parameter>port</parameter> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>integer</type>
+	      <methodname>read-block</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>buffer</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>offset</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>count</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Reads up to <parameter>count</parameter> bytes
+		into the given binary buffer at position 
+		<parameter>offset</parameter>.  The number of
+		actual bytes read are returned as an integer
+		value, or -1 if the end of stream has been reached.  
+		<parameter>port</parameter> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>integer</type>
+	      <methodname>available</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Returns a count of the number of bytes which
+		are available for reading.  This number need 
+		not be accurate.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>close</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Closes the port.
+	      </para>
+	    </blockquote>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </para>
+    <para>
+      <blockquote>
+	<para>
+	  <indexterm><primary>make-custom-character-output-port</primary>
+	  </indexterm>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>character-output-port</type>
+	    <methodname>make-custom-character-output-port</methodname>
+	    <methodparam>
+	      <parameter>write</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>write-string</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>flush</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>close</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Creates a character-output-port whose functionality is
+	      implemented by the four provided fundamental procedures.
+	    </para>
+	    <para>
+	      The fundamental procedures required are as follows:
+	    </para>
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>write</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>byte</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Writes a character represented as an integer value.
+		<parameter>port</parameter> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>void</type>
+	      <methodname>write-string</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>string</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>offset</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>count</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Writes <parameter>count</parameter> characters 
+		from the given string at position 
+		<parameter>offset</parameter>. 
+		<parameter>port</parameter> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>flush</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Flushes any unwritten characters to the stream.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>close</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Closes the port.
+	      </para>
+	    </blockquote>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </para>
+    <para>
+      <blockquote>
+	<para>
+	  <indexterm><primary>make-custom-binary-output-port</primary>
+	  </indexterm>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>binary-output-port</type>
+	    <methodname>make-custom-binary-output-port</methodname>
+	    <methodparam>
+	      <parameter>write</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>write-block</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>flush</parameter>
+	    </methodparam>
+	    <methodparam>
+	      <parameter>close</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Creates a binary-output-port whose functionality is
+	      implemented by the four provided fundamental procedures.
+	    </para>
+	    <para>
+	      The fundamental procedures required are as follows:
+	    </para>
+	    <para>
+	      The fundamental procedures required are as follows:
+	    </para>
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>write</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>byte</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Writes a byte represented as an integer value.
+		<parameter>port</parameter> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>void</type>
+	      <methodname>write-block</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>buffer</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>offset</parameter>
+	      </methodparam>
+	      <methodparam>
+		<parameter>count</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Writes <parameter>count</parameter> bytes
+		from the given binary buffer at position 
+		<parameter>offset</parameter>. 
+		<parameter>port</parameter> is a reference to the
+		custom Scheme port which contains the procedure.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>flush</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Flushes any unwritten characters to the stream.
+	      </para>
+	    </blockquote>
+	    <methodsynopsis language="scheme">
+	      <type>undefined</type>
+	      <methodname>close</methodname>
+	      <methodparam>
+		<parameter>port</parameter>
+	      </methodparam>
+	    </methodsynopsis>
+	    <blockquote>
+	      <para>
+		Closes the port.
+	      </para>
+	    </blockquote>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </para>
+    <para>
+      Finally, the underlying procedures which implement a custom port
+      can be retrieved with the following function:
+    </para>
+    <para>
+      <blockquote>
+	<para>
+	  <indexterm><primary>custom-port-procedures</primary>
+	  </indexterm>
+	  &procedure;
+	  <methodsynopsis language="scheme">
+	    <type>list</type>
+	    <methodname>custom-port-procedures</methodname>
+	    <methodparam>
+	      <parameter>custom-port</parameter>
+	    </methodparam>
+	  </methodsynopsis>
+	  <blockquote>
+	    <para>
+	      Returns the procedures which implement a custom port
+	      as a list.
+	    </para>
+	  </blockquote>
+	</para>
+      </blockquote>
+    </para>
+    <para>
+      As an example, here are String Ports, implemented as user
+      defined ports:
+    </para>
+    <example>
+      <title>User defined string ports</title>
+      <programlisting>
+(import custom-io)
 
-  (define-class (&lt;port&gt;))
+;; String Input Ports
 
-  (define-class (&lt;input-port&gt; &lt;port&gt;))
-  (define-class (&lt;output-port&gt; &lt;port&gt;))
+(define (sio/read port)
+  (let ([local (port-local port)])
+    (let ([ptr (vector-ref local 1)])
+      (if (= (vector-ref local 2) ptr)
+          -1
+          (let ([c (char-&gt;integer
+                    (string-ref (vector-ref local 0) ptr))])
+            (vector-set! local 1 (+ ptr 1))
+            c)))))
 
-  (define-class (&lt;character-input-port&gt; &lt;input-port&gt;))
-  (define-class (&lt;character-output-port&gt; &lt;output-port&gt;))
+(define (sio/read-string local buffer offset length)
+  (let ([local (port-local port)])
+    (let ([str (vector-ref local 0)]
+          [strlen (vector-ref local 2)])
+      (do ([i offset (+ i 1)]
+           [j (vector-ref local 1) (+ j 1)]
+           [c 0 (+ c 1)])
+          ((or (= i (+ offset length))
+               (= j strlen))
+           (vector-set! local 1 (+ ptr 1))
+           c)
+        (string-set! buffer i (string-ref str j))))))
 
-  (define-class (&lt;filter-input-port&gt; &lt;input-port&gt;)
-    (in :in :in!))
-  (define-class (&lt;filter-output-port&gt; &lt;output-port&gt;)
-    (out :out :out!)
-    (auto-flush :aflush :aflush!))
+(define null (lambda args (void)))
 
-  (define-class (&lt;native-input-port&gt; &lt;filter-input-port&gt;))
-  (define-class (&lt;native-output-port&gt; &lt;filter-output-port&gt;))
+(define (open-input-string str)
+  (unless (string? str)
+    (error 'open-input-string "expected string, got '~a'.~%" str))
+  (let ([port (make-custom-character-input-port
+               sio/read sio/read-string null null)])
+    ; Use the port local value to store the string and a pointer
+    ; for the current position
+    (set-port-local! port (vector str 0 (string-length str)))
+    port))
 
-  (define-class (&lt;native-character-input-port&gt;
-                 &lt;native-input-port&gt; &lt;character-input-port&gt;))
-  (define-class (&lt;native-character-output-port&gt;
-                 &lt;native-output-port&gt; &lt;character-output-port&gt;))
 
+;; String Output Ports
+
+(define (sio/write port char)
+  (set-port-local! port
+    (cons char (port-local port))))
+
+(define (sio/write-string port string offset length)
+  (set-port-local! port
+   (append (reverse (string->list (substring string offset (+ length offset))))
+           (port-local port))))
+
+(define (open-output-string)
+  (let ([port
+         (make-custom-character-output-port
+          sio/write sio/write-string null null)])
+    (set-port-local! port '())
+    port))
+
+(define (get-output-string port)
+  (flush-output-port port)
+  (let ([str (apply string
+                    (reverse (port-local port)))])
+    (set-port-local! port '())
+    str))
       </programlisting>
-      <para>
-        At the top of the hierarchy is the
-        <literal>&lt;port&gt;</literal> class, which is naturally
-        followed by the <literal>&lt;input-port&gt;</literal> and
-        <literal>&lt;output-port&gt;</literal>.  The default input and
-        output port types are binary.  The character port classes
-        which follow set the type of character ports.  Below those are
-        filter ports, which provide a slot for storing a nested port.
-        In a filter port, the methods transform the operation and read
-        or write the resulting data to the nested port.  Finally, the
-        native port types are filter ports whose target is a Java
-        I/O stream.
-      </para>
-      <para>
-        Most often the filter ports or both a filter and a character
-        port types are the natural supertypes for
-        newly created port types.
-      </para>
-      <para>
-        All ports must define the <function>gio/close</function>
-        method.
-      </para>
-      <para>
-        <blockquote>
-          <para>
-            <indexterm><primary>gio/close</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>undefined</type>
-              <methodname>gio/close</methodname>
-              <methodparam>
-                <parameter>new-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-          </para>
-        </blockquote>
-      </para>
-    </sect2>
-    <sect2>
-      <title>Input Generics</title>
-      <para>
-        The following generic procedures must be utilized to create
-        an input port (unless the supertype already provides a
-        satisfactory behavior).  Their behavior should be the same as
-        the &R5RS; input functions or the &SISC; functions of the same
-        name less the <literal>gio/</literal> prefix.
-      </para>
-      <para>
-        <blockquote>
-          <para>
-            <indexterm><primary>gio/char-ready?</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>boolean</type>
-              <methodname>gio/char-ready?</methodname>
-              <methodparam>
-                <parameter>new-input-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-          </para>
-          <para>
-            <indexterm><primary>gio/read</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>gio/read</methodname>
-              <methodparam>
-                <parameter>new-input-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-          </para>
-          <para>
-            <indexterm><primary>gio/read-char</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>character/byte</type>
-              <methodname>gio/read-char</methodname>
-              <methodparam>
-                <parameter>new-input-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-          </para>
-          <para>
-            <indexterm><primary>gio/read-code</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>value</type>
-              <methodname>gio/read-code</methodname>
-              <methodparam>
-                <parameter>new-input-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-          </para>
-          <para>
-            <indexterm><primary>gio/read-block</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>integer</type>
-              <methodname>gio/read-block</methodname>
-              <methodparam>
-                <parameter>buffer</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>offset</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>count</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>new-input-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Only applies to binary ports.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>gio/read-string</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>integer</type>
-              <methodname>gio/read-string</methodname>
-              <methodparam>
-                <parameter>string</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>offset</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>count</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>new-input-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Only applies to character-ports.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>
-    </sect2>
-    <sect2>
-      <title>Output Generics</title>
-      <para>
-        The following generic procedures must be utilized to create
-        an output port (unless the supertype already provides a
-        satisfactory behavior).  Their behavior should be the same as
-        the &R5RS; output functions or the &SISC; functions of the same
-        name less the <literal>gio/</literal> prefix.
-      </para>
-      <para>
-        <blockquote>
-          <para>
-            <indexterm><primary>gio/flush-output-port</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>undefined</type>
-              <methodname>gio/flush-output-port</methodname>
-              <methodparam>
-                <parameter>new-output-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-          </para>
-          <para>
-            <indexterm><primary>gio/write</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>undefined</type>
-              <methodname>gio/write</methodname>
-              <methodparam>
-                <parameter>value</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>new-output-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-          </para>
-          <para>
-            <indexterm><primary>gio/display</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>undefined</type>
-              <methodname>gio/display</methodname>
-              <methodparam>
-                <parameter>value</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>new-output-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-          </para>
-          <para>
-            <indexterm><primary>gio/write-char</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>undefined</type>
-              <methodname>gio/write-char</methodname>
-              <methodparam>
-                <parameter>character/byte</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>new-output-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-          </para>
-          <para>
-            <indexterm><primary>gio/write-block</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>undefined</type>
-              <methodname>gio/write-block</methodname>
-              <methodparam>
-                <parameter>buffer</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>offset</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>count</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>new-output-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Only applies to binary ports.
-              </para>
-            </blockquote>
-          </para>
-          <para>
-            <indexterm><primary>gio/write-string</primary>
-            </indexterm>
-            &procedure;
-            <methodsynopsis language="scheme">
-              <type>undefined</type>
-              <methodname>gio/write-string</methodname>
-              <methodparam>
-                <parameter>string</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>offset</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>count</parameter>
-              </methodparam>
-              <methodparam>
-                <parameter>new-output-port-type</parameter>
-              </methodparam>
-            </methodsynopsis>
-            <blockquote>
-              <para>
-                Only applies to character-ports.
-              </para>
-            </blockquote>
-          </para>
-        </blockquote>
-      </para>
-    </sect2>
+    </example>
   </sect1>
   <sect1>
     <title>Miscellaneous</title>

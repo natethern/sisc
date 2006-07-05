@@ -31,7 +31,7 @@
       (and (not (< (string-length s1) l))
            (string-ci=? (substring s1 0 l) s2))))
   (let ([osn (getenv "os.name")])
-	(cond [(string-starts-with-ci? osn "win") 'ms-dos]
+    (cond [(string-starts-with-ci? osn "win") 'ms-dos]
           [(string-starts-with-ci? osn "mac") 'macos]
           [(string-starts-with-ci? osn "os/2") 'os2]
           [(string-starts-with-ci? osn "openvms") 'vms]
@@ -63,78 +63,78 @@
 ;;; initially supported by this implementation.
 (define *features*
       '(
-	source				;can load scheme source files
-					;(SLIB:LOAD-SOURCE "filename")
+    source				;can load scheme source files
+    				;(SLIB:LOAD-SOURCE "filename")
 ;;;	compiled			;can load compiled files
-					;(SLIB:LOAD-COMPILED "filename")
-	vicinity
-	srfi-59
+    				;(SLIB:LOAD-COMPILED "filename")
+    vicinity
+    srfi-59
 
-		       ;; Scheme report features
+    	       ;; Scheme report features
    ;; R5RS-compliant implementations should provide all 9 features.
 
-	r5rs				;conforms to
-	eval				;R5RS two-argument eval
-	values				;R5RS multiple values
-	dynamic-wind			;R5RS dynamic-wind
-	macro				;R5RS high level macros
-	delay				;has DELAY and FORCE
-	multiarg-apply			;APPLY can take more than 2 args.
-	char-ready?
-	rev4-optional-procedures	;LIST-TAIL, STRING-COPY,
-					;STRING-FILL!, and VECTOR-FILL!
+    r5rs				;conforms to
+    eval				;R5RS two-argument eval
+    values				;R5RS multiple values
+    dynamic-wind			;R5RS dynamic-wind
+    macro				;R5RS high level macros
+    delay				;has DELAY and FORCE
+    multiarg-apply			;APPLY can take more than 2 args.
+    char-ready?
+    rev4-optional-procedures	;LIST-TAIL, STRING-COPY,
+    				;STRING-FILL!, and VECTOR-FILL!
 
       ;; These four features are optional in both R4RS and R5RS
 
-	multiarg/and-			;/ and - can take more than 2 args.
-	rationalize
-	transcript			;TRANSCRIPT-ON and TRANSCRIPT-OFF
-	with-file			;has WITH-INPUT-FROM-FILE and
-					;WITH-OUTPUT-TO-FILE
+    multiarg/and-			;/ and - can take more than 2 args.
+    rationalize
+    transcript			;TRANSCRIPT-ON and TRANSCRIPT-OFF
+    with-file			;has WITH-INPUT-FROM-FILE and
+    				;WITH-OUTPUT-TO-FILE
 
-	r4rs				;conforms to
+    r4rs				;conforms to
 
-	ieee-p1178			;conforms to
+    ieee-p1178			;conforms to
 
-	r3rs				;conforms to
+    r3rs				;conforms to
 
 ;;;	rev2-procedures			;SUBSTRING-MOVE-LEFT!,
-					;SUBSTRING-MOVE-RIGHT!,
-					;SUBSTRING-FILL!,
-					;STRING-NULL?, APPEND!, 1+,
-					;-1+, <?, <=?, =?, >?, >=?
-	object-hash			;has OBJECT-HASH
+    				;SUBSTRING-MOVE-RIGHT!,
+    				;SUBSTRING-FILL!,
+    				;STRING-NULL?, APPEND!, 1+,
+    				;-1+, <?, <=?, =?, >?, >=?
+    object-hash			;has OBJECT-HASH
 
-	full-continuation		;can return multiple times
-	ieee-floating-point		;conforms to IEEE Standard 754-1985
-					;IEEE Standard for Binary
-					;Floating-Point Arithmetic.
+    full-continuation		;can return multiple times
+    ieee-floating-point		;conforms to IEEE Standard 754-1985
+    				;IEEE Standard for Binary
+    				;Floating-Point Arithmetic.
 
-			;; Other common features
+    		;; Other common features
 
-	srfi				;srfi-0, COND-EXPAND finds all srfi-*
+    srfi				;srfi-0, COND-EXPAND finds all srfi-*
 ;;;	sicp				;runs code from Structure and
-					;Interpretation of Computer
-					;Programs by Abelson and Sussman.
-	defmacro			;has Common Lisp DEFMACRO
-	record				;has user defined data structures
-	string-port			;has CALL-WITH-INPUT-STRING and
-					;CALL-WITH-OUTPUT-STRING
+    				;Interpretation of Computer
+    				;Programs by Abelson and Sussman.
+    defmacro			;has Common Lisp DEFMACRO
+    record				;has user defined data structures
+    string-port			;has CALL-WITH-INPUT-STRING and
+    				;CALL-WITH-OUTPUT-STRING
 ;;;	sort
-	pretty-print
-	object->string
+    pretty-print
+    object->string
 ;;;	format				;Common-lisp output formatting
-	trace				;has macros: TRACE and UNTRACE
+    trace				;has macros: TRACE and UNTRACE
 ;;;	compiler			;has (COMPILER)
 ;;;	ed				;(ED) is editor
 ;;;	system				;posix (system <string>)
-	getenv				;posix (getenv <string>)
+    getenv				;posix (getenv <string>)
 ;;;	program-arguments		;returns list of strings (argv)
 ;;;	current-time			;returns time in seconds since 1/1/1970
 
-		  ;; Implementation Specific features
+    	  ;; Implementation Specific features
 
-	))
+    ))
 
 ;;@ (OUTPUT-PORT-WIDTH <port>)
 (define (output-port-width . arg)
@@ -173,7 +173,7 @@
     (lambda ()
       (set! cntr (+ 1 cntr))
       (let ((tmp (string-append "slib_" (number->string cntr))))
-	(if (file-exists? tmp) (tmpnam) tmp)))))
+    (if (file-exists? tmp) (tmpnam) tmp)))))
 
 ;;@ (FILE-EXISTS? <string>)
 ;;(define (file-exists? f) #f)
@@ -213,27 +213,27 @@
 (define macro:load load)
 (define *defmacros*
   (list (cons 'defmacro
-	      (lambda (name parms . body)
-		`(set! *defmacros* (cons (cons ',name (lambda ,parms ,@body))
-					 *defmacros*))))))
+          (lambda (name parms . body)
+    	`(set! *defmacros* (cons (cons ',name (lambda ,parms ,@body))
+    				 *defmacros*))))))
 ;@
 (define (defmacro? m) (and (assq m *defmacros*) #t))
 ;@
 (define (macroexpand-1 e)
   (if (pair? e)
       (let ((a (car e)))
-	(cond ((symbol? a) (set! a (assq a *defmacros*))
-	       (if a (apply (cdr a) (cdr e)) e))
-	      (else e)))
+    (cond ((symbol? a) (set! a (assq a *defmacros*))
+           (if a (apply (cdr a) (cdr e)) e))
+          (else e)))
       e))
 ;@
 (define (macroexpand e)
   (if (pair? e)
       (let ((a (car e)))
-	(cond ((symbol? a)
-	       (set! a (assq a *defmacros*))
-	       (if a (macroexpand (apply (cdr a) (cdr e))) e))
-	      (else e)))
+    (cond ((symbol? a)
+           (set! a (assq a *defmacros*))
+           (if a (macroexpand (apply (cdr a) (cdr e))) e))
+          (else e)))
       e))
 ;@
 (define gentemp gensym)
@@ -276,18 +276,18 @@
 (define (call-with-open-ports . ports)
   (define proc (car ports))
   (cond ((procedure? proc) (set! ports (cdr ports)))
-	(else (set! ports (reverse ports))
-	      (set! proc (car ports))
-	      (set! ports (reverse (cdr ports)))))
+    (else (set! ports (reverse ports))
+          (set! proc (car ports))
+          (set! ports (reverse (cdr ports)))))
   (let ((ans (apply proc ports)))
     (for-each close-port ports)
     ans))
 (define (close-port port)
   (cond ((input-port? port)
-	 (close-input-port port)
-	 (if (output-port? port) (close-output-port port)))
-	((output-port? port) (close-output-port port))
-	(else (slib:error 'close-port 'port? port))))
+     (close-input-port port)
+     (if (output-port? port) (close-output-port port)))
+    ((output-port? port) (close-output-port port))
+    (else (slib:error 'close-port 'port? port))))
 ;@
 (define (browse-url url)
   (define (try cmd end) (zero? (system (string-append cmd url end))))
@@ -318,8 +318,8 @@
 ;;@ Here for backward compatability
 (define scheme-file-suffix
   (let ((suffix (case (software-type)
-		  ((NOSVE) "_scm")
-		  (else ".scm"))))
+    	  ((NOSVE) "_scm")
+    	  (else ".scm"))))
     (lambda () suffix)))
 
 ;;@ (SLIB:LOAD-SOURCE "foo") should load "foo.scm" or with whatever

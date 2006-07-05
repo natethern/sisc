@@ -32,9 +32,9 @@
 (define (pathname->vicinity pathname)
   (let loop ((i (- (string-length pathname) 1)))
     (cond ((negative? i) "")
-	  ((vicinity:suffix? (string-ref pathname i))
-	   (substring pathname 0 (+ i 1)))
-	  (else (loop (- i 1))))))
+      ((vicinity:suffix? (string-ref pathname i))
+       (substring pathname 0 (+ i 1)))
+      (else (loop (- i 1))))))
 
 (define (vicinity:suffix? chr)
   (eqv? chr #\/))

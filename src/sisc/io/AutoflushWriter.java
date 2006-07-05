@@ -1,41 +1,36 @@
+/*
+ * $Id$
+ */
 package sisc.io;
 
-import java.io.*;
+import java.io.FilterWriter;
+import java.io.IOException;
+import java.io.Writer;
 
-public class WriterOutputPort extends AutoflushOutputPort {
+public class AutoflushWriter extends FilterWriter {
 
-    protected Writer out;
+    public AutoflushWriter(Writer out) {
+        super(out);
+    }
 
-    public WriterOutputPort(OutputStream out,
-                            Charset encoding,
-                            boolean aflush) {
-        this(new BufferedWriter(encoding.newOutputStreamWriter(out)), aflush);
+    public void write(int c) throws IOException{
+        super.write(c);
+        flush();
     }
     
-    public WriterOutputPort(Writer out, boolean aflush) {
-        super(aflush);
-        this.out=out;
-    }
-
-    public Writer getWriter() {
-        return out;
-    }
-
-    protected void writeHelper(char v) throws IOException {
-        out.write(v);
-    }
-
-    protected void writeHelper(String s) throws IOException {
-        out.write(s);
-    }
-
-    public void flush() throws IOException {
-        out.flush();
-    }
-
-    public void close() throws IOException {
+    public void write(String str, int offset, int length) throws IOException {
+        super.write(str, offset, length);
         flush();
-        out.close();
+    }
+    
+    public void write(char[] buffer) throws IOException {
+        super.write(buffer);
+        flush();
+    }
+    
+    public void write(char[] buffer, int offset, int length) throws IOException {
+        super.write(buffer, offset, length);
+        flush();
     }
 }
 /*

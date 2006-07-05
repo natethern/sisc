@@ -1,60 +1,37 @@
 package sisc.io;
 
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import sisc.util.Util;
+import sisc.data.Value;
+import sisc.interpreter.AppContext;
+import sisc.ser.StreamSerializer;
 
-public class StreamOutputPort
-    extends AutoflushOutputPort
-    implements BinaryOutputPort {
+public class SerializerStream
+    extends FilterOutputStream
+    implements SerialOutputStream {
 
-    public OutputStream out;
+    public StreamSerializer serializer;
     
-    public StreamOutputPort(OutputStream out, boolean aflush) {
-        super(aflush);
-        this.out=out;
+    public SerializerStream(AppContext ctx, OutputStream out)
+        throws IOException {
+        super(out);
+        serializer=new StreamSerializer(ctx, out);
     }
 
-    public OutputStream getOutputStream() {
-        return out;
-    }
-
-    public void write(int b) throws IOException {
-        writeHelper(b);
-        if (autoflush) flush();
+    public void writeSer(Value v) throws IOException {
+        serializer.serialize(v);
     }
     
-    public void write(byte[] b, int offset, int length) throws IOException {
-        writeHelper(b, offset, length);
-        if (autoflush) flush();
-    }
-
-    protected void writeHelper(char v) throws IOException {
-        System.err.println(Util.warn("charoponbinport", synopsis()));
-        out.write(v);
-    }
-
-    protected void writeHelper(String s) throws IOException {
-        System.err.println(Util.warn("charoponbinport", synopsis()));
-        out.write(s.getBytes(Util.getDefaultCharacterSet().getName()));
-    }
-
-    protected void writeHelper(int b) throws IOException {
-        out.write(b);
-    }
-
-    protected void writeHelper(byte[] b, int offset, int length)
-    throws IOException {
-        out.write(b, offset, length);
-    }
     public void flush() throws IOException {
-        out.flush();
+        serializer.flush();
+        super.flush();
     }
 
     public void close() throws IOException {
-        flush();
-        out.close();
+        serializer.close();
+        super.close();
     }
 }
 /*

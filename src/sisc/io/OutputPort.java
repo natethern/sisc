@@ -1,12 +1,13 @@
+/*
+ * $Id$
+ */
 package sisc.io;
 
 import java.io.IOException;
 
 public interface OutputPort extends Port {
 
-    void write(char v) throws IOException;
-    void write(String v) throws IOException;
-    void flush() throws IOException;
+    public void flush() throws IOException;
 }
 /*
  * The contents of this file are subject to the Mozilla Public

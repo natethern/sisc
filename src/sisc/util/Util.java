@@ -14,8 +14,13 @@ import sisc.interpreter.*;
 import sisc.nativefun.NativeLibrary;
 import java.io.IOException;
 import java.io.EOFException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PushbackReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.lang.reflect.Constructor;
 import sisc.reader.Lexer;
 import sisc.reader.Parser;
@@ -46,8 +51,8 @@ public abstract class Util implements Version {
         Integer.parseInt(safeGetProperty("sisc.maxStackTraceDepth",
                                          Integer.toString(Defaults.MAX_STACK_TRACE_DEPTH)));
 
-    protected static final Value[] ZV = new Value[0];
-    protected static final Quantity FIVE = Quantity.valueOf(5);
+    public static final Value[] ZV = new Value[0];
+    public static final Quantity FIVE = Quantity.valueOf(5);
 
     public static EOFObject EOF = EOFObject.EOF;
     public static Syntax QUOTE = 
@@ -232,7 +237,7 @@ public abstract class Util implements Version {
     }
 
     public static Value read(String expr) throws IOException {
-        InputPort ip = new ReaderInputPort(new StringReader(expr));
+        PushbackReader ip = new PushbackReader(new StringReader(expr));
         Parser p = new Parser(new Lexer());
         Value res = p.nextExpression(ip);
         try {
@@ -473,22 +478,76 @@ public abstract class Util implements Version {
         }
     }
 
-    public static final SchemeOutputPort outport(Value o) {
-        if (o instanceof SchemeOutputPort) {
-            return (SchemeOutputPort) o;
+    /* IO Type casts */
+    
+    public static final OutputPort outport(Value o) {
+        if (o instanceof OutputPort) {
+            return (OutputPort) o;
         } else {
             typeError("output-port", o);
             return null;
         }
     }
 
-    public static final SchemeInputPort inport(Value o) {
-        if (o instanceof SchemeInputPort) {
-            return (SchemeInputPort) o;
+    public static final SchemeBinaryOutputPort binoutport(Value o) {
+        if (o instanceof SchemeBinaryOutputPort) {
+            return (SchemeBinaryOutputPort) o;
+        } else {
+            typeError("binaryoutput-port", o);
+            return null;
+        }
+    }
+
+    public static final OutputStream binoutstream(Value o) {
+        return binoutport(o).getOutputStream();
+    }   
+
+    public static final SchemeCharacterOutputPort charoutport(Value o) {
+        if (o instanceof SchemeCharacterOutputPort) {
+            return (SchemeCharacterOutputPort) o;
+        } else {
+            typeError("character-output-port", o);
+            return null;
+        }
+    }
+
+    public static final Writer charoutwriter(Value o) {
+        return charoutport(o).getWriter();
+    }
+
+    public static final InputPort inport(Value o) {
+        if (o instanceof InputPort) {
+            return (InputPort) o;
         } else {
             typeError("input-port", o);
             return null;
         }
+    }
+        
+    public static final SchemeBinaryInputPort bininport(Value o) {
+        if (o instanceof SchemeBinaryInputPort) {
+            return (SchemeBinaryInputPort) o;
+        } else {
+            typeError("binary-input-port", o);
+            return null;
+        }
+    }
+
+    public static final InputStream bininstream(Value o) {
+        return bininport(o).getInputStream();
+    }
+    
+    public static final SchemeCharacterInputPort charinport(Value o) {
+        if (o instanceof SchemeCharacterInputPort) {
+            return (SchemeCharacterInputPort) o;
+        } else {
+            typeError("character-input-port", o);
+            return null;
+        }
+    }
+
+    public static final Reader charinreader(Value o) {
+        return charinport(o).getReader();
     }
 
     public static final SymbolicEnvironment env(Value o) {

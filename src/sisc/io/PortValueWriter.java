@@ -1,6 +1,8 @@
 package sisc.io;
 
 import java.io.IOException;
+import java.io.Writer;
+
 import sisc.data.Value;
 import sisc.util.Util;
 import sisc.util.ExpressionVisitor;
@@ -9,13 +11,13 @@ import sisc.util.ExpressionVisitee;
 public class PortValueWriter extends Util
     implements ValueWriter, ExpressionVisitor {
 
-    private OutputPort port;
+    private Writer port;
 
     private boolean display;
 
     private boolean vectorLengthPrefixing, caseSensitive;
 
-    public PortValueWriter(OutputPort port,
+    public PortValueWriter(Writer port,
                            boolean vectorLengthPrefixing,
                            boolean caseSensitive) {
         this.port = port;

@@ -1131,7 +1131,7 @@
           ((sub (array:vector subshape))
            (dex (array:index subshape))
            (ck (lambda (k ks)
-		 (if (zero? k)
+    	 (if (zero? k)
                      (call-with-values
                       (lambda () (apply f ks))
                       (lambda qs (array:good-indices? qs super)))

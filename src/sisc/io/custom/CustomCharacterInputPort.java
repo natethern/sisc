@@ -1,15 +1,32 @@
-package sisc.data;
+package sisc.io.custom;
 
-import java.io.IOException;
-import sisc.data.NamedValue;
-import sisc.io.OutputPort;
-import sisc.io.ValueWriter;
+import java.io.Reader;
 
-public abstract class SchemeOutputPort extends Value 
-    implements OutputPort, NamedValue {
+import sisc.data.SchemeCharacterInputPort;
+import sisc.data.Value;
 
-    public void display(ValueWriter w) throws IOException {
-        displayNamedOpaque(w, "native-output-port");
+public class CustomCharacterInputPort extends SchemeCharacterInputPort implements CustomPort {
+
+    protected SchemeReader schemeReader;
+    
+    public CustomCharacterInputPort(Reader r, SchemeReader schemeReader) {
+    	super(r);
+    	this.schemeReader=schemeReader;
+    	schemeReader.setHost(this);
+    }
+
+    protected Value portLocal=VOID;
+    
+    public void setPortLocal(Value local) {    	
+    	portLocal=local;    	
+    }
+    
+    public Value getPortLocal() {
+    	return portLocal;
+    }    
+
+    public CustomPortProxy getProxy() {
+    	return schemeReader;
     }
 }
 /*

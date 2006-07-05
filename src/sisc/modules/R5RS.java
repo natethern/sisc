@@ -4,7 +4,6 @@ import sisc.data.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.env.SymbolicEnvironment;
-import sisc.boot.GenerateHeap;
 
 public class R5RS extends NativeLibrary {
 

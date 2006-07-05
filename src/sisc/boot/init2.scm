@@ -387,12 +387,12 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
           (letrec ((port 
                     (cond ((output-port? output-port) output-port)
                           ((eq? output-port #t) (current-output-port)) 
-                          ((eq? output-port #f) (_open-output-string)) 
+                          ((eq? output-port #f) (open-output-string)) 
                           (else (error 'format "bad output-port argument: ~s"
                                        output-port))))
                    (return-value 
                     (if (eq? output-port #f)    ;; if format into a string 
-                        (lambda () (_get-output-string port)) ;; then return the string
+                        (lambda () (get-output-string port)) ;; then return the string
                         void))) ;; else do something harmless
             
             (define (format-help format-strg arglist)

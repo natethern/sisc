@@ -4,8 +4,11 @@ import sisc.interpreter.*;
 import sisc.nativefun.*;
 import sisc.util.Util;
 import sisc.data.*;
+
 import java.io.IOException;
 import java.io.EOFException;
+import java.io.OutputStream;
+
 import sisc.io.*;
 
 public class SerialIO extends IndexedProcedure {
@@ -15,7 +18,8 @@ public class SerialIO extends IndexedProcedure {
 
     protected static final int
         DESERIALIZE=1, SERIALIZE=2,
-        OPENSERIALINPUTFILE = 3, OPENSERIALOUTPUTFILE= 4;
+        OPENSERIALINPUTFILE = 3, OPENSERIALOUTPUTFILE= 4,
+        SERIALINPORTQ=5, SERIALOUTPORTQ=6;
 
     public static class Index extends IndexedLibraryAdapter {
         
@@ -28,50 +32,53 @@ public class SerialIO extends IndexedProcedure {
             define("deserialize",             DESERIALIZE);
             define("open-serial-input-port",  OPENSERIALINPUTFILE);
             define("open-serial-output-port", OPENSERIALOUTPUTFILE);
+            define("serial-input-port?", SERIALINPORTQ);
+            define("serial-output-port?", SERIALOUTPORTQ);
         }   
     }
     
-    public static final SerialOutputPort soutport(Value o) {
+    public static final SerialOutputStream soutport(Value o) {
         try {
-            return (SerialOutputPort)o;
+            return (SerialOutputStream)binoutport(o).getOutputStream();
         } catch (ClassCastException e) { typeError(BINARYB, "soutput-port", o); }
         return null;
     }
 
-    public static final SerialInputPort sinport(Value o) {
+    public static final SerialInputStream sinport(Value o) {
         try {
-            return (SerialInputPort)o;
+            return (SerialInputStream)bininport(o).getInputStream();
         } catch (ClassCastException e) { typeError(BINARYB, "sinput-port", o); }
         return null;
     }
 
-    private static DeserializerPort openSerInPort(Interpreter f, 
-                                                  StreamInputPort sip)
+    private static SchemeBinaryInputPort openSerInPort(Interpreter f, 
+                                                  SchemeBinaryInputPort sip)
         throws ContinuationException {
         try {
-            return new DeserializerPort(f.getCtx(), sip.getInputStream());
+            return new SchemeBinaryInputPort(new DeserializerStream(f.getCtx(), sip.getInputStream()));
         } catch (IOException e) {
             IO.throwIOException(f, liMessage(BINARYB, "erroropening"), e);
         }
         return null;
     }
 
-    private static SerializerPort openSerOutPort(Interpreter f, 
-                                                 StreamOutputPort sop,
+    private static SchemeBinaryOutputPort openSerOutPort(Interpreter f, 
+                                                 SchemeBinaryOutputPort sop,
                                                  boolean aflush) 
         throws ContinuationException {
         try {
-            SerializerPort sp=new SerializerPort(f.getCtx(), sop.getOutputStream(), 
-                                                 aflush);
+            OutputStream out=sop.getOutputStream();
+            if (aflush) out=new AutoflushOutputStream(out);
+            SerializerStream sp=new SerializerStream(f.getCtx(), out);
             sp.flush();
-            return sp;
+            return new SchemeBinaryOutputPort(sp);
         } catch (IOException e) {
             IO.throwIOException(f, liMessage(BINARYB, "erroropening"), e);
         }
         return null;
     }
 
-    public static Value readSer(Interpreter r, SerialInputPort p)
+    public static Value readSer(Interpreter r, SerialInputStream p)
         throws ContinuationException {
         try {
             return p.readSer();
@@ -85,7 +92,7 @@ public class SerialIO extends IndexedProcedure {
         return null; //Should never happen
     }
 
-    public static Value writeSer(Interpreter r, SerialOutputPort p,
+    public static Value writeSer(Interpreter r, SerialOutputStream p,
                                  Value v)
         throws ContinuationException {
         try {
@@ -110,10 +117,16 @@ public class SerialIO extends IndexedProcedure {
         switch (f.vlr.length) {
         case 1:
             switch (id) {
+            case SERIALOUTPORTQ: 
+                return truth(f.vlr[0] instanceof SchemeBinaryOutputPort &&
+                        ((SchemeBinaryOutputPort)f.vlr[0]).getOutputStream() instanceof SerialOutputStream);
+            case SERIALINPORTQ: 
+                return truth(f.vlr[0] instanceof SchemeBinaryInputPort &&
+                        ((SchemeBinaryInputPort)f.vlr[0]).getInputStream() instanceof SerialInputStream);
             case OPENSERIALINPUTFILE:
-                return openSerInPort(f, (StreamInputPort)inport(f.vlr[0]));
+                return openSerInPort(f, bininport(f.vlr[0]));
             case OPENSERIALOUTPUTFILE:
-                return openSerOutPort(f, (StreamOutputPort)outport(f.vlr[0]), 
+                return openSerOutPort(f, binoutport(f.vlr[0]), 
                                       false);
             case DESERIALIZE:
                 return readSer(f, sinport(f.vlr[0]));
@@ -123,7 +136,7 @@ public class SerialIO extends IndexedProcedure {
         case 2:
             switch (id) {
             case OPENSERIALOUTPUTFILE:
-                return openSerOutPort(f, (StreamOutputPort)outport(f.vlr[0]), 
+                return openSerOutPort(f, binoutport(f.vlr[0]), 
                                       truth(f.vlr[1]));
             case SERIALIZE:
                 return writeSer(f, soutport(f.vlr[1]), f.vlr[0]);

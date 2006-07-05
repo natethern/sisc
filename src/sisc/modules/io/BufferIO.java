@@ -6,8 +6,6 @@ import sisc.data.*;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import sisc.io.StreamOutputPort;
-import sisc.io.StreamInputPort;
 
 public class BufferIO extends IndexedProcedure {
 
@@ -15,7 +13,8 @@ public class BufferIO extends IndexedProcedure {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int        
-        OPENINPUTBUFFER=0, OPENOUTPUTBUFFER=1, GETOUTPUTBUFFER=2;
+        OPENINPUTBUFFER=0, OPENOUTPUTBUFFER=1, GETOUTPUTBUFFER=2,
+        BUFFERINPORTQ=3, BUFFEROUTPORTQ=4;
 
 
     public static class Index extends IndexedLibraryAdapter {
@@ -25,9 +24,11 @@ public class BufferIO extends IndexedProcedure {
         }
         
        public Index() {
-           define("_get-output-buffer", GETOUTPUTBUFFER);
-           define("_open-input-buffer", OPENINPUTBUFFER);
-           define("_open-output-buffer", OPENOUTPUTBUFFER);
+           define("get-output-buffer", GETOUTPUTBUFFER);
+           define("open-input-buffer", OPENINPUTBUFFER);
+           define("open-output-buffer", OPENOUTPUTBUFFER);
+           define("buffer-input-port?", BUFFERINPORTQ);
+           define("buffer-output-port?", BUFFEROUTPORTQ);
         }   
     }
     
@@ -43,15 +44,21 @@ public class BufferIO extends IndexedProcedure {
         case 0:
             switch (id) {
             case OPENOUTPUTBUFFER:
-                return new StreamOutputPort(new ByteArrayOutputStream(), false);
+                return new SchemeBinaryOutputPort(new ByteArrayOutputStream());
             default:
                 throwArgSizeException();
             }
         case 1:
             switch (id) {
+            case BUFFEROUTPORTQ: 
+                return truth(f.vlr[0] instanceof SchemeBinaryOutputPort &&
+                        ((SchemeBinaryOutputPort)f.vlr[0]).getOutputStream() instanceof ByteArrayOutputStream);
+            case BUFFERINPORTQ: 
+                return truth(f.vlr[0] instanceof SchemeBinaryInputPort &&
+                        ((SchemeBinaryInputPort)f.vlr[0]).getInputStream() instanceof ByteArrayInputStream);
             case GETOUTPUTBUFFER:
-                StreamOutputPort sop=(StreamOutputPort)f.vlr[0];
-                ByteArrayOutputStream bos=(ByteArrayOutputStream)sop.out;
+                SchemeBinaryOutputPort sop=(SchemeBinaryOutputPort)f.vlr[0];
+                ByteArrayOutputStream bos=(ByteArrayOutputStream)sop.getOutputStream();
                 try {
                     sop.flush();
                 } catch (IOException e) {
@@ -63,9 +70,9 @@ public class BufferIO extends IndexedProcedure {
                 bos.reset();
                 return rv;
             case OPENINPUTBUFFER:
-                return new StreamInputPort(new ByteArrayInputStream(BinaryIO.buffer(f.vlr[0]).buf));
+                return new SchemeBinaryInputPort(new ByteArrayInputStream(BinaryIO.buffer(f.vlr[0]).buf));
             case OPENOUTPUTBUFFER:
-                return new StreamOutputPort(new ByteArrayOutputStream(num(f.vlr[0]).indexValue()), false);
+                return new SchemeBinaryOutputPort(new ByteArrayOutputStream(num(f.vlr[0]).indexValue()));
             default:
                 throwArgSizeException();
             }

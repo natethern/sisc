@@ -1,10 +1,8 @@
 package sisc.modules.s2j;
 
 import java.lang.reflect.*;
-import java.beans.*;
 
 import sisc.data.*;
-import sisc.interpreter.*;
 
 import java.io.IOException;
 

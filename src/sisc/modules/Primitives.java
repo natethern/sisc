@@ -1,12 +1,12 @@
 package sisc.modules;
 
 import sisc.data.*;
-import sisc.io.*;
 import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;
 
 import java.io.IOException;
+import java.io.PushbackReader;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Calendar;
@@ -786,7 +786,7 @@ public abstract class Primitives extends Util {
                 case STRING2NUMBER:
                     String st=string(vlr[0]);
                     try {
-                        return (Quantity)r.dynenv.parser.nextExpression(new ReaderInputPort(new StringReader(st)));
+                        return (Quantity)r.dynenv.parser.nextExpression(new PushbackReader(new StringReader(st)));
                     } catch (ClassCastException cce) {
                         return FALSE;
                     } catch (NumberFormatException nf) {
@@ -902,7 +902,7 @@ public abstract class Primitives extends Util {
                             !(radix==10 || radix == 16 || radix == 2 ||
                               radix==8))
                             throwPrimException(liMessage(SISCB, "invalidradix"));
-                        return (Quantity)r.dynenv.parser.nextExpression(new ReaderInputPort(new StringReader(string(vlr[0]))), radix, 0);
+                        return (Quantity)r.dynenv.parser.nextExpression(new PushbackReader(new StringReader(string(vlr[0]))), radix, 0);
                     } catch (NumberFormatException nf) {
                         return FALSE;
                     } catch (IOException e) {

@@ -1,3 +1,4 @@
+
 (define (call-with-binary-input-file file proc)
   (call-with-input-port&close (open-binary-input-file file) proc))
  

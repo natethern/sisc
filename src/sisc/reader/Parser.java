@@ -5,8 +5,6 @@ import java.util.*;
 
 import sisc.data.*;
 import sisc.util.Util;
-import sisc.io.InputPort;
-import sisc.io.SourceInputPort;
 import sisc.exprs.AnnotatedExpr;
 import sisc.util.Defaults;
 import sisc.compiler.*;
@@ -63,22 +61,22 @@ public class Parser extends Util implements Tokens {
         this.lexer=l;
     }
 
-    void warn(String messageClass, InputPort is) {
-        if (is instanceof SourceInputPort) {
-            SourceInputPort sp=(SourceInputPort)is;
+    void warn(String messageClass, PushbackReader is) {
+        if (is instanceof SourceReader) {
+            SourceReader sp=(SourceReader)is;
             System.err.println(warn(messageClass, sp.sourceFile, sp.line, sp.column));
         } else {                
             System.err.println(warn(messageClass));
         }    
     }
     
-    public final Value nextExpression(InputPort is)
+    public final Value nextExpression(PushbackReader is)
         throws IOException {
 
         return nextExpression(is, PRODUCE_IMMUTABLES, EMPTYLIST);
     }
 
-    public final Value nextExpression(InputPort is,
+    public final Value nextExpression(PushbackReader is,
                                       int flags,
                                       Pair anns)
         throws IOException {
@@ -86,7 +84,7 @@ public class Parser extends Util implements Tokens {
         return nextExpression(is, 10, flags, anns);
     }
 
-    public final Value nextExpression(InputPort is,
+    public final Value nextExpression(PushbackReader is,
                                       int radix,
                                       int flags)
         throws IOException {
@@ -97,14 +95,14 @@ public class Parser extends Util implements Tokens {
     /**
      * Reads an s-expression from the given input port.
      *
-     * @param is InputPort from which to read
+     * @param is PushbackReader from which to read
      * @param radix Specifies the radix of any numbers that are read
      * @param flags Specifies attributes for the returned values (PRODUCE_IMMUTABLES, PRODUCE_ANNOTATIONS, STRICT_R5RS)
      * @param anns additional annotations
      * @return the read expression
      * @exception IOException if an error occurs
      */
-    public Value nextExpression(InputPort is,
+    public Value nextExpression(PushbackReader is,
                                 int radix,
                                 int flags,
                                 Pair anns)
@@ -125,7 +123,7 @@ public class Parser extends Util implements Tokens {
         return (Value)n;
     }
 
-    protected final Value nextExpression(InputPort is,
+    protected final Value nextExpression(PushbackReader is,
                                          HashMap state, 
                                          int flags,
                                          Pair anns) 
@@ -134,7 +132,7 @@ public class Parser extends Util implements Tokens {
         return (Value)_nextExpression(is, state, null, flags, anns);
     }
 
-    protected void potentialError(int flags, String message, InputPort is) throws IOException {
+    protected void potentialError(int flags, String message, PushbackReader is) throws IOException {
         if (permissiveParsing(flags))
             if (is==null) System.err.println(warn(message));
             else warn(message, is);
@@ -142,7 +140,7 @@ public class Parser extends Util implements Tokens {
             throw new IOException(liMessage(SISCB, message));
     }
 
-    protected void potentialError(int flags, String message, String arg, InputPort is) throws IOException {
+    protected void potentialError(int flags, String message, String arg, PushbackReader is) throws IOException {
         if (permissiveParsing(flags))
             if (is==null) System.err.println(warn(message, arg));
             else warn(liMessage(SISCB, message, arg));
@@ -154,7 +152,7 @@ public class Parser extends Util implements Tokens {
         return (Value)(l instanceof Integer ? state.get(l) : l);
     }
 
-    protected Object _nextExpression(InputPort is,
+    protected Object _nextExpression(PushbackReader is,
                                      HashMap state, 
                                      Integer def,
                                      int flags,
@@ -164,7 +162,7 @@ public class Parser extends Util implements Tokens {
         return _nextExpression(is, state, def, 10, flags, anns);
     }
 
-    protected Quantity numberCheck(Object o, InputPort is, int flags) throws IOException {
+    protected Quantity numberCheck(Object o, PushbackReader is, int flags) throws IOException {
         try {
             return (Quantity)o;
         } catch (ClassCastException cce) {
@@ -174,7 +172,7 @@ public class Parser extends Util implements Tokens {
     }
 
     protected Object listSpecial(Symbol car,
-                                 InputPort is,
+                                 PushbackReader is,
                                  HashMap state,
                                  Integer def, 
                                  int flags,
@@ -197,7 +195,7 @@ public class Parser extends Util implements Tokens {
         return p;
     }
 
-    protected Object _nextExpression(InputPort is,
+    protected Object _nextExpression(PushbackReader is,
                                      HashMap state,
                                      Integer def,
                                      int radix,
@@ -236,8 +234,8 @@ public class Parser extends Util implements Tokens {
             break;
         case TT_PAIR:
             //Annotation support
-            if (is instanceof SourceInputPort) {
-                SourceInputPort sip=(SourceInputPort)is;
+            if (is instanceof SourceReader) {
+                SourceReader sip=(SourceReader)is;
                 line=sip.line;
                 col=sip.column-1;
                 file=sip.sourceFile;
@@ -293,7 +291,7 @@ public class Parser extends Util implements Tokens {
                     o=new SchemeCharacter((char)c);
                     break;
                 }
-                is.pushback(c);
+                is.unread(c);
                 String cn=lexer.readToBreak(is, Lexer.special, false, false);
                 String cnl=cn.toLowerCase();
                 Object cs=CharUtil.namedConstToChar(cnl);
@@ -371,13 +369,13 @@ public class Parser extends Util implements Tokens {
                 o=new AnnotatedExpr(p.cdr(), p.car());
                 break;
             case '|': 
-                //InputPort is, HashMap state, Integer def, int radix, int flags
+                //PushbackReader is, HashMap state, Integer def, int radix, int flags
                 //Nested multiline comment
                 lexer.skipMultilineComment(is);
                 return _nextExpression(is, state, def, radix, flags, anns);
             default:
                 Value[] v=null;
-                is.pushback(c);
+                is.unread(c);
                 if (Character.isDigit((char)c)) {
                     Integer ref=
                         new Integer(Integer
@@ -395,7 +393,7 @@ public class Parser extends Util implements Tokens {
                         o=state.get(ref);
                         break;
                     } else {
-                        is.pushback(c);
+                        is.unread(c);
                         v=new Value[ref.intValue()];
                     }
                 }
@@ -453,7 +451,7 @@ public class Parser extends Util implements Tokens {
         return o;
     }
 
-    private Value readAfterDot(InputPort is,
+    private Value readAfterDot(PushbackReader is,
                                HashMap state,
                                int flags,
                                Pair anns)
@@ -476,7 +474,7 @@ public class Parser extends Util implements Tokens {
         return v;
     }
 
-    public Value readList(InputPort is,
+    public Value readList(PushbackReader is,
                           HashMap state,
                           Integer def,
                           int flags,
@@ -571,7 +569,7 @@ public class Parser extends Util implements Tokens {
     
     public static void main(String[] args) throws Exception {
         Parser p=new Parser(new Lexer());
-        InputPort is=new sisc.io.StreamInputPort(System.in);
+        PushbackReader is=new PushbackReader(new InputStreamReader(System.in));
         Expression e;
         while (EOF != (e=p.nextExpression(is, PERMISSIVE_PARSING, EMPTYLIST))) {
             System.err.println(e);
