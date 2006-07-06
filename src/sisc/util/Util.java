@@ -493,7 +493,7 @@ public abstract class Util implements Version {
         if (o instanceof SchemeBinaryOutputPort) {
             return (SchemeBinaryOutputPort) o;
         } else {
-            typeError("binaryoutput-port", o);
+            typeError("binary-output-port", o);
             return null;
         }
     }
