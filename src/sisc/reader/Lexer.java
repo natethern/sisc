@@ -112,7 +112,7 @@ public class Lexer implements Tokens {
             case BACKQUOTE:
                 return TT_BACKQUOTE;
             case UNQUOTE:
-                int sc=is.read();
+                int sc=readChar(is);
                 if (sc==UNQUOTE_SPLICING)
                     return TT_UNQUOTE_SPLICING;
                 else

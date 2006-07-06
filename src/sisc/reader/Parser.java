@@ -259,7 +259,7 @@ public class Parser extends Util implements Tokens {
         case TT_PIPE:
             Symbol sym=Symbol.intern(lexer.readToBreak(is, Lexer.protected_literal_barrier, true, true));
             // Discard the closing PIPE
-            is.read();
+            lexer.readChar(is);
             return sym;
         case TT_SYMBOL:
             if (lexer.strictR5RS && !isPeculiarIdentifier(lexer.sval) &&
