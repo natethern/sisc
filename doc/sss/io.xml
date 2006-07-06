@@ -1434,7 +1434,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
       </para>
       <para>
         This module provides procedures to convert between Scheme and
-        Java I/O types. In general, non-character Scheme ports map to
+        Java I/O types. In general, binary Scheme ports map to
         plain Java streams, while character Scheme ports map to Java
         readers and writers.
       </para>
@@ -1630,6 +1630,10 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             </blockquote>
           </para>
         </blockquote>
+      </para>
+      <para>
+        Scheme ports can also be used from Java.  See <xref linkend="SchemePortsInJava"/>
+        for information.
       </para>
     </sect2>
     <sect2 id="SerialIO">

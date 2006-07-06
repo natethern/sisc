@@ -2,7 +2,7 @@ package sisc.util;
 
 public interface Version {
 
-    String VERSION = "1.15.1-rc";
+    String VERSION = "1.16.0-alpha";
 
 }
 

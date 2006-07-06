@@ -1,6 +1,3 @@
-/*
- * $Id$
- */
 package sisc.io.custom;
 
 import java.io.IOException;

@@ -1,6 +1,3 @@
-/*
- * $Id$
- */
 package sisc.io;
 
 import java.io.FilterOutputStream;
