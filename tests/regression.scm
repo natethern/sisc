@@ -374,3 +374,13 @@
                           (p l)))
                       (set! my-length (lambda (x) (length x)))
                       (letrec-opt-bug '() values)))))
+
+;;this used to throw an error about call-with-input-strings
+;;arity, because the string constant was read incorrectly, consuming
+;;part of the following expression
+(should-be 1520129 #t
+           (let ()
+             (import string-io)
+             (call-with-input-string "\"\u0000\""
+               (lambda (in)
+                 (string? (read in))))))

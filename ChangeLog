@@ -1,3 +1,14 @@
+2006-07-10  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Fixed handling of the null character constant in the reader.
+	  See bug 1520129.
+	  
+2006-07-05  SISC 1.5.1 Released
+
+2006-06-30  SISC 1.5.1-rc Released
+
+2006-06-30  SISC 1.13.8 Released
+
 2006-06-21  Matthias Radestock  <matthias@sorted.org>
 
     * Fixed fatal error in de-optimisation of letrec. See bug 1509504.
