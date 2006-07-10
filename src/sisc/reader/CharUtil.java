@@ -87,17 +87,24 @@ public abstract class CharUtil {
         } else return escapedToChar((char)c);
     }
 
-    public static String charToEscaped(char c) {
+    public static String charToEscapedIfNecessary(char c) {
         switch (c) {
         case '\b': return "b";
         case '\t': return "t";
         case '\n': return "n";
         case '\f': return "f";
         case '\r': return "r";
+        case '"': return "\"";
         default: 
             if (c < ' ' || c > '~') return "u"+charToHex(c);
-            else return new String(new char[] {c});
+            else return null;
         }
+        
+    }
+    public static String charToEscaped(char c) {
+        String escapedChar=charToEscapedIfNecessary(c);
+        if (escapedChar==null) return new String(new char[] {c});
+        else return escapedChar;
     }
     
     public static char octToChar(String oct) {

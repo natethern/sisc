@@ -3,6 +3,7 @@ package sisc.data;
 import java.io.*;
 
 import sisc.io.ValueWriter;
+import sisc.reader.CharUtil;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 
@@ -142,19 +143,11 @@ public class SchemeString extends Value {
         int lastGood=0;
         asCharArray();
         for (int i=0; i<data_c.length; i++) {
-            char escapeChar;
-            switch(data_c[i]) {
-            case '"':  escapeChar = '"'; break;
-            case '\\': escapeChar = '\\'; break;
-            case '\b': escapeChar = 'b'; break;
-            case '\t': escapeChar = 't'; break;
-            case '\n': escapeChar = 'n'; break;
-            case '\f': escapeChar = 'f'; break;
-            default: continue;
-            }
+            String escapeString=CharUtil.charToEscapedIfNecessary(data_c[i]);
+            if (escapeString == null) continue;
             
             b.append(data_c, lastGood, i-lastGood);
-            b.append('\\').append(escapeChar);
+            b.append('\\').append(escapeString);
             lastGood=i+1;
         }
 

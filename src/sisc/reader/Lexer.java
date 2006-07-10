@@ -178,10 +178,12 @@ public class Lexer implements Tokens {
     public String readToEndOfString(PushbackReader is)
     throws IOException {
         StringBuffer b=new StringBuffer();
-        int x;
-        while ('"'!=(x=readPureChar(is)) && x!=0)
+        do {
+            int x=readPureChar(is);
+            if (x=='"') break;
             b.append((char)x);
-        return b.toString();
+        } while(true);
+       return b.toString();
     }
 
     public String readToBreak(PushbackReader is, char[] stops, 
