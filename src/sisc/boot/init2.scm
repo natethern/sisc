@@ -371,7 +371,7 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
            (else ;; no digits
             (string-grow (number->string real) width #\space)))))
        (else
-        (error 'format "~F requires a number or a string, got ~s" number-or-string))))
+        (error 'format "~~F requires a number or a string, got ~s" number-or-string))))
     (lambda args
       (cond
        ((null? args)
