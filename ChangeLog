@@ -1,7 +1,11 @@
+2006-07-12  Matthias Radestock  <matthias@sorted.org>
+
+    * Improved error reporting in Java->Scheme interface.
+
 2006-07-10  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Fixed handling of the null character constant in the reader.
-	  See bug 1520129.
+    * Fixed handling of the null character constant in the reader.
+      See bug 1520129.
 	  
 2006-07-05  SISC 1.5.1 Released
 

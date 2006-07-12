@@ -921,6 +921,12 @@
 (putprop 'pretty-print @pretty-printing::pretty-print)
 (import pretty-printing)
 
+;; hook for native code to print SchemeExceptions
+(define (error->string e k)
+  (import* string-io with-output-to-string)
+  (with-output-to-string
+      (lambda () (print-exception (make-exception e k) #t))))
+
 (initialize)
 (set! current-optimizer (make-parameter optimize))
 

@@ -1,7 +1,16 @@
 package sisc.interpreter;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import sisc.util.Util;
+import sisc.data.Value;
+import sisc.data.Symbol;
 import sisc.data.Pair;
 import sisc.data.Procedure;
+import sisc.data.SchemeString;
+import sisc.interpreter.Context;
+import sisc.interpreter.SchemeCaller;
+import sisc.interpreter.Interpreter;
 
 public class SchemeException extends Exception {
     public Pair m;
@@ -26,6 +35,34 @@ public class SchemeException extends Exception {
      */
     public String getMessageText() {
         return ((Pair)m.car()).cdr().toString();
+    }
+
+    private String schemeStackTrace() {
+        try {
+            SchemeString res =
+                (SchemeString)Context.execute(new SchemeCaller() {
+                        public Object execute(Interpreter r)
+                            throws SchemeException {
+                            Procedure converter =
+                                (Procedure)r.lookup(Symbol.get("error->string"),
+                                                  Util.TOPLEVEL);
+                            return r.eval(converter, new Value[]{m,e});
+                        }
+                    });
+            return "Scheme exception:\n" + res.asString();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public void printStackTrace(PrintStream s) {
+        super.printStackTrace(s);
+        s.print(schemeStackTrace());
+    }
+
+    public void printStackTrace(PrintWriter s) {
+        super.printStackTrace(s);
+        s.print(schemeStackTrace());
     }
 
 }
