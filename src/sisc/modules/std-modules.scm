@@ -676,33 +676,6 @@
   (import string-io-native)
   (include "io/string-io.scm"))
 
-; Good Lord what a hack!
-(for-each
-  (lambda (x)
-    (putprop x (eval (sc-expand x)))
-    ($sc-put-cte x `(global . ,x)))
- '(char-ready?
-   peek-byte
-   peek-char
-   read
-   read-byte
-   read-char
-   read-string
-   read-code
-   write
-   write-byte
-   write-char
-   write-string
-   display
-   flush-output-port
-   open-input-file
-   open-output-file
-   close-input-port
-   close-output-port
-   port?
-   input-port?
-   output-port?))
-
 (module serial-io
   (serialize
    deserialize
