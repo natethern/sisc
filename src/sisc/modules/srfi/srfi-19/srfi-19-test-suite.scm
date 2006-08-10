@@ -5,10 +5,10 @@
 
 (define (define-s19-test! name thunk)
   (let ((name (if (symbol? name) name (string->symbol name)))
-    (pr (assoc name s19-tests)))
+        (pr (assoc name s19-tests)))
     (if pr
-    (set-cdr! pr thunk)
-    (set! s19-tests (append s19-tests (list (cons name thunk)))))))
+        (set-cdr! pr thunk)
+        (set! s19-tests (append s19-tests (list (cons name thunk)))))))
 
 (define (run-s19-test name thunk verbose)
   (if verbose (begin (display ";;; Running ") (display name)))
@@ -19,25 +19,25 @@
 (define (run-s19-tests . verbose)
   (let ((runs 0) (goods 0) (bads 0) (verbose (if (cdr verbose) (cdr verbose) #f)))
     (for-each (lambda (pr)
-    	(set! runs (+ runs 1))
-    	(if (run-s19-test (car pr) (cdr pr) verbose)
-    	    (set! goods (+ goods 1))
-    	    (set! bads (+ bads 1))))
-          s19-tests)
+                (set! runs (+ runs 1))
+                (if (run-s19-test (car pr) (cdr pr) verbose)
+                    (set! goods (+ goods 1))
+                    (set! bads (+ bads 1))))
+              s19-tests)
     (if verbose
-    (begin
-      (display ";;; Results: Runs: ")
-      (display runs)
-      (display "; Goods: ")
-      (display goods)
-      (display "; Bads: ")
-      (display bads)
-      (if (> runs 0)
-          (begin
-    	(display "; Pass rate: ")
-    	(display (/ goods runs)))
-          (display "; No tests."))
-      (newline)))
+        (begin
+          (display ";;; Results: Runs: ")
+          (display runs)
+          (display "; Goods: ")
+          (display goods)
+          (display "; Bads: ")
+          (display bads)
+          (if (> runs 0)
+              (begin
+                (display "; Pass rate: ")
+                (display (/ goods runs)))
+              (display "; No tests."))
+          (newline)))
     (values runs goods bads)))
 
 (set! s19-tests (list))
@@ -57,34 +57,34 @@
 (define-s19-test! "Time comparisons (time=?, etc.)"
   (lambda ()
     (let ((t1 (make-time 'time-utc 0 1))
-      (t2 (make-time 'time-utc 0 1))
-      (t3 (make-time 'time-utc 0 2))
-      (t11 (make-time 'time-utc 1001 1))
-      (t12 (make-time 'time-utc 1001 1))
-      (t13 (make-time 'time-utc 1001 2))
-      )
+          (t2 (make-time 'time-utc 0 1))
+          (t3 (make-time 'time-utc 0 2))
+          (t11 (make-time 'time-utc 1001 1))
+          (t12 (make-time 'time-utc 1001 1))
+          (t13 (make-time 'time-utc 1001 2))
+          )
       (and (time=? t1 t2)
-       (time>? t3 t2)
-       (time<? t2 t3)
-       (time>=? t1 t2)
-       (time>=? t3 t2)
-       (time<=? t1 t2)
-       (time<=? t2 t3)
-       (time=? t11 t12)
-       (time>? t13 t12)
-       (time<? t12 t13)
-       (time>=? t11 t12)
-       (time>=? t13 t12)
-       (time<=? t11 t12)
-       (time<=? t12 t13)
-       ))))
+           (time>? t3 t2)
+           (time<? t2 t3)
+           (time>=? t1 t2)
+           (time>=? t3 t2)
+           (time<=? t1 t2)
+           (time<=? t2 t3)
+           (time=? t11 t12)
+           (time>? t13 t12)
+           (time<? t12 t13)
+           (time>=? t11 t12)
+           (time>=? t13 t12)
+           (time<=? t11 t12)
+           (time<=? t12 t13)
+           ))))
 
 (define-s19-test! "Time difference"
   (lambda ()
     (let ((t1 (make-time 'time-utc 0 3000))
-      (t2 (make-time 'time-utc 0 1000))
-      (t3 (make-time 'time-duration 0 2000))
-      (t4 (make-time 'time-duration 0 -2000)))
+          (t2 (make-time 'time-utc 0 1000))
+          (t3 (make-time 'time-duration 0 2000))
+          (t4 (make-time 'time-duration 0 -2000)))
       (and
        (time=? t3 (time-difference t1 t2))
        (time=? t4 (time-difference t2 t1))))))
@@ -92,38 +92,38 @@
 
 (define (test-one-utc-tai-edge utc tai-diff tai-last-diff)
   (let* (;; right on the edge they should be the same
-     (utc-basic (make-time 'time-utc 0 utc))
-     (tai-basic (make-time 'time-tai 0 (+ utc tai-diff)))
-     (utc->tai-basic (time-utc->time-tai utc-basic))
-     (tai->utc-basic (time-tai->time-utc tai-basic))
-     ;; a second before they should be the old diff
-     (utc-basic-1 (make-time 'time-utc 0 (- utc 1)))
-     (tai-basic-1 (make-time 'time-tai 0 (- (+ utc tai-last-diff) 1)))
-     (utc->tai-basic-1 (time-utc->time-tai utc-basic-1))
-     (tai->utc-basic-1 (time-tai->time-utc tai-basic-1))
-     ;; a second later they should be the new diff
-     (utc-basic+1 (make-time 'time-utc 0 (+ utc 1)))
-     (tai-basic+1 (make-time 'time-tai 0 (+ (+ utc tai-diff) 1)))
-     (utc->tai-basic+1 (time-utc->time-tai utc-basic+1))
-     (tai->utc-basic+1 (time-tai->time-utc tai-basic+1))
-     ;; ok, let's move the clock half a month or so plus half a second
-     (shy (* 15 24 60 60))
-     (hs (/ (expt 10 9) 2))
-     ;; a second later they should be the new diff
-     (utc-basic+2 (make-time 'time-utc hs (+ utc shy)))
-     (tai-basic+2 (make-time 'time-tai hs (+ (+ utc tai-diff) shy)))
-     (utc->tai-basic+2 (time-utc->time-tai utc-basic+2))
-     (tai->utc-basic+2 (time-tai->time-utc tai-basic+2))
-     )
+         (utc-basic (make-time 'time-utc 0 utc))
+         (tai-basic (make-time 'time-tai 0 (+ utc tai-diff)))
+         (utc->tai-basic (time-utc->time-tai utc-basic))
+         (tai->utc-basic (time-tai->time-utc tai-basic))
+         ;; a second before they should be the old diff
+         (utc-basic-1 (make-time 'time-utc 0 (- utc 1)))
+         (tai-basic-1 (make-time 'time-tai 0 (- (+ utc tai-last-diff) 1)))
+         (utc->tai-basic-1 (time-utc->time-tai utc-basic-1))
+         (tai->utc-basic-1 (time-tai->time-utc tai-basic-1))
+         ;; a second later they should be the new diff
+         (utc-basic+1 (make-time 'time-utc 0 (+ utc 1)))
+         (tai-basic+1 (make-time 'time-tai 0 (+ (+ utc tai-diff) 1)))
+         (utc->tai-basic+1 (time-utc->time-tai utc-basic+1))
+         (tai->utc-basic+1 (time-tai->time-utc tai-basic+1))
+         ;; ok, let's move the clock half a month or so plus half a second
+         (shy (* 15 24 60 60))
+         (hs (/ (expt 10 9) 2))
+         ;; a second later they should be the new diff
+         (utc-basic+2 (make-time 'time-utc hs (+ utc shy)))
+         (tai-basic+2 (make-time 'time-tai hs (+ (+ utc tai-diff) shy)))
+         (utc->tai-basic+2 (time-utc->time-tai utc-basic+2))
+         (tai->utc-basic+2 (time-tai->time-utc tai-basic+2))
+         )
     (and (time=? utc-basic tai->utc-basic)
-     (time=? tai-basic utc->tai-basic)
-     (time=? utc-basic-1 tai->utc-basic-1)
-     (time=? tai-basic-1 utc->tai-basic-1)
-     (time=? utc-basic+1 tai->utc-basic+1)
-     (time=? tai-basic+1 utc->tai-basic+1)
-     (time=? utc-basic+2 tai->utc-basic+2)
-     (time=? tai-basic+2 utc->tai-basic+2) 
-     )))
+         (time=? tai-basic utc->tai-basic)
+         (time=? utc-basic-1 tai->utc-basic-1)
+         (time=? tai-basic-1 utc->tai-basic-1)
+         (time=? utc-basic+1 tai->utc-basic+1)
+         (time=? tai-basic+1 utc->tai-basic+1)
+         (time=? utc-basic+2 tai->utc-basic+2)
+         (time=? tai-basic+2 utc->tai-basic+2) 
+         )))
 
 (define-s19-test! "TAI-UTC Conversions"
   (lambda ()
@@ -169,37 +169,67 @@
   (lambda ()
     (and
      (tm:date= (time-tai->date (make-time time-tai 0 (+ 915148800 29)) 0)
-           (make-date 0 58 59 23 31 12 1998 0))
+               (make-date 0 58 59 23 31 12 1998 0))
      (tm:date= (time-tai->date (make-time time-tai 0 (+ 915148800 30)) 0)
-           (make-date 0 59 59 23 31 12 1998 0))
+               (make-date 0 59 59 23 31 12 1998 0))
      (tm:date= (time-tai->date (make-time time-tai 0 (+ 915148800 31)) 0)
-           (make-date 0 60 59 23 31 12 1998 0))
+               (make-date 0 60 59 23 31 12 1998 0))
      (tm:date= (time-tai->date (make-time time-tai 0 (+ 915148800 32)) 0)
-           (make-date 0 0 0 0 1 1 1999 0)))))
+               (make-date 0 0 0 0 1 1 1999 0)))))
 
 (define-s19-test! "Date-UTC Conversions"
   (lambda ()
     (and
      (time=? (make-time time-utc 0 (- 915148800 2))
-         (date->time-utc (make-date 0 58 59 23 31 12 1998 0)))
+             (date->time-utc (make-date 0 58 59 23 31 12 1998 0)))
      (time=? (make-time time-utc 0 (- 915148800 1))
-         (date->time-utc (make-date 0 59 59 23 31 12 1998 0)))
+             (date->time-utc (make-date 0 59 59 23 31 12 1998 0)))
      ;; yes, I think this is acutally right.
      (time=? (make-time time-utc 0 (- 915148800 0))
-         (date->time-utc (make-date 0 60 59 23 31 12 1998 0)))
+             (date->time-utc (make-date 0 60 59 23 31 12 1998 0)))
      (time=? (make-time time-utc 0 (- 915148800 0))
-         (date->time-utc (make-date 0 0 0 0 1 1 1999 0)))
+             (date->time-utc (make-date 0 0 0 0 1 1 1999 0)))
      (time=? (make-time time-utc 0 (+ 915148800 1))
-         (date->time-utc (make-date 0 1 0 0 1 1 1999 0))))))
+             (date->time-utc (make-date 0 1 0 0 1 1 1999 0))))))
 
 (define-s19-test! "TZ Offset conversions"
   (lambda ()
     (let ((ct-utc (make-time time-utc 6320000 1045944859))
-      (ct-tai (make-time time-tai 6320000 1045944891))
-      (cd (make-date 6320000 19 14 15 22 2 2003 -18000)))
+          (ct-tai (make-time time-tai 6320000 1045944891))
+          (cd (make-date 6320000 19 14 15 22 2 2003 -18000)))
       (and
        (time=? ct-utc (date->time-utc cd))
        (time=? ct-tai (date->time-tai cd))))))
+
+(define-s19-test! "Date-JD conversions"
+  (lambda ()
+    (and (= (date->julian-day (make-date 0 0 0 12 25 2 1996 0)) ; zero TZ offset
+            2450139)
+         ;; ...and the same civil time, 6 hours further east
+         (= (date->julian-day (make-date 0 0 0 12 25 2 1996 (* 6 3600)))
+            (- 2450139 1/4)))))
+
+(define-s19-test! "Time to date round-trips"
+  (lambda ()
+    (let ((zero-diff (make-time 'time-duration 0 0)))
+      (and (let ((x (current-time 'time-monotonic)))
+             (time=? zero-diff
+                     (time-difference
+                      x
+                      (date->time-monotonic ;round-trip monotonic-date-monotonic
+                       (time-monotonic->date x)))))
+           (let ((x (current-time 'time-tai)))
+             (time=? zero-diff
+                     (time-difference
+                      x
+                      (date->time-tai
+                       (time-tai->date x)))))
+           (let ((x (current-time 'time-utc)))
+             (time=? zero-diff
+                     (time-difference
+                      x
+                      (date->time-utc
+                       (time-utc->date x)))))))))
 
 (begin (newline) (run-s19-tests #t))
 
