@@ -384,3 +384,9 @@
              (call-with-input-string "\"\u0000\""
                (lambda (in)
                  (string? (read in))))))
+
+; Used to pick up the escaped newline as a real one,
+; and start parsing later on the comment line.
+(should-be 1538637 1 
+   (begin 1 ; \n 2
+    ))

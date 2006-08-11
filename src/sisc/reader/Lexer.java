@@ -107,7 +107,7 @@ public class Lexer implements Tokens {
                 sval=readToEndOfString(is);
                 return TT_STRING;
             case COMMENT:
-                while (readChar(is)!='\n') {}
+                while (readChar(is,false,false,false)!='\n') {}
                 return nextToken(is, radix);
             case BACKQUOTE:
                 return TT_BACKQUOTE;

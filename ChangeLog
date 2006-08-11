@@ -8,6 +8,8 @@
 	* Changed the os module streams to be binary.  This is the right thing,
 	  as they can be converted to character as needed but don't have to be.
 	  
+	* Fixed single-line comment escape handling.  See bug 1538637.
+	  
 2006-08-10  SISC 1.15.2 Released
 
 2006-08-10  SISC 1.16.0-alpha Released
