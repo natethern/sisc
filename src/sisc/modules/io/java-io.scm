@@ -19,7 +19,7 @@
 
 ;; 1. InputStream -> <native-input-port>
 (define-method (->binary-input-port (<java.io.input-stream> is))
-  (java-unwrap (java-new <sisc.data.stream-binary-input-port> is)))
+  (java-unwrap (java-new <sisc.data.scheme-binary-input-port> is)))
 
 ;; 2. OutputStream -> <native-output-port>
 (define-method (->binary-output-port (<java.io.output-stream> os)

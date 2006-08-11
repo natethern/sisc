@@ -601,20 +601,6 @@
   (type<=-hook        'oo oo-type<=-hook)
   (compare-types-hook 'oo oo-compare-types-hook))
 
-(module custom-io
-  (make-custom-character-input-port
-   make-custom-binary-input-port
-   make-custom-character-output-port
-   make-custom-binary-output-port
-   port-local
-   set-port-local!
-   custom-port-procedures
-   custom-port?)
-  (import s2j)
-  (import custom-io-native)
-  (import* type-system instance-of?)
-  (include "io/custom-io.scm"))
-
 (module binary-io
   (read-block
    write-block
@@ -716,6 +702,44 @@
 
   (include "io/java-io.scm"))
 
+(module custom-io
+  (make-custom-character-input-port
+   make-custom-binary-input-port
+   make-custom-character-output-port
+   make-custom-binary-output-port
+   port-local
+   set-port-local!
+   custom-port-procedures
+   custom-port?)
+  (import s2j)
+  (import custom-io-native)
+  (import java-io)
+  (import* type-system instance-of?)
+  (include "io/custom-io.scm"))
+
+(module os
+  (process?
+   process-terminated?
+   wait-for-process
+   get-process-stdout
+   get-process-stderr
+   get-process-stdin
+   spawn-process
+   spawn-process-with-environment
+   spawn-process/env
+   core-count
+   free-memory
+   total-memory
+   max-memory
+   garbage-collect)
+  (import s2j)
+  (import java-io)
+  (import* oo make)
+  (import* type-system instance-of?)
+  (include "os/process.scm")
+  (include "os/system.scm")
+  (define spawn-process/env)
+  (set! spawn-process/env spawn-process-with-environment))
 
 (module networking
   (open-tcp-listener
@@ -851,29 +875,6 @@
          match-equality-test)
     (import debugging)
     (include "match.ss"))
-
-(module os
-  (process?
-   process-terminated?
-   wait-for-process
-   get-process-stdout
-   get-process-stderr
-   get-process-stdin
-   spawn-process
-   spawn-process-with-environment
-   spawn-process/env
-   core-count
-   free-memory
-   total-memory
-   max-memory
-   garbage-collect)
-  (import s2j)
-  (import* oo make)
-  (import* type-system instance-of?)
-  (include "os/process.scm")
-  (include "os/system.scm")
-  (define spawn-process/env)
-  (set! spawn-process/env spawn-process-with-environment))
 
 (module optimizer
   (optimize initialize)

@@ -1,4 +1,4 @@
-(define-java-classes 
+(define-java-classes
   <java.lang.runtime>
   <java.lang.process>
   <java.io.file>
@@ -34,23 +34,16 @@
        (instance-of? val <java.lang.process>)))
 
 (define (get-process-stdout process)
-  (make <native-input-port>
-    (java-unwrap 
-      (java-new <character-input-port> 
-                (get-input-stream process)))))
+  (->binary-input-port (get-input-stream process)))
 
 (define (get-process-stderr process)
-  (make <native-input-port>
-    (java-unwrap 
-      (java-new <character-input-port> 
-              (get-error-stream process)))))
+  (->binary-input-port (get-error-stream process)))
 
 (define (get-process-stdin process . aflush)
-  (make <native-output-port>
-    (java-unwrap 
-      (java-new <character-output-port> 
-                (get-output-stream process)
-           (->jboolean (if (null? aflush) #f (car aflush)))))))
+  (let ([base-port (->binary-output-port (get-output-stream process))])
+    (if aflush
+        (open-buffered-binary-output-port base-port)
+        base-port)))
         
 (define (spawn-process progname . arglist)
   (let ([runtime (get-runtime)])

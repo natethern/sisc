@@ -455,8 +455,8 @@ public class IO extends IndexedProcedure {
                 cinport=charinport(f.vlr[0]);
                 return readCode(f, cinport);
             case OPENCHARINPUTPORT:
-            	return new SchemeCharacterInputPort(new BufferedReader(
-            			f.dynenv.getDefaultCharacterSet().newInputStreamReader(bininstream(f.vlr[0]))));
+            	return new SchemeCharacterInputPort(new PushbackReader(new BufferedReader(
+            			f.dynenv.getDefaultCharacterSet().newInputStreamReader(bininstream(f.vlr[0])))));
             case OPENSOURCEINPUTFILE:
                 URL url = url(f.vlr[0]);
                 return openCharInFile(f, url, f.dynenv.characterSet);
@@ -601,8 +601,8 @@ public class IO extends IndexedProcedure {
                 return displayOrWrite(f, charoutport(f.vlr[1]), f.vlr[0], false);
             case OPENCHARINPUTPORT:
             	try {
-            		return new SchemeCharacterInputPort(new BufferedReader(
-            				Charset.forName(string(f.vlr[1])).newInputStreamReader(bininstream(f.vlr[0]))));
+            		return new SchemeCharacterInputPort(new PushbackReader(new BufferedReader(
+            				Charset.forName(string(f.vlr[1])).newInputStreamReader(bininstream(f.vlr[0])))));
             	} catch (UnsupportedEncodingException use) {
             		throwIOException(f, use.getMessage(), new IOException(use.getMessage())); 
             	}
