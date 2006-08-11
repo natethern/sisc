@@ -5,6 +5,9 @@
 	* Port the os module to the new I/O system, including using the java-io module.
 	  See bug 1538636.
 	  
+	* Changed the os module streams to be binary.  This is the right thing,
+	  as they can be converted to character as needed but don't have to be.
+	  
 2006-08-10  SISC 1.15.2 Released
 
 2006-08-10  SISC 1.16.0-alpha Released

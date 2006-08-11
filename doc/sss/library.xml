@@ -1470,14 +1470,14 @@ com/foo/bar/baz/baz3.scm
             </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
-              <type>input-port</type>
+              <type>binary-input-port</type>
               <methodname>get-process-stdout</methodname>
               <methodparam><parameter>process</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns an input port which will read bytes which the
+                Returns a binary input port which will read bytes which the
                 given process has written to its standard output stream.
               </para>
             </blockquote>
@@ -1487,14 +1487,14 @@ com/foo/bar/baz/baz3.scm
             </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
-              <type>input-port</type>
+              <type>binary-input-port</type>
               <methodname>get-process-stderr</methodname>
               <methodparam><parameter>process</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns an input port which will read bytes which the
+                Returns a binary input port which will read bytes which the
                 given process has written to its standard error stream.
               </para>
             </blockquote>
@@ -1504,14 +1504,14 @@ com/foo/bar/baz/baz3.scm
             </indexterm>
             &procedure;
             <methodsynopsis language="scheme">
-              <type>output-port</type>
+              <type>binary-output-port</type>
               <methodname>get-process-stdin</methodname>
               <methodparam><parameter>process</parameter>
               </methodparam>
             </methodsynopsis>
             <blockquote>
               <para>
-                Returns an output port which when written to will send
+                Returns a binary output port which when written to will send
                 bytes to the given process' standard input stream.
               </para>
             </blockquote>
