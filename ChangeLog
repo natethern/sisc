@@ -1,3 +1,7 @@
+2006-08-12  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Buffered binary port constructors weren't exported from binary-io.  Fixed.
+	
 2006-08-11  Scott G. Miller  <sgmiller@gmail.com>
 
 	* |open-character-input-port| wasn't producing read compatible streams. Fixed. 

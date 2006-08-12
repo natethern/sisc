@@ -613,6 +613,8 @@
    buffer-copy!
    open-binary-input-file
    open-binary-output-file
+   open-buffered-binary-input-port
+   open-buffered-binary-output-port
    call-with-binary-input-file
    call-with-binary-output-file
    with-binary-input-from-file
@@ -623,6 +625,8 @@
   (import* binary-io-native
            read-block
            write-block
+           open-buffered-binary-input-port
+           open-buffered-binary-output-port
            open-binary-input-file
            open-binary-output-file
            binary-input-port?
