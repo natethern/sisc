@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/sh -
+
 if [ -z "$1" ]
 then
   USERID=`id -u`
@@ -9,29 +10,33 @@ then
   fi
   INSTALL_DIR=/usr/local/bin
 else
-  INSTALL_DIR=$1
+  INSTALL_DIR=`cd "$1" && pwd || echo $1` # bad-dir error caught below
 fi
 if [ -z "$2" ]
 then
   SRCDIR="scheme-src/srfi-22"
 else
-  SRCDIR=$2
+  SRCDIR=`cd "$2" && pwd || echo $2`
 fi
 
-echo This script will install the srfi-22 support scripts in $INSTALL_DIR.
-echo If this is acceptable, press enter now, otherwise press CTL-C.
+echo "This script will install the srfi-22 support scripts in $INSTALL_DIR."
+echo "If this is acceptable, press enter now, otherwise press CTL-C."
 echo ""
 echo "You can call this script with a different install dir as an argument."
 read
 
-pushd .
-cd $SRCDIR
-cp srfi-22.sh $INSTALL_DIR
-cd $INSTALL_DIR
+test -d "$SRCDIR"      || { echo "No source directory $SRCDIR">&2; exit 1; }
+test -d "$INSTALL_DIR" || { echo "No install dir $INSTALL_DIR">&2; exit 1; }
+
+cp "$SRCDIR/srfi-22.sh" "$INSTALL_DIR"
+chmod +x "$INSTALL_DIR/srfi-22.sh"
+
+cd "$INSTALL_DIR"
 ln -s srfi-22.sh scheme-r4rs
 ln -s srfi-22.sh scheme-r5rs
 ln -s srfi-22.sh scheme-srfi-0
 ln -s srfi-22.sh scheme-srfi-7
 ln -s srfi-22.sh scheme-srfi-55
 ln -s srfi-22.sh scheme-ieee-1178-1900
-popd
+
+exit 0
