@@ -26,7 +26,6 @@ public class FreeReference implements ExpressionVisitee {
     }
 
     public static FreeReference[] allReferences() {
-        Pair res = Util.EMPTYLIST;
         return (FreeReference[])allReferences.toArray(new FreeReference[] {});
     }
 

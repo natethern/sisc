@@ -2,14 +2,8 @@ package sisc.modules.io;
 
 import sisc.interpreter.*;
 import sisc.nativefun.*;
-import sisc.util.Util;
 import sisc.data.*;
 
-import java.io.IOException;
-import java.io.EOFException;
-import java.io.OutputStream;
-
-import sisc.io.*;
 import sisc.io.custom.CustomPort;
 
 public class CustomIO extends IndexedFixableProcedure {
