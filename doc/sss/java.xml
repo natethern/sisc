@@ -793,7 +793,7 @@ AppContext ctx=new AppContext(myProperties);
                 </entry>
                 <entry>
                   <programlisting>
-ctx.loadDefaultHeap();
+ctx.addDefaultHeap();
                   </programlisting>
                 </entry>                    
               </row>
