@@ -218,8 +218,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
         sourceAnnotations = pair(v);
     }
 
-    public Value getCharacterSet() {
-        return new SchemeString(characterSet.displayName());
+    public Charset getCharacterSet() {
+        return characterSet;
     }
 
     public void setCharacterSet(Value v) {

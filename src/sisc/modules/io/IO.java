@@ -456,7 +456,7 @@ public class IO extends IndexedProcedure {
                 return readCode(f, cinport);
             case OPENCHARINPUTPORT:
             	return new SchemeCharacterInputPort(new PushbackReader(new BufferedReader(
-            			f.dynenv.getDefaultCharacterSet().newInputStreamReader(bininstream(f.vlr[0])))));
+            			f.dynenv.getCharacterSet().newInputStreamReader(bininstream(f.vlr[0])))));
             case OPENSOURCEINPUTFILE:
                 URL url = url(f.vlr[0]);
                 return openCharInFile(f, url, f.dynenv.characterSet);
