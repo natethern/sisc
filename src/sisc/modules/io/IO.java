@@ -17,7 +17,7 @@ public class IO extends IndexedProcedure {
         Symbol.intern("sisc.modules.io.Messages");
 
     protected static final int
-        //NEXT = 34,
+        //NEXT = 35,
 
         ABSPATHQ            = 0,
         CHARREADY           = 3,
@@ -37,6 +37,7 @@ public class IO extends IndexedProcedure {
         OPENBUFFEREDCHARINPORT = 32,
         OPENBUFFEREDCHAROUTPORT = 33,
         OPENCHARINPUTPORT   = 31,
+        OPENCHAROUTPUTPORT   = 34,
         OPENINPUTFILE       = 17,
         OPENOUTPUTFILE      = 19,
         OPENSOURCEINPUTFILE = 20,
@@ -79,6 +80,7 @@ public class IO extends IndexedProcedure {
             define("open-buffered-character-input-port", OPENBUFFEREDCHARINPORT);
             define("open-buffered-character-output-port", OPENBUFFEREDCHAROUTPORT);
             define("open-character-input-port", OPENCHARINPUTPORT);
+            define("open-character-output-port", OPENCHAROUTPUTPORT);
             define("open-input-file"    , OPENINPUTFILE);
             define("open-output-file"   , OPENOUTPUTFILE);
             define("open-source-input-file", OPENSOURCEINPUTFILE);
@@ -457,6 +459,9 @@ public class IO extends IndexedProcedure {
             case OPENCHARINPUTPORT:
             	return new SchemeCharacterInputPort(new PushbackReader(new BufferedReader(
             			f.dynenv.getCharacterSet().newInputStreamReader(bininstream(f.vlr[0])))));
+            case OPENCHAROUTPUTPORT:
+                return new SchemeCharacterOutputPort(new BufferedWriter(
+                        f.dynenv.getCharacterSet().newOutputStreamWriter(binoutstream(f.vlr[0]))));
             case OPENSOURCEINPUTFILE:
                 URL url = url(f.vlr[0]);
                 return openCharInFile(f, url, f.dynenv.characterSet);
@@ -600,12 +605,19 @@ public class IO extends IndexedProcedure {
             case WRITE:
                 return displayOrWrite(f, charoutport(f.vlr[1]), f.vlr[0], false);
             case OPENCHARINPUTPORT:
-            	try {
-            		return new SchemeCharacterInputPort(new PushbackReader(new BufferedReader(
-            				Charset.forName(string(f.vlr[1])).newInputStreamReader(bininstream(f.vlr[0])))));
-            	} catch (UnsupportedEncodingException use) {
-            		throwIOException(f, use.getMessage(), new IOException(use.getMessage())); 
-            	}
+                try {
+                    return new SchemeCharacterInputPort(new PushbackReader(new BufferedReader(
+                            Charset.forName(string(f.vlr[1])).newInputStreamReader(bininstream(f.vlr[0])))));
+                } catch (UnsupportedEncodingException use) {
+                    throwIOException(f, use.getMessage(), new IOException(use.getMessage())); 
+                }
+            case OPENCHAROUTPUTPORT:
+                try {
+                    return new SchemeCharacterOutputPort(new BufferedWriter(
+                            Charset.forName(string(f.vlr[1])).newOutputStreamWriter(binoutstream(f.vlr[0]))));
+                } catch (UnsupportedEncodingException use) {
+                    throwIOException(f, use.getMessage(), new IOException(use.getMessage())); 
+                }
             case OPENINPUTFILE:
                 URL url = url(f.vlr[0]);
                 return openCharInFile(f, url,
