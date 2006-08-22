@@ -70,7 +70,7 @@ public class BinaryIO extends IndexedProcedure {
         try {
             OutputStream out=new BufferedOutputStream(IO.getURLOutputStream(url));
             if (aflush) {
-            	warn("autoflushdeprecated");
+            	System.err.println(warn("autoflushdeprecated"));
                 out=new AutoflushOutputStream(out);
             }
             return new SchemeBinaryOutputPort(out);

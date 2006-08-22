@@ -328,7 +328,7 @@ public abstract class Context extends Util {
         try {
             return execute(lookup(appName), caller);
         } catch (SchemeException se) {
-            warn("SchemeException caught from execute:" + se.getMessage());
+            System.err.println(warn("SchemeException caught from execute:" + se.getMessage()));
             return null;
         }
     }

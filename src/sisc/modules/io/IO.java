@@ -316,7 +316,7 @@ public class IO extends IndexedProcedure {
         try {
             Writer w=new OutputStreamWriter(getURLOutputStream(url), encoding.getName());           
             if (aflush) {
-            	warn("autoflushdeprecated");
+            	System.err.println(warn("autoflushdeprecated"));
             	w=new AutoflushWriter(w);
             }
             return new SchemeCharacterOutputPort(w);
@@ -461,10 +461,10 @@ public class IO extends IndexedProcedure {
                 cinport=charinport(f.vlr[0]);
                 return readCode(f, cinport);
             case OPENAUTOFLUSHSTREAM:
-                warn("autoflushdeprecated");
+                System.err.println(warn("autoflushdeprecated"));
                 return new SchemeBinaryOutputPort(new AutoflushOutputStream(binoutstream(f.vlr[0])));
             case OPENAUTOFLUSHWRITER:
-                warn("autoflushdeprecated");
+                System.err.println(warn("autoflushdeprecated"));
                 return new SchemeCharacterOutputPort(new AutoflushWriter(charoutwriter(f.vlr[0])));
             case OPENCHARINPUTPORT:
             	return new SchemeCharacterInputPort(new PushbackReader(new BufferedReader(

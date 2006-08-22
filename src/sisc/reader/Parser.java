@@ -143,7 +143,7 @@ public class Parser extends Util implements Tokens {
     protected void potentialError(int flags, String message, String arg, PushbackReader is) throws IOException {
         if (permissiveParsing(flags))
             if (is==null) System.err.println(warn(message, arg));
-            else warn(liMessage(SISCB, message, arg));
+            else System.err.println(warn(liMessage(SISCB, message, arg)));
         else
             throw new IOException(liMessage(SISCB, message, arg));
     }

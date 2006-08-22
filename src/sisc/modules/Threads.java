@@ -207,7 +207,7 @@ public class Threads extends Util {
 
         public void serialize(Serializer ser) throws IOException {
             if (lockCount > 0 || owner != null)
-                warn("serializinglockedmutex");
+               System.err.println(warn("serializinglockedmutex"));
         }
 
         public boolean visit(ExpressionVisitor v) {
