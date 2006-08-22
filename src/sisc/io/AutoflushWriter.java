@@ -4,6 +4,9 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+/**
+ * @deprecated Use buffered ports instead.
+ */
 public class AutoflushWriter extends FilterWriter {
 
     public AutoflushWriter(Writer out) {

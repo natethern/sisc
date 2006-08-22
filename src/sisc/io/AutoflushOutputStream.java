@@ -4,6 +4,10 @@ import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+
+/**
+ * @deprecated Use buffered ports instead.
+ */
 public class AutoflushOutputStream extends FilterOutputStream {
 
     public AutoflushOutputStream(OutputStream out) {
