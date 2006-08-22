@@ -601,6 +601,9 @@
   (type<=-hook        'oo oo-type<=-hook)
   (compare-types-hook 'oo oo-compare-types-hook))
 
+; One-version deprecated support for autoflush
+(include "io/char-io.scm")
+
 (module binary-io
   (read-block
    write-block
