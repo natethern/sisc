@@ -1,3 +1,12 @@
+2006-08-22  Scott G. Miller  <sgmiller@gmail.com>
+
+	* java-io converters were incorrectly passing unwrapped Scheme values.  Fixed.
+	
+	* Character ports weren't accepting autoflush as a parameter, for backwards compatibility.
+	  Fixed.
+	 
+	* Documented character-set as an argument to open-character-in/output-port.
+	
 2006-08-12  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Buffered binary port constructors weren't exported from binary-io.  Fixed.
