@@ -58,15 +58,18 @@
 
 ;; 5. <filter-input-port> -> InputStream
 (define-method (->jinput-stream (<binary-input-port> in-port))
-  (get-input-stream in-port))
+  (get-input-stream (java-wrap in-port)))
 
 ;; 6. <character-input-port> -> InputStream (error)
 (define-method (->jinput-stream (<character-input-port> in-port))
   (error "Cannot obtain an InputStream from a <character-input-port>"))
 
+(define-method (->joutput-stream (<binary-output-port> out-port))
+  (get-output-stream (java-wrap out-port)))
+
 ;; 8. <character-output-port> -> OutputStream (error)
 (define-method (->joutput-stream (<character-output-port> out-port))
-  (error "Cannot obtain an OutputStream from a <charater-output-port>"))
+  (error "Cannot obtain an OutputStream from a <character-output-port>"))
 
 
 ;; <native-*-character-port> -> Java Read/Writer
@@ -74,8 +77,9 @@
 
 ;; 9. <native-character-input-port> => Reader
 (define-method (->jreader (<character-input-port> in-port))
-  (get-reader in-port))
+  (get-reader (java-wrap in-port)))
 
 ;; 10. <native-character-output-port> => Writer
 (define-method (->jwriter (<character-output-port> out-port))
-  (get-writer out-port))
+  (get-writer (java-wrap out-port)))
+
