@@ -370,11 +370,15 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                 <methodparam>
                   <parameter>binary-input-port</parameter>
                 </methodparam>
+                <methodparam choice="opt">
+                  <parameter>character-set</parameter>
+                </methodparam>
               </methodsynopsis>
               <blockquote>
                 <para>
                   Creates an input port which reads from the
-                  provided binary input port.  The character
+                  provided binary input port.  One may specify the
+                  desired character set as a string, otherwise the character
                   set is retrieved from the <literal>character-set</literal>
                   dynamic parameter.
                 </para>
@@ -391,13 +395,17 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
                   <parameter>binary-output-port</parameter>
                 </methodparam>
                 <methodparam choice="opt">
+                  <parameter>character-set</parameter>
+                </methodparam>
+                <methodparam choice="opt">
                   <parameter>auto-flush</parameter>
                 </methodparam>
               </methodsynopsis>
               <blockquote>
                 <para>
                   Creates an output port which writes to the
-                  provided binary output port.  The character
+                  provided binary output port.  One may specify the
+                  desired character set as a string, otherwise the character
                   set is retrieved from the <literal>character-set</literal>
                   dynamic parameter.  If the optional
                   <parameter>auto-flush</parameter> argument is provided
