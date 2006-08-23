@@ -1,3 +1,7 @@
+2006-08-23  SISC 1.15.3 Released
+
+2006-08-23  SISC 1.16.2-beta Released
+
 2006-08-23  Scott G. Miller  <sgmiller@gmail.com>
 
 	* #%fix syntoken isn't used, and thus prevents that as a binding.  Fixed, see
