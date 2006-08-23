@@ -11,6 +11,8 @@
 	  Fixed.
 	 
 	* Documented character-set as an argument to open-character-in/output-port.
+
+2006-08-19  SISC 1.16.1-beta Released
 	
 2006-08-12  Scott G. Miller  <sgmiller@gmail.com>
 
