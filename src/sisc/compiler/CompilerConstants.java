@@ -27,7 +27,7 @@ public abstract class CompilerConstants extends Util {
         SYN_SET    = syntax("set!", SET), 
         SYN_LAMBDA = syntax("lambda", LAMBDA),
         SYN_LETREC = syntax("letrec", LETREC),
-        SYN_FIX = syntax("fix", FIX),
+        //SYN_FIX = syntax("fix", FIX),
         SYN_ANNOT  = syntax("annotate", MAKEANNOTATION),
         SYN_UNKNOWN = syntax("unknown", UNKNOWN);
     
