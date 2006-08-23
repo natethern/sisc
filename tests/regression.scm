@@ -390,3 +390,8 @@
 (should-be 1538637 1 
    (begin 1 ; \n 2
     ))
+
+; Used to throw an error handling 'fix'
+(should-be 1545294 #t
+           (eval '(begin (define (f) (fix)) #t) (sisc-initial-environment)))
+
