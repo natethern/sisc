@@ -101,6 +101,7 @@
 (define internal-debugging      (make-native-parameter "internalDebugging"))
 (define synopsis-length         (make-native-parameter "synopsisLength"))
 (define source-annotations      (make-native-parameter "sourceAnnotations"))
+(define max-stack-trace-depth   (make-native-parameter "maxStackTraceDepth"))
 
 ; Enable inlining and optimizer assumptions while expanding libraries
  
