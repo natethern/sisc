@@ -720,6 +720,105 @@ else { ...make internal call... }
           <emphasis>same</emphasis> call works correctly.
         </para>
       </sect3>
+      <sect3 id="SchemePortsInJava">
+        <title>Scheme I/O</title>
+        <para>
+          Scheme ports are thin wrappers around the Java I/O
+          hierarchy, adding some functionality needed by Scheme. 
+          As such, it is trivial to obtain Java compatible I/O objects
+          from Scheme ports.  For information on obtaining Scheme and
+          Java compatible I/O objects in Scheme, see the Java I/O
+          module described in <xref linkend="JavaPorts"/>.
+        </para>
+        <para>
+          Scheme ports are encapsulated in the
+          <classname>SchemeBinaryInputPort</classname>,
+          <classname>SchemeBinaryOutputPort</classname>,
+          <classname>SchemeCharacterInputPort</classname>,
+          <classname>SchemeCharacterOutputPort</classname> classes
+          in the <classname>sisc.data</classname> package.  Each port class
+          contains an accessor which returns the relevant Java I/O
+          type, as described below.
+        </para>
+        <blockquote>
+          <classsynopsis language="java" class="class">
+            <ooclass>
+              <modifier>public</modifier>
+              <classname>sisc.data.SchemeBinaryInputPort</classname>
+            </ooclass>
+          <indexterm><primary>getInputStream</primary></indexterm>
+          <methodsynopsis>
+            <modifier>public</modifier>
+            <type>java.io.InputStream</type>
+            <methodname>getInputStream</methodname>
+            <void/>
+          </methodsynopsis>
+        </classsynopsis>
+          <blockquote>
+            <para>
+              Return a Java <classname>InputStream</classname> for
+              accessing this Scheme port.
+            </para>
+          </blockquote>
+          <classsynopsis language="java" class="class">
+            <ooclass>
+              <modifier>public</modifier>
+              <classname>sisc.data.SchemeBinaryOutputPort</classname>
+            </ooclass>
+          <indexterm><primary>getOutputStream</primary></indexterm>
+            <methodsynopsis>
+              <modifier>public</modifier>
+              <type>java.io.OutputStream</type>
+              <methodname>getOutputStream</methodname>
+              <void/>
+            </methodsynopsis>
+          </classsynopsis>
+          <blockquote>
+            <para>
+              Return a Java <classname>OutputStream</classname> for
+              accessing this Scheme port.
+            </para>
+          </blockquote>
+          <classsynopsis language="java" class="class">
+            <ooclass>
+              <modifier>public</modifier>
+              <classname>sisc.data.SchemeCharacterInputPort</classname>
+            </ooclass>
+            <indexterm><primary>getReader</primary></indexterm>
+            <methodsynopsis>
+              <modifier>public</modifier>
+              <type>java.io.Reader</type>
+              <methodname>getReader</methodname>
+              <void/>
+            </methodsynopsis>
+          </classsynopsis>
+          <blockquote>
+            <para>
+              Return a Java <classname>Reader</classname> for
+              accessing this Scheme port.
+            </para>
+          </blockquote>
+          <classsynopsis language="java" class="class">
+            <ooclass>
+              <modifier>public</modifier>
+              <classname>sisc.data.SchemeCharacterOutputPort</classname>
+            </ooclass>
+            <indexterm><primary>getWriter</primary></indexterm>
+            <methodsynopsis>
+              <modifier>public</modifier>
+              <type>java.io.Writer</type>
+              <methodname>getWriter</methodname>
+              <void/>
+            </methodsynopsis>
+          </classsynopsis>
+          <blockquote>
+            <para>
+              Return a Java <classname>Writer</classname> for
+              accessing this Scheme port.
+            </para>
+          </blockquote>
+        </blockquote>
+      </sect3>
     </sect2>
     <sect2>
       <title>Quick Reference</title>
