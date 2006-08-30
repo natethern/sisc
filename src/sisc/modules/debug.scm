@@ -185,7 +185,7 @@
 
 
 ;;;;;;;;;;;;;; exception display ;;;;;;;;;;;;;;;;;;;;
-          
+
 (define suppressed-stack-trace-source-kinds (make-parameter '(#f)))
 
 (define (filter-expr? exp)
@@ -327,10 +327,11 @@
             (display 
              (string-append
               "---------------------------\n"
-              "To enable more detailed stack tracing, start SISC "
-              "with the -Dsisc.maxStackTraceDepth=16 java option.\n"))
+              "To enable more detailed stack tracing, set the dynamic "
+              "parameter max-stack-trace-depth to a non-zero value, "
+              "e.g. 16.\n"))
             (set! *STACK-TRACE-MESSAGE-PRINTED?* #t))))
-  ;;; If the user has never seen a full stack trace, them them how to
+  ;;; If the user has never seen a full stack trace, tell them how to
   ;;; get one.
   (if (null? (suppressed-stack-trace-source-kinds))
       (set! *SUPPRESSED-MESSAGE-PRINTED?* #t)
