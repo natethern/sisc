@@ -198,9 +198,8 @@ public class Interpreter extends Util {
     }
 
     public final StackTracer makeStackTracer() {
-        return (maxStackTraceDepth == 0 ?
-                null :
-                new StackTracer(maxStackTraceDepth));
+    	int depth=num(dynenv.getMaxStackTraceDepth()).indexValue();
+        return (depth == 0 ? null : new StackTracer(depth));
     }
 
     private final StackTracer copyStackTracer() {

@@ -29,6 +29,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public boolean hedgedInlining       = Defaults.HEDGED_INLINING;
     public boolean internalDebugging    = Defaults.INTERNAL_DEBUGGING;
     public int     synopsisLength       = Defaults.SYNOPSIS_LENGTH;
+    public int     maxStackTraceDepth   = Defaults.MAX_STACK_TRACE_DEPTH;
 
     private static String defaultCharacterSet =
         Util.getDefaultCharacterSet().displayName();
@@ -52,6 +53,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
         new Boolean(Defaults.EMIT_ANNOTATIONS).toString();
     private static String defaultStrictR5RS =
         new Boolean(Defaults.STRICT_R5RS).toString();
+    private static String defaultMaxStackTraceDepth =
+        new Integer(Defaults.MAX_STACK_TRACE_DEPTH).toString();
 
     public Value wind = FALSE; //top of wind stack
 
@@ -306,6 +309,13 @@ public class DynamicEnvironment extends Util implements Cloneable {
         parser.lexer.strictR5RS = truth(v);
     }
 
+    public Value getMaxStackTraceDepth() {
+    	return Quantity.valueOf(maxStackTraceDepth);
+    }
+    
+    public void setMaxStackTraceDepth(Value v) {
+    	maxStackTraceDepth = num(v).indexValue();
+    }
 }
 /*
  * The contents of this file are subject to the Mozilla Public

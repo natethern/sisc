@@ -86,7 +86,7 @@ public class CallFrame extends Procedure {
     public boolean visit(ExpressionVisitor v) {
         return visitValueArray(v, vlr) && visitValueArray(v,lcl) && 
             visitValueArray(v,env) && v.visit(tpl) && v.visit(nxp) && v.visit(fk) && 
-            v.visit(parent);
+            v.visit(parent) && (tracer == null || v.visit(tracer));
     }
 
     public void apply(Interpreter r) throws ContinuationException {
@@ -123,7 +123,10 @@ public class CallFrame extends Procedure {
         s.writeExpression(nxp);
         s.writeExpression(fk);
         s.writeExpression(parent);
-        //TODO: we should serialize the stack tracer here
+        s.writeBoolean(tracer!=null);
+        if (tracer != null) {
+        	tracer.serialize(s);
+        }
     }
 
     public CallFrame() {}
@@ -140,10 +143,10 @@ public class CallFrame extends Procedure {
         nxp=s.readExpression();
         fk=(CallFrame)s.readExpression();
         parent=(CallFrame)s.readExpression();
-        //TODO: we should deserialize the stack tracer here
-        tracer = (maxStackTraceDepth == 0) ?
-            null :
-            new StackTracer(maxStackTraceDepth);
+        if (s.readBoolean()) {
+        	tracer=new StackTracer();
+        	tracer.deserialize(s);
+        }
     }
 }
 

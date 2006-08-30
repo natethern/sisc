@@ -30,7 +30,7 @@ public class SharedValueWriter extends PortValueWriter {
 
         visit(v);
         while(!visited.isEmpty()) {
-            ((Expression)visited.remove(0)).visit(this);
+            ((ExpressionVisitee)visited.remove(0)).visit(this);
         }
 
         super.displayOrWrite(v, display);

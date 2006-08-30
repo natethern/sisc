@@ -2,13 +2,18 @@ package sisc.interpreter;
 
 import sisc.data.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
+import sisc.ser.Deserializer;
+import sisc.ser.Serializer;
+import sisc.util.ExpressionVisitee;
+import sisc.util.ExpressionVisitor;
 import sisc.util.Util;
 
-public class StackTracer implements Cloneable {
+public class StackTracer implements Cloneable, ExpressionVisitee {
 
     private static Symbol UNKNOWN = Symbol.get("?");
 
@@ -71,7 +76,11 @@ public class StackTracer implements Cloneable {
         this.maxDepth = maxDepth;
     }
 
-    private static boolean addTailToPreceedingRepetition(List l) {
+    // No arg constructor for serialization/deserialization
+    public StackTracer() {
+	}
+
+	private static boolean addTailToPreceedingRepetition(List l) {
         /*
           (... (n x_0 ... x_m) x_0 ... x_m)
           -->
@@ -195,6 +204,85 @@ public class StackTracer implements Cloneable {
         addAll();
         return new Pair(Util.truth(overflown), deepListToValue(stack));
     }
+
+	public void serialize(Serializer s) throws IOException {
+		s.writeInt(maxDepth);
+		s.writeBoolean(overflown);
+		writeList(s, toAdd);
+		writeList(s, stack);
+	}
+
+	private static final int WRAPPER=0, REPETITION=1, EXPR=2;
+	
+	private static void writeList(Serializer s, List ls) throws IOException {
+		s.writeInt(ls.size());
+		for (int i=0; i<ls.size(); i++) {			
+			Object o=ls.get(i);
+			if (o instanceof Wrapper) {
+				s.writeInt(WRAPPER);
+				s.writeExpression(((Wrapper)o).expr);
+			} else if (o instanceof Repetition) {
+				s.writeInt(REPETITION);
+				Repetition r=(Repetition)o;
+				s.writeInt(r.count);
+				writeList(s, r.exprs);
+			} else if (o instanceof Expression) {
+				s.writeInt(EXPR);
+				s.writeExpression((Expression)o);
+			}
+		}
+	}
+
+	private static List readList(Deserializer s) throws IOException {
+		int size=s.readInt();
+		List rv=new ArrayList(size);
+		for (int i=0; i<size; i++) {
+			int type=s.readInt();
+			switch (type) {
+			case WRAPPER:
+				Expression e=s.readExpression();
+				rv.add(new Wrapper(e));
+				break;
+			case REPETITION:
+				int count=s.readInt();
+				List exprs=readList(s);
+				rv.add(new Repetition(count, exprs));
+				break;
+			case EXPR:
+				rv.add(s.readExpression());
+			}
+		}
+		return rv;
+	}
+
+	public void deserialize(Deserializer s) throws IOException {
+		maxDepth=s.readInt();
+		overflown=s.readBoolean();
+		toAdd=readList(s);
+		stack=readList(s);
+	}
+
+	
+	private static boolean visitList(ExpressionVisitor v, List ls) {
+		boolean rv=true;
+		for (int i=0; i<ls.size(); i++) {			
+			Object o=ls.get(i);
+			if (o instanceof Wrapper) {
+				rv = v.visit(((Wrapper)o).expr) && rv;
+			} else if (o instanceof Repetition) {
+				Repetition r=(Repetition)o;
+				rv = visitList(v, r.exprs) && rv;
+			} else if (o instanceof Expression) {
+				rv = v.visit((Expression)o) && rv;
+			}
+			if (!rv) return false;
+		}
+		return rv;
+	}
+
+	public boolean visit(ExpressionVisitor v) {
+		return visitList(v, toAdd) && visitList(v, stack);
+	}
 
 }
 /*
