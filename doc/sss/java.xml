@@ -736,9 +736,9 @@ else { ...make internal call... }
           <classname>SchemeBinaryOutputPort</classname>,
           <classname>SchemeCharacterInputPort</classname>,
           <classname>SchemeCharacterOutputPort</classname> classes
-          in the <classname>sisc.data</classname> package.  Each port class
-          contains an accessor which returns the relevant Java I/O
-          type, as described below.
+          in the <classname>sisc.data</classname> package.  An
+          instance of a port class contains an accessor which returns 
+          the relevant Java I/O type, as described for each class below.
         </para>
         <blockquote>
           <classsynopsis language="java" class="class">
