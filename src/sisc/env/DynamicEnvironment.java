@@ -309,6 +309,10 @@ public class DynamicEnvironment extends Util implements Cloneable {
         parser.lexer.strictR5RS = truth(v);
     }
 
+    public int getMaxStackTraceDepthAsInt() {
+    	return maxStackTraceDepth;
+    }
+    
     public Value getMaxStackTraceDepth() {
     	return Quantity.valueOf(maxStackTraceDepth);
     }
