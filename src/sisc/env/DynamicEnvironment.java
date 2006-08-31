@@ -116,6 +116,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
             ctx.getProperty("sisc.emitAnnotations", defaultEmitAnnotations).equals("true");
         this.parser.lexer.strictR5RS =
             ctx.getProperty("sisc.strictR5RS", defaultStrictR5RS).equals("true");
+        this.maxStackTraceDepth =
+            Integer.parseInt(ctx.getProperty("sisc.maxStackTraceDepth", defaultMaxStackTraceDepth));
 
         initialClassPathExtension = new URL[]{};
     }
