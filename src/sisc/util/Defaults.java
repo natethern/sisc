@@ -2,7 +2,7 @@ package sisc.util;
 
 public abstract class Defaults {
 
-    public static int     SYNOPSIS_LENGTH             = 30;
+	public static int     SYNOPSIS_LENGTH             = 30;
     public static boolean PERMIT_INTERRUPTS           = true;
     public static int     MIN_FLOAT_PRECISION         = 16;
     public static int     MAX_FLOAT_PRECISION         = 32;
@@ -16,6 +16,7 @@ public abstract class Defaults {
     public static boolean INTERNAL_DEBUGGING          = false;
     public static boolean EMIT_ANNOTATIONS            = true;
     public static boolean STRICT_R5RS                 = false;
+    public static boolean CUSTOM_PRINTING             = true;
 
 }
  

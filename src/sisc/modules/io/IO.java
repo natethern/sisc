@@ -258,6 +258,9 @@ public class IO extends IndexedProcedure {
                                       r.dynenv.caseSensitive):
                 new PortValueWriter(port.getWriter(), r.dynenv.vectorLengthPrefixing,
                                     r.dynenv.caseSensitive);
+            if (r.dynenv.customPrinting)
+            	w=new CustomValueWriter(w,r.dynenv);
+            	
             if (display) w.display(v);
             else w.write(v);
         } catch (IOException e) {

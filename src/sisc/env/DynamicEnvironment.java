@@ -30,6 +30,9 @@ public class DynamicEnvironment extends Util implements Cloneable {
     public boolean internalDebugging    = Defaults.INTERNAL_DEBUGGING;
     public int     synopsisLength       = Defaults.SYNOPSIS_LENGTH;
     public int     maxStackTraceDepth   = Defaults.MAX_STACK_TRACE_DEPTH;
+	public boolean customPrinting       = Defaults.CUSTOM_PRINTING;
+	public Pair    customDisplayTypeMap = Util.EMPTYLIST;
+	public Pair    customWriteTypeMap   = Util.EMPTYLIST;
 
     private static String defaultCharacterSet =
         Util.getDefaultCharacterSet().displayName();
@@ -80,6 +83,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
     //user-defined thread variables; this map is weak so that we don't
     //hang on to vars that are no longer in use.
     public java.util.Map parameters = new WeakHashMap(1);
+
 
     public DynamicEnvironment(AppContext ctx) {
         this(ctx, System.in, System.out);
@@ -321,6 +325,30 @@ public class DynamicEnvironment extends Util implements Cloneable {
     
     public void setMaxStackTraceDepth(Value v) {
     	maxStackTraceDepth = num(v).indexValue();
+    }
+    
+    public void setCustomPrinting(Value v) {
+    	customPrinting=truth(v);
+    }
+    
+    public Value getCustomPrinting() {
+    	return truth(customPrinting);
+    }
+    
+    public Value getCustomDisplayTypeMap() {
+    	return customDisplayTypeMap;
+    }
+    
+    public void setCustomDisplayTypeMap(Value v) {
+    	customDisplayTypeMap=pair(v);    	
+    }
+
+    public Value getCustomWriteTypeMap() {
+    	return customWriteTypeMap;
+    }
+    
+    public void setCustomWriteTypeMap(Value v) {
+    	customWriteTypeMap=pair(v);    	
     }
 }
 /*

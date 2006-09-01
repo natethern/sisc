@@ -102,6 +102,9 @@
 (define synopsis-length         (make-native-parameter "synopsisLength"))
 (define source-annotations      (make-native-parameter "sourceAnnotations"))
 (define max-stack-trace-depth   (make-native-parameter "maxStackTraceDepth"))
+(define custom-printing         (make-native-parameter "customPrinting"))
+(define custom-display-type-map (make-native-parameter "customDisplayTypeMap"))
+(define custom-write-type-map   (make-native-parameter "customWriteTypeMap"))
 
 ; Enable inlining and optimizer assumptions while expanding libraries
  
