@@ -6,8 +6,6 @@ import sisc.data.Pair;
 import sisc.data.Procedure;
 import sisc.data.Value;
 import sisc.env.DynamicEnvironment;
-import sisc.env.NativeParameter;
-import sisc.env.Parameter;
 import sisc.interpreter.Context;
 import sisc.interpreter.Interpreter;
 import sisc.interpreter.SchemeException;
@@ -18,8 +16,6 @@ import sisc.util.Util;
 
 public class CustomValueWriter implements ValueWriter {
 
-	final static Parameter typeMap=new NativeParameter("customPrinterTypeMap");
-	
 	ValueWriter parent;
 	private DynamicEnvironment dynenv;
 	
