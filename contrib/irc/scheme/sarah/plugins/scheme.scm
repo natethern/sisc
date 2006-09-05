@@ -173,7 +173,7 @@
                                             (thread/result evaluation-thread)))
                                  (display 
                                   "Sorry, I couldn't evaluate your expression in the given time."))
-                               (print-exception (make-exception m e) #f)))
+                               (print-exception (make-exception (error-parent m) e) #f)))
                          (lambda ()
                            (let ([result (thread/result evaluation-thread)])
                              (unless (void? result) 
