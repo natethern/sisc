@@ -71,7 +71,7 @@ public class SISCFrame extends JPanel implements ActionListener, KeyListener {
             String s=input.getText().trim();
             if (s.length()>1 && s.charAt(s.length()-1)=='\n')
                 s=s.substring(0,s.length()-1);
-            SchemeInputPort ip=new ReaderInputPort(new BufferedReader(new StringReader(s)));
+            PushbackReader ip=new PushbackReader(new BufferedReader(new StringReader(s)));
             Value v=Util.VOID;
             try {
                 v=sp.dynenv.parser.nextExpression(ip); 
