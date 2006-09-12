@@ -395,3 +395,12 @@
 (should-be 1545294 #t
            (eval '(begin (define (f) (fix)) #t) (sisc-initial-environment)))
 
+; In 1.16.4, we failed to escape backslash
+(should-be 1557206 #t 
+  (let ()
+    (import string-io)
+    (char=? #\\ (string-ref 
+                  (with-output-to-string 
+                    (lambda ()
+                      (write "a\\b")))
+                  3))))
