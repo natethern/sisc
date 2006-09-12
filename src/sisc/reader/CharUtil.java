@@ -94,6 +94,7 @@ public abstract class CharUtil {
         case '\n': return "n";
         case '\f': return "f";
         case '\r': return "r";
+        case '\\': return "\\";
         case '"': return "\"";
         default: 
             if (c < ' ' || c > '~') return "u"+charToHex(c);
