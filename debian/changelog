@@ -1,8 +1,26 @@
+sisc (1.16.4) stable; urgency=medium
+
+  * New upstream release.
+	
+ -- Scott G. Miller <sgmiller@gmail.com>  Mon,  11 Sep 2006 10:33:12 -0500
+
 sisc (1.16.3-rc-1) unstable; urgency=medium
 
   * New upstream release candidate.
 	
- -- Scott G. Miller <sgmiller@gmail.com>  Wed,  30 Aug 2006 11:10:07 -0500
+ -- Scott G. Miller <sgmiller@gmail.com>  Thu,  31 Aug 2006 9:53:52 -0500
+
+sisc (1.16.2-beta-1) unstable; urgency=medium
+
+  * New upstream beta.
+	
+ -- Scott G. Miller <sgmiller@gmail.com>  Wed,  23 Aug 2006 10:11:41 -0500
+
+sisc (1.16.1-beta-1) unstable; urgency=medium
+
+  * New upstream beta.
+	
+ -- Scott G. Miller <sgmiller@gmail.com>  Sat,  19 Aug 2006 17:52:19 -0500
 
 sisc (1.16.0-alpha-1) unstable; urgency=medium
 

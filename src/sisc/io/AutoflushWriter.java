@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
+ * A legacy support class which creates ports which flush immediately
+ * after each I/O operation.
+ *
  * @deprecated Use buffered ports instead.
  */
 public class AutoflushWriter extends FilterWriter {

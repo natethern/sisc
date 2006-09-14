@@ -1,3 +1,9 @@
+2006-09-11  Released SISC 1.16.4
+
+2006-09-11  Scott G. Miller  <sgmiller@gmail.com>
+
+	* Updated build-heapjar.scm for the new I/O layer.
+
 2006-08-31  Released SISC 1.16.3-rc
 
 2006-08-30  Scott G. Miller  <sgmiller@gmail.com>
@@ -13,7 +19,7 @@
 
 	* #%fix syntoken isn't used, and thus prevents that as a binding.  Fixed, see
 	  bug 1545294.
-	  
+
 2006-08-22  Scott G. Miller  <sgmiller@gmail.com>
 
 	* java-io converters were incorrectly passing unwrapped Scheme values.  Fixed.
@@ -24,7 +30,7 @@
 	* Documented character-set as an argument to open-character-in/output-port.
 
 2006-08-19  SISC 1.16.1-beta Released
-	
+
 2006-08-12  Scott G. Miller  <sgmiller@gmail.com>
 
 	* Buffered binary port constructors weren't exported from binary-io.  Fixed.
