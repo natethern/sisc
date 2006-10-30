@@ -1675,7 +1675,7 @@
       </example>
       <para>
         Note that the difference between <xref linkend="properror"/> and 
-        <xref linkend="raisenewerror"/> is that in the latter,
+        <xref linkend="raisenewerror"/> is that in the former,
         the computation can still be restarted from the second
         argument of the addition if an outside handler catches the
         newly raised exception and applies the continuation.  This is
