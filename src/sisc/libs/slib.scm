@@ -124,13 +124,13 @@
     pretty-print
     object->string
 ;;;	format				;Common-lisp output formatting
-    trace				;has macros: TRACE and UNTRACE
+;;;     trace				;has macros: TRACE and UNTRACE
 ;;;	compiler			;has (COMPILER)
 ;;;	ed				;(ED) is editor
 ;;;	system				;posix (system <string>)
     getenv				;posix (getenv <string>)
 ;;;	program-arguments		;returns list of strings (argv)
-;;;	current-time			;returns time in seconds since 1/1/1970
+    current-time			;returns time in seconds since 1/1/1970
 
     	  ;; Implementation Specific features
 
