@@ -1907,7 +1907,7 @@ Context.execute(mySchemeCaller);
   &lt;java.lang.object&gt;)
 (define-java-proxy (comparator fn)
   (&lt;java.util.comparator&gt;)
-  (define (.compare p obj1 obj2)
+  (define (.compare this obj1 obj2)
     (let ([x (java-unwrap obj1)]
           [y (java-unwrap obj2)])
       (-&gt;jint (cond [(fn x y) -1]
