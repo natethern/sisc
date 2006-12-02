@@ -266,6 +266,7 @@ com/foo/lib3/Class2.class
     </para> 
     <sect2 id="SRFI55">
       <title><function>require-extension</function></title>
+      <indexterm><primary>require-extension</primary></indexterm>
       <para>          
        	&SISC; supports <ulink url="http://srfi.schemers.org/srfi-55/srfi-55.html">SRFI-55</ulink> for loading libraries and extensions as well.
       	SRFI-55 provides <function>require-extension</function>, which in &SISC; 
