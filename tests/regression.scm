@@ -404,3 +404,8 @@
                     (lambda ()
                       (write "a\\b")))
                   3))))
+                  
+; Multi-arg LCD and GCM were broken
+(should-be 1640371 12 (lcd 2 3 4))
+(should-be 1640371 2 (gcd 12 6 4))
+                  

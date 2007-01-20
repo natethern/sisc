@@ -438,7 +438,7 @@
 (define (gcd . args)
    (cond [(null? args) 0]
 	     [(null? (cdr args)) (car args)]
-         [else (_gcd (car args) (apply gcd (gcd args)))]))
+         [else (_gcd (car args) (apply gcd (cdr args)))]))
 
 (define (lcm . args)
    (cond [(null? args) 1]

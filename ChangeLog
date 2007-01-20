@@ -1,3 +1,7 @@
+2007-01-20  Scott G. Miller <sgmiller@gmail.com>
+    
+    * Fixed a bug in LCM and GCD's recursions.  Bug #1640371.
+    
 2006-11-15  Matthias Radestock  <matthias@sorted.org>
 
 	* Fixed a bug in SISC's slib binding that resulted in slib:warn
