@@ -437,13 +437,13 @@
 
 (define (gcd . args)
    (cond [(null? args) 0]
-     [(null? (cdr args)) (car args)]
-         [else (_gcd (car args) (cadr args))]))
+	     [(null? (cdr args)) (car args)]
+         [else (_gcd (car args) (apply gcd (gcd args)))]))
 
 (define (lcm . args)
    (cond [(null? args) 1]
-     [(null? (cdr args)) (car args)]
-         [else (_lcm (car args) (cadr args))]))
+     	 [(null? (cdr args)) (car args)]
+         [else (_lcm (car args) (apply lcm (cdr args)))]))
 
 (define modulo
   (lambda (x y)
