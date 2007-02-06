@@ -43,7 +43,7 @@ public class CustomCharacterOutputPort extends SchemeCharacterOutputPort impleme
  * The Original Code is the Second Interpreter of Scheme Code (SISC).
  * 
  * The Initial Developer of the Original Code is Scott G. Miller.
- * Portions created by Scott G. Miller are Copyright (C) 2000-2006
+ * Portions created by Scott G. Miller are Copyright (C) 2000-2007
  * Scott G. Miller.  All Rights Reserved.
  * 
  * Contributor(s):
