@@ -662,9 +662,11 @@ public class IO extends IndexedProcedure {
             switch (id) {
             case READSTRING:
                 try {
-                    return Quantity.valueOf(str(f.vlr[0]).readFromReader(f.dynenv.getCurrentInReader(),
-                                                                         num(f.vlr[1]).intValue(),
-                                                                         num(f.vlr[2]).intValue()));
+                	int charsRead=str(f.vlr[0]).readFromReader(f.dynenv.getCurrentInReader(),
+                            num(f.vlr[1]).intValue(),
+                            num(f.vlr[2]).intValue());
+                    if (charsRead < 0) return EOF;
+                    else return Quantity.valueOf(charsRead);
                 } catch (IOException e) {
                     throwIOException(f, e.getMessage(), e);
                 }
@@ -690,9 +692,11 @@ public class IO extends IndexedProcedure {
             switch (id) {
             case READSTRING:
                 try {
-                    return Quantity.valueOf(str(f.vlr[0]).readFromReader(charinreader(f.vlr[3]),
-                                                                         num(f.vlr[1]).intValue(),
-                                                                         num(f.vlr[2]).intValue()));
+                	int charsRead=str(f.vlr[0]).readFromReader(charinreader(f.vlr[3]),
+                            num(f.vlr[1]).intValue(),
+                            num(f.vlr[2]).intValue());
+                	if (charsRead<0) return EOF;
+                	else return Quantity.valueOf(charsRead);
                 } catch (IOException e) {
                     throwIOException(f, e.getMessage(), e);
                 }

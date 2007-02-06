@@ -1,3 +1,16 @@
+2007-02-07  Released SISC 1.16.6
+
+2007-02-06  Scott G. Miller <sgmiller@gmail.com>
+
+	* Fixed a bug in error handling triggered by the recycling of 
+	  escaping continuations.  Bug #1585900.
+	
+	* Fixed a bug in eval which evaluated code in the wrong environment
+	  when a custom environment was used, breaking |load|.  Bug #1650514.
+	  
+	* Fixed return value of |read-string|, which should be the eof object,
+	  not -1.  Bug #1653382.
+
 2007-01-20  Scott G. Miller <sgmiller@gmail.com>
     
     * Fixed a bug in LCM and GCD's recursions.  Bug #1640371.

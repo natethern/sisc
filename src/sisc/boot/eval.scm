@@ -89,4 +89,8 @@
            (set! x (cadr x))]
           [(and (null? env) (strict-r5rs-compliance))
            (error 'eval "expected 2 arguments to procedure, got 1.")])
-    ((apply compile-with-flags x phase '((e) (e)) env))))
+    (let ([compiled-expr (apply compile-with-flags x phase '((e) (e)) env)])
+      (if (null? env) 
+          (compiled-expr)
+          (with-environment (car env) compiled-expr)))))
+        

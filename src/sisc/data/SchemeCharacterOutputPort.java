@@ -7,6 +7,11 @@ import sisc.data.NamedValue;
 import sisc.io.OutputPort;
 import sisc.io.ValueWriter;
 
+/**
+ * A Scheme character output port.  
+ * 
+ * Character output ports are wrappers around Java's Writers.  
+ */
 public class SchemeCharacterOutputPort extends Value 
     implements OutputPort, NamedValue {
 

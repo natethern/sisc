@@ -167,7 +167,7 @@ public class SignalHook implements InvocationHandler {
                     }
                 }
             }        
-        } catch (Throwable t) {
+        } catch (Exception t) {
             t.printStackTrace();
         }
         return null;

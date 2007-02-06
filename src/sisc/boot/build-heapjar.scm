@@ -14,15 +14,14 @@
 (define-java-classes
   <sisc.boot.heap-anchor>
   <sisc.interpreter.app-context>
-  <sisc.io.stream-output-port>
+  <sisc.data.scheme-binary-output-port>
   <java.util.zip.zip-output-stream>
   <java.io.file-output-stream>
   <java.util.zip.zip-entry>
   (<java.net.URL> |java.net.URL|))
 
 (define-generic-java-methods put-next-entry close-entry write close find-heap
-  get-resource)
-(define-generic-java-field-accessor :out)
+  get-resource get-output-stream)
 
 (define (copy in out)
   (let ([buffer (make-buffer 8192)])
@@ -48,9 +47,8 @@
         [heapfile (find-heap-file)]
         [heapanchor (find-heap-anchor-file)])
     (let* ([zip-out (java-new <java.util.zip.zip-output-stream>
-                             (:out (java-wrap (unwrap-native-output-port outfile))))]
-           [zip-schemeout (make <native-output-port>
-                            (java-unwrap (java-new <sisc.io.stream-output-port> zip-out (->jboolean #f))))]
+                              (get-output-stream (java-wrap outfile)))]
+           [zip-schemeout (java-unwrap (java-new <sisc.data.scheme-binary-output-port> zip-out))]
            [anchorentry (java-new <java.util.zip.zip-entry>
                                   (->jstring "sisc/boot/HeapAnchor.class"))]
            [heapentry (java-new  <java.util.zip.zip-entry>

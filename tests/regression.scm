@@ -1,5 +1,7 @@
 ;;SISC-specific regression tests
 
+(include "regression-definitions.scm")
+
 (define-syntax should-be
   (syntax-rules ()
     ((_ test-id value expression)
@@ -228,14 +230,6 @@
 (should-be 1096047 '#(1 2 unquote (list 3 4)) 
                    `#(1 2 unquote (list 3 4)))
 
-(module m (a b)
-  (module ((a x))
-   (define x 10)
-   (define (a) x))
-  (module ((b x))
-   (define x 20)
-   (define (b) x)))
-
 (should-be 1124005 10
   (let () 
     (import m)
@@ -404,8 +398,21 @@
                     (lambda ()
                       (write "a\\b")))
                   3))))
-                  
-; Multi-arg LCD and GCM were broken
-(should-be 1640371 12 (lcd 2 3 4))
+     
+; Multi-arg LCM and GCD were broken
+(should-be 1640371 12 (lcm 2 3 4))
 (should-be 1640371 2 (gcd 12 6 4))
+               
+; eval was evaluating code in the wrong environment
+(should-be 1650514 1
+  (let ([env (sisc-initial-environment)])
+    (set! intvalue 3)
+    (eval '(load "regression-definitions.scm") env)
+    (getprop 'intvalue env)))
+
+; read-string was returning -1 on eof
+(should-be 1653382 #!eof
+  (let ()
+    (import string-io)
+    (read-string (make-string 8) 0 1 (open-input-string ""))))
                   

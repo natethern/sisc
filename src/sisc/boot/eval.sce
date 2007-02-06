@@ -1,13 +1,13 @@
 (#%program
-  ((|%%_-TqjjnpUq_x| . 1) (_make-parameter . 1))
+  ((|%%_7w-V8lgoK_x| . 1) (_make-parameter . 1))
   ()
   (_make-parameter)
   (#%define current-optimizer
     (_make-parameter
       (#%lambda #t
-        (|%%_-TqjjnpUq_x|)
+        (|%%_7w-V8lgoK_x|)
         ()
-        |%%_-TqjjnpUq_x|))))
+        |%%_7w-V8lgoK_x|))))
 (#%program
   ((_with-environment . 1))
   ()
@@ -15,28 +15,28 @@
   (#%define with-environment _with-environment))
 (#%program
   ((compile . 1)
-   (|%%_-TQV4ysUq_compile| . 1)
-   (|%%_-TuZ65sUq_analyze| . 1)
-   (|%%_-T819ErUq_optimize| . 1)
-   (|%%_-TO4bbrUq_expand| . 1)
+   (|%%_7wowWvjoK_compile| . 1)
+   (|%%_7w2AY2joK_analyze| . 1)
+   (|%%_7wID-BioK_optimize| . 1)
+   (|%%_7wmH09ioK_expand| . 1)
    (cons . 4)
    (list . 1)
-   (|%%_-TcHYluUq_expr| . 1)
-   (|%%_-TMfhQpUq_old-compile| . 1)
-   (|%%_-TSK-UtUq_expr| . 1)
+   (|%%_7wMhOjloK_expr| . 1)
+   (|%%_7wkS6OgoK_old-compile| . 1)
+   (|%%_7wqlQSkoK_expr| . 1)
    (_analyze! . 1)
-   (|%%_-TwO0stUq_expr| . 1)
+   (|%%_7w4pSpkoK_expr| . 1)
    (current-optimizer . 1)
-   (|%%_-T6cfhqUq_flags| . 1)
-   (|%%_-TaS2_sUq_expr| . 1)
+   (|%%_7wGO4fhoK_flags| . 1)
+   (|%%_7wKsUYjoK_expr| . 1)
    (sc-expand . 1)
    (apply . 1)
-   (|%%_-Ts8dKqUq_env| . 3)
+   (|%%_7w0L2IhoK_env| . 3)
    (with-environment . 1))
-  ((|%%_-TQV4ysUq_compile| . 1)
-   (|%%_-TuZ65sUq_analyze| . 1)
-   (|%%_-T819ErUq_optimize| . 1)
-   (|%%_-TO4bbrUq_expand| . 1))
+  ((|%%_7wowWvjoK_compile| . 1)
+   (|%%_7w2AY2joK_analyze| . 1)
+   (|%%_7wID-BioK_optimize| . 1)
+   (|%%_7wmH09ioK_expand| . 1))
   (compile
     list
     cons
@@ -47,77 +47,77 @@
     with-environment)
   (#%define compilation-phases
     ((#%lambda #t
-       (|%%_-TMfhQpUq_old-compile|)
+       (|%%_7wkS6OgoK_old-compile|)
        ()
        (#%lambda #t
-         (|%%_-T6cfhqUq_flags| |%%_-Ts8dKqUq_env|)
-         (|%%_-TMfhQpUq_old-compile|)
+         (|%%_7wGO4fhoK_flags| |%%_7w0L2IhoK_env|)
+         (|%%_7wkS6OgoK_old-compile|)
          (#%letrec #t
-           ((|%%_-TO4bbrUq_expand|
+           ((|%%_7wmH09ioK_expand|
               (#%lambda #t
-                (|%%_-TaS2_sUq_expr|)
-                (|%%_-Ts8dKqUq_env| |%%_-T6cfhqUq_flags|)
+                (|%%_7wKsUYjoK_expr|)
+                (|%%_7w0L2IhoK_env| |%%_7wGO4fhoK_flags|)
                 (with-environment
-                  |%%_-Ts8dKqUq_env|
+                  |%%_7w0L2IhoK_env|
                   (#%lambda #t
                     ()
-                    (|%%_-TaS2_sUq_expr| |%%_-T6cfhqUq_flags|)
+                    (|%%_7wKsUYjoK_expr| |%%_7wGO4fhoK_flags|)
                     (apply sc-expand
-                           |%%_-TaS2_sUq_expr|
-                           |%%_-T6cfhqUq_flags|)))))
-            (|%%_-T819ErUq_optimize|
+                           |%%_7wKsUYjoK_expr|
+                           |%%_7wGO4fhoK_flags|)))))
+            (|%%_7wID-BioK_optimize|
               (#%lambda #t
-                (|%%_-TwO0stUq_expr|)
+                (|%%_7w4pSpkoK_expr|)
                 ()
-                ((current-optimizer) |%%_-TwO0stUq_expr|)))
-            (|%%_-TuZ65sUq_analyze|
+                ((current-optimizer) |%%_7w4pSpkoK_expr|)))
+            (|%%_7w2AY2joK_analyze|
               (#%lambda #t
-                (|%%_-TSK-UtUq_expr|)
-                (|%%_-Ts8dKqUq_env|)
+                (|%%_7wqlQSkoK_expr|)
+                (|%%_7w0L2IhoK_env|)
                 (_analyze!
-                  |%%_-TSK-UtUq_expr|
-                  |%%_-Ts8dKqUq_env|)))
-            (|%%_-TQV4ysUq_compile|
+                  |%%_7wqlQSkoK_expr|
+                  |%%_7w0L2IhoK_env|)))
+            (|%%_7wowWvjoK_compile|
               (#%lambda #t
-                (|%%_-TcHYluUq_expr|)
-                (|%%_-Ts8dKqUq_env| |%%_-TMfhQpUq_old-compile|)
-                (|%%_-TMfhQpUq_old-compile|
-                  |%%_-TcHYluUq_expr|
-                  |%%_-Ts8dKqUq_env|))))
-           (|%%_-Ts8dKqUq_env|
-             |%%_-T6cfhqUq_flags|
-             |%%_-TMfhQpUq_old-compile|)
-           (list (cons (#%quote expand) |%%_-TO4bbrUq_expand|)
-                 (cons (#%quote optimize) |%%_-T819ErUq_optimize|)
-                 (cons (#%quote analyze) |%%_-TuZ65sUq_analyze|)
-                 (cons (#%quote compile) |%%_-TQV4ysUq_compile|)))))
+                (|%%_7wMhOjloK_expr|)
+                (|%%_7w0L2IhoK_env| |%%_7wkS6OgoK_old-compile|)
+                (|%%_7wkS6OgoK_old-compile|
+                  |%%_7wMhOjloK_expr|
+                  |%%_7w0L2IhoK_env|))))
+           (|%%_7w0L2IhoK_env|
+             |%%_7wGO4fhoK_flags|
+             |%%_7wkS6OgoK_old-compile|)
+           (list (cons (#%quote expand) |%%_7wmH09ioK_expand|)
+                 (cons (#%quote optimize) |%%_7wID-BioK_optimize|)
+                 (cons (#%quote analyze) |%%_7w2AY2joK_analyze|)
+                 (cons (#%quote compile) |%%_7wowWvjoK_compile|)))))
      compile)))
 (#%program
   ((interaction-environment . 1)
-   (|%%_-TyDWOuUq_env| . 2)
-   (|%%_-TAsQ9wUq_expr| . 1)
-   (|%%_-TChKwxUq_env| . 1)
-   (|%%_-TUzUfvUq_flags| . 1)
+   (|%%_7w6eMMloK_env| . 2)
+   (|%%_7w83G7noK_expr| . 1)
+   (|%%_7waUzuooK_env| . 1)
+   (|%%_7wsaKdmoK_flags| . 1)
    (compilation-phases . 1)
-   (|%%_-TewSIvUq_start-phase| . 1)
-   (|%%_-TglM3xUq_select-phases| . 2)
+   (|%%_7wO6IGmoK_start-phase| . 1)
+   (|%%_7wQXB1ooK_select-phases| . 2)
    (map . 1)
-   (|%%_-TGXxeAUq_start-phase| . 2)
-   (|%%_-T0UvHAUq_phases| . 3)
+   (|%%_7weyncroK_start-phase| . 2)
+   (|%%_7wAulFroK_phases| . 3)
    (caar . 1)
    (eq? . 1)
    (cdr . 3)
-   (|%%_-TWoOCwUq_compose| . 2)
+   (|%%_7wu_DAnoK_compose| . 2)
    (apply . 2)
    (car . 2)
-   (|%%_-T-2CkzUq_x| . 1)
-   (|%%_-TiaGqyUq_fn| . 1)
-   (|%%_-TE6ETyUq_tail| . 1)
-   (|%%_-Tk_zNzUq_x| . 1)
-   (|%%_-TYdIZxUq_fs| . 3)
+   (|%%_7wyFriqoK_x| . 1)
+   (|%%_7wSMvopoK_fn| . 1)
+   (|%%_7wcJtRpoK_tail| . 1)
+   (|%%_7wUBpLqoK_x| . 1)
+   (|%%_7wwQxXooK_fs| . 3)
    (null? . 2))
-  ((|%%_-TglM3xUq_select-phases| . 1)
-   (|%%_-TWoOCwUq_compose| . 1))
+  ((|%%_7wQXB1ooK_select-phases| . 1)
+   (|%%_7wu_DAnoK_compose| . 1))
   (null? apply
          cdr
          car
@@ -128,68 +128,68 @@
          compilation-phases)
   (#%define compile-with-flags
     (#%lambda #t
-      (|%%_-TAsQ9wUq_expr|
-        |%%_-TewSIvUq_start-phase|
-        |%%_-TUzUfvUq_flags|
+      (|%%_7w83G7noK_expr|
+        |%%_7wO6IGmoK_start-phase|
+        |%%_7wsaKdmoK_flags|
         .
-        |%%_-TyDWOuUq_env|)
+        |%%_7w6eMMloK_env|)
       ()
       (#%letrec #t
-        ((|%%_-TWoOCwUq_compose|
+        ((|%%_7wu_DAnoK_compose|
            (#%lambda #t
-             |%%_-TYdIZxUq_fs|
-             (|%%_-TWoOCwUq_compose|)
-             (#%if (null? |%%_-TYdIZxUq_fs|)
+             |%%_7wwQxXooK_fs|
+             (|%%_7wu_DAnoK_compose|)
+             (#%if (null? |%%_7wwQxXooK_fs|)
                (#%lambda #t
-                 (|%%_-Tk_zNzUq_x|)
+                 (|%%_7wUBpLqoK_x|)
                  ()
-                 |%%_-Tk_zNzUq_x|)
+                 |%%_7wUBpLqoK_x|)
                ((#%lambda #t
-                  (|%%_-TiaGqyUq_fn| |%%_-TE6ETyUq_tail|)
+                  (|%%_7wSMvopoK_fn| |%%_7wcJtRpoK_tail|)
                   ()
                   (#%lambda #t
-                    (|%%_-T-2CkzUq_x|)
-                    (|%%_-TE6ETyUq_tail| |%%_-TiaGqyUq_fn|)
-                    (|%%_-TE6ETyUq_tail|
-                      (|%%_-TiaGqyUq_fn| |%%_-T-2CkzUq_x|))))
-                (car |%%_-TYdIZxUq_fs|)
-                (apply |%%_-TWoOCwUq_compose|
-                       (cdr |%%_-TYdIZxUq_fs|))))))
-         (|%%_-TglM3xUq_select-phases|
+                    (|%%_7wyFriqoK_x|)
+                    (|%%_7wcJtRpoK_tail| |%%_7wSMvopoK_fn|)
+                    (|%%_7wcJtRpoK_tail|
+                      (|%%_7wSMvopoK_fn| |%%_7wyFriqoK_x|))))
+                (car |%%_7wwQxXooK_fs|)
+                (apply |%%_7wu_DAnoK_compose|
+                       (cdr |%%_7wwQxXooK_fs|))))))
+         (|%%_7wQXB1ooK_select-phases|
            (#%lambda #t
-             (|%%_-TGXxeAUq_start-phase|
-               |%%_-T0UvHAUq_phases|)
-             (|%%_-TglM3xUq_select-phases|)
-             (#%if (eq? (caar |%%_-T0UvHAUq_phases|)
-                        |%%_-TGXxeAUq_start-phase|)
-               (map cdr |%%_-T0UvHAUq_phases|)
-               (|%%_-TglM3xUq_select-phases|
-                 |%%_-TGXxeAUq_start-phase|
-                 (cdr |%%_-T0UvHAUq_phases|))))))
-        (|%%_-TyDWOuUq_env|
-          |%%_-TUzUfvUq_flags|
-          |%%_-TewSIvUq_start-phase|
-          |%%_-TAsQ9wUq_expr|)
+             (|%%_7weyncroK_start-phase|
+               |%%_7wAulFroK_phases|)
+             (|%%_7wQXB1ooK_select-phases|)
+             (#%if (eq? (caar |%%_7wAulFroK_phases|)
+                        |%%_7weyncroK_start-phase|)
+               (map cdr |%%_7wAulFroK_phases|)
+               (|%%_7wQXB1ooK_select-phases|
+                 |%%_7weyncroK_start-phase|
+                 (cdr |%%_7wAulFroK_phases|))))))
+        (|%%_7w6eMMloK_env|
+          |%%_7wsaKdmoK_flags|
+          |%%_7wO6IGmoK_start-phase|
+          |%%_7w83G7noK_expr|)
         ((#%lambda #t
-           (|%%_-TChKwxUq_env|)
-           (|%%_-TglM3xUq_select-phases|
-             |%%_-TWoOCwUq_compose|
-             |%%_-TUzUfvUq_flags|
-             |%%_-TewSIvUq_start-phase|
-             |%%_-TAsQ9wUq_expr|)
-           ((apply |%%_-TWoOCwUq_compose|
-                   (|%%_-TglM3xUq_select-phases|
-                     |%%_-TewSIvUq_start-phase|
+           (|%%_7waUzuooK_env|)
+           (|%%_7wQXB1ooK_select-phases|
+             |%%_7wu_DAnoK_compose|
+             |%%_7wsaKdmoK_flags|
+             |%%_7wO6IGmoK_start-phase|
+             |%%_7w83G7noK_expr|)
+           ((apply |%%_7wu_DAnoK_compose|
+                   (|%%_7wQXB1ooK_select-phases|
+                     |%%_7wO6IGmoK_start-phase|
                      (compilation-phases
-                       |%%_-TUzUfvUq_flags|
-                       |%%_-TChKwxUq_env|)))
-            |%%_-TAsQ9wUq_expr|))
-         (#%if (null? |%%_-TyDWOuUq_env|)
+                       |%%_7wsaKdmoK_flags|
+                       |%%_7waUzuooK_env|)))
+            |%%_7w83G7noK_expr|))
+         (#%if (null? |%%_7w6eMMloK_env|)
            (interaction-environment)
-           (car |%%_-TyDWOuUq_env|)))))))
+           (car |%%_7w6eMMloK_env|)))))))
 (#%program
-  ((|%%_-TmQt8BUq_env| . 1)
-   (|%%_-TIMrBBUq_expr| . 1)
+  ((|%%_7wWqj6soK_env| . 1)
+   (|%%_7wgnhzsoK_expr| . 1)
    (compile-with-flags . 1)
    (apply . 1)
    (compile . 1))
@@ -197,65 +197,76 @@
   (compile-with-flags apply)
   (#%set! compile
     (#%lambda #t
-      (|%%_-TIMrBBUq_expr| . |%%_-TmQt8BUq_env|)
+      (|%%_7wgnhzsoK_expr| . |%%_7wWqj6soK_env|)
       ()
       (apply compile-with-flags
-             |%%_-TIMrBBUq_expr|
+             |%%_7wgnhzsoK_expr|
              (#%quote expand)
              (#%quote ((l) (l)))
-             |%%_-TmQt8BUq_env|))))
+             |%%_7wWqj6soK_env|))))
 (#%program
   ((compile-with-flags . 1)
    (apply . 1)
+   (with-environment . 1)
+   (|%%_7wE89nuoK_compiled-expr| . 2)
    (error . 1)
    (strict-r5rs-compliance . 1)
-   (|%%_-T2Jp2CUq_env| . 2)
-   (null? . 1)
+   (|%%_7wCjf0toK_env| . 4)
+   (null? . 2)
    (cadr . 2)
-   (|%%_-TKBlYCUq_phase| . 3)
-   (car . 2)
+   (|%%_7wicbWtoK_phase| . 3)
+   (car . 3)
    (equal? . 2)
-   (|%%_-ToFnvCUq_x| . 9)
+   (|%%_7wYfdttoK_x| . 9)
    (pair? . 2))
-  ((|%%_-ToFnvCUq_x| . 2)
-   (|%%_-TKBlYCUq_phase| . 2))
+  ((|%%_7wYfdttoK_x| . 2)
+   (|%%_7wicbWtoK_phase| . 2))
   (error null?
          strict-r5rs-compliance
          cadr
          pair?
          car
          equal?
+         apply
          compile-with-flags
-         apply)
+         with-environment)
   (#%define eval
     (#%lambda #t
-      (|%%_-ToFnvCUq_x| . |%%_-T2Jp2CUq_env|)
+      (|%%_7wYfdttoK_x| . |%%_7wCjf0toK_env|)
       ()
       ((#%lambda #t
-         (|%%_-TKBlYCUq_phase|)
-         (|%%_-T2Jp2CUq_env| |%%_-ToFnvCUq_x|)
+         (|%%_7wicbWtoK_phase|)
+         (|%%_7wCjf0toK_env| |%%_7wYfdttoK_x|)
          (#%begin
-           (#%if (#%if (pair? |%%_-ToFnvCUq_x|)
-                   (equal? (car |%%_-ToFnvCUq_x|) "noexpand")
+           (#%if (#%if (pair? |%%_7wYfdttoK_x|)
+                   (equal? (car |%%_7wYfdttoK_x|) "noexpand")
                    #f)
              (#%begin
-               (#%set! |%%_-TKBlYCUq_phase| (#%quote compile))
-               (#%set! |%%_-ToFnvCUq_x| (cadr |%%_-ToFnvCUq_x|)))
-             (#%if (#%if (pair? |%%_-ToFnvCUq_x|)
-                     (equal? (car |%%_-ToFnvCUq_x|) "analyzeonly")
+               (#%set! |%%_7wicbWtoK_phase| (#%quote compile))
+               (#%set! |%%_7wYfdttoK_x| (cadr |%%_7wYfdttoK_x|)))
+             (#%if (#%if (pair? |%%_7wYfdttoK_x|)
+                     (equal? (car |%%_7wYfdttoK_x|) "analyzeonly")
                      #f)
                (#%begin
-                 (#%set! |%%_-TKBlYCUq_phase| (#%quote analyze))
-                 (#%set! |%%_-ToFnvCUq_x| (cadr |%%_-ToFnvCUq_x|)))
-               (#%if (#%if (null? |%%_-T2Jp2CUq_env|)
+                 (#%set! |%%_7wicbWtoK_phase| (#%quote analyze))
+                 (#%set! |%%_7wYfdttoK_x| (cadr |%%_7wYfdttoK_x|)))
+               (#%if (#%if (null? |%%_7wCjf0toK_env|)
                        (strict-r5rs-compliance)
                        #f)
                  (error (#%quote eval)
                         "expected 2 arguments to procedure, got 1.")
                  #!void)))
-           ((apply compile-with-flags
-                   |%%_-ToFnvCUq_x|
-                   |%%_-TKBlYCUq_phase|
+           ((#%lambda #t
+              (|%%_7wE89nuoK_compiled-expr|)
+              (|%%_7wCjf0toK_env|)
+              (#%if (null? |%%_7wCjf0toK_env|)
+                (|%%_7wE89nuoK_compiled-expr|)
+                (with-environment
+                  (car |%%_7wCjf0toK_env|)
+                  |%%_7wE89nuoK_compiled-expr|)))
+            (apply compile-with-flags
+                   |%%_7wYfdttoK_x|
+                   |%%_7wicbWtoK_phase|
                    (#%quote ((e) (e)))
-                   |%%_-T2Jp2CUq_env|))))
+                   |%%_7wCjf0toK_env|))))
        (#%quote expand)))))

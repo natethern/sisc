@@ -231,7 +231,7 @@ public class Interpreter extends Util {
     private final CallFrame createEmptyFrame(Expression e,
                                              CallFrame p,
                                              StackTracer t) {
-        return createFrame(e, null, false, null, null, null, null, p, t);
+        return createFrame(e, null, false, null, null, null, top_fk, p, t);
     }
 
     private final CallFrame createNearlyEmptyFrame(Expression e,
@@ -264,6 +264,9 @@ public class Interpreter extends Util {
     }
 
     public final Procedure captureEscapingContinuation() {
+    	//Even though we're not capturing for long term preservation, we must protect this individual
+    	//call frame from being recycled, mostly for error handling.
+    	stk.vlk=true;
         return createContinuation(stk);
     }
 
