@@ -11,18 +11,24 @@ import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
 
 public class LambdaExp extends Expression implements Immediate {
+	public transient boolean simple;
     public boolean infiniteArity;
     public int fcount, lcount, localIndices[], lexicalIndices[], boxes[];
     public Expression body;
 
     public LambdaExp(int s, Expression body, boolean arity,
                      int[] localids, int[] lexids, int[] boxes) {
-        infiniteArity=arity;
+    	if (!arity && boxes==null) {
+    		simple=true;
+    	} else {
+    		simple=false;
+            infiniteArity=arity;
+            this.boxes=boxes;
+    	}
         fcount=s;
         this.body=body;
         localIndices=localids;
         lexicalIndices=lexids;
-        this.boxes=boxes;
         lcount=localids.length+lexids.length;
     }
 
@@ -30,9 +36,9 @@ public class LambdaExp extends Expression implements Immediate {
         r.acc=getValue(r);
         r.nxp=null;
     }
-
+    
     public Value getValue(Interpreter r) throws ContinuationException {
-    	if (!infiniteArity && boxes==null) {
+    	if (simple) {
     		return new SimpleClosure(fcount,body,
     				                 LexicalUtils.fixLexicals(r, lcount, localIndices, lexicalIndices));
     	} else {
@@ -74,6 +80,7 @@ public class LambdaExp extends Expression implements Immediate {
                 (lexicalIndices==null ? 0 : lexicalIndices.length));
         boxes=LexicalUtils.readIntArray(s);
         body=s.readExpression();
+        simple=!infiniteArity && boxes==null;
     }
 
     public boolean visit(ExpressionVisitor v) {
