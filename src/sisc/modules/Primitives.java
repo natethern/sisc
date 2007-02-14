@@ -1,6 +1,7 @@
 package sisc.modules;
 
 import sisc.data.*;
+import sisc.data.proc.Closure;
 import sisc.exprs.*;
 import sisc.interpreter.*;
 import sisc.nativefun.*;

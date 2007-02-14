@@ -1,4 +1,4 @@
-package sisc.data;
+package sisc.data.proc;
 
 import java.io.*;
 import sisc.interpreter.*;
@@ -6,6 +6,13 @@ import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
+import sisc.data.Box;
+import sisc.data.Expression;
+import sisc.data.NamedValue;
+import sisc.data.Pair;
+import sisc.data.Procedure;
+import sisc.data.Quantity;
+import sisc.data.Value;
 import sisc.env.LexicalUtils;
 
 public class Closure extends Procedure implements NamedValue {

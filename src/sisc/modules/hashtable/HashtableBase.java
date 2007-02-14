@@ -6,9 +6,9 @@ import sisc.io.ValueWriter;
 import sisc.ser.Serializer;
 import sisc.ser.Deserializer;
 import sisc.util.ExpressionVisitor;
+import sisc.data.Procedure;
 import sisc.data.Value;
 import sisc.data.Pair;
-import sisc.data.Procedure;
 
 public abstract class HashtableBase extends Value {
 

@@ -2,6 +2,8 @@ package sisc.exprs;
 
 import java.io.*;
 import sisc.data.*;
+import sisc.data.proc.Closure;
+import sisc.data.proc.SimpleClosure;
 import sisc.env.LexicalUtils;
 import sisc.interpreter.*;
 import sisc.ser.Serializer;
@@ -30,9 +32,14 @@ public class LambdaExp extends Expression implements Immediate {
     }
 
     public Value getValue(Interpreter r) throws ContinuationException {
-        return new Closure(infiniteArity, fcount, body, 
-                           LexicalUtils.fixLexicals(r, lcount, localIndices, lexicalIndices), 
-                           boxes);
+    	if (!infiniteArity && boxes==null) {
+    		return new SimpleClosure(fcount,body,
+    				                 LexicalUtils.fixLexicals(r, lcount, localIndices, lexicalIndices));
+    	} else {
+    		return new Closure(infiniteArity, fcount, body, 
+    				LexicalUtils.fixLexicals(r, lcount, localIndices, lexicalIndices), 
+    				boxes);
+    	}
     }
 
     public Value express() {
