@@ -1091,7 +1091,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
             <blockquote>
               <para>
                 Evaluates <parameter>thunk</parameter> with a binary
-                input port attached to a file opened for writing to
+                output port attached to a file opened for writing to
                 <parameter>url</parameter> as the
                 <literal>current-output-port</literal> for the
                 duration of the evaluation. The port is closed when

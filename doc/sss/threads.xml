@@ -44,7 +44,7 @@
       will be visible by both the parent and child threads.  The
       lexical environments created in an executing thread are
       visible by that thread only (unless that thread spawns a child
-      thread whose thunk binds it's parent's lexicals).  
+      thread whose thunk binds its parent's lexicals).  
     </para>
     <para>
       Some resources can be shared but may also be distinct from
@@ -133,7 +133,7 @@
     <para>
       This section describes the basic, low-level operations on
       threads, including how to create a thread, how to start it,
-      how to wait for it to terminate, and how to retrieve it's
+      how to wait for it to terminate, and how to retrieve its
       result.  A thread is managed in Scheme by its <emphasis>thread
 	handle</emphasis>, an opaque value that is used to identify
       the thread.  A thread handle is present as an argument to most

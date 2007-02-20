@@ -243,7 +243,7 @@
       </para>
       <para>
         Uninterned symbols, while always pointer-distinct, may still
-        be <function>equal?</function> to another symbol if it's
+        be <function>equal?</function> to another symbol if its
         representation matches another.
       </para>
       <sect3>
@@ -1243,7 +1243,7 @@
               <blockquote>
                 <para>
                   The first version creates an error record which has
-                  <parameter>parent-error</parameter> (and it's
+                  <parameter>parent-error</parameter> (and its
                   associated
                   <parameter>parent-error-continuation</parameter>) as
                   the root cause of an error-record passed as
