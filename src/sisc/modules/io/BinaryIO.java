@@ -63,7 +63,7 @@ public class BinaryIO extends IndexedProcedure {
         }
         return null;
     }
-
+    
     private static SchemeBinaryOutputPort openBinOutFile(Interpreter f,  URL url,
                                                    boolean aflush) 
         throws ContinuationException {
@@ -94,6 +94,33 @@ public class BinaryIO extends IndexedProcedure {
         return null;
     }
 
+    private static void writeBlock(Interpreter f, 
+            Buffer b, int offset, int count, SchemeBinaryOutputPort outport) throws ContinuationException {        
+        try {
+            outport.getOutputStream().write(b.buf, 0, count);
+        } catch (IOException e) {
+            error(f, liMessage(BINARYB, "errorwriting",
+                               outport.toString(),
+                               e.getMessage()));
+        }
+    }
+    
+    private static Value readBlock(Interpreter f, 
+            Buffer b, int offset, int count, SchemeBinaryInputPort inport) throws ContinuationException {
+        byte[] buf=b.buf;
+        try {
+            int rv=inport.getInputStream().read(buf, offset, 
+                    Math.min(buf.length-offset, count));
+            if (rv==-1) return EOF;
+            else return Quantity.valueOf(rv);
+        } catch (IOException e) {
+            error(f, liMessage(BINARYB, "errorreading", 
+                               inport.toString(),
+                               e.getMessage()));
+        }
+        return VOID;
+    }
+    
     public Value doApply(Interpreter f) throws ContinuationException {
         switch (f.vlr.length) {
         case 1:
@@ -170,38 +197,24 @@ public class BinaryIO extends IndexedProcedure {
                                                      f.vlr[0].synopsis()}));
                 }
                 return VOID;
+            case BLOCKREAD:
+                return readBlock(f,buffer(f.vlr[0]), num(f.vlr[1]).indexValue(),
+                        num(f.vlr[2]).indexValue(), bininport(f.dynenv.getCurrentInPort()));
+            case BLOCKWRITE:
+                writeBlock(f,buffer(f.vlr[0]), num(f.vlr[1]).indexValue(),
+                        num(f.vlr[2]).indexValue(), binoutport(f.dynenv.getCurrentOutPort()));
+                return VOID;
             default:
                 throwArgSizeException();
             }
         case 4:
             switch (id) {            
             case BLOCKREAD:
-                int count=num(f.vlr[2]).indexValue();
-                int offset=num(f.vlr[1]).indexValue();
-                SchemeBinaryInputPort inport=bininport(f.vlr[3]);
-                byte[] buf=buffer(f.vlr[0]).buf;
-                try {
-                    int rv=inport.getInputStream().read(buf, offset, Math.min(buf.length-offset, count));
-                    if (rv==-1) return EOF;
-                    else return Quantity.valueOf(rv);
-                } catch (IOException e) {
-                    error(f, liMessage(BINARYB, "errorreading", 
-                                       inport.toString(),
-                                       e.getMessage()));
-                }
-                break;
+                return readBlock(f,buffer(f.vlr[0]), num(f.vlr[1]).indexValue(),
+                        num(f.vlr[2]).indexValue(), bininport(f.vlr[3]));
             case BLOCKWRITE:
-                count=num(f.vlr[2]).indexValue();
-                offset=num(f.vlr[1]).indexValue();
-                SchemeBinaryOutputPort outport=binoutport(f.vlr[3]);
-                buf=buffer(f.vlr[0]).buf;
-                try {
-                    outport.getOutputStream().write(buf, 0, count);
-                } catch (IOException e) {
-                    error(f, liMessage(BINARYB, "errorwriting",
-                                       outport.toString(),
-                                       e.getMessage()));
-                }
+                writeBlock(f,buffer(f.vlr[0]), num(f.vlr[1]).indexValue(),
+                        num(f.vlr[2]).indexValue(), binoutport(f.vlr[3]));
                 return VOID;
             case BUFFERCOPY:
                 byte[] sbuf=buffer(f.vlr[0]).buf;
@@ -209,7 +222,7 @@ public class BinaryIO extends IndexedProcedure {
 
                 int soff=num(f.vlr[1]).indexValue();
                 int doff=num(f.vlr[3]).indexValue();
-                count=sbuf.length;
+                int count=sbuf.length;
 
                 try {
                     System.arraycopy(sbuf, soff, dbuf, doff, count);

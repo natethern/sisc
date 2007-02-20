@@ -1,15 +1,18 @@
-2007-02-07  Released SISC 1.16.6
+2007-02-20  Scott G. Miller <sgmiller@gmail.com>
 
+    * Fixed bug 1663873, where |read-block| and |write-block|'s 
+      optional port argument wasn't actually optional.
+      
 2007-02-06  Scott G. Miller <sgmiller@gmail.com>
 
-	* Fixed a bug in error handling triggered by the recycling of 
-	  escaping continuations.  Bug #1585900.
-	
-	* Fixed a bug in eval which evaluated code in the wrong environment
-	  when a custom environment was used, breaking |load|.  Bug #1650514.
-	  
-	* Fixed return value of |read-string|, which should be the eof object,
-	  not -1.  Bug #1653382.
+    * Fixed a bug in error handling triggered by the recycling of 
+      escaping continuations.  Bug #1585900.
+    
+    * Fixed a bug in eval which evaluated code in the wrong environment
+      when a custom environment was used, breaking |load|.  Bug #1650514.
+      
+    * Fixed return value of |read-string|, which should be the eof object,
+      not -1.  Bug #1653382.
 
 2007-01-20  Scott G. Miller <sgmiller@gmail.com>
     
@@ -17,64 +20,64 @@
     
 2006-11-15  Matthias Radestock  <matthias@sorted.org>
 
-	* Fixed a bug in SISC's slib binding that resulted in slib:warn
-	  breaking. See bug 1597134.
+    * Fixed a bug in SISC's slib binding that resulted in slib:warn
+      breaking. See bug 1597134.
 
 2006-09-11  Released SISC 1.16.4
 
 2006-09-11  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Updated build-heapjar.scm for the new I/O layer.
+    * Updated build-heapjar.scm for the new I/O layer.
 
 2006-08-31  Released SISC 1.16.3-rc
 
 2006-08-30  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Made |max-stack-trace-depth| a dynamic parameter, including
-	  adding serialization of StackTracers.  See feature request
-	  1538610.
-	   
+    * Made |max-stack-trace-depth| a dynamic parameter, including
+      adding serialization of StackTracers.  See feature request
+      1538610.
+       
 2006-08-23  SISC 1.15.3 Released
 
 2006-08-23  SISC 1.16.2-beta Released
 
 2006-08-23  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Fixed big that prevented |fix| being used as a symbol. See bug
-	  1545294.
+    * Fixed big that prevented |fix| being used as a symbol. See bug
+      1545294.
 
 2006-08-22  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Fixed java-io converters to correctly pass unwrapped Scheme
-	  values.
-	
-	* Accept autoflush as a parameter in character ports, for
-	  backwards compatibility.
-	 
-	* Documented character-set as an argument to
-	  open-character-in/output-port.
+    * Fixed java-io converters to correctly pass unwrapped Scheme
+      values.
+    
+    * Accept autoflush as a parameter in character ports, for
+      backwards compatibility.
+     
+    * Documented character-set as an argument to
+      open-character-in/output-port.
 
 2006-08-19  SISC 1.16.1-beta Released
 
 2006-08-12  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Fixed module definition of binary-io to export constructors of
-	  buffered binary ports.
-	
+    * Fixed module definition of binary-io to export constructors of
+      buffered binary ports.
+    
 2006-08-11  Scott G. Miller  <sgmiller@gmail.com>
 
-	* Fixed bug in |open-character-input-port|, which wasn't producing
-	  read compatible streams.
-	
-	* Ported the os module to the new I/O system, including using the
-	  java-io module. See bug 1538636.
-	  
-	* Changed the os module streams to be binary.  This is the right
-	  thing, as they can be converted to character as needed but don't
-	  have to be.
-	  
-	* Fixed single-line comment escape handling.  See bug 1538637.
-	  
+    * Fixed bug in |open-character-input-port|, which wasn't producing
+      read compatible streams.
+    
+    * Ported the os module to the new I/O system, including using the
+      java-io module. See bug 1538636.
+      
+    * Changed the os module streams to be binary.  This is the right
+      thing, as they can be converted to character as needed but don't
+      have to be.
+      
+    * Fixed single-line comment escape handling.  See bug 1538637.
+      
 2006-08-10  SISC 1.15.2 Released
 
 2006-08-10  SISC 1.16.0-alpha Released
@@ -92,7 +95,7 @@
 
     * Fixed handling of the null character constant in the reader.
       See bug 1520129.
-	  
+      
 2006-07-05  SISC 1.5.1 Released
 
 2006-06-30  SISC 1.5.1-rc Released
