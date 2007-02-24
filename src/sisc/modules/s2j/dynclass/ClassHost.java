@@ -44,11 +44,12 @@ public class ClassHost extends ClassLoader {
     
     public static void main(String[] args) throws Exception {
         //Hello world example
-        MethodSignature test=new MethodSignature(1, Modifier.PUBLIC, Void.TYPE, "test", null, null);
-        ClassSignature testclass=new ClassSignature(Modifier.PUBLIC, "HelloWorld", null, null, 
+        MethodSignature test=new MethodSignature(Modifier.PUBLIC, Void.TYPE, "test", null, null);
+        ClassSignature testclass=new ClassSignature(Modifier.PUBLIC, "HelloWorld", null, null,
+                null,
                 new MethodSignature[] {test});
         ClassHost ch=new ClassHost();
-        Class hwClass=ch.newClass(testclass);
+        Class hwClass=ch.newClass(testclass, null);
         Object hwi=hwClass.newInstance();
         hwClass.getMethods()[0].invoke(hwi, new Object[0]);
     }

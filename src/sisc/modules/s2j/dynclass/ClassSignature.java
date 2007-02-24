@@ -46,35 +46,58 @@ public class ClassSignature implements Opcodes {
                           MethodSignature[] methods) {
         this.modifiers = modifiers;
         this.className = className;
-        this.superclassName = superclassName;
+        if (superclassName==null) {
+            this.superclassName="java.lang.Object";
+        } else 
+            this.superclassName = superclassName;
+    
         this.interfaceTypes = interfaceTypes;
         this.constructors=constructors;
         this.methods=methods;
     }
         
     byte[] generateBytecode() {
-        ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS);
-        cw.visit(V1_2, asmModifiers(modifiers), className, null, superclassName, interfaceTypes);
+        ClassWriter cw=new ClassWriter(ClassWriter.COMPUTE_MAXS+ClassWriter.COMPUTE_FRAMES);
+        cw.visit(V1_2, asmModifiers(modifiers), className, null, superclassName.replaceAll("\\.", "/"), interfaceTypes);
     
         
-        cw.visitField(ACC_PRIVATE + ACC_STATIC, "__procs", "Lsisc.data.Procedure[];",
+        cw.visitField(ACC_PUBLIC + ACC_STATIC, "__procs", "[Lsisc/modules/s2j/dynclass/SchemeHook;",
                 null, null).visitEnd();
         
-        cw.visitField(ACC_PUBLIC + ACC_STATIC, "__bytecode", "B[]",
+        cw.visitField(ACC_PUBLIC + ACC_STATIC, "__bytecode", "[B",
                 null, null).visitEnd();
         
-        Type thisType=Type.getType("L"+className+";");
-        Type superclassType = Type.getType(superclassName);
+        Type thisType=Type.getType(classNameToTypeName(className));
+        Type superclassType = Type.getType(classNameToTypeName(superclassName));
         
-        for (int i=0; i<constructors.length; i++) {
-            constructors[i].visitMethod(i, thisType, cw, superclassType);
+        if (constructors!=null) {
+            for (int i=0; i<constructors.length; i++) {
+                constructors[i].visitMethod(i, thisType, cw, superclassType);
+            }
+        } else {
+            //Generate the default constructor
+            Method m=new Method("<init>", Type.VOID_TYPE, new Type[0]);
+            GeneratorAdapter mg = new GeneratorAdapter(ClassSignature.asmModifiers(modifiers), m, null, null, cw);
+            Method superMethod=m;
+            mg.loadThis();
+            mg.invokeConstructor(superclassType, superMethod);
+            mg.returnValue();
+            mg.endMethod();
         }
         
         for (int i=0; i<methods.length; i++) {
-            methods[i].visitMethod(i+constructors.length, thisType, cw, superclassType);
+            methods[i].visitMethod(i+(constructors != null ? constructors.length : 0), 
+                    thisType, cw, superclassType);
         }
         cw.visitEnd();
         return cw.toByteArray();
+    }
+    
+    String classNameToTypeName(String className) {
+        StringBuffer b=new StringBuffer("L");
+        b.append(className.replaceAll("\\.","/")); 
+        b.append(';');
+        return b.toString();
     }
     
     static int asmModifiers(int modifiers) {

@@ -28,6 +28,11 @@ public class ConstructorSignature extends MethodSignature {
                 mg.loadArg(superArgs[i]);
             }
             Method superMethod=new Method("<init>", Type.VOID_TYPE, superTypes);            
+            mg.loadThis();
+            mg.invokeConstructor(superType, superMethod);
+        } else {
+            Method superMethod=new Method("<init>", Type.VOID_TYPE, new Type[0]);
+            mg.loadThis();
             mg.invokeConstructor(superType, superMethod);
         }
         super.visitMethod(procid, thisType, mg, superType);
