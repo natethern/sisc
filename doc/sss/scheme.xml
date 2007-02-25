@@ -1766,8 +1766,34 @@
     </para>
     <sect2 id="AccessingSymbolicEnvironments">
       <title>
-        Access Functions
+	    Basic Functions
       </title>
+      <para>
+      	Symbolic environments are a distinct value type in &SISC;, and can 
+      	be checked using the <function>environment?</function> predicate.
+      </para>
+      <para>
+        <blockquote>
+          <para>
+            <indexterm><primary>environment?</primary>
+            </indexterm>
+            &procedure;
+            <methodsynopsis language="scheme" id="environmentq">
+              <type>#t/#f</type>
+              <methodname>environment?</methodname>
+	          <methodparam>
+	          	<parameter>value</parameter>
+	          </methodparam>	          	
+            </methodsynopsis>
+            <blockquote>
+              <para>
+	            Returns a non-false value if the provided value is a symbolic environment,
+	            false otherwise.
+              </para>
+            </blockquote>
+          </para>
+        </blockquote>
+      </para>
       <para>
         Access to symbolic environments is performed through the
         <function>getprop</function> and <function>putprop</function>
