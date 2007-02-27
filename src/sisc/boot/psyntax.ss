@@ -2520,7 +2520,6 @@
                        cons-immutable
                        cons)
                    #f #f)))
-         (write x)
          (when parent (set-annotation-stripped! parent new))
          (set-car! new (strip-annotation (car x) #f))
          (set-cdr! new (strip-annotation (cdr x) #f))
