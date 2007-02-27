@@ -415,4 +415,12 @@
   (let ()
     (import string-io)
     (read-string (make-string 8) 0 1 (open-input-string ""))))
-                  
+
+;Used to loop infinitely and crash with OutOfMemory
+(should-be 1666713 #t
+  (let ()
+    (import string-io)
+    (sc-expand (with-input-from-string "'#0=(1 . #0#)" read))
+    #t))
+
+
