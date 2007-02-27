@@ -2515,11 +2515,12 @@
 (define strip-annotation
   (lambda (x parent)
     (cond
-      ((pair? x)
+      ((and (pair? x) (not (circular? x)))
        (let ((new ((if (immutable-pair? x)
                        cons-immutable
                        cons)
                    #f #f)))
+         (write x)
          (when parent (set-annotation-stripped! parent new))
          (set-car! new (strip-annotation (car x) #f))
          (set-cdr! new (strip-annotation (cdr x) #f))
@@ -2555,7 +2556,7 @@
           (cond
             ((syntax-object? x)
              (strip* (syntax-object-expression x) (syntax-object-wrap x) fn))
-            ((pair? x)
+            ((and (pair? x) (not (circular? x)))
              (let ((a (f (car x))) (d (f (cdr x))))
                (if (and (eq? a (car x)) (eq? d (cdr x)))
                    x
