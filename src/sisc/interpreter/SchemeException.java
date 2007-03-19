@@ -37,7 +37,7 @@ public class SchemeException extends Exception {
         return ((Pair)m.car()).cdr().toString();
     }
 
-    private String schemeStackTrace() {
+    public String schemeStackTrace() {
         try {
             SchemeString res =
                 (SchemeString)Context.execute(new SchemeCaller() {

@@ -25,6 +25,7 @@ public abstract class Util extends IndexedFixableProcedure {
         public SchemeException schemeException;
 
         public SchemeInvocationException(SchemeException se) {
+            super(se.schemeStackTrace());
             this.schemeException = se;
         }
     }
