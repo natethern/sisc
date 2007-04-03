@@ -423,4 +423,6 @@
     (sc-expand (with-input-from-string "'#0=(1 . #0#)" read))
     #t))
 
+(should-be 1693950 1 (append 1))
+
 

@@ -49,7 +49,7 @@ public class OptionalPrimitives extends Util {
             case MIN: case MAX: return num(v1);
             case VECTOR: return new SchemeVector(new Value[] {v1});
             case VALUES: return v1;
-            case APPEND: return pair(v1);
+            case APPEND: return v1;
             case NOT: return truth(v1) ? FALSE : TRUE;
             case CADR:
                 return truePair(truePair(v1).cdr()).car();
