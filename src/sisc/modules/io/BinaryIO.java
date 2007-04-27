@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
+import java.io.PushbackInputStream;
 import java.net.URL;
 
 public class BinaryIO extends IndexedProcedure {
@@ -140,7 +141,7 @@ public class BinaryIO extends IndexedProcedure {
             case BINARYOUTPUTPORTQ:
                 return truth(f.vlr[0] instanceof SchemeBinaryOutputPort);
             case OPENBUFFEREDBININPORT: 
-            	return new SchemeBinaryInputPort(new BufferedInputStream(bininport(f.vlr[0]).getInputStream()));
+            	return new SchemeBinaryInputPort(new PushbackInputStream(new BufferedInputStream(bininport(f.vlr[0]).getInputStream())));
             case OPENBUFFEREDBINOUTPORT: 
             	return new SchemeBinaryOutputPort(new BufferedOutputStream(binoutport(f.vlr[0]).getOutputStream()));
             default:
