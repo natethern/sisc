@@ -462,7 +462,7 @@ r / 2<superscript>s</superscript>
               <para>
                 The third optional argument determines whether
                 operations on the hash table should be made
-                thread-safe. The default is &num;t. Thread
+                thread-safe. The default is &num;f. Thread
                 synchronization (see <xref linkend="Threads"/>) is
                 required if there are potentially several threads
                 operating concurrently on the hash table and one of
