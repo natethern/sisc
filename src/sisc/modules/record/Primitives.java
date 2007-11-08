@@ -86,7 +86,11 @@ public abstract class Primitives extends Util {
         public Value apply(Value v1, Value v2, Value v3) throws ContinuationException {
             switch (id) {
             case RECORD_SET:
-                record(v1).setSlot(num(v2).indexValue(), v3);
+                try {
+                    record(v1).setSlot(num(v2).indexValue(), v3);
+                } catch (ArrayIndexOutOfBoundsException aib) {
+                    throwPrimException(liMessage(SRECORDB, "nosuchslot", num(v2).toString(), record(v1).synopsis()));
+                }
                 return VOID;
             default:
                 throwArgSizeException();
