@@ -340,12 +340,14 @@
                          (* squaring squaring))))))])
     (lambda (base exponent)
       (cond
-       ((zero? exponent) (if (exact? exponent) #e1 #i1))
-       ((zero? base) (if (exact? exponent) base #i0))       
+       ((zero? exponent) 
+        (if (and (exact? base) (exact? exponent)) #e1 #i1))
+       ((zero? base) 
+        (if (exact? exponent) base #i0))       
        ((and (exact? base) (rational? base) (not (integer? base)))
         (rational-expt (numerator base) (denominator base) exponent))
        ((and (exact? exponent) (integer? exponent))
-    (integer-expt base exponent))
+        (integer-expt base exponent))
        (else (general-expt base exponent))))))
   
 (define (modpow x y N)
@@ -372,11 +374,11 @@
 (define complex? number?)
 
 (define (abs num) 
-  (if (not (real? num))
+  (if (real? num)
+      (if (< num 0) (- num) num)
       (let ([a (real-part num)]
-        [b (imag-part num)])
-    (sqrt (+ (* a a) (* b b))))
-      (if (< num 0) (- num) num)))
+            [b (imag-part num)])
+        (sqrt (+ (* a a) (* b b))))))
 
 (define min (void))
 (define max (void))

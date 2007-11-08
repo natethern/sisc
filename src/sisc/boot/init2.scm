@@ -36,14 +36,14 @@
 (define (make-parameter value . converter)
   (cond [(null? converter) 
          (_make-parameter value)]
-            [(null? (cdr converter))
-             (let ([param (_make-parameter value)]
-                       [converter (car converter)])
-              (lambda arg
-                (if (null? arg)
-                    (param)
-                    (param (converter (car arg))))))]
-            [else (error 'make-parameter "too many arguments.")]))
+        [(null? (cdr converter))
+         (let ([param (_make-parameter value)]
+               [converter (car converter)])
+           (lambda arg
+             (if (null? arg)
+                 (param)
+                 (param (converter (car arg))))))]
+        [else (error 'make-parameter "too many arguments.")]))
 
 (define (make-config-parameter name value . converter)
     (cond [(null? converter) 
@@ -677,12 +677,15 @@ OPTION	[MNEMONIC]	DESCRIPTION	-- Implementation Assumes ASCII Text Encoding
     (make-rectangular (* x (cos y))
                       (* x (sin y)))))
 
-(define magnitude
-  (lambda (x)
-    (cond [(real? x) (abs x)]
-          [else (let ([r (real-part x)]
-                      [i (imag-part x)])
-                  (sqrt (+ (* r r) (* i i))))])))
+(define (square x) (* x x))
+
+(define (magnitude x)
+  (cond [(real? x) (abs x)]
+        [else (let ([c (abs (real-part x))]
+                    [d (abs (imag-part x))])
+               (if (< d c)
+                   (* c (sqrt (+ 1 (square (/ d c)))))
+                   (* d (sqrt (+ 1 (square (/ c d)))))))]))
 
 (define angle 
   (lambda (x)
