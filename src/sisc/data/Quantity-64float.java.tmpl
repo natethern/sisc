@@ -1167,12 +1167,12 @@ public class Quantity extends Value implements Singleton {
                 return new Quantity((long)val).comp(o,test);
             else return test==(val > o.val ? 1 : (val < o.val ? -1 : 0));
         case DECIM:
-        	if (Double.isNaN(d)) return -2;
+        	if (Double.isNaN(d)) return false;
             switch (o.type) {
             case FIXEDINT:
                 return sign(d-o.val)==test;
             case DECIM:
-            	if (Double.isNaN(o.d)) return -2;
+            	if (Double.isNaN(o.d)) return false;
                 return sign(d-o.d)==test;
             case INTEG:
                 return sign(d-o.i.doubleValue())==test;
@@ -1189,7 +1189,7 @@ public class Quantity extends Value implements Singleton {
             case FIXEDINT:
                 return i.compareTo(BigInteger.valueOf(o.val))==test;
             case DECIM:
-            	if (Double.isNaN(o.d)) return -2;
+            	if (Double.isNaN(o.d)) return false;
                 return sign(i.doubleValue()-o.d)==test;
             case INTEG:
                 return i.compareTo(o.i)==test;
@@ -1210,7 +1210,7 @@ public class Quantity extends Value implements Singleton {
                 BigInteger cnum=BigInteger.valueOf(o.val).multiply(de);
                 return i.compareTo(cnum)==test;
             case DECIM:
-            	if (Double.isNaN(o.d)) return -2;
+            	if (Double.isNaN(o.d)) return false;
                 return sign(ratioToDecimal(i, de)-o.d)==test;
             case INTEG:
                 cnum=o.i.multiply(de);

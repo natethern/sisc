@@ -1,3 +1,12 @@
+2007-11-08  Scott G. Miller <sgmiller@gmail.com>
+
+	* Made character sets proper SISC values, fixing bug 1687759.
+	
+	* Give a proper Scheme exception on invalid slotid for record-set!.  
+	  Fixes part of bug 1683317.
+	  
+	* NaN should never be comparable to anything.  Fixes bug 1729292.
+	
 2007-02-27  Scott G. Miller <sgmiller@gmail.com>
 
 	* 1-arg append should be the same as identity.  Fixes bug 1693950.
