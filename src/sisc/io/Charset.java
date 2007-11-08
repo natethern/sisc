@@ -1,11 +1,16 @@
 package sisc.io;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+
+import sisc.data.NamedValue;
+import sisc.data.Symbol;
+import sisc.data.Value;
 
 /**
  * Wrapper class which names a Character Set
@@ -13,28 +18,22 @@ import java.io.UnsupportedEncodingException;
  * @author scgmille
  *
  */
-public class Charset {
-
-    private String name;
+public class Charset extends Value implements NamedValue {
 
     public static Charset forName(String name) throws UnsupportedEncodingException {
         new InputStreamReader(new ByteArrayInputStream(new byte[0]), name);
         Charset cs=new Charset();
-        cs.name=name;
+        cs.setName(Symbol.get(name, true));
         return cs;
     }
     
-    public String getName() {
-        return name;
-    }
-
-    public String displayName() {
-        return name;
+    public String getCharsetName() {
+        return getName().symval;
     }
 
     public InputStreamReader newInputStreamReader(InputStream in) {
         try {
-            return new InputStreamReader(in, getName());
+            return new InputStreamReader(in, getCharsetName());
         } catch (UnsupportedEncodingException use) {
             //Can't happen
             return null;
@@ -43,11 +42,15 @@ public class Charset {
 
     public OutputStreamWriter newOutputStreamWriter(OutputStream out) {
         try {
-            return new OutputStreamWriter(out, getName());
+            return new OutputStreamWriter(out, getCharsetName());
         } catch (UnsupportedEncodingException use) {
             //Can't happen
             return null;
         }
+    }
+
+    public void display(ValueWriter w) throws IOException {
+        displayNamedOpaque(w, liMessage(SISCB, "charset")); 
     }
 }
 /*

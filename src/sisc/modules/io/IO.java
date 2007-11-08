@@ -317,7 +317,7 @@ public class IO extends IndexedProcedure {
                                                    boolean aflush) 
         throws ContinuationException {
         try {
-            Writer w=new OutputStreamWriter(getURLOutputStream(url), encoding.getName());           
+            Writer w=new OutputStreamWriter(getURLOutputStream(url), encoding.getCharsetName());           
             if (aflush) {
             	System.err.println(warn("autoflushdeprecated"));
             	w=new AutoflushWriter(w);
@@ -362,7 +362,7 @@ public class IO extends IndexedProcedure {
             // to get the stream's content-encoding
             sr=new SourceReader(new InputStreamReader(conn.getInputStream(),
                     Util.charsetFromString
-                    (conn.getContentEncoding()).getName()), u.toString());
+                    (conn.getContentEncoding()).getCharsetName()), u.toString());
             p = new SchemeCharacterInputPort(sr);
         } catch (IOException e) {
             throwIOException(f, liMessage(IOB, "erroropening",

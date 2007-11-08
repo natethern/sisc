@@ -35,7 +35,7 @@ public class DynamicEnvironment extends Util implements Cloneable {
 	public Pair    customWriteTypeMap   = Util.EMPTYLIST;
 
     private static String defaultCharacterSet =
-        Util.getDefaultCharacterSet().displayName();
+        Util.getDefaultCharacterSet().getCharsetName();
     private static String defaultCaseSensitive = 
         new Boolean(Defaults.CASE_SENSITIVE).toString();
     private static String defaultPrintShared =
@@ -93,8 +93,8 @@ public class DynamicEnvironment extends Util implements Cloneable {
         this.ctx = ctx;
         this.characterSet = Util.charsetFromString(ctx.getProperty("sisc.characterSet", defaultCharacterSet));
         try {
-            this.in  = new SchemeCharacterInputPort(new SourceReader(new InputStreamReader(in, this.characterSet.getName()), liMessage(SISCB, "console")));
-            this.out = new SchemeCharacterOutputPort(new AutoflushWriter(new OutputStreamWriter(out, this.characterSet.getName())));
+            this.in  = new SchemeCharacterInputPort(new SourceReader(new InputStreamReader(in, this.characterSet.getCharsetName()), liMessage(SISCB, "console")));
+            this.out = new SchemeCharacterOutputPort(new AutoflushWriter(new OutputStreamWriter(out, this.characterSet.getCharsetName())));
         } catch (UnsupportedEncodingException use) {
             //Hack?
             throw new RuntimeException(use.getMessage());

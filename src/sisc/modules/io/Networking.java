@@ -172,14 +172,14 @@ public class Networking extends IndexedProcedure {
 
         public SchemeCharacterInputPort getInputPort(Interpreter r, Charset encoding)
                    throws IOException, ContinuationException {
-            return new SchemeCharacterInputPort(new InputStreamReader(s.getInputStream(), encoding.getName()));
+            return new SchemeCharacterInputPort(new InputStreamReader(s.getInputStream(), encoding.getCharsetName()));
         }
          
         public SchemeCharacterOutputPort getCharacterOutputPort(Interpreter r,
                                               Charset encoding,
                                               boolean autoflush) 
             throws IOException, ContinuationException {
-            Writer out=new OutputStreamWriter(s.getOutputStream(), encoding.getName());
+            Writer out=new OutputStreamWriter(s.getOutputStream(), encoding.getCharsetName());
             if (autoflush) out=new AutoflushWriter(out);
             return new SchemeCharacterOutputPort(out);
         }
@@ -344,7 +344,7 @@ public class Networking extends IndexedProcedure {
             if ((mode & LISTEN) == 0)
                 error(r, liMessage(SNETB, "inputonoutputudp"));
             return new SchemeCharacterInputPort(new InputStreamReader(
-                    new UDPInputStream(s, packet_size), encoding.getName()));
+                    new UDPInputStream(s, packet_size), encoding.getCharsetName()));
         }
 
         public SchemeCharacterOutputPort getCharacterOutputPort(Interpreter r, 
@@ -353,7 +353,7 @@ public class Networking extends IndexedProcedure {
             throws IOException, ContinuationException {
             if ((mode & SEND) == 0)
                 error(r, liMessage(SNETB, "outputoninputudp"));
-            Writer out=new OutputStreamWriter(new UDPOutputStream(s, remoteHost, dport), encoding.getName());
+            Writer out=new OutputStreamWriter(new UDPOutputStream(s, remoteHost, dport), encoding.getCharsetName());
             if (autoflush) out=new AutoflushWriter(out);
             return new SchemeCharacterOutputPort(out);
         }
