@@ -1931,10 +1931,18 @@
         </programlisting>
         Each call to <function>scheme-report-environment</function>
         returns a new environment that contains only the bindings
-        available in the Scheme report.  Finally, the initial
-        environment available to the programmer when &SISC; starts can
-        be retrieved using the
-        <function>sisc-initial-environment</function> function:
+        available in the Scheme report. 
+      </para> 
+      <para>
+        &SISC; naturally supports the <function>null-environment</function> function from &R5RS;, 
+        which is defined only for a <emphasis>version</emphasis> of 5.  &SISC; additionally supports
+        version 0.  When <function>null-environment</function> is called with version 0, a new, completely
+        empty environment is returned, lacking even the syntactic bindings present in standard calls
+        to <function>null-environment</function>.
+      </para>
+      <para>
+        Finally, the initial environment available to the programmer when &SISC; starts can
+        be retrieved using the <function>sisc-initial-environment</function> function:
       </para>
       <para>
         <blockquote>
