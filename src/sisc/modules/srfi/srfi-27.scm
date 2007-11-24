@@ -51,7 +51,7 @@
   (get-instance (java-null <java.security.secure-random>)
                 (->jstring "SHA1PRNG")))
 
-(define (make-fast-prng l) (java-new <java.util.random> l)
+(define (make-fast-prng l) (java-new <java.util.random> l))
 
 (define (make-random-source . type)
   (let ([golden-ratio #x9e3779b97f4a7c15])
