@@ -2465,7 +2465,7 @@ jar:http://foo.com/bar.jar!/bar/bar1.scm
               </para>
             </blockquote>
           </para>
-          <para id="func-open-tcp-listener">
+          <para id="func-open-ssl-listener">
             <indexterm><primary>open-ssl-listener</primary>
             </indexterm>
               &procedure;
