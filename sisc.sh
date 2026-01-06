@@ -1,6 +1,7 @@
 #!/bin/sh
 
 RLWRAP_FILE=~/.sisc-rlwrap
+HEAP_LOCATION=/usr/share/sisc/sisc.shp
 
 checkIfNonInteractive() {
 # returns true if parameter for "non-interactive" was passed to the script
@@ -21,7 +22,10 @@ then
    SISC_HOME="`dirname $0`"
    if [ ! -f "$SISC_HOME/sisc.jar" ]
    then 
-     if [ -f /usr/lib/sisc/sisc.jar ] 
+     if [ -f /usr/share/java/sisc.jar ]
+     then
+       SISC_HOME="/usr/share/java"
+     elif [ -f /usr/lib/sisc/sisc.jar ] 
      then 
        SISC_HOME="/usr/lib/sisc" 
      elif [ -f /usr/local/lib/sisc/sisc.jar ]
@@ -70,6 +74,6 @@ else
         D=";" ;;
     esac
       
-    $JAVA $JAVAOPT -classpath $SISC_HOME/sisc-opt.jar${D}$SISC_HOME/sisc.jar${D}$SISC_HOME/sisc-lib.jar${D}$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h $SISC_HOME/sisc.shp $PROPERTIES $EXTENSIONS "$@"
+    $JAVA $JAVAOPT -classpath $SISC_HOME/sisc-opt.jar${D}$SISC_HOME/sisc.jar${D}$SISC_HOME/sisc-lib.jar${D}$CLASSPATH -Dsisc.home=$SISC_HOME sisc.REPL -h "$HEAP_LOCATION" $PROPERTIES $EXTENSIONS "$@"
 fi
 
