@@ -5,14 +5,14 @@ HEAP_LOCATION=/usr/share/sisc/sisc.shp
 
 checkIfNonInteractive() {
 # returns true if parameter for "non-interactive" was passed to the script
-    case "-x" in
-    "$@")
-        return 1;
-    esac
-    case "--no-repl" in
-    "$@")
-        return 1;
-    esac
+    for arg in "$@"; do
+        case "$arg" in
+        "-x")
+            return 1;;
+        "--no-repl")
+            return 1;;
+        esac
+    done
     return 0;
 };
 
